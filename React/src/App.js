@@ -1,24 +1,21 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
- function App() {
+import Table from "./view/pages/Status/components/Table/Table.js";
+
+function App() {
   return (
     <Router>
       <div>
         <nav>
           <ul>
-          <li>
+            <li>
               <Link to="/">Log In</Link>
             </li>
-          <li>
+            <li>
               <Link to="/register">Register</Link>
             </li>
-          <li>
+            <li>
               <Link to="/forgotPassword">Admin</Link>
             </li>
             <li>
@@ -36,23 +33,23 @@ import {
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
-        <Route exact={true} path="/">
+          <Route exact={true} path="/">
             <h1>login</h1>
           </Route>
           <Route path="/register">
-          <h1>register</h1>
+            <h1>register</h1>
           </Route>
           <Route path="/forgotPassword">
-          <h1>forgotPassword</h1>
+            <h1>forgotPassword</h1>
           </Route>
           <Route path="/admin">
-          <h1>Admin</h1>
+            <h1>Admin</h1>
           </Route>
           <Route path="/analysis">
-          <h1>Analysis</h1>
+            <h1>Analysis</h1>
           </Route>
           <Route path="/status">
-          <h1>status</h1>
+            <Table></Table>
           </Route>
         </Switch>
       </div>
