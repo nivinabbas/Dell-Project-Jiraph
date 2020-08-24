@@ -3,7 +3,7 @@ import "./Chart.css";
 import MainTable from "../MainTable/MainTable"
 import { useState } from 'react';
 
-
+//
 function Chart(props) {
   const { UiObjs } = props;
 
