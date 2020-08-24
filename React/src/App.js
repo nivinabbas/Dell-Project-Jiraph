@@ -1,11 +1,13 @@
 import React from "react";
 import Login from "./view/pages/Admin/components/Login/Login"
+import forgotPassword from "./view/pages/Admin/components/ForgotPassword/ForgotPassword"
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Link
 } from "react-router-dom";
+import ForgotPassword from "./view/pages/Admin/components/ForgotPassword/ForgotPassword";
 
  function App() {
   return (
@@ -21,7 +23,7 @@ import {
 
             </li>
           <li>
-              <Link to="/forgotPassword">Admin</Link>
+              <Link to="/forgotPassword">Forgot Password</Link>
             </li>
             <li>
               <Link to="/admin">Admin</Link>
@@ -43,10 +45,10 @@ import {
             
           </Route>
           <Route path="/register">
- 
+            
           </Route>
           <Route path="/forgotPassword">
-
+              <ForgotPassword></ForgotPassword>
           </Route>
           <Route path="/admin">
 

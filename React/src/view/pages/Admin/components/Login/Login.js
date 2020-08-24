@@ -7,13 +7,11 @@ import {
 function Login(props) {
  
 
-    
-    
     return (
         <div className='login'>
             <h3>Welcome to Jiraph System</h3>
-            <input id="userEmail-Inp" name="userEmail-Inp" placeholder="Enter your Emailadress"></input>
-            <input id="userPsw-Inp" name="userPsw-Inp" placeholder="Enter your Password"></input>
+            <input id="userEmail-Inp" name="userEmailInp" placeholder="Enter your Emailadress"></input>
+            <input id="userPsw-Inp" name="userPswInp" placeholder="Enter your Password"></input>
             <button onClick={handleLogin()}>Login</button>
             <Link to="/forgotPassword">Forgot Password?</Link>
         </div>
