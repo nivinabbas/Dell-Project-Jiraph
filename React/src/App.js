@@ -1,60 +1,22 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Home from "./components/common/NavBar/index";
 
-import StatusPage from './view/pages/Status/components/StatusPage/StatusPage.jsx'
- function App() {
+function App() {
   return (
     <Router>
       <div>
-        <nav>
-          <ul>
-          <li>
-              <Link to="/">Log In</Link>
-            </li>
-          <li>
-              <Link to="/register">Register</Link>
-            </li>
-          <li>
-              <Link to="/forgotPassword">Admin</Link>
-            </li>
-            <li>
-              <Link to="/admin">Admin</Link>
-            </li>
-            <li>
-              <Link to="/analysis">Analysis</Link>
-            </li>
-            <li>
-              <Link to="/status">Status</Link>
-            </li>
-          </ul>
-        </nav>
-
-        {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
         <Switch>
-        <Route exact={true} path="/">
-            <h1>login</h1>
-          </Route>
-          <Route path="/register">
-          <h1>register</h1>
-          </Route>
           <Route path="/forgotPassword">
-          <h1>forgotPassword</h1>
+            /** add relevant component here (i'm not sure that forgotPassword
+            should be a route) */
           </Route>
-          <Route path="/admin">
-          <h1>Admin</h1>
+          <Route path="/admin">/* add Admin component here*/</Route>
+          <Route path="/home">
+            <Home />
           </Route>
-          <Route path="/analysis">
-          <h1>Analysis</h1>
-          </Route>
-          <Route path="/status">
-        <StatusPage/>
-          </Route>
+          <Route path="/register">/* add Register component here*/</Route>
+          <Route path="/">/* add Login component here*/</Route>
         </Switch>
       </div>
     </Router>
