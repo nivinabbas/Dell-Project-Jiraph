@@ -6,6 +6,7 @@ import {
   Link
 } from "react-router-dom";
 
+import StatusPage from './view/pages/Status/components/StatusPage/StatusPage.jsx'
  function App() {
   return (
     <Router>
@@ -52,7 +53,7 @@ import {
           <h1>Analysis</h1>
           </Route>
           <Route path="/status">
-          <h1>status</h1>
+        <StatusPage/>
           </Route>
         </Switch>
       </div>
