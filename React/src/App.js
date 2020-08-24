@@ -14,9 +14,10 @@ import {
           <ul>
           <li>
               <Link to="/">Log In</Link>
-            </li>
+            {/* </li>
           <li>
-              <Link to="/register">Register</Link>
+              <Link to="/register">Register</Link> */}
+
             </li>
           <li>
               <Link to="/forgotPassword">Admin</Link>
