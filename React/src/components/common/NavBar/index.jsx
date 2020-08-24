@@ -1,16 +1,17 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useRouteMatch, Link } from "react-router-dom";
 import "./style.css";
 
-const NavBar = () => {
+export default () => {
+  let { url } = useRouteMatch();
+
   return (
     <nav className="main-nav">
       <div className="main-nav__nav-items">
         <NavLink
-          exact
           className="inactive"
           activeClassName="active"
-          to="/home/status"
+          to={`${url}/status`}
         >
           Status
         </NavLink>
@@ -18,7 +19,7 @@ const NavBar = () => {
         <NavLink
           className="inactive"
           activeClassName="active"
-          to="/home/analysis"
+          to={`${url}/analytics`}
         >
           Analytics
         </NavLink>
@@ -26,5 +27,3 @@ const NavBar = () => {
     </nav>
   );
 };
-
-export default NavBar;
