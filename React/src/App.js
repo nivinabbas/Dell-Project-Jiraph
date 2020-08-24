@@ -38,7 +38,6 @@ import {
         <Switch>
         <Route exact={true} path="/">
             <h1>login</h1>
-            
           </Route>
           <Route path="/register">
           <h1>register</h1>
