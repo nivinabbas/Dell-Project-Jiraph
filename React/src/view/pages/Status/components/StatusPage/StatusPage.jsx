@@ -2,6 +2,7 @@ import React from "react";
 import "./StatusPage.css";
 import { useState } from "react";
 import DashBoard from "../DashBoard/DashBoard";
+import Table from "../Table/Table";
 
 let array = [
   { name: "functional tests", number: 12 },
@@ -18,6 +19,7 @@ const StatusPage = (props) => {
   return (
     <div className="dashboard">
       <DashBoard cardsContent={array} />
+      <Table />
     </div>
   );
 };

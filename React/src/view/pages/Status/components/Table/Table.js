@@ -1,6 +1,6 @@
 import React from "react";
 import "./style.css";
-import shortid from "shortid";
+
 /////////////Presenting Data Table/////////////
 
 const dummyData = [
@@ -10,7 +10,7 @@ const dummyData = [
 const getTableData = (data) => {
   return data.map((d) => {
     return (
-      <tr key={shortid.generate()}>
+      <tr >
         {Object.keys(d).map((key, index) => {
           return <td key={index}>{d[key]}</td>;
         })}
