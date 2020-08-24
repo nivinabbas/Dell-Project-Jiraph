@@ -10,12 +10,16 @@ const NavBar = () => {
           exact
           className="inactive"
           activeClassName="active"
-          to="/status"
+          to="/home/status"
         >
           Status
         </NavLink>
 
-        <NavLink className="inactive" activeClassName="active" to="/analysis">
+        <NavLink
+          className="inactive"
+          activeClassName="active"
+          to="/home/analysis"
+        >
           Analytics
         </NavLink>
       </div>
