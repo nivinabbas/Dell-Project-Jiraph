@@ -1,0 +1,23 @@
+.login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+
+
+}
+.login input {
+    width: 20%;
+    height: 2rem;
+    margin-bottom: 0.5rem;  
+}
+
+.login button {
+    width: 20%;
+    height: 2rem;   
+    margin-top:0.5rem;
+}
+    
+
+
+
