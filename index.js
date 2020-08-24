@@ -12,7 +12,7 @@ app.use(express.static('public'))
 
 
 const url = "mongodb+srv://nimer:N1N1N1N1@cluster0.tejcy.mongodb.net/test";
-
+ 
 
 const mongoose = require('mongoose');
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
