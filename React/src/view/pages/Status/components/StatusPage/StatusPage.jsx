@@ -4,6 +4,7 @@ import { useState, useEffect} from "react";
 import SelectInput from "../Select/SelectInput";
 import DashBoard from "../DashBoard/DashBoard";
 import Chart from "../../../../../components/charts/Chart";
+import Pie from "../Pie/Pie";
 
 import Table from "../Table/Table";
 
@@ -45,7 +46,9 @@ const StatusPage = (props) => {
       <div className="statuspage__chart">
         <Chart />
       </div>
-      <div className="statuspage__pie"></div>
+      <div className="statuspage__pie">
+        <Pie />
+      </div>
     </div>
   );
 };
