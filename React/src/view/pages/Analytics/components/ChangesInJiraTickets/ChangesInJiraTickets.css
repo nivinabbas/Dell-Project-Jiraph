@@ -62,18 +62,16 @@
     
     grid-area: filterButtons;
   }
-  .ModificationByFieldTable{
-    grid-area: table;
-  }
+  
   .ChangeOfJiraTicket__Filters{
     display: flex;
     justify-content: space-evenly;
   }
-  .ChangeOfJiraTicket__Filters--option{
+  .ChangeOfJiraTicket__Filter{
   width: 100%;
   
   }
-  .ChangeOfJiraTicket__Filters--submit{
+  .ChangeOfJiraTicket__Submit{
     width: 15%;
    border-radius: 15px;
     border: black;

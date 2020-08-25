@@ -83,7 +83,7 @@ function ChangesInJiraTickets(props) {
         }
       </div>
       <form onSubmit={handleFilter} className="ChangeOfJiraTicket__Filters">
-        <select name="oldNew" className="ChangeOfJiraTicket__Filters--option" required>
+        <select name="oldNew" className="ChangeOfJiraTicket__Filter" required>
         <option value="none" selected disabled hidden> 
           old/new:
          </option>
@@ -91,7 +91,7 @@ function ChangesInJiraTickets(props) {
           <option name="oldValue" value="oldValue">oldValue</option>
 
         </select>
-     <select name="status" className="ChangeOfJiraTicket__Filters--option" required>
+     <select name="status" className="ChangeOfJiraTicket__Filter" required>
 
          <option value="none" selected disabled hidden> 
           Choose a status:
@@ -102,18 +102,18 @@ function ChangesInJiraTickets(props) {
 
       </select>
 
-        <input className="ChangeOfJiraTicket__Filters--option" type="date" name="startDate" required></input>
+        <input className="ChangeOfJiraTicket__Filter" type="date" name="startDate" required></input>
 
-        <input className="ChangeOfJiraTicket__Filters--option" type="date" name="endDate" required></input>
+        <input className="ChangeOfJiraTicket__Filter" type="date" name="endDate" required></input>
 
-        <select name="label" className="ChangeOfJiraTicket__Filters--option" required>
+        <select name="label" className="ChangeOfJiraTicket__Filter" required>
           <option value="" >Label </option>
           <option value="day">Daily</option>
           {/* <option value="week">Weekly</option> */}
           <option value="month">Monthly</option>
           <option value="year">Yearly</option>
         </select>
-        <button className="ChangeOfJiraTicket__Filters--submit" type="submit"> submit</button>
+        <button className="ChangeOfJiraTicket__Submit" type="submit"> submit</button>
       </form>
 
       {/* <div className="chart_Colors">
