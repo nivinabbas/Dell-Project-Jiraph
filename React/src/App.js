@@ -1,12 +1,13 @@
 import React from "react";
 import Login from "./view/pages/Admin/components/Login/Login"
+import forgotPassword from "./view/pages/Admin/components/ForgotPassword/ForgotPassword"
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Redirect,
 } from "react-router-dom";
-import './App.css';
+import ForgotPassword from "./view/pages/Admin/components/ForgotPassword/ForgotPassword";
 
 import Admin from '.view/components/Admin/Admin'
 
@@ -25,7 +26,7 @@ import Admin from '.view/components/Admin/Admin'
 
             </li>
           <li>
-              <Link to="/forgotPassword">forgotPassword</Link>
+              <Link to="/forgotPassword">Forgot Password</Link>
             </li>
             <li>
               <Link to="/Admin">Admin</Link>
@@ -47,10 +48,10 @@ import Admin from '.view/components/Admin/Admin'
             
           </Route>
           <Route path="/register">
- 
+            
           </Route>
           <Route path="/forgotPassword">
-
+              <ForgotPassword></ForgotPassword>
           </Route>
           <Route path="/Admin">
           <h1>Admin</h1>
