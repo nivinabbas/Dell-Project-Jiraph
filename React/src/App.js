@@ -1,5 +1,7 @@
 import React from "react";
 import Login from "./view/pages/Admin/components/Login/Login"
+import UserList from "./view/pages/Admin/components/UsersList/UserList"
+
 import {
   BrowserRouter as Router,
   Switch,
@@ -49,7 +51,7 @@ import {
 
           </Route>
           <Route path="/admin">
-
+          <UserList></UserList>
           </Route>
           <Route path="/analysis">
 
