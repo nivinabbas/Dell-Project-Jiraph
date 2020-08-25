@@ -42,13 +42,13 @@ router.post('/login',(req,res)=>{
 
  router.get('/getUsersList',(req,res)=>{
      UserModel.find({}).then(users=>{
-        //  if(users.length>0){
-        //      let table = [];
-        //      users.map((item,index)=>{
-        //          item[index]
-        //      })
-        //     //  res.send({success:true,error:null,info:{users})
-        //  }
+        if(users.length>0){
+            let table = [];
+            for (let index = 0; index < users.length; index++) {
+                table.push({email:users[index].userInfo.employeeEmail,name:users[index].userInfo.employeeName,role:users[index].userInfo.employeeRole})
+            }
+            res.send({success:true,error:null,info:{table}})
+        }
      })
  })
 
@@ -56,54 +56,120 @@ router.post('/login',(req,res)=>{
  router.post('/forgotPassword',(req,res)=>{
      const { email } = req.body;
      if(validator.validate(email)){
-     UserModel.find({"userInfo.useremployeeEmail":email}).then(checkEmail=>{
-         console.log(checkEmail)
-        if(checkEmail.length>0){
-            if(validator.validate(email)){
-                const key = makeid(10)
-                var transporter = nodemailer.createTransport({
-                    service: 'gmail',
-                    auth: {
-                      user: 'servicetest468@gmail.com',
-                      pass: 'mxzmxz123'
-                    }
-                  });
-                  
-                  var mailOptions = {
-                    from: 'servicetest468@gmail.com',
-                    to: 'ramiayoub12123@gmail.com',
-                    subject: 'Sending Email using Node.js',
-                    text: 'That was easy!'+ key
-                  };
-                  
-                  transporter.sendMail(mailOptions, function(err, info){
-                    if (err) {
-                      console.log(err);
-                    } else {
-                      console.log('Email sent: ' + info.response);
-                    }
-                  });
-                res.send({success:true,error:null,info:{key:key}})
-                
-            }else{
-                res.send({success:true,error:"Email is not valid",info:{key:key}})
-
-            }
-        }else{
-            res.send({success:false,error:"Email not found",info:null})
-        }
-     })
-    }else{
-        res.send({success:false,error:"Email not valid",info:null})
-    }
+        UserModel.find({"userInfo.employeeEmail":email}).then(checkEmail=>{
+           if(checkEmail.length>0){
+                   const key = makeid(10)
+                   var transporter = nodemailer.createTransport({
+                       service: 'gmail',
+                       auth: {
+                         user: 'servicetest468@gmail.com',
+                         pass: 'mxzmxz123'
+                       }
+                     });
+                     
+                     var mailOptions = {
+                       from: 'servicetest468@gmail.com',
+                       to: 'ramiayoub12123@gmail.com',
+                       subject: 'Reset Password',
+                       text: 'Your Key Is: '+ key
+                     };
+                     
+                     transporter.sendMail(mailOptions, function(err, info){
+                       if (err) {
+                         console.log(err);
+                       } else {
+                         console.log('Email sent: ' + info.response);
+                       }
+                     });
+                   res.send({success:true,error:null,info:{key:key}})
+                   
+           }else{
+               res.send({success:false,error:"Email not found",info:null})
+           }
+        })
+       }else{
+           res.send({success:false,error:"Email not valid",info:null})
+       }
  })
 
-//  router.post('/getUserInfo',(req,res)=>{
-//      const { email } = req.body
-//      User.find({employeeEmail:email}).then(docs=>{
-//          console.log(docs)
-//      })
-//  })
+ router.post('/getUserInfo',(req,res)=>{
+    const { email } = req.body;
+    if(validator.validate(email)){
+       UserModel.findOne({"userInfo.employeeEmail":email}).then(checkEmail=>{
+          if(checkEmail.length>0){
+                  
+                  res.send({success:true,error:null,info:{email:checkEmail[0].userInfo.employeeEmail,name:checkEmail[0].userInfo.employeeName,role:checkEmail[0].userInfo.employeeRole,id:checkEmail[0]._id}})
+                  
+          }else{
+              res.send({success:false,error:"Email not found",info:null})
+          }
+       })
+      }else{
+          res.send({success:false,error:"Email not valid",info:null})
+      }
+})
+
+router.post('/createUser',(req,res)=>{
+    const { email , password , name , role} = req.body;
+    if(validator.validate(email)){
+        UserModel.find({"userInfo.employeeEmail":email}).then(checkEmail=>{
+          if(checkEmail.length>0){
+                res.send({success:false,error:"Email is already in use",info:null})          
+          }else{
+            UserModel.insertMany({userInfo:{employeeName:name,employeeEmail:email,employeeRole:role,password:password}})
+              res.send({success:true,error:null,info:null})
+          }
+       })
+      }else{
+          res.send({success:false,error:"Email not valid",info:null})
+      }
+})
+
+router.put('/editUser',(req,res)=>{
+    const { id , email , password , name , role} = req.body;
+    
+    if(validator.validate(email)){
+
+
+        UserModel.find({"userInfo.employeeEmail":email}).then(checkEmail=>{
+          if(checkEmail.length>0){
+            UserModel.find({_id:id,"userInfo.employeeEmail":email}).then(checkUserEmail=>{
+                  if(checkUserEmail.length>0){
+                      
+                    UserModel.update(
+                        {_id:id},{$set:
+                            {userInfo:
+                                {employeeName:name,
+                                    employeeEmail:email,
+                                    employeeRole:role,
+                                    password:password
+                                }
+                            }
+                        })
+                        .then(res.send({success:true,error:null,info:null}))
+                  }else{
+                    res.send({success:false,error:"Email is already in use",info:null})  
+                  }
+              })        
+          }else{
+            UserModel.update(
+                {_id:id},{$set:
+                    {userInfo:
+                        {employeeName:name,
+                            employeeEmail:email,
+                            employeeRole:role,
+                            password:password
+                        }
+                    }
+                })
+                .then(res.send({success:true,error:null,info:null}))
+              
+          }
+       })
+      }else{
+          res.send({success:false,error:"Email not valid",info:null})
+      }
+})
 
 
 function makeid(length) {
