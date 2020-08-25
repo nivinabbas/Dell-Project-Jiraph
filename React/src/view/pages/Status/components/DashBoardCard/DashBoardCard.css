@@ -1,0 +1,6 @@
+.DashBoard__Card {
+  border: 1px solid black;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+}
