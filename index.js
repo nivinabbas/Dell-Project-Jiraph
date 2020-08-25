@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors')
 const app = express();
 
 
@@ -7,6 +8,8 @@ app.use(bodyParser.json());       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
     extended: true
 }));
+
+app.use(cors())
 
 app.use(express.static('public'))
 
@@ -26,6 +29,13 @@ const User = mongoose.model('User', {
     }
 })
 
+
+app.get('/api/status/dailyAlerts', (req,res) => {
+    res.send({'success' : true,"error" : null , 'content':[{ name: "functional tests", number: 12 },
+    { name: "fix versions", number: 10 },
+    { name: "deleted tasks", number: 20 },
+    { name: "total tasks", number: 36 }]})
+})
 
 
 const UIObject = [

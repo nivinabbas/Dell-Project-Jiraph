@@ -11,8 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.1",
-    "mongoose": "^5.9.29",
-    "react-select": "^3.1.0"
+    "mongoose": "^5.9.29"
   }
 }
