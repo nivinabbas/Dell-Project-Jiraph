@@ -5,7 +5,6 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
-// import Home from "./components/common/NavBar/index";
 import Home from "../src/view/pages/Home";
 
 function App() {
