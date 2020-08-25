@@ -3,10 +3,7 @@ import "./StatusPage.css";
 import { useState } from "react";
 import SelectInput from "../Select/SelectInput";
 import DashBoard from "../DashBoard/DashBoard";
-import React from "react";
-import "./StatusPage.css";
-import { useState } from "react";
-import DashBoard from "../DashBoard/DashBoard";
+
 import Table from "../Table/Table";
 
 let array = [
