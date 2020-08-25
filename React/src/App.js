@@ -1,5 +1,7 @@
 import React from "react";
 import Login from "./view/pages/Admin/components/Login/Login"
+import UserList from "./view/pages/Admin/components/UsersList/UserList"
+
 import ForgetPassword from "./view/pages/Admin/components/ForgetPassword/ForgetPassword";
 
 
@@ -51,9 +53,8 @@ import {
           <Route path="/forgotPassword">
               <ForgetPassword></ForgetPassword>
           </Route>
-          <Route path="/Admin">
-          <h1>Admin</h1>
-            
+          <Route path="/admin">
+
           </Route>
           <Route path="/analysis">
 
