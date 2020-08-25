@@ -17,9 +17,15 @@ const StatusPage = (props) => {
   // console.log(cardsContent)
 
   return (
-    <div className="dashboard">
-      <DashBoard cardsContent={array} />
-      <Table />
+    <div className="statuspage">
+      <div className="statuspage__dashboard">
+        <DashBoard cardsContent={array} />
+      </div>
+      <div className="statuspage__table">
+        <Table />
+      </div>
+      <div className="statuspage__chart"></div>
+      <div className="statuspage__pie"></div>
     </div>
   );
 };

@@ -1,7 +1,6 @@
-.dashboard{
-    display: flex;
-   padding: 32px;
-   width: auto;
-   align-content: center;
-
+.dashboard {
+  display: flex;
+  padding: 32px;
+  width: 100%;
+  align-content: center;
 }

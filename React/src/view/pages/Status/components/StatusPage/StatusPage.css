@@ -1,0 +1,27 @@
+.statuspage {
+  width: 100%;
+  background-color: #f9f9f9;
+  display: grid;
+  grid-template-columns: 5vw 46vw 22vw 22vw 5vw;
+  grid-template-rows: auto auto auto auto auto;
+  grid-template-areas:
+    ". dashboard dashboard dashboard ."
+    ". tabl chart chart ."
+    ". tabl pie pie .";
+}
+.statuspage__dashboard {
+  grid-area: dashboard;
+  margin: auto;
+}
+.statuspage__table {
+  grid-area: tabl;
+  margin: auto;
+}
+.statuspage__chart {
+  grid-area: chart;
+  background-color: brown;
+}
+.statuspage__pie {
+  grid-area: pie;
+  background-color: cadetblue;
+}

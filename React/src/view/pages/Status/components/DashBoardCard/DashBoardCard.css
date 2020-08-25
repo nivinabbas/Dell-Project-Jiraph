@@ -1,10 +1,5 @@
-.DashBoard__Card{
-border: 1px solid black;
-text-align: center;
-}
-.DashBoard__CardTitle{
-
-}
-.DashBoard__CardContent{
-    
+.DashBoard__Card {
+  border: 1px solid black;
+  text-align: center;
+  width: 100%;
 }
