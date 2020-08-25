@@ -1,12 +1,20 @@
-import React from 'react';
-import "./ModificationByFieldMain.css";
+import React, { useEffect } from 'react';
+import "./ModificationByField.css";
 import Chart from "../charts/Chart";
 import { useState } from 'react';
-
+import Select from "react-select"
 
 
 
 function ModificationByFieldMain(props) {
+
+    const options = [
+        { value: 'chocolate', label: 'Chocolate' },
+        { value: 'strawberry', label: 'Strawberry' },
+        { value: 'vanilla', label: 'Vanilla' }
+      ]
+    //   const [options, setOptions]=useState([]);
+      
     const [UiObjs, setUiObjs] = useState([]);
     const handleFilter = e => {
         e.preventDefault();
@@ -32,6 +40,8 @@ function ModificationByFieldMain(props) {
 
 
     return (
+
+
         <div className='ModificationByField__Wrapper'>
             <div className="ModificationByField__MainTitle">Modification By Field</div>
             <div className="ModificationByField__Chart">
@@ -41,6 +51,9 @@ function ModificationByFieldMain(props) {
                 }
             </div>
             <form onSubmit={handleFilter} className="ModificationByField__Filters">
+                <Select isMulti options={options}/>
+                <Select options={options}/>
+
                 <select name="fieldName" className="ModificationByField__Filter" required>
                     <option value="" >
                         Field Name
