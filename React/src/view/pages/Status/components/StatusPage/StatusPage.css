@@ -1,28 +1,18 @@
-.statuspage {
-  width: 100%;
-  background-color: #f9f9f9;
-  display: grid;
-  grid-template-columns: 5vw 46vw 22vw 22vw 5vw;
-  grid-template-rows: auto auto auto auto auto;
-  grid-template-areas:
-    ". dashboard dashboard dashboard ."
-    ". tabl chart chart ."
-    ". tabl pie pie .";
+.statusPageContainer {
+  display: flex;
 }
 .statuspage__dashboard {
-  grid-area: dashboard;
+  display: flex;
+  width: auto;
   margin: auto;
-  width: 100%;
 }
 .statuspage__table {
-  grid-area: tabl;
-  margin: auto;
+  display: flex;
 }
 .statuspage__chart {
-  grid-area: chart;
-
-  margin: auto;
+  display: flex;
 }
+
 .statuspage__pie {
-  grid-area: pie;
+  display: flex;
 }
