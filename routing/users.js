@@ -20,9 +20,9 @@ const u = new UserModel({
 //app.get/post/put/delete => router.get/post/put/delete
 router.post('/login',(req,res)=>{
     const {email , password} = req.body;
+    if(validator.validate(email)){
     UserModel.find({"userInfo.employeeEmail":email}).then(checkEmail=>{
         if(checkEmail.length>0){
-            
             UserModel.find({"userInfo.employeeEmail":email,"userInfo.password":password}).then(checkPassword=>{
                 if(checkPassword.length>0){
                     res.send({success:true,error:"",info:{role:checkPassword[0].userInfo.employeeRole}})
@@ -33,29 +33,33 @@ router.post('/login',(req,res)=>{
         }else{
             res.send({success:false,error:"Email not found",info:null})
         }
+        
     })
+}else{
+    res.send({success:false,error:"Email is not Valid",info:null})
+}
  })
+
 
  router.post('/forgotPassword',(req,res)=>{
      const { email } = req.body;
-     UserModel.find({},(err,docs)=>{
-        console.log(docs)
-     })
-    //  UserModel.find({"userInfo.useremployeeEmail":email}).then(checkEmail=>{
-    //      console.log(checkEmail)
-    //     if(checkEmail.length>0){
-    //         if(validator.validate(email)){
-    //             const key = makeid(10)
-    //             res.send({success:true,error:null,info:{key:key}})
+     if(validator.validate(email)){
+     UserModel.find({"userInfo.useremployeeEmail":email}).then(checkEmail=>{
+         console.log(checkEmail)
+        if(checkEmail.length>0){
+            if(validator.validate(email)){
+                const key = makeid(10)
+                res.send({success:true,error:null,info:{key:key}})
                 
-    //         }else{
-    //             res.send({success:true,error:"Email is not valid",info:{key:key}})
+            }else{
+                res.send({success:true,error:"Email is not valid",info:{key:key}})
 
-    //         }
-    //     }else{
-    //         res.send({success:false,error:"Email not found",info:null})
-    //     }
-    //  })
+            }
+        }else{
+            res.send({success:false,error:"Email not found",info:null})
+        }
+     })
+    }
  })
 
 //  router.post('/getUserInfo',(req,res)=>{
