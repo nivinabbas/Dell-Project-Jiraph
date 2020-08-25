@@ -6,6 +6,8 @@ import {
   Link
 } from "react-router-dom";
 
+import MainPage from './view/pages/Analytics/components/MainPage/MainPage'
+
  function App() {
   return (
     <Router>
@@ -49,7 +51,7 @@ import {
           <h1>Admin</h1>
           </Route>
           <Route path="/analysis">
-          <h1>Analysis</h1>
+          <MainPage />
           </Route>
           <Route path="/status">
           <h1>status</h1>

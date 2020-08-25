@@ -1,0 +1,134 @@
+    
+    
+    body {
+        background-color: whitesmoke;
+      }
+
+.MainForm {
+    display: grid;
+    grid-template-columns: 10vw 40vw 40vw 10vw;
+    grid-template-rows: 15vh 28.3vh 28.3vh 28.3vh;
+    grid-template-areas: 
+    "status status analytics analytics  "
+    ". changesOfJiraTickets ModificationByField . "
+    ". DeletedJiraTickets DelaysInDelievry . "
+    ". . . . ";
+    background-color:rgba(211, 211, 211, 0.623);
+  }
+  
+  
+  .MainForm__status{
+    display: grid;
+    grid-area: status;
+    box-shadow:5px 7px 7px rgba(211, 211, 211, 0.836);
+  }
+  .MainForm__status--btn{
+    color:rgba(0, 0, 0, 0.7);
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Roboto', sans-serif;
+    font-size: 26px;
+    /* border-bottom: 1px solid rgba(0, 0, 0, 0.281); */
+  }
+  
+  
+  .MainForm__analytics{
+    display: grid;
+    grid-area: analytics;
+    box-shadow:5px 7px 7px rgba(211, 211, 211, 0.836);
+  }
+  .MainForm__analytics--btn{
+    color:rgba(0, 0, 0, 0.7);
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Roboto', sans-serif;
+    font-size: 26px;
+    
+  }
+  
+
+.MainForm__changesOfJiraTickets{
+    display: grid;
+    grid-area: changesOfJiraTickets;
+    margin: 100px 100px;
+    width: 25vw;
+    height:  25vh;
+  }
+  
+  .MainForm__changesOfJiraTickets--btn {
+  background-color: whitesmoke;
+  border-radius: 10px 3px 0 3px;
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.65);
+  font-weight: 500;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  border-width: .5px 0 0 .5px;
+  box-shadow: 0 2px 7px #88888836;
+  }
+  
+  
+  
+  .MainForm__ModificationByField {
+    display: grid;
+    grid-area: ModificationByField;
+    margin: 100px 100px;
+    width: 25vw;
+    height:  25vh;
+    
+  }
+  .MainForm__ModificationByField--btn {
+    background-color: whitesmoke;
+    border-radius: 3px 10px 3px 0;
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.65);
+    font-weight:  500;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    border-width: .5px .5px 0 0;
+    box-shadow: 0 2px 7px #88888836;
+  }
+  
+  
+  
+  .MainForm__DeletedJiraTickets{
+    display: grid;
+    grid-area: DeletedJiraTickets;
+    margin: 100px 100px;
+    width: 25vw;
+    height:  25vh;
+  }
+  .MainForm__DeletedJiraTickets--btn{
+    background-color: whitesmoke;
+    border-radius: 3px 0 3px 10px;
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.65);
+    font-weight:  500;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    border-width: 0px 0px .5px .5px;
+    box-shadow: 0 2px 7px #88888836;
+  }
+  
+  
+  
+  .MainForm__DelaysInDelievry{
+    display: grid;
+    grid-area: DelaysInDelievry;
+    margin: 100px 100px;
+    width: 25vw;
+    height:  25vh;
+  }
+  .MainForm__DelaysInDelievry--btn{
+    background-color: whitesmoke;
+    border-radius: 0 3px 10px 3px;
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.65);
+    font-weight:  500;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    border-width: 0 .5px .5px 0;
+    box-shadow: 0 2px 7px #88888836;
+  }
+  
+  
