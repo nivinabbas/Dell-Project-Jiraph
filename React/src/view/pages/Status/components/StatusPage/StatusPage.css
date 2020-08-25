@@ -13,7 +13,6 @@
   grid-area: dashboard;
   margin: auto;
   width: 100%;
-  border: 1px solid red;
 }
 .statuspage__table {
   grid-area: tabl;
@@ -22,6 +21,7 @@
 .statuspage__chart {
   grid-area: chart;
   background-color: brown;
+  margin: auto;
 }
 .statuspage__pie {
   grid-area: pie;
