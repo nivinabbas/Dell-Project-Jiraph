@@ -23,6 +23,7 @@ app.use("/api/status", statusRouter);
 const analyticsRouter = require('./routing/analytics');
 app.use("/api/analytics", analyticsRouter);
 
-app.use("/api/PostBellaData", bellaRouting);
 const bellaRouting = require('./routing/bellaRouting');
+app.use("/api/PostBellaData", bellaRouting);
+
 app.listen(4000, () => { console.log("App is Listening to 4000") })
