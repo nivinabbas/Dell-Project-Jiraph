@@ -1,12 +1,16 @@
 import React from "react";
 import Login from "./view/pages/Admin/components/Login/Login"
+import ForgetPassword from "./view/pages/Admin/components/ForgetPassword/ForgetPassword";
+
+
 import {
   BrowserRouter as Router,
   Switch,
   Route,
+  Redirect,
   Link
+
 } from "react-router-dom";
-import './App.css';
 
 
 
@@ -16,16 +20,12 @@ import './App.css';
       <div>
         <nav>
           <ul>
-          <li>
-              <Link to="/">Log In</Link>
-            </li>
+
           <li>
               <Link to="/register">Register</Link>
 
             </li>
-          <li>
-              <Link to="/forgotPassword">forgotPassword</Link>
-            </li>
+
             <li>
               <Link to="/Admin">Admin</Link>
             </li>
@@ -46,10 +46,10 @@ import './App.css';
             
           </Route>
           <Route path="/register">
- 
+            
           </Route>
           <Route path="/forgotPassword">
-
+              <ForgetPassword></ForgetPassword>
           </Route>
           <Route path="/Admin">
           <h1>Admin</h1>
