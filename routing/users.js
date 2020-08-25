@@ -31,10 +31,10 @@ router.post('/login',(req,res)=>{
         if(checkEmail.length>0){
             if(validator.validate(email)){
                 const key = makeid(10)
-                res.send({success:true,error:null,inf:{key:key}})
+                res.send({success:true,error:null,info:{key:key}})
                 
             }else{
-                res.send({success:true,error:"Email is not valid",inf:{key:key}})
+                res.send({success:true,error:"Email is not valid",info:{key:key}})
 
             }
         }else{
