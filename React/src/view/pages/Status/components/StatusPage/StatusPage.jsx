@@ -3,6 +3,7 @@ import "./StatusPage.css";
 import { useState } from "react";
 import SelectInput from "../Select/SelectInput";
 import DashBoard from "../DashBoard/DashBoard";
+import Chart from "../../../../../components/charts/Chart";
 
 import Table from "../Table/Table";
 
@@ -31,7 +32,9 @@ const StatusPage = (props) => {
       <div className="statuspage__table">
         <Table />
       </div>
-      <div className="statuspage__chart"></div>
+      <div className="statuspage__chart">
+        <Chart />
+      </div>
       <div className="statuspage__pie"></div>
     </div>
   );
