@@ -1,6 +1,6 @@
 import React from "react";
 import "./StatusPage.css";
-import { useState } from "react";
+import { useState, useEffect} from "react";
 import SelectInput from "../Select/SelectInput";
 import DashBoard from "../DashBoard/DashBoard";
 
@@ -18,18 +18,18 @@ const optionSprint = [
   { value: "Done", label: "Done" },
 ];
 const StatusPage = (props) => {
+  
   const [cardsContent,setCardsContent]=useState([]);
-  function getDailyAlerts(){
-    fetch('/api/status/dailyAlerts')
+  
+ 
+
+  useEffect(()=>{
+    console.log('getDailyAlerts')
+    fetch('http://localhost:4000/api/status/dailyAlerts')
     .then(res => res.json())
-    .then(data => {
-      if(data.success === false){
-        alert(data.error);
-      }
-      setCardsContent(data.content);
-    })
-  }
-  getDailyAlerts();
+    .then(data=>console.log(data))
+  },[])
+
   // setCardsContent(array);
   // console.log(cardsContent)
 

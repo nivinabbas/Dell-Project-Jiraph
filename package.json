@@ -12,7 +12,6 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
-    "mongoose": "^5.9.29",
-    "react-select": "^3.1.0"
+    "mongoose": "^5.9.29"
   }
 }
