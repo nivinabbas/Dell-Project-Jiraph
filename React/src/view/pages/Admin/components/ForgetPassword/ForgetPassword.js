@@ -48,7 +48,7 @@ function Forgotpassword(props) {
                     e.target.parentElement.children[3].style.display = "none";
                 }
                 else {
-                    console.log("error")
+                    console.log(error)
                 }
             });
     }
