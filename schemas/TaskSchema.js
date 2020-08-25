@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const UserSchema = require('./UserSchema')
 
-const TaskModel = mongoose.model('Task', {
+const TaskModel = mongoose.model('TaskModel', {
     jiraItem: {
         jiraId: String,
         jiraName: String,
