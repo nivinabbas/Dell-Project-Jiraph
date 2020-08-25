@@ -15,9 +15,9 @@ function ModificationByFieldMain(props) {
 
         const fieldName = e.target.fieldName.value;
         const label = e.target.label.value;
-        
 
-        fetch('/api/Analytics/ModificationByField', {
+
+        fetch('/api/analytics/modificationByField', {
             method: 'POST',
             body: JSON.stringify({ fieldName, startDate, endDate, label }),
 
@@ -32,16 +32,16 @@ function ModificationByFieldMain(props) {
 
 
     return (
-        <div className='modificationByFieldWrapper'>
-            <div className="mainTitle">Modification By Field</div>
-            <div className="chart">
+        <div className='ModificationByField__Wrapper'>
+            <div className="ModificationByField__MainTitle">Modification By Field</div>
+            <div className="ModificationByField__Chart">
                 {UiObjs &&
 
                     <Chart UiObjs={UiObjs} />
                 }
             </div>
-            <form onSubmit={handleFilter} className="filtersContainer">
-                <select name="fieldName" className="filtersContainer__option" required>
+            <form onSubmit={handleFilter} className="ModificationByField__Filters">
+                <select name="fieldName" className="ModificationByField__Filter" required>
                     <option value="" >
                         Field Name
                           </option>
@@ -52,11 +52,11 @@ function ModificationByFieldMain(props) {
 
                 </select>
 
-                <input className="filtersContainer__option" type="date" name="startDate" required></input>
+                <input className="ModificationByField__Filter" type="date" name="startDate" required></input>
 
-                <input className="filtersContainer__option" type="date" name="endDate" required></input>
+                <input className="ModificationByField__Filter" type="date" name="endDate" required></input>
 
-                <select name="label" className="filtersContainer__option" required>
+                <select name="label" className="ModificationByField__Filter" required>
                     <option value="" >
                         Label
               </option>
@@ -65,7 +65,7 @@ function ModificationByFieldMain(props) {
                     <option value="month">Monthly</option>
                     <option value="year">Yearly</option>
                 </select>
-                <button className="filtersContainer__Submit" type="submit"> submit</button>
+                <button className="ModificationByField__Submit" type="submit"> submit</button>
             </form>
 
             <div className="chart_Colors">

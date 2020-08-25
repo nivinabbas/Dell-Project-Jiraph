@@ -1,4 +1,4 @@
-.modificationByFieldWrapper{
+.ModificationByField__Wrapper{
     display: grid;
     grid-template-columns: 5vw 90vw 5vw;
     grid-template-rows: 10vh 5vh 5vh auto;
@@ -11,6 +11,44 @@
     
     background-color: whitesmoke;
   }
+
+  .ModificationByField__MainTitle{
+    font-size: 30px;
+  font-weight: bold;
+    grid-area: header;
+    text-align: center;
+    background-color: #20283E;
+    color: white;
+    height: 100%;
+  }
+  .ModificationByField__Chart{
+    grid-area: chart;
+  }
+  
+ 
+  
+
+  .ModificationByField__Filters{
+    
+    grid-area: filterButtons;
+    display: flex;
+    justify-content: space-evenly;
+  }
+ 
+ 
+  .ModificationByField__Filter{
+  width: 100%;
+  
+  }
+ 
+  .ModificationByField__Submit{
+    width: 15%;
+   border-radius: 15px;
+    border: black;
+    background-color: lightgray;
+  }
+
+
   .chart_Colors{
     margin-left: 10px;
     /* display: flex; */
@@ -47,37 +85,4 @@
     width: fit-content;
     height: fit-content;
     border-radius: 5px;
-  }
-  .mainTitle{
-    font-size: 30px;
-  font-weight: bold;
-    grid-area: header;
-    text-align: center;
-    background-color: #20283E;
-    color: white;
-    height: 100%;
-  }
-  .filtersContainer{
-    
-    grid-area: filterButtons;
-  }
-  .ModificationByFieldTable{
-    grid-area: table;
-  }
-  .filtersContainer{
-    display: flex;
-    justify-content: space-evenly;
-  }
-  .filtersContainer__option{
-  width: 100%;
-  
-  }
-  .filtersContainer__Submit{
-    width: 15%;
-   border-radius: 15px;
-    border: black;
-    background-color: lightgray;
-  }
-  .chart{
-    grid-area: chart;
   }
