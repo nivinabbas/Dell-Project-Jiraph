@@ -1,6 +1,6 @@
 import React from "react";
 import "./StatusPage.css";
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import SelectInput from "../Select/SelectInput";
 import DashBoard from "../DashBoard/DashBoard";
 import Pie from "../Pie/Pie";
@@ -20,17 +20,14 @@ const optionSprint = [
   { value: "Done", label: "Done" },
 ];
 const StatusPage = (props) => {
-  
-  const [cardsContent,setCardsContent]=useState([]);
-  
- 
+  //   const [cardsContent,setCardsContent]=useState([]);
 
-  useEffect(()=>{
-    console.log('getDailyAlerts')
-    fetch('http://localhost:4000/api/status/dailyAlerts')
-    .then(res => res.json())
-    .then(data=>console.log(data))
-  },[])
+  //   useEffect(()=>{
+  //     console.log('getDailyAlerts')
+  //     fetch('http://localhost:4000/api/status/dailyAlerts')
+  //     .then(res => res.json())
+  //     .then(data=>console.log(data))
+  //   },[])
 
   // setCardsContent(array);
   // console.log(cardsContent)
@@ -38,13 +35,15 @@ const StatusPage = (props) => {
   return (
     <div className="statusPageContainer">
       <div className="statuspage__dashboard">
-        <DashBoard cardsContent={cardsContent} />
+        <DashBoard cardsContent={array} />
       </div>
-      <div className="statuspage__table">
-        <Table />
-      </div>
-      <div className="statuspage__chart">
-        <ColumnChart />
+      <div className="statusPageContainerTableColumn">
+        <div className="statuspage__table">
+          <Table />
+        </div>
+        <div className="statuspage__chart">
+          <ColumnChart />
+        </div>
       </div>
       <div className="statuspage__pie">
         <Pie />

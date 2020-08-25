@@ -17,7 +17,7 @@ const UIObj = [
 
 const ColumnChart = () => {
     return (
-        <div className='columnchart'>
+        <div className="columnchart">
             {
                 UIObj.map((column, index) => {
 
