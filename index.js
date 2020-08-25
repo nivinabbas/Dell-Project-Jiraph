@@ -30,14 +30,6 @@ const User = mongoose.model('User', {
 })
 
 
-app.get('/api/status/dailyAlerts', (req,res) => {
-    res.send({'success' : true,"error" : null , 'content':[{ name: "functional tests", number: 12 },
-    { name: "fix versions", number: 10 },
-    { name: "deleted tasks", number: 20 },
-    { name: "total tasks", number: 36 }]})
-})
-
-
 const UIObject = [
     { label: String, order: Number, Tasks: Array },
     { label: String, order: Number, Tasks: Array },
