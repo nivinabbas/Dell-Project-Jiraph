@@ -30,7 +30,7 @@ const TaskModel = mongoose.model('Task', {
         }
     },
     taskItem: {
-        user: User,
+        user: UserSchema,
         isDone: Boolean,
         updatedTime: Date,
         createdTime: Date
