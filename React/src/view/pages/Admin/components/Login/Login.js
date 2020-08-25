@@ -51,8 +51,9 @@ function Login(props) {
                 }
 
                 else {
-                    const { error } = data
-                    document.getElementById("res").innerText = `${error}`;
+                    const { error } = data;
+                    console.log(error)
+                    //document.getElementById("res").innerText = `${error}`;
                 }
 
             });
