@@ -27,7 +27,7 @@ router.post('/login',(req,res)=>{
  })
  router.post('/forgotPassword',(req,res)=>{
      const { email } = req.body
-     User.find({employeeEmail:email}).then(checkEmail=>{
+     User.find({"infoUser.employeeEmail":email}).then(checkEmail=>{
         if(checkEmail.length>0){
             if(validator.validate(email)){
                 const key = makeid(10)
