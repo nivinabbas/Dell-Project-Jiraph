@@ -1,4 +1,5 @@
 import React from "react";
+import Login from "./view/pages/Admin/components/Login/Login"
 import {
   BrowserRouter as Router,
   Switch,
@@ -42,24 +43,24 @@ import Admin from '.view/components/Admin/Admin'
             renders the first one that matches the current URL. */}
         <Switch>
         <Route exact={true} path="/">
-            <h1>login</h1>
+            <Login></Login>
             
           </Route>
           <Route path="/register">
-          <h1>register</h1>
+ 
           </Route>
           <Route path="/forgotPassword">
-          <h1>forgotPassword</h1>
+
           </Route>
           <Route path="/Admin">
           <h1>Admin</h1>
             
           </Route>
           <Route path="/analysis">
-          <h1>Analysis</h1>
+
           </Route>
           <Route path="/status">
-          <h1>status</h1>
+
           </Route>
         </Switch>
       </div>
