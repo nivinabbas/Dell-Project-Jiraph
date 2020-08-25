@@ -1,3 +1,8 @@
+/**
+ * @author Marshood Ayoub <Marshood.ayoub@gmail.com>
+ * @data 25/08/2020
+ */
+
 const fetch = require('node-fetch');
 
 const Data = [
@@ -321,8 +326,7 @@ const Data = [
     }
 ]
 const key="QYZNRVlzTAzJjWJLxobY24hGYcoclsaf4ZX5BLhGSi0Xa4cMC1APBoN";
-const body = { a: 1 };
-
+ 
 fetch('http://localhost:4000/api/PostBellaData/GetBellaData', {
     method: 'post',
     body: JSON.stringify({
