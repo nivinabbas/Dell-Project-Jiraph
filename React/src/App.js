@@ -6,6 +6,9 @@ import {
   Route,
   Link
 } from "react-router-dom";
+import './App.css';
+
+
 
  function App() {
   return (
@@ -15,16 +18,16 @@ import {
           <ul>
           <li>
               <Link to="/">Log In</Link>
-            {/* </li>
+            </li>
           <li>
-              <Link to="/register">Register</Link> */}
+              <Link to="/register">Register</Link>
 
             </li>
           <li>
-              <Link to="/forgotPassword">Admin</Link>
+              <Link to="/forgotPassword">forgotPassword</Link>
             </li>
             <li>
-              <Link to="/admin">Admin</Link>
+              <Link to="/Admin">Admin</Link>
             </li>
             <li>
               <Link to="/analysis">Analysis</Link>
@@ -48,8 +51,9 @@ import {
           <Route path="/forgotPassword">
 
           </Route>
-          <Route path="/admin">
-
+          <Route path="/Admin">
+          <h1>Admin</h1>
+            
           </Route>
           <Route path="/analysis">
 
