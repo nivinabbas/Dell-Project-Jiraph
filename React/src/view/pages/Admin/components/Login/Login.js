@@ -52,7 +52,7 @@ function Login(props) {
 
                 else {
                     const { error } = data
-                    document.getElementById("res").innerText = "${error}";
+                    document.getElementById("res").innerText = `${error}`;
                 }
 
             });
