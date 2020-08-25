@@ -3,7 +3,7 @@ import "./StatusPage.css";
 import { useState } from "react";
 import SelectInput from "../Select/SelectInput";
 import DashBoard from "../DashBoard/DashBoard";
-import Chart from "../../../../../components/charts/Chart";
+import ColumnChart from "../ColumnChart/ColumnChart";
 
 import Table from "../Table/Table";
 
@@ -25,7 +25,7 @@ const StatusPage = (props) => {
   // console.log(cardsContent)
 
   return (
-    <div className="statuspage">
+    <div className="statusPageContainer">
       <div className="statuspage__dashboard">
         <DashBoard cardsContent={array} />
       </div>
@@ -33,7 +33,7 @@ const StatusPage = (props) => {
         <Table />
       </div>
       <div className="statuspage__chart">
-        <Chart />
+        <ColumnChart />
       </div>
       <div className="statuspage__pie"></div>
     </div>
