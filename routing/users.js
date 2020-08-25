@@ -49,6 +49,28 @@ router.post('/login',(req,res)=>{
         if(checkEmail.length>0){
             if(validator.validate(email)){
                 const key = makeid(10)
+                var transporter = nodemailer.createTransport({
+                    service: 'gmail',
+                    auth: {
+                      user: 'servicetest468@gmail.com',
+                      pass: 'mxzmxz123'
+                    }
+                  });
+                  
+                  var mailOptions = {
+                    from: 'servicetest468@gmail.com',
+                    to: 'ramiayoub12123@gmail.com',
+                    subject: 'Sending Email using Node.js',
+                    text: 'That was easy!'+ key
+                  };
+                  
+                  transporter.sendMail(mailOptions, function(error, info){
+                    if (error) {
+                      console.log(error);
+                    } else {
+                      console.log('Email sent: ' + info.response);
+                    }
+                  });
                 res.send({success:true,error:null,info:{key:key}})
                 
             }else{
@@ -59,6 +81,8 @@ router.post('/login',(req,res)=>{
             res.send({success:false,error:"Email not found",info:null})
         }
      })
+    }else{
+        res.send({success:false,error:"Email not valid",info:null})
     }
  })
 
