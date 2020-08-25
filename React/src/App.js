@@ -1,15 +1,17 @@
 import React from "react";
 import Login from "./view/pages/Admin/components/Login/Login"
-import forgotPassword from "./view/pages/Admin/components/ForgotPassword/ForgotPassword"
+import ForgetPassword from "./view/pages/Admin/components/ForgetPassword/ForgetPassword";
+
+
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Redirect,
-} from "react-router-dom";
-import ForgotPassword from "./view/pages/Admin/components/ForgotPassword/ForgotPassword";
+  Link
 
-import Admin from '.view/components/Admin/Admin'
+} from "react-router-dom";
+
 
 
  function App() {
@@ -18,16 +20,12 @@ import Admin from '.view/components/Admin/Admin'
       <div>
         <nav>
           <ul>
-          <li>
-              <Link to="/">Log In</Link>
-            </li>
+
           <li>
               <Link to="/register">Register</Link>
 
             </li>
-          <li>
-              <Link to="/forgotPassword">Forgot Password</Link>
-            </li>
+
             <li>
               <Link to="/Admin">Admin</Link>
             </li>
@@ -51,7 +49,7 @@ import Admin from '.view/components/Admin/Admin'
             
           </Route>
           <Route path="/forgotPassword">
-              <ForgotPassword></ForgotPassword>
+              <ForgetPassword></ForgetPassword>
           </Route>
           <Route path="/Admin">
           <h1>Admin</h1>
