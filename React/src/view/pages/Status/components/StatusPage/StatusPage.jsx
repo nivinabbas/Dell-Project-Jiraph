@@ -3,6 +3,9 @@ import "./StatusPage.css";
 import { useState } from "react";
 import SelectInput from "../Select/SelectInput";
 import DashBoard from "../DashBoard/DashBoard";
+import Chart from "../../../../../components/charts/Chart";
+
+import Table from "../Table/Table";
 
 let array = [
   { name: "functional tests", number: 12 },
@@ -22,15 +25,17 @@ const StatusPage = (props) => {
   // console.log(cardsContent)
 
   return (
-    <div className="dashboard">
-      <DashBoard cardsContent={array} />
-
-      <SelectInput
-        options={optionSprint}
-        //dataKey="statusField"
-        //onSelect={onFilterChange}
-        isMulti={true}
-      />
+    <div className="statuspage">
+      <div className="statuspage__dashboard">
+        <DashBoard cardsContent={array} />
+      </div>
+      <div className="statuspage__table">
+        <Table />
+      </div>
+      <div className="statuspage__chart">
+        <Chart />
+      </div>
+      <div className="statuspage__pie"></div>
     </div>
   );
 };
