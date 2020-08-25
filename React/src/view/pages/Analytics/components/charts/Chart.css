@@ -6,8 +6,12 @@
   " chart "
   " table "
   ;
-  
+  overflow-x:auto;
   background-color: whitesmoke;
+  height: 29rem;
+}
+.chart__Wrapper::-webkit-scrollbar {
+  display: none;
 }
 .chart{
   grid-area: chart;
