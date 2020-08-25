@@ -24,12 +24,12 @@ function ModificationByFieldMain(props) {
   
       const fieldName = e.target.fieldName.value;
       const label = e.target.label.value;
-      const dateToSendStart = new Date(...prepareDate(startDate)).getTime();
-      const dateToSendEnd = new Date(...prepareDate(endDate)).getTime();
-      if (label === "day") {
+    //   const dateToSendStart = new Date(...prepareDate(startDate)).getTime();
+    //   const dateToSendEnd = new Date(...prepareDate(endDate)).getTime();
+      
         fetch('/getUpdatedTasksByFieldNameDaily', {
           method: 'POST',
-          body: JSON.stringify({ fieldName, dateToSendEnd, dateToSendStart }),
+          body: JSON.stringify({ fieldName, dateToSendEnd, dateToSendStart,label }),
   
           headers: {
             "Content-Type": "application/json"
@@ -38,34 +38,8 @@ function ModificationByFieldMain(props) {
           .then((res) => res.json())
           .then((data) => { setUiObjs(data) })
   
-      }
-      if (label === "month") {
-        fetch('/getUpdatedTasksByFieldNameMonthly', {
-          method: 'POST',
-          body: JSON.stringify({ fieldName, dateToSendEnd, dateToSendStart }),
-  
-          headers: {
-            "Content-Type": "application/json"
-          }
-        })
-          .then((res) => res.json())
-          .then((data) => { setUiObjs(data) })
-  
-      }
-      if (label === "year") {
-        fetch('/getUpdatedTasksByFieldNameYearly', {
-          method: 'POST',
-          body: JSON.stringify({ fieldName, dateToSendEnd, dateToSendStart }),
-  
-          headers: {
-            "Content-Type": "application/json"
-          }
-        })
-          .then((res) => res.json())
-          .then((data) => { setUiObjs(data) })
-  
-      }
-  
+      
+    
   
   
   
