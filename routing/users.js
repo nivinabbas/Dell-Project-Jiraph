@@ -1,6 +1,10 @@
 const express = require("express");
+const mongoose = require('mongoose');
+
 const router = express.Router();
-const User = require('../schemas/UserSchema')
+const UserSchema = require('../schemas/UserSchema');
+const UserModel = mongoose.model("UserModel", UserSchema)
+
 var nodemailer = require('nodemailer')
 var validator = require("email-validator");
 
@@ -11,9 +15,9 @@ var validator = require("email-validator");
 router.post('/login',(req,res)=>{
     const {email , password} = req.body;
     console.log('email ', email)
-    User.find({employeeEmail:email}).then(checkEmail=>{
+    UserModel.find({employeeEmail:email}).then(checkEmail=>{
         if(checkEmail.length>0){
-            User.find({employeeEmail:email,password:password}).then(checkPassword=>{
+            UserModel.find({employeeEmail:email,password:password}).then(checkPassword=>{
                 if(checkPassword.length>0){
                     res.send({success:true,error:"",info:null})
                 }else{
@@ -25,22 +29,27 @@ router.post('/login',(req,res)=>{
         }
     })
  })
- router.post('/forgotPassword',(req,res)=>{
-     const { email } = req.body
-     User.find({employeeEmail:email}).then(checkEmail=>{
-        if(checkEmail.length>0){
-            if(validator.validate(email)){
-                const key = makeid(10)
-                res.send({success:true,error:null,info:{key:key}})
-                
-            }else{
-                res.send({success:true,error:"Email is not valid",info:{key:key}})
 
-            }
-        }else{
-            res.send({success:false,error:"Email not found",info:null})
-        }
+ router.post('/forgotPassword',(req,res)=>{
+     const { email } = req.body;
+     UserModel.find({},(err,docs)=>{
+        console.log(docs)
      })
+    //  UserModel.find({"userInfo.useremployeeEmail":email}).then(checkEmail=>{
+    //      console.log(checkEmail)
+    //     if(checkEmail.length>0){
+    //         if(validator.validate(email)){
+    //             const key = makeid(10)
+    //             res.send({success:true,error:null,info:{key:key}})
+                
+    //         }else{
+    //             res.send({success:true,error:"Email is not valid",info:{key:key}})
+
+    //         }
+    //     }else{
+    //         res.send({success:false,error:"Email not found",info:null})
+    //     }
+    //  })
  })
 
 //  router.post('/getUserInfo',(req,res)=>{

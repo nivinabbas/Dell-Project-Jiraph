@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory } from "react-router-dom";
-import './Forgotpassword.css'
+import './ForgetPassword.css'
 function Forgotpassword(props) {
     let history = useHistory();
 
@@ -40,8 +40,8 @@ function Forgotpassword(props) {
             .then((res) => res.json())
             .then((data) => {
                 const { success } = data;
-                const {error}=data;
-                const {info}=data;
+                const { error } = data;
+                const { info } = data;
                 if (success == true) {
                     e.target.parentElement.children[1].style.display = "none";
                     e.target.parentElement.children[2].style.display = "initial";
