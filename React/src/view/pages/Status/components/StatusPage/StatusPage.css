@@ -12,6 +12,8 @@
 .statuspage__dashboard {
   grid-area: dashboard;
   margin: auto;
+  width: 100%;
+  border: 1px solid red;
 }
 .statuspage__table {
   grid-area: tabl;
