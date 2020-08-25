@@ -9,6 +9,9 @@ import {
 } from "react-router-dom";
 import ForgotPassword from "./view/pages/Admin/components/ForgotPassword/ForgotPassword";
 
+import Admin from '.view/components/Admin/Admin'
+
+
  function App() {
   return (
     <Router>
@@ -17,16 +20,16 @@ import ForgotPassword from "./view/pages/Admin/components/ForgotPassword/ForgotP
           <ul>
           <li>
               <Link to="/">Log In</Link>
-            {/* </li>
+            </li>
           <li>
-              <Link to="/register">Register</Link> */}
+              <Link to="/register">Register</Link>
 
             </li>
           <li>
               <Link to="/forgotPassword">Forgot Password</Link>
             </li>
             <li>
-              <Link to="/admin">Admin</Link>
+              <Link to="/Admin">Admin</Link>
             </li>
             <li>
               <Link to="/analysis">Analysis</Link>
@@ -50,8 +53,9 @@ import ForgotPassword from "./view/pages/Admin/components/ForgotPassword/ForgotP
           <Route path="/forgotPassword">
               <ForgotPassword></ForgotPassword>
           </Route>
-          <Route path="/admin">
-
+          <Route path="/Admin">
+          <h1>Admin</h1>
+            
           </Route>
           <Route path="/analysis">
 
