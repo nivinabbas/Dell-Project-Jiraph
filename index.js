@@ -49,7 +49,8 @@ const User = new mongoose.Schema({
     }
 })
 
-const UserModel = mongoose.model('User',User)
+const UserModel = mongoose.model('User',User);
+//exports.UserModel = UserModel
 
 const user = new UserModel({
     userInfo: {
@@ -60,7 +61,7 @@ const user = new UserModel({
     }
 })
 
-user.save();
+//user.save();
 
 
 
@@ -446,13 +447,11 @@ async function addTaskItem(lst){
     })
 }
 
+
+
 addTaskItem(newData);
-Task.insertMany(newData);
-
-
-
-console.log(newData)
-
+//Task.insertMany(newData);
+module.exports = { UserModel , Task}
 
 
 

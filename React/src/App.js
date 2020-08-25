@@ -8,7 +8,6 @@ import {
 } from "react-router-dom";
 import './App.css';
 
-import Admin from '.view/components/Admin/Admin'
 
 
  function App() {
