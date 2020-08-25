@@ -60,7 +60,7 @@ const user = new UserModel({
     }
 })
 
-user.save();
+// user.save();
 
 
 
@@ -447,7 +447,7 @@ async function addTaskItem(lst){
 }
 
 addTaskItem(newData);
-Task.insertMany(newData);
+// Task.insertMany(newData);
 
 
 
