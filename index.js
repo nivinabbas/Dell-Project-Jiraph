@@ -26,6 +26,8 @@ app.use("/api/status", statusRouter);
 const analyticsRouter = require('./routing/analytics');
 app.use("/api/analytics", analyticsRouter);
 
+const bellaRouting = require('./routing/bellaRouting');
+app.use("/api/PostBellaData", bellaRouting);
 
 
 
@@ -60,7 +62,7 @@ const user = new UserModel({
     }
 })
 
-user.save();
+//user.save();
 
 
 
@@ -102,7 +104,7 @@ const Task = mongoose.model('Task', {
         isDone: Boolean,
         updatedTime: Date,
         createdTime: Date
-    }
+    } 
 });
 
 
@@ -267,7 +269,6 @@ const newData = [
                 "newValue": "Low",
                 "oldValue": "High"
             }
-
         },
         "jiraItem": {
             "priority": "P01",
@@ -446,12 +447,12 @@ async function addTaskItem(lst){
     })
 }
 
-addTaskItem(newData);
-Task.insertMany(newData);
+//addTaskItem(newData);
+//Task.insertMany(newData);
 
 
 
-console.log(newData)
+//console.log(newData)
 
 
 
