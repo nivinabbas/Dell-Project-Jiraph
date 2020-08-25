@@ -1,6 +1,7 @@
 import React from "react";
 import Login from "./view/pages/Admin/components/Login/Login"
 import ForgetPassword from "./view/pages/Admin/components/ForgetPassword/ForgetPassword";
+import UsersList from "./view/pages/Admin/components/usersList/UsersList"
 
 
 import {
@@ -11,6 +12,7 @@ import {
   Link
 
 } from "react-router-dom";
+import usersList from "./view/pages/Admin/components/usersList/usersList";
 
 
 
@@ -52,7 +54,7 @@ import {
               <ForgetPassword></ForgetPassword>
           </Route>
           <Route path="/Admin">
-          <h1>Admin</h1>
+          <UsersList></UsersList>
             
           </Route>
           <Route path="/analysis">
