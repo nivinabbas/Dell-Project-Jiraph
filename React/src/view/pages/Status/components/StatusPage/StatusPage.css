@@ -20,10 +20,9 @@
 }
 .statuspage__chart {
   grid-area: chart;
-  background-color: brown;
+
   margin: auto;
 }
 .statuspage__pie {
   grid-area: pie;
-  background-color: cadetblue;
 }
