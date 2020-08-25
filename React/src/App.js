@@ -5,7 +5,7 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Redirect,
 } from "react-router-dom";
 import ForgotPassword from "./view/pages/Admin/components/ForgotPassword/ForgotPassword";
 
