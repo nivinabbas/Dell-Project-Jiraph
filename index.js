@@ -9,6 +9,7 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 app.use(express.static('public'))
 
 const url = "mongodb+srv://nimer:N1N1N1N1@cluster0.tejcy.mongodb.net/server";
+//const url = "mongodb+srv://Marshood:raMHdQuDOBxwrcss@cluster0.ifcjp.mongodb.net/jiraphServer";
 
 const mongoose = require('mongoose');
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -22,5 +23,8 @@ app.use("/api/status", statusRouter);
 
 const analyticsRouter = require('./routing/analytics');
 app.use("/api/analytics", analyticsRouter);
+
+const bellaRouting = require('./routing/bellaRouting');
+app.use("/api/PostBellaData", bellaRouting);
 
 app.listen(4000, () => { console.log("App is Listening to 4000") })
