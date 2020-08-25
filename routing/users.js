@@ -40,6 +40,18 @@ router.post('/login',(req,res)=>{
 }
  })
 
+ router.get('/getUsersList',(req,res)=>{
+     UserModel.find({}).then(users=>{
+        //  if(users.length>0){
+        //      let table = [];
+        //      users.map((item,index)=>{
+        //          item[index]
+        //      })
+        //     //  res.send({success:true,error:null,info:{users})
+        //  }
+     })
+ })
+
 
  router.post('/forgotPassword',(req,res)=>{
      const { email } = req.body;
@@ -64,9 +76,9 @@ router.post('/login',(req,res)=>{
                     text: 'That was easy!'+ key
                   };
                   
-                  transporter.sendMail(mailOptions, function(error, info){
-                    if (error) {
-                      console.log(error);
+                  transporter.sendMail(mailOptions, function(err, info){
+                    if (err) {
+                      console.log(err);
                     } else {
                       console.log('Email sent: ' + info.response);
                     }
