@@ -1,29 +1,23 @@
-.statuspage {
-  width: 100%;
-  background-color: #f9f9f9;
-  display: grid;
-  grid-template-columns: 5vw 46vw 22vw 22vw 5vw;
-  grid-template-rows: auto auto auto auto auto;
-  grid-template-areas:
-    ". dashboard dashboard dashboard ."
-    ". tabl chart chart ."
-    ". tabl pie pie .";
+.statusPageContainer {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  margin: auto;
 }
 .statuspage__dashboard {
-  grid-area: dashboard;
-  margin: auto;
-  width: 100%;
-  border: 1px solid red;
+  /* display: flex; */
+}
+.statusPageContainerTableColumn {
+  display: flex;
 }
 .statuspage__table {
-  grid-area: tabl;
+  width: 50;
+
   margin: auto;
 }
 .statuspage__chart {
-  grid-area: chart;
-  background-color: brown;
+  width: 50%;
 }
+
 .statuspage__pie {
-  grid-area: pie;
-  background-color: cadetblue;
 }
