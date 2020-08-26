@@ -5,7 +5,6 @@ import SelectInput from "../Select/SelectInput";
 import DashBoard from "../DashBoard/DashBoard";
 import Pie from "../Pie/Pie";
 import ColumnChart from "../ColumnChart/ColumnChart";
-
 import Table from "../Table/Table";
 
 let array = [
@@ -14,23 +13,33 @@ let array = [
   { name: "deleted tasks", number: 20 },
   { name: "total tasks", number: 36 },
 ];
+
 const optionSprint = [
   { value: "Backlog", label: "Backlog" },
   { value: "inProgress", label: "In Progress" },
   { value: "Done", label: "Done" },
 ];
 const StatusPage = (props) => {
-  //   const [cardsContent,setCardsContent]=useState([]);
+  // pie chart 1 :
+  // const [FunctionalPieContent, setFunctionalPieContent] = useState([]);
+  // const [cardsContent, setCardsContent] = useState([]);
 
-  //   useEffect(()=>{
-  //     console.log('getDailyAlerts')
-  //     fetch('http://localhost:4000/api/status/dailyAlerts')
-  //     .then(res => res.json())
-  //     .then(data=>console.log(data))
-  //   },[])
+  // useEffect(() => {
+  //   console.log("getDailyAlerts");
+  //   fetch("http://localhost:4000/api/status/dailyAlerts")
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       let { success, error, info } = data;
+  //       console.log(success, error, info);
+  //       if (success) {
+  //         setCardsContent(info);
+  //       } else {
+  //         alert(error);
+  //       }
+  //     });
+  // }, []);
 
   // setCardsContent(array);
-  // console.log(cardsContent)
 
   return (
     <div className="statusPageContainer">
@@ -50,5 +59,22 @@ const StatusPage = (props) => {
       </div>
     </div>
   );
+
+  // fetch("/api/Functionalpiechart", {
+  //   method: "POST",
+  //   body: JSON.stringify({}),
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  // })
+  //   .then((res) => res.json())
+  //   .then((data) => {
+  //     let { success, error, info } = data;
+  //     if (success) {
+  //       setFunctionalPieContent(info);
+  //     } else {
+  //       alert(error);
+  //     }
+  //   });
 };
 export default StatusPage;
