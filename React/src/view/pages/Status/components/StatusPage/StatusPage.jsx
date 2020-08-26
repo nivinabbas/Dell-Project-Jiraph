@@ -54,7 +54,7 @@ const StatusPage = (props) => {
           <Table />
         </div>
         <div className="statuspage__chart">
-          <ColumnChart />
+          <Chart />
         </div>
       </div>
       <div className="statuspage__chart">
