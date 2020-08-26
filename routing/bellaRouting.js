@@ -11,9 +11,9 @@ const mongoose = require('mongoose');
 let newDwata = [];
 const UserModel = mongoose.model("UserModel", UserSchema)
 
-async function addTaskItem(lst) {
-    await lst.map((item, index) => {
-        item.diffItem.updateTime = new Date(item.diffItem.updateTime)
+ function addTaskItem(lst) {
+    lst.map((item, index) => {
+        item.diffItem.updatedTime = new Date(item.diffItem.updatedTime)
         item.taskItem =
         {
             user: null,
@@ -23,17 +23,36 @@ async function addTaskItem(lst) {
         }
     })
 }
+// TaskModel.insertMany(Data1);
 router.post("/GetBellaData", async function (req, res) {
+    newDwata = [];
     const { user_id, user_pass, Data } = req.body;
     if (req.body.key == "QYZNRVlzTAzJjWJLxobY24hGYcoclsaf4ZX5BLhGSi0Xa4cMC1APBoN") {
         newDwata = Data;
-        addTaskItem(newDwata);
-        TaskModel.insertMany(newDwata).then(console.log("Adding Success.!"));
-         res.send({ "success": "ture" });
+        console.log("data length",Data.length)
+        console.log("befor")
+         addTaskItem(newDwata);
+        console.log("after")
+        //insertToDB();
+        try{
+        TaskModel.insertMany(newDwata).then(console.log("Adding Success..!"));
+        }catch{
+            console.error("error: ",e)
+        }
+        res.send({ "success": "ture"});
     } else {
         res.send({ "success": "false" });
     };
 });
+
+
+async function insertToDB() {
+    console.log("insertToDb")
+    await TaskModel.insertMany(newDwata).then(console.log("Adding Success..!"));
+
+}
+
+
 
 
 

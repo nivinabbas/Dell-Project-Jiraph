@@ -22,7 +22,7 @@ const TaskModel = mongoose.model('TaskModel', {
     },
     diffItem: {
         type: { type: String },
-        updateTime: Date,
+        updatedTime: Date,
         updatedField: {
             fieldName: String,
             oldValue: String,
