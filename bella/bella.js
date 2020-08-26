@@ -15,7 +15,7 @@ const Data=[
                 "status": "Funnel",
                 "specialFields": {
                     "jiraParentId": "TRIES-21957",
-                    "functionalTest": true,
+                    "functionalTest": false,
                     "qaRepresentative": "Morad",
                     "fixVersion": "Foothills V1.1.0 (Core)"
                 }
@@ -26,10 +26,10 @@ const Data=[
                  "status": "Blocked"                
             },
             "diffItem": {
-                "type": "Delete",
+                "type": "updated",
                 "updatedTime": new Date(),
                  "updatedField":{
-                     "fieldName":"fixVersion",
+                     "fieldName":"fieldName",
                      "oldValue":"oldValue",
                      "newValue":"newValue"
                  }

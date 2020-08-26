@@ -15,17 +15,8 @@ let Today;
 
 router.get("/dailyAlerts", async function (req, res) {
 
-    let tasks;
-    let Today = new Date();
-    let label = [{
-        functionalTest: 12,
-        fixVersion: 10,
-        deletedTickets: 0
-    }];
-    // let Today = new Date().toLocaleDateString();
-    // var milliseconds = Today.getTime();
-    console.log("123 ", Today);
-    Today = dateFormat();
+ 
+    let Today = dateFormat();
     let DailyAlerts = await TaskModel.aggregate([
         {
             "$match": {
@@ -73,13 +64,22 @@ router.get("/dailyAlerts", async function (req, res) {
                     }
                 },
             },
-            "TotalTasks": 
+            "totalTasks": 
                  { "$sum": 1 },
         },
     ]);
-    console.log("DailyAlerts");
+    if(DailyAlerts.length==0||DailyAlerts==[])
+    {
+        res.send({ success: true, error: null, info: {  _id: 'DailyAlerts',
+        functionalTest: 0,
+        deletedTicktes: 0,
+        fixVersionTicktes: 0,
+        TotalTasks: 0 } });
+
+    }
+    console.log("DailyAlertsStart");
     console.log(DailyAlerts)
-    console.log("DailyAlertsFF");
+    console.log("DailyAlertsFinal");
 
     res.send({ success: true, error: null, info: { DailyAlerts } });
 })
@@ -149,6 +149,15 @@ async function teststau() {
             },
         },
     ]);
+    if(DailyAlerts.length==0||DailyAlerts==[])
+    {
+        DailyAlerts=  {  _id: 'DailyAlerts',
+        functionalTest: 0,
+        deletedTicktes: 0,
+        fixVersionTicktes: 0,
+        TotalTasks: 0 } ;
+
+    }
     console.log("DailyAlerts");
     console.log(DailyAlerts)
     console.log("DailyAlertsFF");
