@@ -69,7 +69,7 @@ router.post('/login',(req,res)=>{
                      
                      var mailOptions = {
                        from: 'servicetest468@gmail.com',
-                       to: 'ramiayoub12123@gmail.com',
+                       to: email,
                        subject: 'Reset Password',
                        text: 'Your Key Is: '+ key
                      };
@@ -92,22 +92,22 @@ router.post('/login',(req,res)=>{
        }
  })
 
- router.post('/getUserInfo',(req,res)=>{
-    const { email } = req.body;
-    if(validator.validate(email)){
-       UserModel.findOne({"userInfo.employeeEmail":email}).then(checkEmail=>{
-          if(checkEmail.length>0){
+//  router.post('/getUserInfo',(req,res)=>{
+//     const { email } = req.body;
+//     if(validator.validate(email)){
+//        UserModel.findOne({"userInfo.employeeEmail":email}).then(checkEmail=>{
+//           if(checkEmail.length>0){
                   
-                  res.send({success:true,error:null,info:{email:checkEmail[0].userInfo.employeeEmail,name:checkEmail[0].userInfo.employeeName,role:checkEmail[0].userInfo.employeeRole,id:checkEmail[0]._id}})
+//                   res.send({success:true,error:null,info:{email:checkEmail[0].userInfo.employeeEmail,name:checkEmail[0].userInfo.employeeName,role:checkEmail[0].userInfo.employeeRole,id:checkEmail[0]._id}})
                   
-          }else{
-              res.send({success:false,error:"Email not found",info:null})
-          }
-       })
-      }else{
-          res.send({success:false,error:"Email not valid",info:null})
-      }
-})
+//           }else{
+//               res.send({success:false,error:"Email not found",info:null})
+//           }
+//        })
+//       }else{
+//           res.send({success:false,error:"Email not valid",info:null})
+//       }
+// })
 
 router.post('/createUser',(req,res)=>{
     const { email , password , name , role} = req.body;
