@@ -3,8 +3,7 @@ import "./StatusPage.css";
 import { useState, useEffect } from "react";
 import SelectInput from "../Select/SelectInput";
 import DashBoard from "../DashBoard/DashBoard";
-import Chart from "../../../../../components/charts/Chart";
-import Pie from "../Pie/Pie";
+
 
 import Table from "../Table/Table";
 import StackedChart from "../Chart/StackedChart";
