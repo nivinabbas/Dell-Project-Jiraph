@@ -3,59 +3,30 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Redirect,
 } from "react-router-dom";
+import Home from "../src/view/pages/Home";
 
 import MainPage from './view/pages/Analytics/components/MainPage/MainPage'
 
  function App() {
   return (
     <Router>
-      <div>
-        <nav>
-          <ul>
-          <li>
-              <Link to="/">Log In</Link>
-            </li>
-          <li>
-              <Link to="/register">Register</Link>
-            </li>
-          <li>
-              <Link to="/forgotPassword">Admin</Link>
-            </li>
-            <li>
-              <Link to="/admin">Admin</Link>
-            </li>
-            <li>
-              <Link to="/analysis">Analysis</Link>
-            </li>
-            <li>
-              <Link to="/status">Status</Link>
-            </li>
-          </ul>
-        </nav>
-
-        {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
+      <div className="app">
         <Switch>
-        <Route exact={true} path="/">
-            <h1>login</h1>
-          </Route>
-          <Route path="/register">
-          <h1>register</h1>
+          <Route path="/home">
+            <Home />
           </Route>
           <Route path="/forgotPassword">
-          <h1>forgotPassword</h1>
+            <h1>forget</h1>
           </Route>
           <Route path="/admin">
-          <h1>Admin</h1>
+            <h1>admin</h1>
           </Route>
           <Route path="/analysis">
           <MainPage />
           </Route>
-          <Route path="/status">
-          <h1>status</h1>
-          </Route>
+          <Redirect from="/" exact to="/home/status" />
         </Switch>
       </div>
     </Router>
