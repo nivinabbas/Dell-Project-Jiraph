@@ -1,29 +1,26 @@
 import React from "react";
-import Login from "./view/pages/Admin/components/Login/Login"
-import ForgetPassword from "./view/pages/Admin/components/ForgetPassword/ForgetPassword";
 
+//components
+import Login from "./view/pages/Admin/components/Login/Login";
+import ForgetPassword from "./view/pages/Admin/components/ForgetPassword/ForgetPassword";
+import Status from "./view/pages/Home/index.jsx";
 
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Redirect,
-  Link
-
+  Link,
 } from "react-router-dom";
 
-
-
- function App() {
+function App() {
   return (
     <Router>
       <div>
         <nav>
           <ul>
-
-          <li>
+            <li>
               <Link to="/register">Register</Link>
-
             </li>
 
             <li>
@@ -41,25 +38,19 @@ import {
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
-        <Route exact={true} path="/">
+          <Route exact={true} path="/">
             <Login></Login>
-            
           </Route>
-          <Route path="/register">
-            
-          </Route>
+          <Route path="/register"></Route>
           <Route path="/forgotPassword">
-              <ForgetPassword></ForgetPassword>
+            <ForgetPassword></ForgetPassword>
           </Route>
           <Route path="/Admin">
-          <h1>Admin</h1>
-            
+            <h1>Admin</h1>
           </Route>
-          <Route path="/analysis">
-
-          </Route>
+          <Route path="/analysis"></Route>
           <Route path="/status">
-
+            <Status />
           </Route>
         </Switch>
       </div>

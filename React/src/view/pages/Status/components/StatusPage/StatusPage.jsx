@@ -26,12 +26,12 @@ const StatusPage = (props) => {
   const [cardsContent, setCardsContent] = useState([]);
 
   useEffect(() => {
-    console.log("getDailyAlerts");
-    fetch("http://localhost:4000/api/status/dailyAlerts")
+    console.log("getDailyalerts");
+    fetch("/api/status/dailyalerts")
       .then((res) => res.json())
       .then((data) => {
+        console.log(data);
         let { success, error, info } = data;
-        console.log(success, error, info);
         if (success) {
           setCardsContent(info);
         } else {
