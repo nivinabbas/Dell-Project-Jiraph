@@ -3,9 +3,12 @@ import "./StatusPage.css";
 import { useState, useEffect } from "react";
 import SelectInput from "../Select/SelectInput";
 import DashBoard from "../DashBoard/DashBoard";
+import Chart from "../../../../../components/charts/Chart";
 import Pie from "../Pie/Pie";
-import ColumnChart from "../ColumnChart/ColumnChart";
+
 import Table from "../Table/Table";
+import StackedChart from "../Chart/StackedChart";
+import PieChart from "../Chart/PieChart";
 
 let array = [
   { name: "functional tests", number: 12 },
@@ -54,8 +57,12 @@ const StatusPage = (props) => {
           <ColumnChart />
         </div>
       </div>
+      <div className="statuspage__chart">
+        <StackedChart />
+      </div>
       <div className="statuspage__pie">
-        <Pie />
+        <PieChart />
+        <PieChart />
       </div>
     </div>
   );
