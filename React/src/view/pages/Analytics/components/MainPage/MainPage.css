@@ -1,8 +1,14 @@
-    
-    
-    body {
+*{
+    margin:0;
+    padding:0;
+    outline: none;
+    box-sizing: border-box;
+    list-style: none;
+    text-decoration: none;
+}    
+body {
         background-color: whitesmoke;
-      }
+}
 
 .MainForm {
     display: grid;
@@ -28,8 +34,19 @@
     cursor: pointer;
     font-family: 'Roboto', sans-serif;
     font-size: 26px;
+    border: none;
+    transition: all 0.2s;
     /* border-bottom: 1px solid rgba(0, 0, 0, 0.281); */
   }
+
+  .MainForm__status--btn:hover{
+    color: rgba(241, 241, 241, 0.9);
+    font-size: 28px;
+    background-color: #3288c196;
+    border: none;
+    box-shadow:0 7px 7px rgba(175, 175, 175, 0.836);
+    height: 105px;
+}
   
   
   .MainForm__analytics{
@@ -43,8 +60,20 @@
     cursor: pointer;
     font-family: 'Roboto', sans-serif;
     font-size: 26px;
+    border: none;
+    transition: all 0.2s;
     
   }
+
+  .MainForm__analytics--btn:hover{
+    color: rgba(241, 241, 241, 0.9);
+    font-size: 28px;
+    background-color: #3288c196;
+    border: none;
+    box-shadow:0 7px 7px rgba(175, 175, 175, 0.836);
+    height: 105px;
+}
+  
   
 
 .MainForm__changesOfJiraTickets{
