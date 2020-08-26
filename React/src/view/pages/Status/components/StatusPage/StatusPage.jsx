@@ -3,18 +3,16 @@ import "./StatusPage.css";
 import { useState, useEffect } from "react";
 import SelectInput from "../Select/SelectInput";
 import DashBoard from "../DashBoard/DashBoard";
-import Chart from "../../../../../components/charts/Chart";
-import Pie from "../Pie/Pie";
 
 import Table from "../Table/Table";
 import StackedChart from "../Chart/StackedChart";
 import PieChart from "../Chart/PieChart";
 
 let array = [
-  { name: "functional tests", number: 12 },
-  { name: "fix versions", number: 10 },
-  { name: "deleted tasks", number: 20 },
-  { name: "total tasks", number: 36 },
+  { name: "functionalTests", number: 12 },
+  { name: "fixVersions", number: 10 },
+  { name: "deletedTasks", number: 20 },
+  { name: "totalTasks", number: 36 },
 ];
 
 const optionSprint = [
@@ -24,37 +22,37 @@ const optionSprint = [
 ];
 const StatusPage = (props) => {
   // pie chart 1 :
-  // const [FunctionalPieContent, setFunctionalPieContent] = useState([]);
-  // const [cardsContent, setCardsContent] = useState([]);
+  const [FunctionalPieContent, setFunctionalPieContent] = useState([]);
+  const [cardsContent, setCardsContent] = useState([]);
 
-  // useEffect(() => {
-  //   console.log("getDailyAlerts");
-  //   fetch("http://localhost:4000/api/status/dailyAlerts")
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       let { success, error, info } = data;
-  //       console.log(success, error, info);
-  //       if (success) {
-  //         setCardsContent(info);
-  //       } else {
-  //         alert(error);
-  //       }
-  //     });
-  // }, []);
+  useEffect(() => {
+    console.log("getDailyalerts");
+    fetch("/api/status/dailyalerts")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        let { success, error, info } = data;
+        if (success) {
+          setCardsContent(info);
+        } else {
+          alert(error);
+        }
+      });
+  }, []);
 
-  // setCardsContent(array);
+  //setCardsContent(array);
 
   return (
     <div className="statusPageContainer">
       <div className="statuspage__dashboard">
-        <DashBoard cardsContent={array} />
+        <DashBoard cardsContent={cardsContent} />
       </div>
       <div className="statusPageContainerTableColumn">
         <div className="statuspage__table">
           <Table />
         </div>
         <div className="statuspage__chart">
-          <Chart />
+          <StackedChart />
         </div>
       </div>
       <div className="statuspage__chart">
