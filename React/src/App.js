@@ -29,7 +29,7 @@ import {
             </li>
 
             <li>
-              <Link to="/Admin">Admin</Link>
+              <Link to="/UserList">Admin</Link>
             </li>
             <li>
               <Link to="/analysis">Analysis</Link>
@@ -53,8 +53,8 @@ import {
           <Route path="/forgotPassword">
               <ForgetPassword></ForgetPassword>
           </Route>
-          <Route path="/admin">
-
+          <Route path="/userList">
+          <UserList></UserList>
           </Route>
           <Route path="/analysis">
 
