@@ -1,18 +1,23 @@
 .statusPageContainer {
   display: flex;
-}
-.statuspage__dashboard {
-  display: flex;
-  width: auto;
+  flex-direction: column;
+  width: 90%;
   margin: auto;
 }
-.statuspage__table {
+.statuspage__dashboard {
+  /* display: flex; */
+}
+.statusPageContainerTableColumn {
   display: flex;
 }
+.statuspage__table {
+  width: 50;
+
+  margin: auto;
+}
 .statuspage__chart {
-  display: flex;
+  width: 50%;
 }
 
 .statuspage__pie {
-  display: flex;
 }
