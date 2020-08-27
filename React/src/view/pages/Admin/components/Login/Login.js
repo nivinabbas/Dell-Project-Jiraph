@@ -30,7 +30,7 @@ function Login(props) {
         const email = userEmailInp.value;
         const password = userPswInp.value;
 
-        fetch("/api/users/login", {
+        fetch('/api/users/login', {
             method: "POST",
             body: JSON.stringify({ email, password }),
             headers: {
@@ -62,4 +62,3 @@ function Login(props) {
 
 export default Login;
 
-// test
