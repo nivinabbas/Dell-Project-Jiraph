@@ -9,6 +9,7 @@ function MainTable(props) {
 
 
   const tasks = [{ jiraId: 15, jiraName: "abona", fieldName: "aemna", newValue: 100, updateDate: "15/06/2020" }]
+  
   const headers = ["jiraId", "jiraName", "fieldName", "newValue", "updateDate"]
 
   return (
