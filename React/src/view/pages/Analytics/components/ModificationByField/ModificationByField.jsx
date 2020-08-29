@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import "./ModificationByField.css";
 import { useState } from 'react';
-
+import MainTable from "../MainTable/MainTable"
 import Select from "react-select"
 // import ApexChart from "../ApexChart/ApexChart"
 
@@ -90,7 +90,11 @@ function ModificationByField(props) {
   return (
 
 
+
     <div className='ModificationByField__Wrapper'>
+      <div className="abona" ><MainTable changes={true}  />
+      <MainTable  /></div>
+      
       <div className="ModificationByField__MainTitle">Modification By Field</div>
       <div className="ModificationByField__Chart">
       </div>

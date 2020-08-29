@@ -6,10 +6,13 @@
   ". header ."
   
   ". filterButtons ."
-  ". . ."
+  ". chart ."
   "chartColors chart .";
   
   background-color: whitesmoke;
+}
+.abona{
+grid-area: chart;
 }
 
 .ModificationByField__MainTitle{
