@@ -43,7 +43,7 @@ function ModificationByField(props) {
 
 
   const renderFieldName = () => {
-    fetch('/api/analytics/modificationByField', {
+    fetch('/api/analytics/modificationByFieldFilters', {
       method: 'POST',
       body: JSON.stringify({ fieldName }),
       headers: {
