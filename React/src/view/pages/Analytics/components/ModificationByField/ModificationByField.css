@@ -36,12 +36,12 @@ font-weight: bold;
   grid-area: filterButtons;
   display: flex;
   justify-content: space-evenly;
+
 }
 
 
 .ModificationByField__Filter{
 width: 100%;
-
 
 }
 
