@@ -1,5 +1,6 @@
 import React from 'react';
 import "./DelaysInDelivery.css";
+import MainTable from "../MainTable/MainTable"
 
 import Select from 'react-select'
 
@@ -134,6 +135,10 @@ function DelaysInDelivery() {
   return (
 
     <div className='DelaysInDeliveryWrapper'>
+       <div className="DelaysInDelivery__Table" >
+                <MainTable changes={true}  />
+              
+          </div>
       <div className="DelaysInDelivery__Title">Delays in Delivery</div>
      
       {/* Select Filters */}
