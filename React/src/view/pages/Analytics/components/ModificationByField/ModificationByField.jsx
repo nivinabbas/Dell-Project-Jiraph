@@ -16,13 +16,13 @@ function ModificationByFieldMain(props) {
     const render = () => {
         fetch('/api/analytics/modificationByField', {
             method: 'POST',
-            body: JSON.stringify({ fieldName, values, label, startDate, endDate, qaRepresentative }),
+            body: JSON.stringify({ fieldName, values, label,qaRepresentative }),
             headers: {
                 "Content-Type": "application/json"
             }
         })
             .then((res) => res.json())
-        // .then((data) => { setUiObjs(data) })
+        .then((data) => { console.log(data) })
     }
 
 
