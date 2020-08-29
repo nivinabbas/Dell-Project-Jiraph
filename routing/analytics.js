@@ -59,15 +59,17 @@ router.post('/modificationByFieldFilters', async (req, res) => {
         tasks = await TaskModel.aggregate([
             {
                 $group: {
-                    _id: null,
-                    fieldNames: {$addToSet : "$diffItem.updatedField.fieldName"}
+                    _id:null,
+                    labels: {$addToSet: {"label":"$diffItem.updatedField.fieldName"}}
+                },
+                //fieldNames: {$addToSet : "$diffItem.updatedField.fieldName"}
 
-                }
+            
             }
         ])
     }
 
-    res.send(tasks)
+res.send(tasks)
 })
 
 module.exports = router;
