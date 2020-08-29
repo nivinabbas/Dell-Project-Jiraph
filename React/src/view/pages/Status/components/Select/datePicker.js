@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { DateRange } from "react-date-range";
-import { formatDate, prepareDateForRequest } from "../../helpers/utils";
+import { formatDate, prepareDateForRequest } from "../helpers/utils";
 const DatePicker = ({ onDateChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [state, setState] = useState([

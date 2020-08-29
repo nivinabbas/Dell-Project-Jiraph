@@ -1,45 +1,44 @@
 import React from "react";
 import "./style.css";
 
-/////////////Presenting Data Table/////////////
-
-const dummyData = [
-  { a: "a", b: "b", c: "", d: "" },
-  { a: "a2", b: "b2" },
-  { a: "a2", b: "b2" },
-  { a: "a2" },
-];
-const getTableData = (data) => {
-  return data.map((d) => {
-    return (
-      <tr>
-        {Object.keys(d).map((key, index) => {
-          return <td key={index}>{d[key]}</td>;
-        })}
-      </tr>
-    );
-  });
-};
-
-const getTableHeader = (item) => {
+export default function TasksTable({ openTasks, onDoneClick }) {
   return (
-    <tr>
-      {Object.keys(item).map((key, index) => {
-        return <th key={index}>{key}</th>;
-      })}
-    </tr>
+    <div className="open-tasks">
+      <div className="open-tasks-title">
+        <h3>Open Tasks</h3>
+      </div>
+      <div className="open-tasks-table">
+        <table className="table">
+          <thead className="thead-dark">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Id</th>
+              <th scope="col">Jira Name</th>
+              <th scope="col">Field Name</th>
+              <th scope="col">Old Val</th>
+              <th scope="col">New Val</th>
+              <th scope="col">Done</th>
+            </tr>
+          </thead>
+          <tbody>
+            {openTasks.map((task, index) => (
+              <tr key={index}>
+                <th scope="row">{++index}</th>
+                <td>{task.jiraItem.jiraId}</td>
+                <td>{task.jiraItem.jiraName}</td>
+                <td>{task.diffItem.updatedField.fieldName}</td>
+                <td>{task.diffItem.updatedField.oldValue}</td>
+                <td>{task.diffItem.updatedField.newValue}</td>
+                <td>
+                  <i onClick={() => onDoneClick(task.jiraItem.jiraId)}>
+                    &#9989;
+                  </i>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
-};
-
-const Table = ({ data }) => {
-  return (
-    <table>
-      <tbody className="container">
-        {getTableHeader(dummyData[0])}
-        {getTableData(dummyData)}
-      </tbody>
-    </table>
-  );
-};
-
-export default Table;
+}
