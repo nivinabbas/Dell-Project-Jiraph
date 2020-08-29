@@ -37,12 +37,11 @@ function ModificationByField(props) {
       }
     })
       .then((res) => res.json())
-      .then((data) => { console.log(data) })
+      .then((data) => { setUiObjs(data) })
   }
 
-
-/// Field Name : 
-  /*const renderFilters = () => {
+ 
+  const renderFilters = () => {
     fetch('/api/analytics/modificationByFieldFilters', {
       method: 'POST',
       body: JSON.stringify({ fieldName }),
@@ -52,11 +51,14 @@ function ModificationByField(props) {
     })
       .then((res) => res.json())
       .then((data) => { 
-                data.map(array => {
-                  if(array)
-                })
+        if(data.length>0){
+          console.log(data)
+                setQaRepresentativeOptions(data[0].QA);
+                setValueOptions(data[0].Values);
+        }
+                 
       })
-  }*/
+  }
 
 
   const date = new Date()
@@ -90,12 +92,12 @@ function ModificationByField(props) {
 
   const handleChangeFieldName = (change => {
     setFieldName([change.label])
-    console.log(fieldName)
-    //renderFilters();
+    renderFilters();
   })
 
   const handleChangeValues = (change => {
     setValues([change.label])
+    console.log(values)
     render();
 
   })
@@ -124,9 +126,7 @@ function ModificationByField(props) {
 
 
     <div className='ModificationByField__Wrapper'>
-      <div className="ModificationByField__Table" >
-      <MainTable changes={true}  />
-      </div>
+     
       <div className="charti"> {UiObjs.length>0 && <Chart UiObjs={UiObjs}/>}</div>
       
       <div className="ModificationByField__MainTitle">Modification By Field</div>
