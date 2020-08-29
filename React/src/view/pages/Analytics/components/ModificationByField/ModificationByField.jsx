@@ -27,11 +27,11 @@ function ModificationByField(props) {
        console.log(data);
       })
   },[])
-  const renderFieldName =() => {
-
-    fetch('/api/analytics/modificationByFieldFilters', {
+  
+  const renderFilters = () => {
+    fetch('/api/analytics/modificationByField', {
       method: 'POST',
-      body: JSON.stringify({fieldName}),
+      body: JSON.stringify({ fieldName, values, label, qaRepresentative }),
       headers: {
         "Content-Type": "application/json"
       }
@@ -43,15 +43,13 @@ function ModificationByField(props) {
        console.log(data);
       })
   }
-  
 
-  const date = new Date()
-  const date1MonthAgo = new Date(new Date().setMonth(date.getMonth() - 1));
 
-  const render = () => {
-    fetch('/api/analytics/modificationByField', {
+
+  const renderFieldName = () => {
+    fetch('/api/analytics/modificationByFieldFilters', {
       method: 'POST',
-      body: JSON.stringify({ fieldName, values, label, qaRepresentative }),
+      body: JSON.stringify({ fieldName }),
       headers: {
         "Content-Type": "application/json"
       }
@@ -60,6 +58,11 @@ function ModificationByField(props) {
       .then((data) => {setUiObjs(data)})
   }
 
+
+
+
+  const date = new Date()
+  const date1MonthAgo = new Date(new Date().setMonth(date.getMonth() - 1));
 
   const [fieldName, setFieldName] = useState([]);
   const [values, setValues] = useState([]);
@@ -75,36 +78,37 @@ function ModificationByField(props) {
   const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([]);
   const [labelOptions, setLabelOptions] = useState([{ label: "Daily", value: "daily" }, { label: "Weekly", value: "weekly" }, { label: "Monthly", value: "monthly" }, { label: "Yearly", value: "yearly" }]);
 
-  // renderFieldName();
 
   const handleChangeLabel = (change => {
     setLabel([change.value])
 
-    render();
+    renderFilters();
   })
+
   const handleChangeFieldName = (change => {
-    setFieldName([change.value])
+    setFieldName([change.label])
     renderFieldName();
   })
+
   const handleChangeValues = (change => {
-    setLabel([change.value])
-    render();
+    setValues([change.label])
+    renderFilters();
 
   })
   const handleChangeQaRepresentative = (change => {
-    setQaRepresentative([change.value])
-    render();
+    setQaRepresentative([change.label])
+    renderFilters();
   })
   const handleChangeStartDate = (change => {
     setStartDate(change.target.value)
     console.log(startDate)
-    render();
+    renderFilters();
   })
   const handleChangeEndDate = (change => {
     setEndDate(change.target.value)
     console.log(endDate)
-    // render();
-  })
+    renderFilters();
+    })
 
 
 
