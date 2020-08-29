@@ -62,10 +62,20 @@ router.post('/modificationByFieldFilters', async (req, res) => {
                     _id:null,
                     labels: {$addToSet: {"label":"$diffItem.updatedField.fieldName"}}
                 },
-                //fieldNames: {$addToSet : "$diffItem.updatedField.fieldName"}
-
-            
-            }
+               
+            },
+            // {
+            //     $unwind: { path: "$labels"}
+              
+            // },
+            // {
+            //     $project: {_id:0 , labels: 1}
+              
+            // },
+            // {
+            //     $sort: {labels:1}
+              
+            // }
         ])
     }
     else{
@@ -81,12 +91,9 @@ router.post('/modificationByFieldFilters', async (req, res) => {
                     _id:null,
                     QA: {$addToSet: {"label":"$jiraItem.qaRepresentative"}},
                     Values: {$addToSet: {"label":"$diffItem.updatedField.newValue"}},
-                    tasks:{$push: "$$ROOT"}
-                },
-                //fieldNames: {$addToSet : "$diffItem.updatedField.fieldName"}
-
+                }
+            },
             
-            }
         ])
     }
 
