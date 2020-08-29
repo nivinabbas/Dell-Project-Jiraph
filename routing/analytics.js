@@ -21,7 +21,6 @@ router.post('/api/analytics/modificationByField', async (req, res) => {
 
         ])
     }
-    console.log(tasks)
     res.send(tasks)
 })
 
