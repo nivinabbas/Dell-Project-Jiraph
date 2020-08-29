@@ -104,6 +104,7 @@ function MainTable(props) {
       <div className="MainTable__Cell">Qc Requirement Id</div>
       <div className="MainTable__Cell">Qc Requirement Type</div>
       <div className="MainTable__Cell">QC Status</div>
+     
       {changes && 
         <div className="MainTable__Cell">Updated Time</div>}
         {changes && 
