@@ -7,6 +7,9 @@ import { useState , useEffect } from 'react';
 
 
 function DeletedJiraTickets() {
+  // Default Date 
+  const date = new Date()
+  const date1MonthAgo = new Date(new Date().setMonth(date.getMonth() - 1));
 
   // To set UiObj from the filtered Data we recieved from server 
   const [UiObjs, setUiObjs] = useState([]);
@@ -16,8 +19,8 @@ function DeletedJiraTickets() {
   const [ functionalTest , setfunctionalTest ]=useState([])
   const [ label  , setLabel ]=useState([])
   const [ qaRepresentative  , setQaRepresentative]=useState([])
-  const [ startDate,setStartDate ]=useState([])
-  const [ endDate,setEndDate ]=useState([] )
+  const [ startDate,setStartDate ]=useState(date1MonthAgo)
+  const [ endDate,setEndDate ]=useState(date)
 
   
 

@@ -7,6 +7,8 @@ import { useState , useEffect } from 'react';
 
 
 function ChangesInJiraTickets() {
+
+  // Default Date
   const date = new Date()
   const date1MonthAgo = new Date(new Date().setMonth(date.getMonth() - 1));
 
@@ -18,8 +20,8 @@ function ChangesInJiraTickets() {
   const [ status , setStatus ]=useState([])
   const [ label  , setLabel ]=useState([])
   const [ qaRepresentative  , setQaRepresentative]=useState([])
-  const [ startDate,setStartDate ]=useState([])
-  const [ endDate,setEndDate ]=useState([] )
+  const [ startDate,setStartDate ]=useState(date1MonthAgo)
+  const [ endDate,setEndDate ]=useState(date)
 
   
 
