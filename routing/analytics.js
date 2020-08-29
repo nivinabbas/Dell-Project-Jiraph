@@ -2,16 +2,10 @@ const express = require("express");
 const mongoose = require('mongoose');
 
 const router = express.Router();
-<<<<<<< HEAD
-const UserSchema = require('../schemas/UserSchema');
-const UserModel = mongoose.model("UserModel", UserSchema)
-
-=======
 const mongoose = require('mongoose');
 const UserSchema = require('../schemas/UserSchema');
 const UserModel = mongoose.model("UserModel", UserSchema);
 const TaskModel = require('../schemas/TaskSchema');
->>>>>>> Yousef
 
 //app.get/post/put/delete => router.get/post/put/delete
 
