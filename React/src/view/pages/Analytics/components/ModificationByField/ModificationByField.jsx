@@ -3,6 +3,7 @@ import "./ModificationByField.css";
 import { useState } from 'react';
 import MainTable from "../MainTable/MainTable"
 import Select from "react-select"
+import Chart from "../charts/Chart"
 // import ApexChart from "../ApexChart/ApexChart"
 
 
@@ -22,6 +23,7 @@ function ModificationByField(props) {
       .then(res => res.json())
       .then(data => {
         //set state (news)
+       setFieldNameOptions(data)
        console.log(data);
       })
   }
@@ -39,7 +41,7 @@ function ModificationByField(props) {
       }
     })
       .then((res) => res.json())
-      .then((data) => { console.log(data) })
+      .then((data) => { setUiObjs(data) })
   }
 
 
@@ -102,7 +104,7 @@ function ModificationByField(props) {
       <MainTable changes={true}  />
       <MainTable  />
       </div>
-      
+      {UiObjs.length>0 && <Chart UiObjs={UiObjs}/>}
       <div className="ModificationByField__MainTitle">Modification By Field</div>
       <div className="ModificationByField__Chart">
       </div>
