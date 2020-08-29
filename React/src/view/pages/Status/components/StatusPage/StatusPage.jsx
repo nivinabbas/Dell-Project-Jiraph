@@ -100,7 +100,7 @@ const StatusPage = (props) => {
         }
       });
   }, []);
-
+  console.log(openTasks);
   const handleDoneClick = (jiraId) => {
     console.log("task id: ", jiraId);
   };
@@ -118,12 +118,14 @@ const StatusPage = (props) => {
           <StackedChart />
         </div>
       </div>
-      <div className="statuspage__chart">
-        <StackedChart />
-      </div>
-      <div className="statuspage__pie">
-        <PieChart />
-        <PieChart />
+      <div className="statuspage__chartpie">
+        <div className="statuspage__chart">
+          <StackedChart />
+        </div>
+        <div className="statuspage__pie">
+          <PieChart />
+          <PieChart />
+        </div>
       </div>
     </div>
   );
