@@ -23,32 +23,12 @@ function ModificationByField(props) {
       .then(res => res.json())
       .then(data => {
         //set state (news)
-       setFieldNameOptions(data.fieldNames)
+       setFieldNameOptions(data[0].labels)
        console.log(data);
       })
   },[])
-  const renderFieldName =() => {
-
-    fetch('/api/analytics/modificationByFieldFilters', {
-      method: 'POST',
-      body: JSON.stringify({fieldName}),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
-        //set state (news)
-       setFieldNameOptions(data)
-       console.log(data);
-      })
-  }
   
-
-  const date = new Date()
-  const date1MonthAgo = new Date(new Date().setMonth(date.getMonth() - 1));
-
-  const render = () => {
+  const renderFilters = () => {
     fetch('/api/analytics/modificationByField', {
       method: 'POST',
       body: JSON.stringify({ fieldName, values, label, qaRepresentative }),
@@ -57,9 +37,30 @@ function ModificationByField(props) {
       }
     })
       .then((res) => res.json())
-      .then((data) => { setUiObjs(data) })
+      .then((data) => { setUiObjs(data[0]) })
   }
 
+
+
+  const renderFieldName = () => {
+    fetch('/api/analytics/modificationByField', {
+      method: 'POST',
+      body: JSON.stringify({ fieldName }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then((res) => res.json())
+      .then((data) => { 
+          console.log(data)
+       })
+  }
+
+
+
+
+  const date = new Date()
+  const date1MonthAgo = new Date(new Date().setMonth(date.getMonth() - 1));
 
   const [fieldName, setFieldName] = useState([]);
   const [values, setValues] = useState([]);
@@ -75,36 +76,37 @@ function ModificationByField(props) {
   const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([]);
   const [labelOptions, setLabelOptions] = useState([{ label: "Daily", value: "daily" }, { label: "Weekly", value: "weekly" }, { label: "Monthly", value: "monthly" }, { label: "Yearly", value: "yearly" }]);
 
-  // renderFieldName();
 
   const handleChangeLabel = (change => {
     setLabel([change.value])
 
-    render();
+    renderFilters();
   })
+
   const handleChangeFieldName = (change => {
-    setFieldName([change.value])
+    setFieldName([change.label])
     renderFieldName();
   })
+
   const handleChangeValues = (change => {
-    setLabel([change.value])
-    render();
+    setValues([change.label])
+    renderFilters();
 
   })
   const handleChangeQaRepresentative = (change => {
-    setQaRepresentative([change.value])
-    render();
+    setQaRepresentative([change.label])
+    renderFilters();
   })
   const handleChangeStartDate = (change => {
     setStartDate(change.target.value)
     console.log(startDate)
-    render();
+    renderFilters();
   })
   const handleChangeEndDate = (change => {
     setEndDate(change.target.value)
     console.log(endDate)
-    // render();
-  })
+    renderFilters();
+    })
 
 
 
