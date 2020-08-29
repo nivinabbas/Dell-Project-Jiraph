@@ -1,5 +1,4 @@
 const express = require("express");
-const mongoose = require('mongoose');
 
 const router = express.Router();
 const mongoose = require('mongoose');
@@ -71,6 +70,179 @@ router.post('/modificationByFieldFilters', async (req, res) => {
     }
 
     res.send(tasks)
+})
+
+
+router.get('/changeOfJIRATicketsStatus', async (req, res) => {
+
+    /*
+    const tasks = await TaskModel.aggregate([
+        {
+            $match: {
+                'diffItem.type': 'Update',
+                'diffItem.updatedField.fieldName': 'status'
+            }
+        },
+        {
+            $group: {
+                _id: {
+
+                    newVal: "$diffItem.updatedField.newValue"
+
+                },
+                tasks: { $push: "$$ROOT" },
+            }
+        },
+        {
+            $group: {
+                _id: "$_id.newVal",
+                arr: { $push: { tasks: "$tasks" , size: { $size: "$tasks" }} },
+
+            }
+
+        }
+
+    ])
+
+
+    let total = 0;
+    tasks.forEach(element => {
+        total += element.arr[0].size
+    })
+    tasks.total = total
+    console.log(tasks)
+    */
+    //-------------------------------------- end of priority 1 --------------------------------------//
+
+
+    
+    // //NOTE : ask nimer to set his default value on load.
+    // const filterValue = 'oldValue' //old or new value
+    // const filterStatus = 'Backlog'     // Done , in progress , Backlog ,In Integration ...
+
+    // //here we build the match expression according to the user's filters.
+    // let matchFilterValue = {}
+
+    // if (filterValue == 'newValue') {
+    //     matchFilterValue = {
+    //         'diffItem.type': 'Update',
+    //         'diffItem.updatedField.fieldName': 'status',
+    //         'diffItem.updatedField.newValue': filterStatus
+    //     }
+    // }else{
+    //     matchFilterValue = {
+    //         'diffItem.type': 'Update',
+    //         'diffItem.updatedField.fieldName': 'status',
+    //         'diffItem.updatedField.oldValue': filterStatus
+    //     }
+    // }
+
+
+    // const tasks = await TaskModel.aggregate([
+    //     {
+    //         $match: matchFilterValue
+    //     },
+    //     {
+    //         $group: {
+    //             _id: {
+
+    //                 Val: `$diffItem.updatedField.${filterValue}`
+
+    //             },
+    //             tasks: { $push: "$$ROOT" },
+    //         }
+    //     },
+    //     {
+    //         $group: {
+    //             _id: "$_id.Val",
+    //             arr: { $push: { tasks: "$tasks", size: { $size: "$tasks" } } },
+
+    //         }
+
+    //     }
+
+    // ])
+
+
+    // let total = 0;
+    // tasks.forEach(element => {
+    //     total += element.arr[0].size
+    // })
+    // tasks.total = total
+    // console.log(tasks)
+
+    // tasks.forEach(element => {
+    //     console.log(element.arr[0].size)
+    // })
+
+    //-------------------------------------- end of priority 2 --------------------------------------//
+
+
+    //NOTE : ask nimer to set his default value on load.
+    const filterValue = 'oldValue' //old or new value
+    const filterStatus = 'Backlog'     // Done , in progress , Backlog ,In Integration ...
+    const filterQaRep = 'Sally'
+    //here we build the match expression according to the user's filters.
+    let matchFilterValue = {}
+
+    if (filterValue == 'newValue') {
+        matchFilterValue = {
+            'diffItem.type': 'Update',
+            'diffItem.updatedField.fieldName': 'status',
+            'diffItem.updatedField.newValue': filterStatus,
+            'jiraItem.qaRepresentative': filterQaRep
+        }
+    }else{
+        matchFilterValue = {
+            'diffItem.type': 'Update',
+            'diffItem.updatedField.fieldName': 'status',
+            'diffItem.updatedField.oldValue': filterStatus,
+            'jiraItem.qaRepresentative': filterQaRep
+
+        }
+    }
+
+
+    const tasks = await TaskModel.aggregate([
+        {
+            $match: matchFilterValue
+        },
+        {
+            $group: {
+                _id: {
+
+                    Val: `$diffItem.updatedField.${filterValue}`
+
+                },
+                tasks: { $push: "$$ROOT" },
+            }
+        },
+        {
+            $group: {
+                _id: "$_id.Val",
+                arr: { $push: { tasks: "$tasks", size: { $size: "$tasks" } } },
+
+            }
+
+        }
+
+    ])
+
+
+    let total = 0;
+    tasks.forEach(element => {
+        total += element.arr[0].size
+    })
+    tasks.total = total
+    console.log(tasks)
+
+    tasks.forEach(element => {
+        console.log(element.arr[0].tasks[0].jiraItem)
+    })
+
+
+    res.send(tasks);
+
 })
 
 module.exports = router;
