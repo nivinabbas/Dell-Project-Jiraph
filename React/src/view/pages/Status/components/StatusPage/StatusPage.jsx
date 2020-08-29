@@ -20,8 +20,54 @@ const optionSprint = [
   { value: "inProgress", label: "In Progress" },
   { value: "Done", label: "Done" },
 ];
+
 const StatusPage = (props) => {
-  // pie chart 1 :
+  /*********TABLEEEEEEE 
+  const [data, setData] = useState([]);
+  const [filters, setFilters] = useState({
+    oldnewvalue: "oldValue",
+    statusField: "Backlog",
+  });
+
+  const fetchData = () => {
+    fetch("http://localhost:5000/Tickets")
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(normalizeData(res));
+
+        setData(normalizeData(res));
+      });
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const onFilterChange = (data) => {
+    console.log({ ...filters, ...data });
+    return setFilters((f) => {
+      return { ...f, ...data };
+    });
+  };
+
+  const fetchFilteredData = () => {
+    console.log("fetch");
+    fetch("http://localhost:5000/getUpdatedByStatus", {
+      method: "POST",
+      body: JSON.stringify({ ...filters }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        console.log(normalizeFilteredData(res, filters));
+        setData(normalizeFilteredData(res, filters));
+      });
+  };
+*/
+
+  //*********** pie chart 1 :
   const [FunctionalPieContent, setFunctionalPieContent] = useState([]);
   const [cardsContent, setCardsContent] = useState([]);
 
