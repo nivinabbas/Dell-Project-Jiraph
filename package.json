@@ -5,13 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "email-validator": "^2.0.4",
     "express": "^4.17.1",
-    "mongoose": "^5.9.29"
+    "mongoose": "^5.10.0",
+    "node-fetch": "^2.6.0"
   }
 }
