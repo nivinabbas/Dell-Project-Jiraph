@@ -11,6 +11,7 @@ import {
   Link
 
 } from "react-router-dom";
+import ModificationByFieldMain from "./components/ModificationByField/ModificationByField";
 
 
 
@@ -42,8 +43,7 @@ import {
             renders the first one that matches the current URL. */}
         <Switch>
         <Route exact={true} path="/">
-            <Login></Login>
-            
+            <h1>login</h1>
           </Route>
           <Route path="/register">
             
@@ -56,7 +56,7 @@ import {
             
           </Route>
           <Route path="/analysis">
-
+          <ModificationByFieldMain/>
           </Route>
           <Route path="/status">
 
