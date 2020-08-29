@@ -1,8 +1,8 @@
 import React from 'react';
 import "./DelaysInDelivery.css";
-import Chart from "../charts/Chart";
+
 import Select from 'react-select'
-import ApexChart from '../ApexChart/ApexChart'
+
 import { useState , useEffect } from 'react';
 
 

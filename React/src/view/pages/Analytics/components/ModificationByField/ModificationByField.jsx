@@ -3,12 +3,12 @@ import "./ModificationByField.css";
 import { useState } from 'react';
 
 import Select from "react-select"
+// import ApexChart from "../ApexChart/ApexChart"
 
 
 
 
-
-function ModificationByFieldMain(props) {
+function ModificationByField(props) {
   useEffect(() => {
 
     fetch('/api/analytics/----')
@@ -144,7 +144,7 @@ function ModificationByFieldMain(props) {
 
       </div>
 
-
+  
 
     </div>
   )
@@ -152,7 +152,7 @@ function ModificationByFieldMain(props) {
 }
 
 
-export default ModificationByFieldMain;
+export default ModificationByField;
 
 
 
