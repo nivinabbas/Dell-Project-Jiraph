@@ -89,7 +89,6 @@ const StatusPage = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log("getOpenTasks");
     fetch("/api/status/openTasks")
       .then((res) => res.json())
       .then((data) => {
@@ -113,10 +112,7 @@ const StatusPage = (props) => {
       </div>
       <div className="statusPageContainerTableColumn">
         <div className="statuspage__table">
-          <Table
-            openTasks={openTasks.length > 0 ? openTasks : []}
-            onDoneClick={handleDoneClick}
-          />
+          <Table openTasks={openTasks} onDoneClick={handleDoneClick} />
         </div>
         <div className="statuspage__chart">
           <StackedChart />
