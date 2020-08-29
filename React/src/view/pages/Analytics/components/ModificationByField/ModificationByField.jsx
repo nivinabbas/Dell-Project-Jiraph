@@ -3,6 +3,7 @@ import "./ModificationByField.css";
 import { useState } from 'react';
 import MainTable from "../MainTable/MainTable"
 import Select from "react-select"
+import Chart from "../charts/Chart"
 // import ApexChart from "../ApexChart/ApexChart"
 
 
@@ -10,6 +11,22 @@ import Select from "react-select"
 
 function ModificationByField(props) {
   
+  useEffect(() => {
+   
+    fetch('/api/analytics/modificationByFieldFilters', {
+      method: 'POST',
+      body: JSON.stringify({fieldName}),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        //set state (news)
+       setFieldNameOptions(data.fieldNames)
+       console.log(data);
+      })
+  },[])
   const renderFieldName =() => {
 
     fetch('/api/analytics/modificationByFieldFilters', {
@@ -22,6 +39,7 @@ function ModificationByField(props) {
       .then(res => res.json())
       .then(data => {
         //set state (news)
+       setFieldNameOptions(data)
        console.log(data);
       })
   }
@@ -39,7 +57,7 @@ function ModificationByField(props) {
       }
     })
       .then((res) => res.json())
-      .then((data) => { console.log(data) })
+      .then((data) => { setUiObjs(data) })
   }
 
 
@@ -57,7 +75,7 @@ function ModificationByField(props) {
   const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([]);
   const [labelOptions, setLabelOptions] = useState([{ label: "Daily", value: "daily" }, { label: "Weekly", value: "weekly" }, { label: "Monthly", value: "monthly" }, { label: "Yearly", value: "yearly" }]);
 
-  renderFieldName();
+  // renderFieldName();
 
   const handleChangeLabel = (change => {
     setLabel([change.value])
@@ -102,7 +120,7 @@ function ModificationByField(props) {
       <MainTable changes={true}  />
       <MainTable  />
       </div>
-      
+      {UiObjs.length>0 && <Chart UiObjs={UiObjs}/>}
       <div className="ModificationByField__MainTitle">Modification By Field</div>
       <div className="ModificationByField__Chart">
       </div>

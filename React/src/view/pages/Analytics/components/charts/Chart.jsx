@@ -15,7 +15,7 @@
 //     return setTasks(tasks)
 
 //   }
-
+// console.log(UiObjs);
 //   return (
 //     <div className="chart__Wrapper">
       
