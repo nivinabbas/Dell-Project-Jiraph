@@ -1,14 +1,16 @@
 const express = require("express");
 const router = express.Router();
+const mongoose = require('mongoose');
 const UserSchema = require('../schemas/UserSchema');
 const UserModel = mongoose.model("UserModel", UserSchema);
-const TaskModel = require('./schemas/TaskSchema');
+const TaskModel = require('../schemas/TaskSchema');
 
 //app.get/post/put/delete => router.get/post/put/delete
 
 
 
-router.post('/api/analytics/modificationByField', async (req, res) => {
+router.post('/modificationByField', async (req, res) => {
+    console.log('hello')
     const { fieldName, values, label,qaRepresentative} = req.body;
     if(fieldName.length == 0 ){
         let tasks = await TaskModel.aggregate([
