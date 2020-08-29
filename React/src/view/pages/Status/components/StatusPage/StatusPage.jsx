@@ -87,8 +87,7 @@ const StatusPage = (props) => {
         }
       });
   }, []);
-  // console.log("open task", openTasks);
-  // console.log("task", openTasks.doc);
+
   useEffect(() => {
     console.log("getOpenTasks");
     fetch("/api/status/openTasks")
@@ -103,12 +102,10 @@ const StatusPage = (props) => {
       });
   }, []);
 
-  const handleDoneSelect = (taskId) => {
-    console.log(taskId.value);
+  const handleDoneClick = (jiraId) => {
+    console.log("task id: ", jiraId);
   };
 
-  //setCardsContent(array);
-  console.log("task sp:", openTasks);
   return (
     <div className="statusPageContainer">
       <div className="statuspage__dashboard">
@@ -116,7 +113,10 @@ const StatusPage = (props) => {
       </div>
       <div className="statusPageContainerTableColumn">
         <div className="statuspage__table">
-          <Table openTasks={openTasks.length > 0 ? openTasks : []} />
+          <Table
+            openTasks={openTasks.length > 0 ? openTasks : []}
+            onDoneClick={handleDoneClick}
+          />
         </div>
         <div className="statuspage__chart">
           <StackedChart />

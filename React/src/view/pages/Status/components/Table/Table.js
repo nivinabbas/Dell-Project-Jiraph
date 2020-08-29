@@ -1,13 +1,7 @@
 import React from "react";
 import "./style.css";
-import SelectInput from "../Select/SelectInput.js";
 
-const selectDoneOptions = [
-  { id: 1, label: "Yes", value: "yes" },
-  { id: 2, label: "No", value: "no" },
-];
-export default function TasksTable({ openTasks }) {
-  console.log("oo", openTasks);
+export default function TasksTable({ openTasks, onDoneClick }) {
   return (
     <div className="open-tasks">
       <div className="open-tasks-title">
@@ -36,7 +30,9 @@ export default function TasksTable({ openTasks }) {
                 <td>{task.diffItem.updatedField.oldValue}</td>
                 <td>{task.diffItem.updatedField.newValue}</td>
                 <td>
-                  <SelectInput options={selectDoneOptions} />
+                  <i onClick={() => onDoneClick(task.jiraItem.jiraId)}>
+                    &#9989;
+                  </i>
                 </td>
               </tr>
             ))}
