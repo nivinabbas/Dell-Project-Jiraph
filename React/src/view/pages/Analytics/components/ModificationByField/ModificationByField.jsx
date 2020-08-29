@@ -23,7 +23,7 @@ function ModificationByField(props) {
       .then(res => res.json())
       .then(data => {
         //set state (news)
-       setFieldNameOptions(data.fieldNames)
+       setFieldNameOptions(data[0].labels)
        console.log(data);
       })
   },[])
@@ -39,7 +39,7 @@ function ModificationByField(props) {
       .then(res => res.json())
       .then(data => {
         //set state (news)
-       setFieldNameOptions(data)
+       setFieldNameOptions(data[0].labels)
        console.log(data);
       })
   }
@@ -57,7 +57,7 @@ function ModificationByField(props) {
       }
     })
       .then((res) => res.json())
-      .then((data) => { console.log(data)})
+      .then((data) => {setUiObjs(data)})
   }
 
 
@@ -118,9 +118,9 @@ function ModificationByField(props) {
     <div className='ModificationByField__Wrapper'>
       <div className="ModificationByField__Table" >
       <MainTable changes={true}  />
-      <MainTable  />
       </div>
-      {UiObjs.length>0 && <Chart UiObjs={UiObjs}/>}
+      <div className="charti"> {UiObjs.length>0 && <Chart UiObjs={UiObjs}/>}</div>
+      
       <div className="ModificationByField__MainTitle">Modification By Field</div>
       <div className="ModificationByField__Chart">
       </div>
