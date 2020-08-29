@@ -3,7 +3,7 @@ import "./ModificationByField.css";
 import { useState } from 'react';
 
 import Select from "react-select"
-
+import ApexChart from "../ApexChart/ApexChart"
 
 
 
@@ -144,7 +144,7 @@ function ModificationByFieldMain(props) {
 
       </div>
 
-
+  <ApexChart/>
 
     </div>
   )
