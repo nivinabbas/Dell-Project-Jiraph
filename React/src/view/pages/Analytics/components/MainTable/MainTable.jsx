@@ -6,81 +6,55 @@ import "./MainTable.css";
 
 
 function MainTable(props) {
+
+
+  const tasks = [{ jiraId: 15, jiraName: "abona", fieldName: "aemna", newValue: 100, updateDate: "15/06/2020" }]
   
+  const headers = ["jiraId", "jiraName", "fieldName", "newValue", "updateDate"]
 
-  const {tasks}=props;
-
-    
   return (
-      
-    <div className='MainTable'>
-      
-      {/* <div className="ModificationByFieldTable__Caption">
 
-        Modification By Field
-        </div > */}
-             <div className="MainTable__Header"></div>
-      <div className="MainTable__Cell">
-        JiraID
-</div>
-      <div className="MainTable__Cell">
-        Jira Name
-</div>
-      <div className="MainTable__Cell">
-        Field Name
-</div>
-      <div className="MainTable__Cell">
-        Old Value
-</div>
-      <div className="MainTable__Cell">
-        New Value
-</div>
-      <div className="MainTable__Cell">
-        Modified Date
-</div>
+    <div className='MainTable'>
+
+      <div className="MainTable__Header"></div>
+      {headers.map((header => {
+        return (
+          <div className="MainTable__Cell">
+            {header}
+          </div>
+        )
+      }))}
+
 
       <div className="MainTable__Body">
       </div>
-      
-      {tasks && tasks.map((task) => { 
+
+      {tasks.map((task) => {
         return (
-        <div className="MainTable__Row">
-        
-          <div className="MainTable__Body__Cell">
-            {task.jiraItem.jiraId}
-</div>
+          <div className="MainTable__Row">
 
-           <div className="MainTable__Body__Cell">
-          {task.jiraItem.jiraName}
+            {headers.map((header => {
+              return (
+                <div className="MainTable__Body__Cell">
+                  {task[header]}
+                </div>
+              )
+            }))}
+
           </div>
-          <div className="MainTable__Body__Cell">
-          {task.diffItem.updatedFields[0].fieldName}
-</div>
-          <div className="MainTable__Body__Cell">
-          {task.diffItem.updatedFields[0].oldValue}
-</div>
-
-
-          <div className="MainTable__Body__Cell">
-          {task.diffItem.updatedFields[0].newValue}
-</div>
-          <div className="MainTable__Body__Cell">
-          {new Date(task.diffItem.updateTime).getDate()}/{new Date(task.diffItem.updateTime).getMonth()+1}/{new Date(task.diffItem.updateTime).getFullYear()}
-</div> 
-        
-</div>
-        
-)
-
+        )
       })}
-      
-   
+
+
+
+
+
 
 
 
 
     </div >
-    
+
   )
 
 }
