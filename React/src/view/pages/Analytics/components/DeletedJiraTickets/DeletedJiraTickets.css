@@ -4,15 +4,15 @@
     grid-template-rows: 10vh 5vh 5vh auto;
     grid-template-areas: 
     ". header ."
-    ". Table . "
     ". filterButtons ."
-    ". . .";
-    /*"chartColors chart .";*/
+    ". . ."
+    ". table . "
+    "chartColors table .";
     
     background-color: whitesmoke;
   }
-  .DeletedJiraTickets_Table {
-    grid-area: Table;
+  .DeletedJiraTickets__Table {
+    grid-area: table;
   }
 
   .DeletedJiraTickets__Title{
