@@ -5,6 +5,7 @@ import {
   Route,
   Link
 } from "react-router-dom";
+import ModificationByFieldMain from "./components/ModificationByField/ModificationByField";
 
  function App() {
   return (
@@ -49,7 +50,7 @@ import {
           <h1>Admin</h1>
           </Route>
           <Route path="/analysis">
-          <h1>Analysis</h1>
+          <ModificationByFieldMain/>
           </Route>
           <Route path="/status">
           <h1>status</h1>
