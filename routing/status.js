@@ -11,20 +11,56 @@ let Today;
 
 // Start daily status alert !
 
-router.get("/dailyalerts", async function (req, res) {
-  let Today = dateFormat();
-  console.log("***************&&&&&&&&&*****");
-  let DailyAlerts = await TaskModel.aggregate([
-    {
-      $match: {
-        $expr: {
-          $eq: [
-            Today,
-            {
-              $dateToString: {
-                date: "$diffItem.updatedTime",
-                format: "%Y-%m-%d",
-              },
+router.get("/dailyAlerts", async function (req, res) {
+
+ 
+    let Today = dateFormat();
+    let DailyAlerts = await TaskModel.aggregate([
+        {
+            "$match": {
+                "$expr": {
+                    $eq: [
+                        Today,
+                        {
+                            "${dateToString": {
+                                "date": "$diffItem.updatedTime",
+                                "format": "%Y-%m-%d"
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            $group: {
+                _id: "DailyAlerts",
+                "functionalTests": {
+                    $sum: {
+                        $cond: [
+                            { $eq: ['$jiraItem.specialFields.functionalTest', true] },
+                            1,
+                            0
+                        ]
+                    }
+                },
+                "deletedTicktes": {
+                    $sum: {
+                        $cond: [
+                            { $eq: ['$diffItem.type', "Delete"] },
+                            1,
+                            0
+                        ]
+                    }
+                },
+                "fixVersionTicktes": {
+                    $sum: {
+                        $cond: [
+                            { $eq: ['$diffItem.updatedField.fieldName', "fixVersion"] },
+                            1,
+                            0
+                        ]
+                    }
+                },
             },
           ],
         },
