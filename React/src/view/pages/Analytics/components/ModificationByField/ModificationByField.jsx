@@ -11,6 +11,22 @@ import Chart from "../charts/Chart"
 
 function ModificationByField(props) {
   
+  useEffect(() => {
+   
+    fetch('/api/analytics/modificationByFieldFilters', {
+      method: 'POST',
+      body: JSON.stringify({fieldName}),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        //set state (news)
+       setFieldNameOptions(data.fieldNames)
+       console.log(data);
+      })
+  },[])
   const renderFieldName =() => {
 
     fetch('/api/analytics/modificationByFieldFilters', {
@@ -59,7 +75,7 @@ function ModificationByField(props) {
   const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([]);
   const [labelOptions, setLabelOptions] = useState([{ label: "Daily", value: "daily" }, { label: "Weekly", value: "weekly" }, { label: "Monthly", value: "monthly" }, { label: "Yearly", value: "yearly" }]);
 
-  renderFieldName();
+  // renderFieldName();
 
   const handleChangeLabel = (change => {
     setLabel([change.value])
