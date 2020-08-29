@@ -1,0 +1,46 @@
+.DeletedJiraTicketsWrapper{
+    display: grid;
+    grid-template-columns: 5vw 90vw 5vw;
+    grid-template-rows: 10vh 5vh 5vh auto;
+    grid-template-areas: 
+    ". header ."
+    
+    ". filterButtons ."
+    ". . .";
+    /*"chartColors chart .";*/
+    
+    background-color: whitesmoke;
+  }
+
+  .DeletedJiraTickets__Title{
+    font-size: 30px;
+  font-weight: bold;
+    grid-area: header;
+    text-align: center;
+    background-color: #20283E;
+    color: white;
+    height: 100%;
+  }
+  .DeletedJiraTickets__Filters{
+    
+    grid-area: filterButtons;
+  }
+ /* .ModificationByFieldTable{
+    grid-area: table;
+  }*/
+  .DeletedJiraTickets__Filters{
+    display: flex;
+    justify-content: space-evenly;
+  }
+  .DeletedJiraTickets__Filter{
+  width: 100%;
+  
+  }
+ 
+  
+  .DeletedJiraTickets__Chart{
+    grid-area: chart;
+  }
+
+  
+  
