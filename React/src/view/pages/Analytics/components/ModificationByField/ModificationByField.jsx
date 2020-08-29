@@ -9,17 +9,23 @@ import Select from "react-select"
 
 
 function ModificationByField(props) {
-  useEffect(() => {
+  
+  const renderFieldName =() => {
 
-    fetch('/api/analytics/----')
+    fetch('/api/analytics/modificationByFieldFilters', {
+      method: 'POST',
+      body: JSON.stringify({fieldName}),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
       .then(res => res.json())
       .then(data => {
-
         //set state (news)
-        setUiObjs(data);
+       console.log(data);
       })
-  })
-
+  }
+  
 
   const date = new Date()
   const date1MonthAgo = new Date(new Date().setMonth(date.getMonth() - 1));
@@ -51,7 +57,7 @@ function ModificationByField(props) {
   const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([]);
   const [labelOptions, setLabelOptions] = useState([{ label: "Daily", value: "daily" }, { label: "Weekly", value: "weekly" }, { label: "Monthly", value: "monthly" }, { label: "Yearly", value: "yearly" }]);
 
-
+  renderFieldName();
 
   const handleChangeLabel = (change => {
     setLabel([change.value])
@@ -60,7 +66,7 @@ function ModificationByField(props) {
   })
   const handleChangeFieldName = (change => {
     setFieldName([change.value])
-    render();
+    renderFieldName();
   })
   const handleChangeValues = (change => {
     setLabel([change.value])
