@@ -7,7 +7,7 @@ const selectDoneOptions = [
   { id: 2, label: "No", value: "no" },
 ];
 export default function TasksTable({ openTasks }) {
-  console.log(openTasks);
+  console.log("oo", openTasks);
   return (
     <div className="open-tasks">
       <div className="open-tasks-title">
@@ -30,13 +30,11 @@ export default function TasksTable({ openTasks }) {
             {openTasks.map((task, index) => (
               <tr key={index}>
                 <th scope="row">{++index}</th>
-                <td>{openTasks.jiraItem.jiraId}</td>
-                <td className="jiraname-column">
-                  {openTasks.jiraItem.jiraName}
-                </td>
-                <td>{openTasks.diffItem.updatedFields[0].fieldName}</td>
-                <td>{openTasks.diffItem.updatedFields[0].oldValue}</td>
-                <td>{openTasks.diffItem.updatedFields[0].newValue}</td>
+                <td>{task.jiraItem.jiraId}</td>
+                <td className="jiraname-column">{task.jiraItem.jiraName}</td>
+                <td>{task.diffItem.updatedField.fieldName}</td>
+                <td>{task.diffItem.updatedField.oldValue}</td>
+                <td>{task.diffItem.updatedField.newValue}</td>
                 <td>
                   <SelectInput options={selectDoneOptions} />
                 </td>

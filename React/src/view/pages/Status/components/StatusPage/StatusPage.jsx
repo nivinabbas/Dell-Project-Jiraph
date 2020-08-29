@@ -71,6 +71,7 @@ const StatusPage = (props) => {
   const [FunctionalPieContent, setFunctionalPieContent] = useState([]);
   const [cardsContent, setCardsContent] = useState([]);
   const [openTasks, setOpenTasks] = useState([]);
+  const [isDone, setIsDone] = useState(false);
 
   useEffect(() => {
     console.log("getDailyalerts");
@@ -86,7 +87,8 @@ const StatusPage = (props) => {
         }
       });
   }, []);
-  //console.log("open task", data);
+  // console.log("open task", openTasks);
+  // console.log("task", openTasks.doc);
   useEffect(() => {
     console.log("getOpenTasks");
     fetch("/api/status/openTasks")
@@ -94,17 +96,19 @@ const StatusPage = (props) => {
       .then((data) => {
         let { success, error, info } = data;
         if (success) {
-          setOpenTasks(info);
+          setOpenTasks(info.doc);
         } else {
           alert(error);
         }
       });
   }, []);
 
-  // console.log(openTasks);
+  const handleDoneSelect = (taskId) => {
+    console.log(taskId.value);
+  };
 
   //setCardsContent(array);
-  //console.log(openTasks);
+  console.log("task sp:", openTasks);
   return (
     <div className="statusPageContainer">
       <div className="statuspage__dashboard">
@@ -112,7 +116,7 @@ const StatusPage = (props) => {
       </div>
       <div className="statusPageContainerTableColumn">
         <div className="statuspage__table">
-          <Table openTasks={openTasks} />
+          <Table openTasks={openTasks.length > 0 ? openTasks : []} />
         </div>
         <div className="statuspage__chart">
           <StackedChart />
