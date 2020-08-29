@@ -1,15 +1,39 @@
 import React from "react";
 import "./style.css";
+import SelectInput from "../Select/SelectInput";
 
+const optionSprint = [
+  { value: "All", label: "All" },
+  { value: "Create", label: "Create" },
+  { value: "Update", label: "Update" },
+  { value: "Delete", label: "Delete" },
+];
+
+const optionFunctional = [
+  { value: "Status", label: "Status" },
+  { value: "Priority", label: "Priority" },
+  { value: "qaRepresentitive", label: "QA representitive" },
+];
+
+const optionValue = [
+  { value: "True", label: "true" },
+  { value: "False", label: "false" },
+];
 export default function TasksTable({ openTasks, onDoneClick }) {
   return (
     <div className="open-tasks">
       <div className="open-tasks-title">
         <h3>Open Tasks</h3>
       </div>
+      <div style={{ display: "flex" }}>
+        <SelectInput options={optionFunctional} />
+        <SelectInput options={optionSprint} />
+        <SelectInput options={optionValue} />
+        <input type="submit" className="submitButton" />
+      </div>
       <div className="open-tasks-table">
-        <table className="table">
-          <thead className="thead-dark">
+        <table className="container">
+          <thead className="header__table">
             <tr>
               <th scope="col">#</th>
               <th scope="col">Id</th>
@@ -30,9 +54,10 @@ export default function TasksTable({ openTasks, onDoneClick }) {
                 <td>{task.diffItem.updatedField.oldValue}</td>
                 <td>{task.diffItem.updatedField.newValue}</td>
                 <td>
-                  <i onClick={() => onDoneClick(task.jiraItem.jiraId)}>
-                    &#9989;
-                  </i>
+                  <input
+                    type="checkbox"
+                    onClick={() => onDoneClick(task.jiraItem.jiraId)}
+                  />
                 </td>
               </tr>
             ))}
