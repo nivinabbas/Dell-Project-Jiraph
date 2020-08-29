@@ -50,4 +50,24 @@ router.post('/modificationByField', async (req, res) => {
     res.send(tasks)
 })
 
+
+
+router.post('/modificationByFieldFilters', async (req, res) => {
+    let tasks = []
+    const { fieldName, values, label, qaRepresentative } = req.body;
+    if (fieldName.length == 0) {
+        tasks = await TaskModel.aggregate([
+            {
+                $group: {
+                    _id: null,
+                    fieldNames: {$addToSet : "$diffItem.updatedField.fieldName"}
+
+                }
+            }
+        ])
+    }
+
+    res.send(tasks)
+})
+
 module.exports = router;
