@@ -12,12 +12,19 @@
 }
 .statuspage__table {
   width: 50;
-
+  height: 500px;
+  overflow: scroll;
   margin: auto;
+}
+.statuspage__chartpie {
+  display: flex;
 }
 .statuspage__chart {
   width: 50%;
+  margin-top: 5%;
 }
 
 .statuspage__pie {
+  display: flex;
+  margin-left: 5%;
 }
