@@ -166,7 +166,7 @@ async function teststau() {
 
 // start open tasks
 
-router.get("/api/status/openTasks", async function (req, res) {
+router.get("/openTasks", async function (req, res) {
   TaskModel.find({ "taskItem.isDone": false }, function (err, doc) {
     //success:T/F,error:string,info{TaskItem[Task]
 
