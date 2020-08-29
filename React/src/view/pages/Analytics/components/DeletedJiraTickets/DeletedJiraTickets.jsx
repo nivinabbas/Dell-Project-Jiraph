@@ -1,8 +1,8 @@
 import React from 'react';
 import "./DeletedJiraTickets.css";
-import Chart from "../charts/Chart";
+
 import Select from 'react-select'
-import ApexChart from '../ApexChart/ApexChart'
+
 import { useState , useEffect } from 'react';
 
 
@@ -88,7 +88,7 @@ function DeletedJiraTickets() {
   
   
   const HandlefunctionalTestChange=(status=>{
-           setStatus([status.value])
+           setfunctionalTest([status.value])
         
            render();
   })
@@ -125,7 +125,7 @@ function DeletedJiraTickets() {
   return (
 
     <div className='DeletedJiraTicketsWrapper'>
-      <div className="DeletedJiraTickets__Title">Changes Of Jira Tickets</div>
+      <div className="DeletedJiraTickets__Title">Deleted Jira Tickets</div>
      
       {/* Select Filters */}
 

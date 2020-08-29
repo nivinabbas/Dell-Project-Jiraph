@@ -1,9 +1,9 @@
 import React from 'react';
 import "./ChangesByParentId.css";
 import Select from 'react-select'
-import ApexChart from '../ApexChart/ApexChart'
+
 import { useState , useEffect } from 'react';
-import PieChart from '../PieChart/PieChart'
+
 
 
 function ChangesByParentId() {
@@ -108,7 +108,7 @@ function ChangesByParentId() {
     
       </form>
       <div className="ChangesByParentId__Chart">
-      <PieChart / >
+ 
       </div>
     </div>
   )

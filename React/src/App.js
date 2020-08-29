@@ -11,7 +11,7 @@ import {
   Link
 
 } from "react-router-dom";
-import ModificationByFieldMain from "../src/view/pages/Analytics/components/ModificationByField/ModificationByField";
+import MainPage from "../src/view/pages/Analytics/components/mainPage/MainPage"
 
 
 
@@ -56,7 +56,7 @@ import ModificationByFieldMain from "../src/view/pages/Analytics/components/Modi
             
           </Route>
           <Route path="/analysis">
-          <ModificationByFieldMain/>
+          <MainPage/>
           </Route>
           <Route path="/status">
 
