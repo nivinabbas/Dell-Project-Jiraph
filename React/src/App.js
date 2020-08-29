@@ -11,7 +11,7 @@ import {
   Link
 
 } from "react-router-dom";
-import ModificationByFieldMain from "./components/ModificationByField/ModificationByField";
+import ModificationByFieldMain from "../src/view/pages/Analytics/components/ModificationByField/ModificationByField";
 
 
 

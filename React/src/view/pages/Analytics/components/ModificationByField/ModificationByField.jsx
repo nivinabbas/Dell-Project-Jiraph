@@ -21,7 +21,7 @@ function ModificationByFieldMain(props) {
                 "Content-Type": "application/json"
             }
         })
-            .then((res) => res.json())
+        .then((res) => res.json())
         .then((data) => { console.log(data) })
     }
 
@@ -63,7 +63,7 @@ function ModificationByFieldMain(props) {
     const handleChangeStartDate = (change => {
         setStartDate(change.target.value)
         console.log(startDate)
-        // render();
+        render();
     })
     const handleChangeEndDate = (change => {
         setEndDate(change.target.value)
