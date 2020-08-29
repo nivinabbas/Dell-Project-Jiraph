@@ -1,6 +1,6 @@
 import React from 'react';
 import "./ChangesInJiraTickets.css";
-
+import MainTable from "../MainTable/MainTable"
 import Select from 'react-select'
 
 import { useState , useEffect } from 'react';
@@ -119,6 +119,11 @@ function ChangesInJiraTickets() {
   return (
 
     <div className='ChangeOfJiraTicketWrapper'>
+           <div className="ChangeOfJiraTicket__Table" >
+                <MainTable changes={true}  />
+              
+          </div>
+
       <div className="ChangeOfJiraTicket__Title">Changes Of Jira Tickets</div>
      
       {/* Select Filters */}

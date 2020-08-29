@@ -104,15 +104,11 @@ function MainTable(props) {
       <div className="MainTable__Cell">Qc Requirement Id</div>
       <div className="MainTable__Cell">Qc Requirement Type</div>
       <div className="MainTable__Cell">QC Status</div>
-     
-      {changes && 
-        <div className="MainTable__Cell">Updated Time</div>}
-        {changes && 
-        <div className="MainTable__Cell">Field Name</div>}
-        {changes && 
-        <div className="MainTable__Cell">Old Value</div>}
-        {changes && 
-        <div className="MainTable__Cell">New Value</div>}
+
+      {changes &&  <div className="MainTable__Cell">Updated Time</div>}
+      {changes &&  <div className="MainTable__Cell">Field Name</div>}
+      {changes &&  <div className="MainTable__Cell">Old Value</div>}
+      {changes &&  <div className="MainTable__Cell">New Value</div>}
       
 
 
@@ -122,7 +118,9 @@ function MainTable(props) {
 
       {tasks.length > 0 && tasks.map((task) => {
         return (
+          
           <div className="MainTable__Row">
+
             <div className="MainTable__Body__Cell">{task.jiraItem.jiraId}</div>
             <div className="MainTable__Body__Cell">{task.jiraItem.jiraName}</div>
             <div className="MainTable__Body__Cell">{task.jiraItem.jiraType}</div>
@@ -135,14 +133,12 @@ function MainTable(props) {
             <div className="MainTable__Body__Cell">{task.qcItem.requirementId}</div>
             <div className="MainTable__Body__Cell">{task.qcItem.requirementType}</div>
             <div className="MainTable__Body__Cell">{task.qcItem.status}</div>
-            {changes && 
-              <div className="MainTable__Body__Cell">{task.diffItem.updateTime}</div>}
-              {changes && 
-              <div className="MainTable__Body__Cell">{task.diffItem.updatedField.fieldName}</div>}
-              {changes && 
-              <div className="MainTable__Body__Cell">{task.diffItem.updatedField.oldValue}</div>}
-              {changes && 
-              <div className="MainTable__Body__Cell">{task.diffItem.updatedField.newValue}</div>}
+
+            {changes &&  <div className="MainTable__Body__Cell">{task.diffItem.updateTime}</div>}
+            {changes &&  <div className="MainTable__Body__Cell">{task.diffItem.updatedField.fieldName}</div>}
+            {changes &&  <div className="MainTable__Body__Cell">{task.diffItem.updatedField.oldValue}</div>}
+            {changes &&  <div className="MainTable__Body__Cell">{task.diffItem.updatedField.newValue}</div>}
+
           </div>
 
 

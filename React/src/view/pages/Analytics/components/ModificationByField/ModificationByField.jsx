@@ -92,8 +92,10 @@ function ModificationByField(props) {
 
 
     <div className='ModificationByField__Wrapper'>
-      <div className="abona" ><MainTable changes={true}  />
-      <MainTable  /></div>
+      <div className="ModificationByField__Table" >
+      <MainTable changes={true}  />
+      <MainTable  />
+      </div>
       
       <div className="ModificationByField__MainTitle">Modification By Field</div>
       <div className="ModificationByField__Chart">

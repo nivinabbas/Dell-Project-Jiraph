@@ -1,5 +1,6 @@
 import React from 'react';
 import "./DeletedJiraTickets.css";
+import MainTable from "../MainTable/MainTable"
 
 import Select from 'react-select'
 
@@ -125,6 +126,10 @@ function DeletedJiraTickets() {
   return (
 
     <div className='DeletedJiraTicketsWrapper'>
+      <div className="DeletedJiraTickets__Table" >
+                <MainTable changes={true}  />
+              
+          </div>
       <div className="DeletedJiraTickets__Title">Deleted Jira Tickets</div>
      
       {/* Select Filters */}

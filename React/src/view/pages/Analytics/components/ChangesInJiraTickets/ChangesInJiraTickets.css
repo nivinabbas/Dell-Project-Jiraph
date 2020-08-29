@@ -5,12 +5,15 @@
     grid-template-rows: 10vh 5vh 5vh auto;
     grid-template-areas: 
     ". header ."
-    
+    ". Table ."
     ". filterButtons ."
     ". . .";
     /*"chartColors chart .";*/
     
     background-color: whitesmoke;
+  }
+  .ChangeOfJiraTicket__Table{
+    grid-area: Table;
   }
 
   .chart_Colors{
