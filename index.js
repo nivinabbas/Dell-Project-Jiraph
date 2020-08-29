@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors')
 const app = express();
 var bodyParser = require('body-parser')
 app.use(bodyParser.json());       // to support JSON-encoded bodies
@@ -6,10 +7,12 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
     extended: true
 }));
 
+app.use(cors())
+
 app.use(express.static('public'))
 
-const url = "mongodb+srv://nimer:N1N1N1N1@cluster0.tejcy.mongodb.net/server";
-//const url = "mongodb+srv://Marshood:raMHdQuDOBxwrcss@cluster0.ifcjp.mongodb.net/jiraphServer";
+//const url = "mongodb+srv://nimer:N1N1N1N1@cluster0.tejcy.mongodb.net/servertest";
+const url = "mongodb+srv://Marshood:raMHdQuDOBxwrcss@cluster0.ifcjp.mongodb.net/jira";
 
 const mongoose = require('mongoose');
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
