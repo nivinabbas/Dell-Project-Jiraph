@@ -57,7 +57,7 @@ function ModificationByField(props) {
       }
     })
       .then((res) => res.json())
-      .then((data) => { setUiObjs(data) })
+      .then((data) => { console.log(data)})
   }
 
 
