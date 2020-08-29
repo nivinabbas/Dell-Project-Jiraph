@@ -89,9 +89,9 @@ function ApexChart(props) {
 
 
 
- 	/* const handleClick = (e) => {
+ 	 const handleClick = (e) => {
 		console.log(e.target)
-	/*	console.log(dummyData.series[0].data)
+		console.log(dummyData.series[0].data)
 
   }
   
@@ -190,8 +190,8 @@ return (
 </div>
 );
 }
-*/
-}
+
+
 export default ApexChart;
 
 
