@@ -1,0 +1,114 @@
+body {
+    background-color: whitesmoke;
+}
+
+.MainForm {
+    display: grid;
+    grid-template-columns: 10vw 40vw 40vw 10vw;
+    grid-template-rows: 15vh 28.3vh 28.3vh 28.3vh;
+    grid-template-areas: 
+    ". status analytics .  "
+    ". changesOfJiraTickets ModificationByField . "
+    ". DeletedJiraTickets DelaysInDelievry . "
+    ". . . . ";
+}
+
+
+.MainForm__status{
+    display: grid;
+    grid-area: status;
+    box-shadow: 5px 5px 5px lightgray;
+}
+.MainForm__status--btn{
+    color:#20283E;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+
+
+.MainForm__analytics{
+    display: grid;
+    grid-area: analytics;
+    box-shadow: 5px 5px 5px lightgray;
+}
+.MainForm__analytics--btn{
+    color:#20283E;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+
+
+
+.MainForm__changesOfJiraTickets{
+    display: grid;
+    grid-area: changesOfJiraTickets;
+    margin: 50px 50px;
+    width: 25vw;
+    height:  25vh;
+}
+
+.MainForm__changesOfJiraTickets--btn {
+ background-color: #20283E;
+ border-radius: 10px;
+ cursor: pointer;
+ color: whitesmoke;
+ font-weight: bold;
+}
+
+
+
+.MainForm__ModificationByField {
+    display: grid;
+    grid-area: ModificationByField;
+    margin: 50px 50px;
+    width: 25vw;
+    height:  25vh;
+    
+}
+.MainForm__ModificationByField--btn {
+    background-color: #20283E;
+    border-radius: 10px;
+    cursor: pointer;
+    color: whitesmoke;
+    font-weight: bold;
+}
+
+
+
+.MainForm__DeletedJiraTickets{
+    display: grid;
+    grid-area: DeletedJiraTickets;
+    margin: 50px 50px;
+    width: 25vw;
+    height:  25vh;
+}
+.MainForm__DeletedJiraTickets--btn{
+    background-color: #20283E;
+    border-radius: 10px;
+    cursor: pointer;
+    color: whitesmoke;
+    font-weight: bold;
+}
+
+
+
+.MainForm__DelaysInDelievry{
+    display: grid;
+    grid-area: DelaysInDelievry;
+    margin: 50px 50px;
+    width: 25vw;
+    height:  25vh;
+}
+.MainForm__DelaysInDelievry--btn{
+    background-color: #20283E;
+    border-radius: 10px;
+    cursor: pointer;
+    color: whitesmoke;
+    font-weight: bold;
+}
+
+
+
+
