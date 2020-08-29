@@ -1,0 +1,85 @@
+.DelaysInDeliveryWrapper{
+    display: grid;
+    grid-template-columns: 5vw 90vw 5vw;
+    grid-template-rows: 10vh 5vh 5vh auto;
+    grid-template-areas: 
+    ". header ."
+    ". filterButtons ."
+    ". . ."
+    ". Table . "
+    "chartColors chart .";
+    
+    background-color: whitesmoke;
+  }
+.DelaysInDelivery__Table{
+  grid-area:Table;
+}
+  .chart_Colors{
+    margin-left: 10px;
+    /* display: flex; */
+    grid-area: chartColors;
+    justify-content: center;
+    justify-content: space-around;
+  }
+  .chart_Colors_Status{
+    margin-bottom: 5px;
+    font:bolder;
+    font-size: 20px;
+    color:white;
+    background-color: #D9514EFF;
+    width: fit-content;
+    height: fit-content;
+    border-radius: 5px;
+  }
+  .chart_Colors_Priority{
+    margin-bottom: 5px;
+    font: bolder;
+    font-size: 20px;
+    color: white;
+    background-color: #2A2B2DFF;
+    width: fit-content;
+    height: fit-content;
+    border-radius: 5px;
+  }
+  .chart_Colors_QaRepresentative{
+    margin-bottom: 5px;
+    font: bolder;
+    font-size: 20px;
+    color: white;
+    background-color: #2DA8D8FF;
+    width: fit-content;
+    height: fit-content;
+    border-radius: 5px;
+  }
+  .DelaysInDelivery__Title{
+    font-size: 30px;
+  font-weight: bold;
+    grid-area: header;
+    text-align: center;
+    background-color: #20283E;
+    color: white;
+    height: 100%;
+  }
+  .DelaysInDelivery__Filters{
+    
+    grid-area: filterButtons;
+  }
+ /* .ModificationByFieldTable{
+    grid-area: table;
+  }*/
+  .DelaysInDelivery__Filters{
+    display: flex;
+    justify-content: space-evenly;
+  }
+  .DelaysInDelivery__Filter{
+  width: 100%;
+  
+  }
+ 
+  
+  .DelaysInDelivery__Chart{
+    grid-area: chart;
+  }
+
+  
+  

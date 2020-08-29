@@ -1,0 +1,51 @@
+.ChangesByParentIdWrapper{
+    display: grid;
+    grid-template-columns: 5vw 90vw 5vw;
+    grid-template-rows: 10vh 5vh 5vh auto;
+    grid-template-areas: 
+    ". header ."
+    
+    ". filterButtons ."
+    ". . ."
+    " . PieChart . ";
+    /*"chartColors chart .";*/
+    
+    background-color: whitesmoke;
+  }
+
+  .ChangesByParentId__Title{
+    font-size: 30px;
+  font-weight: bold;
+    grid-area: header;
+    text-align: center;
+    background-color: #20283E;
+    color: white;
+    height: 100%;
+  }
+  .ChangesByParentId__Filters{
+    
+    grid-area: filterButtons;
+  }
+ /* .ModificationByFieldTable{
+    grid-area: table;
+  }*/
+  .ChangesByParentId__Filters{
+    display: flex;
+    justify-content: space-evenly;
+  }
+  .ChangesByParentId__Filter{
+  width: 100%;
+  
+  }
+ 
+  
+  .ChangesByParentId__Chart{
+    
+      display: grid;
+    grid-area: PieChart;
+
+   justify-items: flex-end;
+  }
+
+  
+  
