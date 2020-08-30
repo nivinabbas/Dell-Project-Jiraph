@@ -110,9 +110,10 @@ const StatusPage = (props) => {
       },
     });
 
-    //remove the item from open task array
-
-    //update the state
+    const result = openTasks.filter(
+      (openTask) => openTask.jiraItem.jiraId !== jiraId
+    );
+    setOpenTasks(result);
   };
 
   return (
