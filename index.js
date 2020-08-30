@@ -7,7 +7,9 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
     extended: true
 }));
 
-app.use(cors())
+//const TaskModel = require('./schemas/TaskSchema');
+
+
 
 app.use(express.static('public'))
 
@@ -16,6 +18,10 @@ const url = "mongodb+srv://Marshood:raMHdQuDOBxwrcss@cluster0.ifcjp.mongodb.net/
 
 const mongoose = require('mongoose');
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
+
+// const data = []
+
+// TaskModel.insertMany(data).then(console.log('Done!'))
 
 
 const userRouter = require('./routing/users');
