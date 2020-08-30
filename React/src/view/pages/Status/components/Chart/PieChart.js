@@ -23,10 +23,15 @@ const dummyData = {
     ],
   },
 };
+
+const optionDone = [
+  { value: "Done", label: "Done" },
+  { value: "Not Done", label: "Not Done" },
+];
 const PieChart = (props) => {
   return (
     <div id="chart">
-      <SelectInput />
+      <SelectInput options={optionDone} />
       <Chart
         options={dummyData.options}
         series={dummyData.series}

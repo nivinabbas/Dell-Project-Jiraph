@@ -2,12 +2,12 @@ import React from "react";
 import "./DashBoard.css";
 import DashBoardCard from "../DashBoardCard/DashBoardCard";
 
-const array = [
-  { name: "functional tests", number: 12 },
-  { name: "fix versions", number: 10 },
-  { name: "deleted tasks", number: 20 },
-  { name: "total tasks", number: 36 },
-];
+// const array = [
+//   { name: "functional tests", number: 12 },
+//   { name: "fix versions", number: 10 },
+//   { name: "deleted tasks", number: 20 },
+//   { name: "total tasks", number: 36 },
+// ];
 
 const DashBoard = ({ cardsContent }) => {
   console.log(cardsContent);
