@@ -1,25 +1,24 @@
 import React from "react";
 import "./StatusPage.css";
 import { useState, useEffect } from "react";
-import SelectInput from "../Select/SelectInput";
 import DashBoard from "../DashBoard/DashBoard";
 
 import Table from "../Table/Table";
 import StackedChart from "../Chart/StackedChart";
 import PieChart from "../Chart/PieChart";
 
-let array = [
-  { name: "functionalTests", number: 12 },
-  { name: "fixVersions", number: 10 },
-  { name: "deletedTasks", number: 20 },
-  { name: "totalTasks", number: 36 },
-];
+// let array = [
+//   { name: "functionalTests", number: 12 },
+//   { name: "fixVersions", number: 10 },
+//   { name: "deletedTasks", number: 20 },
+//   { name: "totalTasks", number: 36 },
+// ];
 
-const optionSprint = [
-  { value: "Backlog", label: "Backlog" },
-  { value: "inProgress", label: "In Progress" },
-  { value: "Done", label: "Done" },
-];
+// const optionSprint = [
+//   { value: "Backlog", label: "Backlog" },
+//   { value: "inProgress", label: "In Progress" },
+//   { value: "Done", label: "Done" },
+// ];
 
 const StatusPage = (props) => {
   /*********TABLEEEEEEE 

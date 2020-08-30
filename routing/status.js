@@ -9,8 +9,8 @@ const TaskModel = require("../schemas/TaskSchema");
 const mongoose = require("mongoose");
 let Today;
 
-// Start daily status alert !
 
+// Start daily status alert !
 router.get("/dailyalerts", async function (req, res) {
   let Today = dateFormat();
   console.log("***************&&&&&&&&&*****");
@@ -87,6 +87,8 @@ router.get("/dailyalerts", async function (req, res) {
 
   res.send({ success: true, error: null, info: DailyAlerts });
 });
+
+
 // to get the time format YY-MM-DD
 function dateFormat() {
   const d = new Date();
@@ -100,6 +102,7 @@ function dateFormat() {
 async function teststau() {
   // let Today = new Date().toLocaleDateString();
   // var milliseconds = Today.getTime();
+  Today = dateFormat();
   console.log("123 ", Today);
   Today = dateFormat();
   let DailyAlerts = await TaskModel.aggregate([
@@ -164,8 +167,10 @@ async function teststau() {
 //teststau();
 // End daily status alert !
 
-// start open tasks
 
+
+
+// start open tasks
 router.get("/openTasks", async function (req, res) {
   TaskModel.find({ "taskItem.isDone": false }, function (err, doc) {
     //success:T/F,error:string,info{TaskItem[Task]
@@ -173,7 +178,27 @@ router.get("/openTasks", async function (req, res) {
     res.send({ success: true, error: null, info: { doc } });
   }).then((err) => console.log(err));
 });
-
 // end open tasks
+
+
+
+
+
+// start update task
+router.post('/updateTasks', (req, res) => {
+  const { jiraId, userId } = req.body;
+  TaskModel.find({ "jiraItem.jiraId": jiraId, "taskItem.user._id": userId })
+    .then(doc => {
+      if (doc.isDone == false) {
+        TaskModel.updateOne({ "jiraItem.jiraId": jiraId, "taskItem.user._id": userId }, { $set: { "taskItem.isDone": true } })
+        res.send({ success: true, error: null, info: { doc } });
+      }
+      else {
+        res.send({ success: false, error: "This task has already been completed", info: { doc } });
+      }
+    }
+    )
+});
+// end update task
 
 module.exports = router;
