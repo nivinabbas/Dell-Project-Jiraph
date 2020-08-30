@@ -20,17 +20,65 @@ const optionSprint = [
   { value: "inProgress", label: "In Progress" },
   { value: "Done", label: "Done" },
 ];
+
 const StatusPage = (props) => {
-  // pie chart 1 :
+  /*********TABLEEEEEEE 
+  const [data, setData] = useState([]);
+  const [filters, setFilters] = useState({
+    oldnewvalue: "oldValue",
+    statusField: "Backlog",
+  });
+
+  const fetchData = () => {
+    fetch("http://localhost:5000/Tickets")
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(normalizeData(res));
+
+        setData(normalizeData(res));
+      });
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const onFilterChange = (data) => {
+    console.log({ ...filters, ...data });
+    return setFilters((f) => {
+      return { ...f, ...data };
+    });
+  };
+
+  const fetchFilteredData = () => {
+    console.log("fetch");
+    fetch("http://localhost:5000/getUpdatedByStatus", {
+      method: "POST",
+      body: JSON.stringify({ ...filters }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        console.log(normalizeFilteredData(res, filters));
+        setData(normalizeFilteredData(res, filters));
+      });
+  };
+*/
+
+  //*********** pie chart 1 :
   const [FunctionalPieContent, setFunctionalPieContent] = useState([]);
   const [cardsContent, setCardsContent] = useState([]);
+  const [openTasks, setOpenTasks] = useState([]);
+  const [isDone, setIsDone] = useState(false);
 
   useEffect(() => {
     console.log("getDailyalerts");
     fetch("/api/status/dailyalerts")
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        console.log("daily alert", data);
         let { success, error, info } = data;
         if (success) {
           setCardsContent(info);
@@ -40,7 +88,22 @@ const StatusPage = (props) => {
       });
   }, []);
 
-  //setCardsContent(array);
+  useEffect(() => {
+    fetch("/api/status/openTasks")
+      .then((res) => res.json())
+      .then((data) => {
+        let { success, error, info } = data;
+        if (success) {
+          setOpenTasks(info.doc);
+        } else {
+          alert(error);
+        }
+      });
+  }, []);
+  console.log(openTasks);
+  const handleDoneClick = (jiraId) => {
+    console.log("task id: ", jiraId);
+  };
 
   return (
     <div className="statusPageContainer">
@@ -49,18 +112,20 @@ const StatusPage = (props) => {
       </div>
       <div className="statusPageContainerTableColumn">
         <div className="statuspage__table">
-          <Table />
+          <Table openTasks={openTasks} onDoneClick={handleDoneClick} />
         </div>
         <div className="statuspage__chart">
           <StackedChart />
         </div>
       </div>
-      <div className="statuspage__chart">
-        <StackedChart />
-      </div>
-      <div className="statuspage__pie">
-        <PieChart />
-        <PieChart />
+      <div className="statuspage__chartpie">
+        <div className="statuspage__chart">
+          <StackedChart />
+        </div>
+        <div className="statuspage__pie">
+          <PieChart />
+          <PieChart />
+        </div>
       </div>
     </div>
   );
