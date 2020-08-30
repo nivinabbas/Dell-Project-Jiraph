@@ -11,7 +11,7 @@ let Today;
 
 
 // Start daily status alert !
-router.get("/api/status/dailyalerts", async function (req, res) {
+router.get("/dailyalerts", async function (req, res) {
   let Today = dateFormat();
   console.log("***************&&&&&&&&&*****");
   let DailyAlerts = await TaskModel.aggregate([
@@ -171,7 +171,7 @@ async function teststau() {
 
 
 // start open tasks
-router.get("/api/status/openTasks", async function (req, res) {
+router.get("/openTasks", async function (req, res) {
   TaskModel.find({ "taskItem.isDone": false }, function (err, doc) {
     //success:T/F,error:string,info{TaskItem[Task]
 
@@ -185,7 +185,7 @@ router.get("/api/status/openTasks", async function (req, res) {
 
 
 // start update task
-router.post('/api/status/updateTasks', (req, res) => {
+router.post('/updateTasks', (req, res) => {
   const { jiraId, userId } = req.body;
   TaskModel.find({ "jiraItem.jiraId": jiraId, "taskItem.user._id": userId })
     .then(doc => {
