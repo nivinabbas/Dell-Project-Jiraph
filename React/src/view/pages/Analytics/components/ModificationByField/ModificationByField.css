@@ -7,12 +7,15 @@
   
   ". filterButtons ."
   ". chart ."
-  "chartColors chart .";
+  "chartColors table .";
   
   background-color: whitesmoke;
 }
 .ModificationByField__Table{
-grid-area: chart;
+grid-area: table;
+}
+.charti{
+  grid-area: chart;
 }
 
 .ModificationByField__MainTitle{

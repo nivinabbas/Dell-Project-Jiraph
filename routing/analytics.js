@@ -60,16 +60,38 @@ router.post('/modificationByFieldFilters', async (req, res) => {
         tasks = await TaskModel.aggregate([
             {
                 $group: {
-                    _id: {
-                        fieldName: "$diffItem.updatedField.fieldName"
+                    _id:null,
+                    labels: {$addToSet: {"label":"$diffItem.updatedField.fieldName"}}
+                },
+                //fieldNames: {$addToSet : "$diffItem.updatedField.fieldName"}
 
-                    },
-                }
+            
+            }
+        ])
+    }
+    else{
+        const name = fieldName[0];
+        tasks = await TaskModel.aggregate([
+            {
+                $match:{"diffItem.updatedField.fieldName":name, "diffItem.type": "Update"}
+
+
+            },
+            {
+                $group: {
+                    _id:null,
+                    QA: {$addToSet: {"label":"$jiraItem.qaRepresentative"}},
+                    Values: {$addToSet: {"label":"$diffItem.updatedField.newValue"}},
+                    tasks:{$push: "$$ROOT"}
+                },
+                //fieldNames: {$addToSet : "$diffItem.updatedField.fieldName"}
+
+            
             }
         ])
     }
 
-    res.send(tasks)
+res.send(tasks)
 })
 
 
