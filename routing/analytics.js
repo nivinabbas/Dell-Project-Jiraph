@@ -280,4 +280,63 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
 
 })
 
+
+
+//  !!-------------------------------------------- Sally --------------------------------------------!!
+router.get('/changeOfJIRATicketsStatusFilters', async (req, res) => {
+    let tasks = []
+    let matchFilters = ''
+    let groupFilters = ''
+    const { filterQa } = req.body;
+    let filterVal = 'oldValue'
+    filterStatus = ''
+    if (filterVal == 'oldValue') {
+        groupFilters = "$diffItem.updatedField.oldValue"
+    }
+    else {
+        groupFilters = "$diffItem.updatedField.newValue"
+    }
+    if (filterStatus.length != 0) {
+        matchFilters = {
+            'diffItem.type': 'Update',
+            'diffItem.updatedField.fieldName': 'status',
+            'diffItem.updatedField.oldValue': filterStatus,
+            //'jiraItem.qaRepresentative': filterQaRep
+        }
+    }
+    else {
+        matchFilters = {
+            'diffItem.type': 'Update',
+            'diffItem.updatedField.fieldName': 'status'
+        }
+    }
+
+    tasks = await TaskModel.aggregate([
+        {
+            $match: matchFilters
+        },
+        {
+            $group: {
+                _id: {
+
+                    filterStatus: groupFilters,
+                    qarep: '$jiraItem.qaRepresentative'
+
+                }
+
+
+            }
+        },
+        {
+            $group: {
+                _id: "$_id.filterStatus",
+                arr: { $push: { qaRepresentatives: "$_id.qarep" } },
+
+            }
+        }
+    ])
+    res.send(tasks)
+
+})
+
 module.exports = router;
