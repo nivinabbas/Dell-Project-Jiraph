@@ -3,8 +3,6 @@
  * @data 25/08/2020
  */
 const express = require("express");
-const mongoose = require('mongoose');
-
 const router = express.Router();
 const UserSchema = require("../schemas/UserSchema");
 const TaskModel = require("../schemas/TaskSchema");
@@ -38,7 +36,7 @@ router.get("/dailyalerts", async function (req, res) {
         functionalTest: {
           $sum: {
             $cond: [
-              { $eq: ["$jiraItem.specialFields.functionalTest", true] },
+              { $eq: ["$jiraItem.functionalTest", true] },
               1,
               0,
             ],
@@ -126,7 +124,7 @@ async function teststau() {
         functionalTest: {
           $sum: {
             $cond: [
-              { $eq: ["$jiraItem.specialFields.functionalTest", true] },
+              { $eq: ["$jiraItem.functionalTest", true] },
               1,
               0,
             ],
@@ -168,7 +166,7 @@ async function teststau() {
 
 // start open tasks
 
-router.get("/api/status/openTasks", async function (req, res) {
+router.get("/openTasks", async function (req, res) {
   TaskModel.find({ "taskItem.isDone": false }, function (err, doc) {
     //success:T/F,error:string,info{TaskItem[Task]
 
@@ -177,5 +175,26 @@ router.get("/api/status/openTasks", async function (req, res) {
 });
 
 // end open tasks
+
+
+
+
+
+// start update task
+router.post('/api/status/updateTasks', (req, res) => {
+  const { jiraId, userId } = req.body;
+  TaskModel.find({ "jiraItem.jiraId": jiraId, "taskItem.user._id": userId })
+    .then(doc => {
+      if (doc.isDone == false) {
+        TaskModel.updateOne({ "jiraItem.jiraId": jiraId, "taskItem.user._id": userId }, { $set: { "taskItem.isDone": true } })
+        res.send({ success: true, error: null, info: { doc } });
+      }
+      else {
+        res.send({ success: false, error: "This task has already been completed", info: { doc } });
+      }
+    }
+    )
+});
+// end update task
 
 module.exports = router;
