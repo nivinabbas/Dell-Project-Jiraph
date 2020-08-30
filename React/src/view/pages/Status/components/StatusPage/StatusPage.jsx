@@ -100,8 +100,19 @@ const StatusPage = (props) => {
       });
   }, []);
   console.log(openTasks);
-  const handleDoneClick = (jiraId) => {
-    console.log("task id: ", jiraId);
+  const handleDoneClick = async (jiraId) => {
+    const userId = null;
+    await fetch("/api/status/updateTasks", {
+      method: "POST",
+      body: JSON.stringify({ jiraId, userId }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    //remove the item from open task array
+
+    //update the state
   };
 
   return (
