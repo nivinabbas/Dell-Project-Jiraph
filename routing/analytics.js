@@ -115,7 +115,7 @@ router.get('/changeOfJIRATicketsStatus', async (req, res) => {
     //-------------------------------------- end of priority 1 --------------------------------------//
 
 
-    
+
     // //NOTE : ask nimer to set his default value on load.
     // const filterValue = 'oldValue' //old or new value
     // const filterStatus = 'Backlog'     // Done , in progress , Backlog ,In Integration ...
@@ -192,7 +192,7 @@ router.get('/changeOfJIRATicketsStatus', async (req, res) => {
             'diffItem.updatedField.newValue': filterStatus,
             'jiraItem.qaRepresentative': filterQaRep
         }
-    }else{
+    } else {
         matchFilterValue = {
             'diffItem.type': 'Update',
             'diffItem.updatedField.fieldName': 'status',
@@ -242,6 +242,63 @@ router.get('/changeOfJIRATicketsStatus', async (req, res) => {
 
 
     res.send(tasks);
+
+})
+
+
+router.get('/changeOfJIRATicketsStatusFilters', async (req, res) => {
+    let tasks = []
+    let matchFilters = ''
+    let groupFilters = ''
+    const { filterQa } = req.body;
+    let filterVal = 'oldValue'
+    filterStatus = ''
+    if (filterVal == 'oldValue') {
+        groupFilters = "$diffItem.updatedField.oldValue"
+    }
+    else {
+        groupFilters = "$diffItem.updatedField.newValue"
+    }
+    if (filterStatus.length != 0) {
+        matchFilters = {
+            'diffItem.type': 'Update',
+            'diffItem.updatedField.fieldName': 'status',
+            'diffItem.updatedField.oldValue': filterStatus,
+            //'jiraItem.qaRepresentative': filterQaRep
+        }
+    }
+    else {
+        matchFilters = {
+            'diffItem.type': 'Update',
+            'diffItem.updatedField.fieldName': 'status'
+        }
+    }
+
+    tasks = await TaskModel.aggregate([
+        {
+            $match: matchFilters
+        },
+        {
+            $group: {
+                _id: {
+
+                    filterStatus: groupFilters,
+                    qarep: '$jiraItem.qaRepresentative'
+
+                }
+
+
+            }
+        },
+        {
+            $group: {
+                _id: "$_id.filterStatus",
+                arr: { $push: { qaRepresentatives: "$_id.qarep" } },
+
+            }
+        }
+    ])
+    res.send(tasks)
 
 })
 
