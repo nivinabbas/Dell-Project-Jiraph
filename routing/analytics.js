@@ -115,7 +115,7 @@ router.get('/changeOfJIRATicketsStatus', async (req, res) => {
     //-------------------------------------- end of priority 1 --------------------------------------//
 
 
-    
+
     // //NOTE : ask nimer to set his default value on load.
     // const filterValue = 'oldValue' //old or new value
     // const filterStatus = 'Backlog'     // Done , in progress , Backlog ,In Integration ...
@@ -179,9 +179,18 @@ router.get('/changeOfJIRATicketsStatus', async (req, res) => {
 
 
     //NOTE : ask nimer to set his default value on load.
-    const filterValue = 'oldValue' //old or new value
-    const filterStatus = 'Backlog'     // Done , in progress , Backlog ,In Integration ...
-    const filterQaRep = 'Sally'
+
+    // const filterValue = 'oldValue'     //old or new value
+    // const filterStatus = 'Backlog'     // Done , in progress , Backlog ,In Integration ...
+    // const filterQaRep = 'Sally'
+
+    const filterValue = req.body.values[0] 
+    const filterStatus = req.body.status[0] 
+    const filterQaRep = req.body.qaRepresentative[0] 
+
+
+    console.log( filterValue, filterStatus, filterQaRep)
+
     //here we build the match expression according to the user's filters.
     let matchFilterValue = {}
 
@@ -192,7 +201,7 @@ router.get('/changeOfJIRATicketsStatus', async (req, res) => {
             'diffItem.updatedField.newValue': filterStatus,
             'jiraItem.qaRepresentative': filterQaRep
         }
-    }else{
+    } else {
         matchFilterValue = {
             'diffItem.type': 'Update',
             'diffItem.updatedField.fieldName': 'status',
