@@ -95,7 +95,7 @@ res.send(tasks)
 })
 
 
-router.post('/changeOfJIRATicketsStatus', async (req, res) => {
+router.get('/changeOfJIRATicketsStatus', async (req, res) => {
 
     
     /*
@@ -203,13 +203,13 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
 
     //NOTE : ask nimer to set his default value on load.
 
-    // const filterValue = 'newValue'     //old or new value
-    // const filterStatus = 'Backlog'     // Done , in progress , Backlog ,In Integration ...
-    // const filterQaRep = 'Sally'
+    const filterValue = 'newValue'     //old or new value
+    const filterStatus = 'Backlog'     // Done , in progress , Backlog ,In Integration ...
+    const filterQaRep = 'Sally'
 
-    const filterValue = req.body.values[0]
-    const filterStatus = req.body.status[0] 
-    const filterQaRep = req.body.qaRepresentative[0] 
+    // const filterValue = req.body.values[0]
+    // const filterStatus = req.body.status[0] 
+    // const filterQaRep = req.body.qaRepresentative[0] 
 
     console.log("nimer")
     console.log( filterValue, filterStatus, filterQaRep)
@@ -223,14 +223,14 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
             'diffItem.type': 'Update',
             'diffItem.updatedField.fieldName': 'status',
             'diffItem.updatedField.newValue': filterStatus,
-            'jiraItem.qaRepresentative': filterQaRep
+            // 'jiraItem.qaRepresentative': filterQaRep
         }
     } else {
         matchFilterValue = {
             'diffItem.type': 'Update',
             'diffItem.updatedField.fieldName': 'status',
             'diffItem.updatedField.oldValue': filterStatus,
-            'jiraItem.qaRepresentative': filterQaRep
+            // 'jiraItem.qaRepresentative': filterQaRep
 
         }
     }
@@ -288,7 +288,7 @@ router.get('/changeOfJIRATicketsStatusFilters', async (req, res) => {
     let matchFilters = ''
     let groupFilters = ''
     const { filterQa } = req.body;
-    let filterVal = 'oldValue'
+    let filterVal = 'newValue'
     filterStatus = ''
     if (filterVal == 'oldValue') {
         groupFilters = "$diffItem.updatedField.oldValue"
@@ -316,25 +316,25 @@ router.get('/changeOfJIRATicketsStatusFilters', async (req, res) => {
             $match: matchFilters
         },
         {
+            // $group: {
+            //     _id: {
+
+            //         filterStatus: groupFilters,
+            //         // qarep: '$jiraItem.qaRepresentative'
+
+            //     }
+
+
+            // },
             $group: {
-                _id: {
-
-                    filterStatus: groupFilters,
-                    qarep: '$jiraItem.qaRepresentative'
-
-                }
-
-
-            }
-        },
-        {
-            $group: {
-                _id: "$_id.filterStatus",
-                arr: { $push: { qaRepresentatives: "$_id.qarep" } },
-
-            }
+                _id:null,
+                labels: {$addToSet: {"label": groupFilters,}}
+            },
         }
     ])
+
+    console.log(tasks)
+
     res.send(tasks)
 
 })
