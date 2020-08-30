@@ -3,6 +3,7 @@ import "./ModificationByField.css";
 import { useState } from 'react';
 import MainTable from "../MainTable/MainTable"
 import Select from "react-select"
+import Chart from "../charts/Chart"
 // import ApexChart from "../ApexChart/ApexChart"
 
 
@@ -10,8 +11,8 @@ import Select from "react-select"
 
 function ModificationByField(props) {
   
-  const renderFieldName =() => {
-
+  useEffect(() => {
+   
     fetch('/api/analytics/modificationByFieldFilters', {
       method: 'POST',
       body: JSON.stringify({fieldName}),
@@ -21,15 +22,12 @@ function ModificationByField(props) {
     })
       .then(res => res.json())
       .then(data => {
-        //set state (news)
+        
+       setFieldNameOptions(data[0].labels)
        console.log(data);
       })
-  }
+  },[])
   
-
-  const date = new Date()
-  const date1MonthAgo = new Date(new Date().setMonth(date.getMonth() - 1));
-
   const render = () => {
     fetch('/api/analytics/modificationByField', {
       method: 'POST',
@@ -39,9 +37,32 @@ function ModificationByField(props) {
       }
     })
       .then((res) => res.json())
-      .then((data) => { console.log(data) })
+      .then((data) => { setUiObjs(data) })
   }
 
+ 
+  const renderFilters = () => {
+    fetch('/api/analytics/modificationByFieldFilters', {
+      method: 'POST',
+      body: JSON.stringify({ fieldName }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then((res) => res.json())
+      .then((data) => { 
+        if(data.length>0){
+          console.log(data)
+                setQaRepresentativeOptions(data[0].QA);
+                setValueOptions(data[0].Values);
+        }
+                 
+      })
+  }
+
+
+  const date = new Date()
+  const date1MonthAgo = new Date(new Date().setMonth(date.getMonth() - 1));
 
   const [fieldName, setFieldName] = useState([]);
   const [values, setValues] = useState([]);
@@ -55,26 +76,33 @@ function ModificationByField(props) {
   const [fieldNameOptions, setFieldNameOptions] = useState([]);
   const [valueOptions, setValueOptions] = useState([]);
   const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([]);
-  const [labelOptions, setLabelOptions] = useState([{ label: "Daily", value: "daily" }, { label: "Weekly", value: "weekly" }, { label: "Monthly", value: "monthly" }, { label: "Yearly", value: "yearly" }]);
+  const [labelOptions, setLabelOptions] = useState([
+    { label: "Daily"  , value: "daily" }, 
+    { label: "Weekly" , value: "weekly" },
+    { label: "Monthly", value: "monthly" },
+    { label: "Yearly" , value: "yearly" }
+  ]);
 
-  renderFieldName();
 
   const handleChangeLabel = (change => {
     setLabel([change.value])
 
     render();
   })
+
   const handleChangeFieldName = (change => {
-    setFieldName([change.value])
-    renderFieldName();
+    setFieldName([change.label])
+    renderFilters();
   })
+
   const handleChangeValues = (change => {
-    setLabel([change.value])
+    setValues([change.label])
+    console.log(values)
     render();
 
   })
   const handleChangeQaRepresentative = (change => {
-    setQaRepresentative([change.value])
+    setQaRepresentative([change.label])
     render();
   })
   const handleChangeStartDate = (change => {
@@ -85,8 +113,8 @@ function ModificationByField(props) {
   const handleChangeEndDate = (change => {
     setEndDate(change.target.value)
     console.log(endDate)
-    // render();
-  })
+    render();
+    })
 
 
 
@@ -98,10 +126,8 @@ function ModificationByField(props) {
 
 
     <div className='ModificationByField__Wrapper'>
-      <div className="ModificationByField__Table" >
-      <MainTable changes={true}  />
-      <MainTable  />
-      </div>
+     
+      <div className="charti"> {UiObjs.length>0 && <Chart UiObjs={UiObjs}/>}</div>
       
       <div className="ModificationByField__MainTitle">Modification By Field</div>
       <div className="ModificationByField__Chart">
