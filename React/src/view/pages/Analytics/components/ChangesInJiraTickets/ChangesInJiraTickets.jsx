@@ -17,19 +17,19 @@ function ChangesInJiraTickets() {
   const [UiObjs, setUiObjs] = useState([]);
 
   // Options To Send == > Server 
-  const [values, setValue] = useState([])
-  const [status, setStatus] = useState([])
+  const [values, setValue] = useState(["newValue"])
+  const [status, setStatus] = useState(["Backlog"])
   const [label, setLabel] = useState([])
-  const [qaRepresentative, setQaRepresentative] = useState([])
+  const [qaRepresentative, setQaRepresentative] = useState(["Sally"])
   const [startDate, setStartDate] = useState(date1MonthAgo)
   const [endDate, setEndDate] = useState(date)
 
 
 
   // Options To get From Server 
-  const [valueOptions, setValueOptions] = useState([])
-  const [statusOptions, setStatusOptions] = useState([])
-  const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([])
+  const [valueOptions, setValueOptions] = useState([{value: "newValue", label: "New Value"},{value: "oldValue", label: "Old Value"}])
+  const [statusOptions, setStatusOptions] = useState([{value: "Backlog", label: "BackLog"}])
+  const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([{value: "Sally", label: "Sally"}])
 
 
   const [labelOptions, setLabelOptions] = useState([
@@ -43,15 +43,15 @@ function ChangesInJiraTickets() {
   // Functions ==> Fetch : 
 
   const render = () => {
-    fetch('/api/analytics/ChangesInJiraTickets', {
+    fetch('/api/analytics/changeOfJIRATicketsStatus', {
       method: 'POST',
-      body: JSON.stringify({ values, status, label, qaRepresentative }),
+      body: JSON.stringify({ values, status, qaRepresentative }),
       headers: {
         "Content-Type": "application/json"
       }
     })
       .then((res) => res.json())
-      .then((data) => { setUiObjs(data) })
+      .then((data) => { console.log(data) })
 
   }
 

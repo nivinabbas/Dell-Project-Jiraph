@@ -10,12 +10,14 @@ import Chart from "../charts/Chart"
 
 
 function ModificationByField(props) {
+  const serverFilters={fieldName:[],values:[],qaRepresentative:[],startDate:[],endDate:[],label:["weekly"]};
+  
   
   useEffect(() => {
    
     fetch('/api/analytics/modificationByFieldFilters', {
       method: 'POST',
-      body: JSON.stringify({fieldName}),
+      body: JSON.stringify({fieldName:serverFilters.fieldName}),
       headers: {
         "Content-Type": "application/json"
       }
@@ -28,10 +30,10 @@ function ModificationByField(props) {
       })
   },[])
   
-  const render = () => {
+  const render = (serverFilters) => {
     fetch('/api/analytics/modificationByField', {
       method: 'POST',
-      body: JSON.stringify({ fieldName, values, label, qaRepresentative }),
+      body: JSON.stringify(serverFilters),
       headers: {
         "Content-Type": "application/json"
       }
@@ -41,10 +43,10 @@ function ModificationByField(props) {
   }
 
  
-  const renderFilters = () => {
+  const renderFilters = (serverFilters) => {
     fetch('/api/analytics/modificationByFieldFilters', {
       method: 'POST',
-      body: JSON.stringify({ fieldName }),
+      body: JSON.stringify({ fieldName:serverFilters.fieldName }),
       headers: {
         "Content-Type": "application/json"
       }
@@ -64,12 +66,15 @@ function ModificationByField(props) {
   const date = new Date()
   const date1MonthAgo = new Date(new Date().setMonth(date.getMonth() - 1));
 
-  const [fieldName, setFieldName] = useState([]);
-  const [values, setValues] = useState([]);
-  const [qaRepresentative, setQaRepresentative] = useState([]);
-  const [label, setLabel] = useState([]);
-  const [startDate, setStartDate] = useState(date1MonthAgo);
-  const [endDate, setEndDate] = useState(date);
+
+ 
+
+  // const [fieldName, setFieldName] = useState([]);
+  // const [values, setValues] = useState([]);
+  // const [qaRepresentative, setQaRepresentative] = useState([]);
+  // const [label, setLabel] = useState([]);
+  // const [startDate, setStartDate] = useState(date1MonthAgo);
+  // const [endDate, setEndDate] = useState(date);
 
 
   const [UiObjs, setUiObjs] = useState([]);
@@ -85,35 +90,34 @@ function ModificationByField(props) {
 
 
   const handleChangeLabel = (change => {
-    setLabel([change.value])
+    serverFilters.label=[change.value]
 
-    render();
+    render(serverFilters);
   })
 
-  const handleChangeFieldName = (change => {
-    setFieldName([change.label])
-    renderFilters();
+  const  handleChangeFieldName=(change=> {
+    serverFilters.fieldName=[change.label];
+    renderFilters(serverFilters);
   })
 
   const handleChangeValues = (change => {
-    setValues([change.label])
-    console.log(values)
-    render();
+    serverFilters.values=[change.label];
+    
+    render(serverFilters);
 
   })
   const handleChangeQaRepresentative = (change => {
-    setQaRepresentative([change.label])
-    render();
+    serverFilters.qaRepresentative=[change.label];
+    render(serverFilters);
   })
   const handleChangeStartDate = (change => {
-    setStartDate(change.target.value)
-    console.log(startDate)
-    render();
+    serverFilters.startDate=[change.target.value];
+   
+    render(serverFilters);
   })
   const handleChangeEndDate = (change => {
-    setEndDate(change.target.value)
-    console.log(endDate)
-    render();
+    serverFilters.endDate=[change.target.value];
+    render(serverFilters);
     })
 
 
