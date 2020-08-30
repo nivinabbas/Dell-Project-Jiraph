@@ -67,16 +67,16 @@ function ChangesInJiraTickets() {
 
   }*/
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    fetch('/api/analytics/ChangesInJiraTickets')
-      .then(res => res.json())
-      .then(data => {
+  //   fetch('/api/analytics/ChangesInJiraTickets')
+  //     .then(res => res.json())
+  //     .then(data => {
 
-        //set state (UiObj)
-        setUiObjs(data);
-      })
-  }, [])
+  //       //set state (UiObj)
+  //       setUiObjs(data);
+  //     })
+  // }, [])
 
 
   // Filters onChange Functions 

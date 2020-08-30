@@ -95,8 +95,9 @@ res.send(tasks)
 })
 
 
-router.get('/changeOfJIRATicketsStatus', async (req, res) => {
+router.post('/changeOfJIRATicketsStatus', async (req, res) => {
 
+    
     /*
     const tasks = await TaskModel.aggregate([
         {
@@ -202,21 +203,22 @@ router.get('/changeOfJIRATicketsStatus', async (req, res) => {
 
     //NOTE : ask nimer to set his default value on load.
 
-    // const filterValue = 'oldValue'     //old or new value
+    // const filterValue = 'newValue'     //old or new value
     // const filterStatus = 'Backlog'     // Done , in progress , Backlog ,In Integration ...
     // const filterQaRep = 'Sally'
 
-    const filterValue = req.body.values[0] 
+    const filterValue = req.body.values[0]
     const filterStatus = req.body.status[0] 
     const filterQaRep = req.body.qaRepresentative[0] 
 
-
+    console.log("nimer")
     console.log( filterValue, filterStatus, filterQaRep)
 
     //here we build the match expression according to the user's filters.
     let matchFilterValue = {}
 
     if (filterValue == 'newValue') {
+        
         matchFilterValue = {
             'diffItem.type': 'Update',
             'diffItem.updatedField.fieldName': 'status',
@@ -234,6 +236,7 @@ router.get('/changeOfJIRATicketsStatus', async (req, res) => {
     }
 
 
+    console.log(matchFilterValue)
     const tasks = await TaskModel.aggregate([
         {
             $match: matchFilterValue
@@ -260,6 +263,7 @@ router.get('/changeOfJIRATicketsStatus', async (req, res) => {
     ])
 
 
+    console.log("YOUSEF")
     let total = 0;
     tasks.forEach(element => {
         total += element.arr[0].size
