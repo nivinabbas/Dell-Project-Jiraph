@@ -5,11 +5,10 @@
     grid-template-rows: 10vh 5vh 5vh auto;
     grid-template-areas: 
     ". header ."
-    
+  
     ". filterButtons ."
     ". . ."
-    ". Table ."
-    "chartColors Table .";
+    "chartColors chart .";
     
     background-color: whitesmoke;
   }
