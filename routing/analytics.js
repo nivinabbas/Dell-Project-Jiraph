@@ -11,7 +11,8 @@ const TaskModel = require('../schemas/TaskSchema');
 
 router.post('/modificationByField', async (req, res) => {
     let tasks = []
-    const { fieldName, values, label, qaRepresentative } = req.body;
+    const { fieldName, values,qaRepresentative,startDate,endDate,label } = req.body;
+    console.log( fieldName, values, label, qaRepresentative)
     if (fieldName.length == 0) {
         tasks = await TaskModel.aggregate([
             {
@@ -54,28 +55,27 @@ router.post('/modificationByField', async (req, res) => {
 
 router.post('/modificationByFieldFilters', async (req, res) => {
     let tasks = []
-    const { fieldName, values, label, qaRepresentative } = req.body;
+    const {fieldName} = req.body
     if (fieldName.length == 0) {
         tasks = await TaskModel.aggregate([
             {
                 $group: {
                     _id:null,
-                    labels: {$addToSet: {"label":"$diffItem.updatedField.fieldName"}}
+                    label: {$addToSet: "$diffItem.updatedField.fieldName"}
                 },
-               
             },
-            // {
-            //     $unwind: { path: "$labels"}
+             {
+                $unwind: { path: "$label"}
               
-            // },
-            // {
-            //     $project: {_id:0 , labels: 1}
+            },
+             {
+                 $project: {_id:0 , label: 1}
               
-            // },
-            // {
-            //     $sort: {labels:1}
+             },
+            {
+                $sort: {label:1}
               
-            // }
+            }
         ])
     }
     else{
@@ -93,7 +93,6 @@ router.post('/modificationByFieldFilters', async (req, res) => {
                     Values: {$addToSet: {"label":"$diffItem.updatedField.newValue"}},
                 }
             },
-            
         ])
     }
 

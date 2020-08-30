@@ -25,7 +25,7 @@ function ModificationByField(props) {
       .then(res => res.json())
       .then(data => {
         
-       setFieldNameOptions(data[0].labels)
+       setFieldNameOptions(data)
        console.log(data);
       })
   },[])
@@ -54,7 +54,6 @@ function ModificationByField(props) {
       .then((res) => res.json())
       .then((data) => { 
         if(data.length>0){
-          console.log(data)
                 setQaRepresentativeOptions(data[0].QA);
                 setValueOptions(data[0].Values);
         }
