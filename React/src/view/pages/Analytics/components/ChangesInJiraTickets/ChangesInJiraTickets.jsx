@@ -52,9 +52,19 @@ function ChangesInJiraTickets() {
       .then(res => res.json())
       .then(data => {
 
-        //set state (UiObj)
+        
         setStatusOptions(data[0].labels);
+        // setQaRepresentativeOptions(data[0].qa);
+
       })
+
+      /*fetch('/api/analytics/changeOfJIRATicketsStatus')
+      .then(res => res.json())
+      .then(data => {
+
+        //set state (UiObj)
+        setUiObjs(data);
+      })*/
 
   }, [])
 
@@ -68,21 +78,28 @@ function ChangesInJiraTickets() {
       }
     })
       .then((res) => res.json())
-      .then((data) => { console.log(data) })
+      .then((data) => { console.log(data) } )
 
   }
 
-  /*  const getFiltersValues = () => {
-      fetch('/api/analytics/ChangesInJiraTicketsFilters')
-      
-        .then((res) => res.json())
-        .then((data) => {
-          data.map(array =>{
-            
-          })
-         })
-  
-    }*/
+  // const renderFilters = (serverFilters) => {
+  //   fetch('/api/analytics/modificationByFieldFilters', {
+  //     method: 'POST',
+  //     body: JSON.stringify({ status:serverFilters.status }),
+  //     headers: {
+  //       "Content-Type": "application/json"
+  //     }
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => { 
+  //       if(data.length>0){
+  //         console.log(data)
+  //               setQaRepresentativeOptions(data[0].QA);
+                
+  //       }
+                 
+  //     })
+  // }
 
 
 
