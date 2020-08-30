@@ -288,7 +288,7 @@ router.get('/changeOfJIRATicketsStatusFilters', async (req, res) => {
     let tasks = []
     let matchFilters = ''
     let groupFilters = ''
-    const { filterQa } = req.body;
+    const { serverFilters } = req.body;
     let filterVal = 'newValue'
     filterStatus = ''
     if (filterVal == 'oldValue') {
@@ -302,7 +302,7 @@ router.get('/changeOfJIRATicketsStatusFilters', async (req, res) => {
             'diffItem.type': 'Update',
             'diffItem.updatedField.fieldName': 'status',
             'diffItem.updatedField.oldValue': filterStatus,
-            //'jiraItem.qaRepresentative': filterQaRep
+            // 'jiraItem.qaRepresentative': filterQaRep
         }
     }
     else {
@@ -317,16 +317,6 @@ router.get('/changeOfJIRATicketsStatusFilters', async (req, res) => {
             $match: matchFilters
         },
         {
-            // $group: {
-            //     _id: {
-
-            //         filterStatus: groupFilters,
-            //         // qarep: '$jiraItem.qaRepresentative'
-
-            //     }
-
-
-            // },
             $group: {
                 _id:null,
                 labels: {$addToSet: {"label": groupFilters,}}
