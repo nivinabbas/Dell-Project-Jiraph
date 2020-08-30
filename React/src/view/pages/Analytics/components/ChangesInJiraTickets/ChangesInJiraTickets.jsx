@@ -59,18 +59,18 @@ function ChangesInJiraTickets() {
   }, [])
 
 
-  // const render = () => {
-  //   fetch('/api/analytics/changeOfJIRATicketsStatus', {
-  //     method: 'POST',
-  //     body: JSON.stringify({ values, status, qaRepresentative }),
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     }
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => { console.log(data) })
+  const render = (serverFilters) => {
+    fetch('/api/analytics/changeOfJIRATicketsStatus', {
+      method: 'POST',
+      body: JSON.stringify(serverFilters),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then((res) => res.json())
+      .then((data) => { console.log(data) })
 
-  // }
+  }
 
   /*  const getFiltersValues = () => {
       fetch('/api/analytics/ChangesInJiraTicketsFilters')
