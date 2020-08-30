@@ -35,10 +35,10 @@ function MainTable(props) {
 
       <div className="MainTable__Body" />
 
-      {tasks && tasks.map((task) => {
+      {tasks && tasks.map((task,index) => {
         return (
           
-          <div className="MainTable__Row">
+          <div key={index} className="MainTable__Row">
 
             <div className="MainTable__Body__Cell">{task.jiraItem.jiraId}</div>
             <div className="MainTable__Body__Cell">{task.jiraItem.jiraName}</div>
