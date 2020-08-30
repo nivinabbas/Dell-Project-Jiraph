@@ -12,6 +12,7 @@ import {
   Redirect,
   Link,
 } from "react-router-dom";
+import MainPage from "../src/view/pages/Analytics/components/mainPage/MainPage"
 
 function App() {
   return (
@@ -38,8 +39,8 @@ function App() {
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
-          <Route exact={true} path="/">
-            <Login></Login>
+        <Route exact={true} path="/">
+            <h1>login</h1>
           </Route>
           <Route path="/register"></Route>
           <Route path="/forgotPassword">
@@ -48,7 +49,9 @@ function App() {
           <Route path="/Admin">
             <h1>Admin</h1>
           </Route>
-          <Route path="/analysis"></Route>
+          <Route path="/analysis">
+          <MainPage/>
+          </Route>
           <Route path="/status">
             <Status />
           </Route>
