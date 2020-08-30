@@ -284,6 +284,7 @@ router.get('/changeOfJIRATicketsStatus', async (req, res) => {
 
 //  !!-------------------------------------------- Sally --------------------------------------------!!
 router.get('/changeOfJIRATicketsStatusFilters', async (req, res) => {
+
     let tasks = []
     let matchFilters = ''
     let groupFilters = ''
@@ -334,7 +335,6 @@ router.get('/changeOfJIRATicketsStatusFilters', async (req, res) => {
     ])
 
     console.log(tasks)
-
     res.send(tasks)
 
 })
