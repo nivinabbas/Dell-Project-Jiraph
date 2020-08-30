@@ -8,10 +8,12 @@ const TaskModel = mongoose.model('TaskModel', {
         jiraType: String,
         priority: String,
         status: String,
-        jiraParentId: String,
-        functionalTest: Boolean,
-        qaRepresentative: String,
-        fixVersion: String
+        specialFields: {
+            jiraParentId: String,
+            functionalTest: Boolean,
+            qaRepresentative: String,
+            fixVersion: String
+        }
     },
     qcItem: {
         requirementId: String,

@@ -23,7 +23,10 @@ const UserModel = mongoose.model("UserModel", UserSchema)
         }
     })
 }
+
 // TaskModel.insertMany(Data1);
+
+
 router.post("/GetBellaData", async function (req, res) {
     newDwata = [];
     const { user_id, user_pass, Data } = req.body;
@@ -33,7 +36,7 @@ router.post("/GetBellaData", async function (req, res) {
         console.log("befor")
          addTaskItem(newDwata);
         console.log("after")
-        //insertToDB();
+        insertToDB();
         try{
         TaskModel.insertMany(newDwata).then(console.log("Adding Success..!"));
         }catch{
@@ -51,6 +54,8 @@ async function insertToDB() {
     await TaskModel.insertMany(newDwata).then(console.log("Adding Success..!"));
 
 }
+//insertToDB();
+
 
 
 
