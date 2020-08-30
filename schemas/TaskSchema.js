@@ -16,7 +16,7 @@ const TaskModel = mongoose.model('TaskModel', {
         }
     },
     qcItem: {
-        requirmentId: String,
+        requirementId: String,
         requirementType: String,
         status: String
     },
