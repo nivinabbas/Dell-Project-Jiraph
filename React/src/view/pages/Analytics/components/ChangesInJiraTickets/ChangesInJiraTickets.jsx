@@ -7,30 +7,34 @@ import { useState, useEffect } from 'react';
 
 
 function ChangesInJiraTickets() {
-
-
+  
   // Default Date
   const date = new Date()
   const date1MonthAgo = new Date(new Date().setMonth(date.getMonth() - 1));
 
+  // Options To Send == > Server 
+  const serverFilters = {
+    values: [],
+    status: [],
+    qaRepresentative: [],
+    startDate: [], // date1MonthAgo
+    endDate: [], // date
+    label: ["weekly"]
+  };
+
+
   // To set UiObj from the filtered Data we recieved from server 
   const [UiObjs, setUiObjs] = useState([]);
 
-  // Options To Send == > Server 
-  const [values, setValue] = useState(["newValue"])
-  const [status, setStatus] = useState(["Backlog"])
-  const [label, setLabel] = useState([])
-  const [qaRepresentative, setQaRepresentative] = useState(["Sally"])
-  const [startDate, setStartDate] = useState(date1MonthAgo)
-  const [endDate, setEndDate] = useState(date)
-
-
-
   // Options To get From Server 
-  const [valueOptions, setValueOptions] = useState([{value: "newValue", label: "New Value"},{value: "oldValue", label: "Old Value"}])
-  const [statusOptions, setStatusOptions] = useState([{value: "Backlog", label: "BackLog"}])
-  const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([{value: "Sally", label: "Sally"}])
 
+  const [statusOptions, setStatusOptions] = useState([])
+  const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([])
+
+  const [valueOptions, setValueOptions] = useState([
+    { value: "newValue", label: "New Value" },
+    { value: "oldValue", label: "Old Value" }
+  ])
 
   const [labelOptions, setLabelOptions] = useState([
     { name: "label", value: "Daily", label: "Daily" },
@@ -42,87 +46,77 @@ function ChangesInJiraTickets() {
 
   // Functions ==> Fetch : 
 
-  const render = () => {
-    fetch('/api/analytics/changeOfJIRATicketsStatus', {
-      method: 'POST',
-      body: JSON.stringify({ values, status, qaRepresentative }),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-      .then((res) => res.json())
-      .then((data) => { console.log(data) })
+   useEffect(() => {
 
-  }
-
-/*  const getFiltersValues = () => {
-    fetch('/api/analytics/ChangesInJiraTicketsFilters')
-    
-      .then((res) => res.json())
-      .then((data) => {
-        data.map(array =>{
-          
-        })
-       })
-
-  }*/
-
-  useEffect(() => {
-
-    fetch('/api/analytics/ChangesInJiraTickets')
+    fetch('/api/analytics/changeOfJIRATicketsStatusFilters')
       .then(res => res.json())
       .then(data => {
 
         //set state (UiObj)
-        setUiObjs(data);
+        setStatusOptions(data[0].labels);
       })
+
   }, [])
+
+
+  // const render = () => {
+  //   fetch('/api/analytics/changeOfJIRATicketsStatus', {
+  //     method: 'POST',
+  //     body: JSON.stringify({ values, status, qaRepresentative }),
+  //     headers: {
+  //       "Content-Type": "application/json"
+  //     }
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => { console.log(data) })
+
+  // }
+
+  /*  const getFiltersValues = () => {
+      fetch('/api/analytics/ChangesInJiraTicketsFilters')
+      
+        .then((res) => res.json())
+        .then((data) => {
+          data.map(array =>{
+            
+          })
+         })
+  
+    }*/
+
 
 
   // Filters onChange Functions 
 
   const HandleValuesChange = (val => {
-    console.log(val.value)
-    setValue([val.value])
-
-    render();
+    serverFilters.values = [val.value]
+    render(serverFilters);
   })
 
 
   const HandleStatusChange = (status => {
-
-    setStatus([status.label])
-
-    render();
+    serverFilters.status = [status.label]
+    render(serverFilters);
   })
 
   const HandleqaRepresentativeChange = (Qa => {
-    setQaRepresentative([Qa.label])
-
-    render();
+    serverFilters.qaRepresentative = [Qa.label]
+    render(serverFilters);
   })
 
   const HandleStartDateChange = (date => {
-    console.log(date)
-
-    setStartDate(date.target.value)
-    render();
+    serverFilters.startDate = [date.target.value]
+    render(serverFilters);
   })
 
   const HandleEndDateChange = (date => {
-    console.log(date.value)
-    setEndDate(date.target.value)
-
-
-    render();
+    serverFilters.endDate = [date.target.value]
+    render(serverFilters);
   })
 
   const HandleLabelChange = (label => {
-    console.log(label.value)
-    setLabel([label.value])
-
-
-    render();
+    serverFilters.label = [label.value]
+    render(serverFilters);
   })
 
   return (
