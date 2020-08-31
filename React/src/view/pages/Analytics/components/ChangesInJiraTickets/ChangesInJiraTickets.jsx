@@ -134,10 +134,7 @@ function ChangesInJiraTickets() {
   })
 
   const HandleLabelChange = (label => {
-    serverFilters.label = []
-    label.map((item,index)=>{
-      serverFilters.label.push(item.value)
-    })
+    serverFilters.label = [label.value]
     
     render(serverFilters);
   })
@@ -196,7 +193,7 @@ function ChangesInJiraTickets() {
           onChange={HandleEndDateChange}
         />
 
-        <ReactMultiSelectCheckboxes 
+        <Select 
           name="labels"
           options={labelOptions}
           placeholder="Label"
