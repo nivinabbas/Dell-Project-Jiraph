@@ -8,9 +8,9 @@ import Chart from "../charts/Chart"
 
 
 
+const serverFilters = { fieldName: [], values: [], qaRepresentative: [], startDate: [], endDate: [], label: ["weekly"] };
 
 function ModificationByField(props) {
-  const serverFilters = { fieldName: [], values: [], qaRepresentative: [], startDate: [], endDate: [], label: ["weekly"] };
 
 
   useEffect(() => {
@@ -27,7 +27,7 @@ function ModificationByField(props) {
         setFieldNameOptions(data)
         console.log(data);
       })
-  },[])
+  }, [])
 
   const render = (serverFilters) => {
     fetch('/api/analytics/modificationByField', {
@@ -38,7 +38,10 @@ function ModificationByField(props) {
       }
     })
       .then((res) => res.json())
-      .then((data) => { setUiObjs(data) })
+      .then((data) => {
+        console.log(data)
+        setUiObjs(data)
+      })
   }
 
 
@@ -53,7 +56,7 @@ function ModificationByField(props) {
       .then((res) => res.json())
       .then((data) => {
         if (data.length > 0) {
-          console.log("select",data[0].Values)
+          console.log("select", data[0].Values)
           setQaRepresentativeOptions(data[0].QA);
           setValueOptions(data[0].Values);
         }
@@ -81,20 +84,23 @@ function ModificationByField(props) {
 
   const handleChangeFieldName = (change => {
     serverFilters.fieldName = [change.label];
+    console.log(serverFilters)
     renderFilters(serverFilters);
     render(serverFilters);
   })
 
   const handleChangeValues = (change => {
-    console.log(change)
-    if (change!=null)
-    serverFilters.values = [change.label];
-    else 
-    serverFilters.values = [];
+    if (change != null) {
+      serverFilters.values = [change[0].label];
+    }
+    else {
+      serverFilters.values = [];
+    }
     render(serverFilters);
   })
 
   const handleChangeQaRepresentative = (change => {
+    console.log(change)
     serverFilters.qaRepresentative = [change.label];
     render(serverFilters);
   })
