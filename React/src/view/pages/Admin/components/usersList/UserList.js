@@ -52,7 +52,7 @@ function UserList() {
                 <button type='submit'>Create</button>
             </form>
 
-
+            
             { users.map((user, index) => <UserRow key={index+'users'} user={user} /> )}
 
 
@@ -82,14 +82,14 @@ function UserList() {
             .then(response => response.json())
             .then(data => {
                 console.log(data.info.table)
-                // if (data.success = true) {
-                //     setUsers(data.info.table)
-                //     console.log(data.info.table)
-                //     return (alert('created sucsses'))
-                // }
-                // else if (data = false) {
-                //     return (alert(data.error))
-                // }
+                if (data.success = true) {
+                    setUsers(data.info.table)
+                    // console.log(data.info.table)
+                    return (alert('created sucsses'))
+                }
+                else if (data = false) {
+                    return (alert(data.error))
+                }
 
             })
     }
