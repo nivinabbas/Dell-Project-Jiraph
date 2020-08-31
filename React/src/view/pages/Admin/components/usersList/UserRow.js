@@ -41,38 +41,9 @@ export default props => {
         console.log(name, email, password, role)
 
 
-        // let counter = 0;
-        // let aCells = event.currentTarget.parentElement.parentElement.cells;
-        // let aRowContent = [];
-        // for (let i = 0; i < aCells.length - 1; i++) {
-        //     aCells[i].children[0].disabled = true;
-        //     aRowContent.push(aCells[i].children[0].value);
-
-        // };
-        // // const newName = aCells[0].children[0].value;
-        // // const newEmail = aCells[1].children[0].value;
-        // // const newRole = aCells[2].children[0].value;
-        // // const newPassword = aCells[3].children[0].value;
-
-        // setName(aCells[0].children[0].value);
-        // setEmail(aCells[1].children[0].value);
-        // setRole(aCells[2].children[0].value);
-        // setPassword(aCells[3].children[0].value);
-        // setId('1');
-
-        // console.log(name, email, role, password, id)
-
-
-
-
-        // let btnsCellsPos = aCells.length - 1;
-        // aCells[btnsCellsPos].children[0].style.display = "initial";
-        // aCells[btnsCellsPos].children[1].style.display = "none";
-
-        //
 
         fetch('/api/users/editUser', {
-            // newName, newEmail, newRole, newPassword
+            
             method: 'POST',
             body: JSON.stringify({}),
             headers: {
@@ -96,18 +67,7 @@ export default props => {
     function onEdit(e) {
         e.preventDefault();
         setEdit(true)
-        // let aCells = event.currentTarget.parentElement.parentElement.cells;
-        // let counter = 0;
-        // for (let i = 0; i < aCells.length - 1; i++) {
-        //     counter++;
-        //     aCells[i].children[0].disabled = false
-        // }
-        // let btnsCellsPos = aCells.length - 1;
-        // console.log(aCells[btnsCellsPos]);
-        // aCells[btnsCellsPos].children[0].style.display = "none";
-        // aCells[btnsCellsPos].children[1].style.display = "initial";
-
-
+       
     }
 
 

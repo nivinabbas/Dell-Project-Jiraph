@@ -83,10 +83,11 @@ function UserList() {
             .then(response => response.json())
             .then(data => {
                 if (data = true) {
-                    return ('created sucsses')
+                    
+                    return (alert('created sucsses'))
                 }
                 else if (data = false) {
-                    return ('not sucsses ')
+                    return (alert('not sucsses '))
                 }
 
             })
