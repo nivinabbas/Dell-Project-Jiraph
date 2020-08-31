@@ -82,7 +82,9 @@ function UserList() {
                 console.log(data.info.table)
                 if (data.success = true) {
                     setUsers(data.info.table)
-
+                    // e.target.elements.inputName.value='';
+                    // e.target.elements.inputEmail.value='';
+                    // e.target.elements.inputPassword.value='';
                     return (alert('created sucsses'))
                 }
                 else if (data = false) {

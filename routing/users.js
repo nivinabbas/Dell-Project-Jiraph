@@ -57,6 +57,7 @@ router.get('/getUsersList', (req, res) => {
 
 router.delete('/deleteUser', (req, res) => {
     const { id } = req.body;
+    let table = []
     UserModel.deleteOne({ _id: id }, async function (err) {
         if (err) {
             res.send({success:false , error:err , info:null })
@@ -71,6 +72,7 @@ router.delete('/deleteUser', (req, res) => {
                 }
             })
         }
+        console.log(table)
         console.log("Successful deletion");
     })
 

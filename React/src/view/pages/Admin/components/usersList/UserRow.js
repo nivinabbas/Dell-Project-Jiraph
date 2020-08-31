@@ -72,11 +72,13 @@ export default props => {
 
     function deleteUser(e, id) {
         e.preventDefault();
+        console.log(id)
         if (!window.confirm('Are you sure you want to delete this User?')) {
             alert("Not Deleted")
             return;
         }
-        fetch('/api/users/deleteUse', {
+        console.log(id)
+        fetch('/api/users/deleteUser', {
             method: 'Delete',
             body: JSON.stringify({id}),
             headers: {
@@ -86,6 +88,7 @@ export default props => {
             .then(response => response.json())
             .then(data => {
                 if (data.success = true) {
+                    console.log(data.info.table)
                     setUsers(data.info.table);
                     return alert('Deleted sucsses')
                 }
