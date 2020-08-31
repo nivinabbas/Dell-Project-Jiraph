@@ -83,7 +83,7 @@ function UserList() {
 
                         <button id="editBtn" onClick={onEdit}>Edit</button>
                         <button id="saveBtn" onClick={onSave}>Save</button>
-                        <button id='delete' onClick={e => { deleteUser(e, item.name) }}>Delete</button>
+                        <button id='delete' onClick={e => { deleteUser(e, item.id) }}>Delete</button>
 
                     </form>)}
 
