@@ -6,18 +6,19 @@ import DashBoard from "../DashBoard/DashBoard";
 import Table from "../Table/Table";
 import StackedChart from "../Chart/StackedChart";
 import PieChart from "../Chart/PieChart";
+import DateFilter from "../DateFilter/DateFilter";
 
 // let array = [
-//   { name: "functionalTests", number: 12 },
-//   { name: "fixVersions", number: 10 },
-//   { name: "deletedTasks", number: 20 },
-//   { name: "totalTasks", number: 36 },
+// { name: "functionalTests", number: 12 },
+// { name: "fixVersions", number: 10 },
+// { name: "deletedTasks", number: 20 },
+// { name: "totalTasks", number: 36 },
 // ];
 
 // const optionSprint = [
-//   { value: "Backlog", label: "Backlog" },
-//   { value: "inProgress", label: "In Progress" },
-//   { value: "Done", label: "Done" },
+// { value: "Backlog", label: "Backlog" },
+// { value: "inProgress", label: "In Progress" },
+// { value: "Done", label: "Done" },
 // ];
 
 const StatusPage = (props) => {
@@ -66,11 +67,12 @@ const StatusPage = (props) => {
   };
 */
 
-  //*********** pie chart 1 :
+  // *********** pie chart 1 :
   const [FunctionalPieContent, setFunctionalPieContent] = useState([]);
   const [cardsContent, setCardsContent] = useState([]);
   const [openTasks, setOpenTasks] = useState([]);
   const [isDone, setIsDone] = useState(false);
+  const [BarChart, setBarChart] = useState([]);
 
   useEffect(() => {
     console.log("getDailyalerts");
@@ -88,6 +90,7 @@ const StatusPage = (props) => {
   }, []);
 
   useEffect(() => {
+    console.log("heyyy");
     fetch("/api/status/openTasks")
       .then((res) => res.json())
       .then((data) => {
@@ -101,7 +104,12 @@ const StatusPage = (props) => {
   }, []);
   console.log(openTasks);
   const handleDoneClick = async (jiraId) => {
+    console.log("jira", jiraId);
     const userId = null;
+    const result = openTasks.filter(
+      (openTask) => openTask.jiraItem.jiraId !== jiraId
+    );
+    setOpenTasks(result);
     await fetch("/api/status/updateTasks", {
       method: "POST",
       body: JSON.stringify({ jiraId, userId }),
@@ -109,11 +117,28 @@ const StatusPage = (props) => {
         "Content-Type": "application/json",
       },
     });
+  };
 
-    const result = openTasks.filter(
-      (openTask) => openTask.jiraItem.jiraId !== jiraId
-    );
-    setOpenTasks(result);
+  //date
+  const handleDateClick = async (CurrentstartDate, CurrentEndtDate) => {
+    console.log("date", CurrentstartDate, CurrentEndtDate);
+
+    await fetch("/api/status/barChart", {
+      method: "POST",
+      body: JSON.stringify({ CurrentstartDate, CurrentEndtDate }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        let { success, error, info } = data;
+        if (success) {
+          setBarChart(info);
+        } else {
+          alert(error);
+        }
+      });
   };
 
   return (
@@ -126,8 +151,7 @@ const StatusPage = (props) => {
           <Table openTasks={openTasks} onDoneClick={handleDoneClick} />
         </div>
         <div className="statuspage__chart">
-          <input type="date" />
-          <input type="date" />
+          <DateFilter onDateFilterClick={handleDateClick} />
           <StackedChart />
         </div>
       </div>
@@ -141,20 +165,20 @@ const StatusPage = (props) => {
   );
 
   // fetch("/api/Functionalpiechart", {
-  //   method: "POST",
-  //   body: JSON.stringify({}),
-  //   headers: {
+  // method: "POST",
+  // body: JSON.stringify({}),
+  // headers: {
   //     "Content-Type": "application/json",
-  //   },
+  // },
   // })
-  //   .then((res) => res.json())
-  //   .then((data) => {
+  // .then((res) => res.json())
+  // .then((data) => {
   //     let { success, error, info } = data;
   //     if (success) {
   //       setFunctionalPieContent(info);
   //     } else {
   //       alert(error);
   //     }
-  //   });
+  // });
 };
 export default StatusPage;

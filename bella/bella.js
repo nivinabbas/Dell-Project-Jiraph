@@ -8,15 +8,15 @@ const Data=[
     
         {
             "jiraItem": {
-                "jiraId": "TRIES-43173",
+                "jiraId": "TRIES-43174",
                 "jiraName": "PSI 42: SAR Support for FHC FSCK",
                 "jiraType": "Epic",
                 "priority": "P00",
                 "status": "Funnel",
                 "specialFields": {
-                    "jiraParentId": "TRIES-21957",
+                    "jiraParentId": "TRIES-21954",
                     "functionalTest": false,
-                    "qaRepresentative": "Morad",
+                    "qaRepresentative": "Lina",
                     "fixVersion": "Foothills V1.1.0 (Core)"
                 }
             },
