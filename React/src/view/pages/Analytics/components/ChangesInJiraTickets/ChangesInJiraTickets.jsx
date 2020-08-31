@@ -24,36 +24,40 @@ function ChangesInJiraTickets() {
 
   useEffect(() => {
 
-    fetch('/api/analytics/changeOfJIRATicketsStatusFilters')
-      .then(res => res.json())
-      .then(data => {
-
-        
-        setStatusOptions(data[0].labels);
-        // setQaRepresentativeOptions(data[0].qa);
-
+    fetch('/api/analytics/changeOfJIRATicketsStatusFilters',{
+      method: 'POST',
+      body: JSON.stringify(serverFilters ),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then((res) => res.json())
+      .then((data) => { 
+        setStatusOptions(data[0].labels) 
+        setQaRepresentativeOptions(data[0].qa) 
+        console.log("filters has arrived")
       })
-      fetch('/api/analytics/changeOfJIRATicketsStatusFilters')
+
+      console.log('11111111')
+      fetch('/api/analytics/changeOfJIRATicketsStatus',{
+        method: 'POST',
+        body: JSON.stringify(serverFilters ),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
       .then(res => res.json())
       .then(data => {
-
-        //set state (UiObj)
         console.log(data)
-        setQaRepresentativeOptions(data[0].qa);
+        
       })
-
-      /*fetch('/api/analytics/changeOfJIRATicketsStatus')
-      .then(res => res.json())
-      .then(data => {
-
-        //set state (UiObj)
-        setUiObjs(data);
-      })*/
+      console.log('222222')
 
   }, [])
 
 
   const render = (serverFilters) => {
+    console.log(serverFilters)
     fetch('/api/analytics/changeOfJIRATicketsStatus', {
       method: 'POST',
       body: JSON.stringify(serverFilters ),
@@ -102,12 +106,13 @@ function ChangesInJiraTickets() {
 
 
   const HandleStatusChange = (status => {
-    serverFilters.status = [status.label]
+    
+    serverFilters.status = [status[0].label]
     render(serverFilters);
   })
 
   const HandleqaRepresentativeChange = (Qa => {
-    serverFilters.qaRepresentative = [Qa.label]
+    serverFilters.qaRepresentative = [Qa[0].label]
     render(serverFilters);
   })
 
