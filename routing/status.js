@@ -98,9 +98,9 @@ router.get("/dailyalerts", async function (req, res) {
       },
       {
         name: "totalTasks/NotDone",
-        number: 0+"/"+0,
+        number: 0 + "/" + 0,
       },
-      
+
     ];
   } else {
     DailyAlerts = [
@@ -118,9 +118,9 @@ router.get("/dailyalerts", async function (req, res) {
       },
       {
         name: "totalTasks/NotDone",
-        number: DailyAlerts[0].totalTasks+"/"+DailyAlerts[0].NotDone,
+        number: DailyAlerts[0].totalTasks + "/" + DailyAlerts[0].NotDone,
       },
-      
+
     ];
   }
   // console.log("DailyAlertsStart");
@@ -209,107 +209,126 @@ router.post("/stackedChart", async function (req, res) {
   let DailyAlerts;
   if (datefrom == null && dateTo == null)//default, label daily 
   {
-    DailyAlerts = await TaskModel.aggregate([
+    datefrom = new Date("2020-08-01T00:00:00.00Z");
+    dateTo = new Date();
+    let stackedChartDone = await TaskModel.aggregate([
       {
         $match: {
-          $expr: {
-            $gte: [
-              datefrom,
-              {
-                $dateToString: {
-                  date: "$diffItem.updatedTime",
-                  format: "%Y-%m-%d",
-                },
-              },
-            ],
-          },
-          $lte: {
-            $gte: [
-              dateTo,
-              {
-                $dateToString: {
-                  date: "$diffItem.updatedTime",
-                  format: "%Y-%m-%d",
-                },
-              },
-            ],
-          },
-        },
+          "taskItem.updatedTime": { $gte: datefrom, $lte: dateTo },
+        }
       },
       {
         $group: {
-          _id: "DailyAlerts",
-          functionalTest: {
-            $sum: {
-              $cond: [
-                {
-                  $eq: ["$jiraItem.functionalTest", true],
-                },
-                1,
-                0,
-              ],
+          _id:
+          {
+            $dateToString: {
+              date: "$taskItem.updatedTime",
+              format: "%Y-%m-%d",
             },
           },
-          deletedTicktes: {
+          "count": { $sum: 1 },
+          done: {
             $sum: {
-              $cond: [
-                {
-                  $eq: ["$diffItem.type", "Delete"],
-                },
-                1,
-                0,
-              ],
+              $cond: [{ $eq: ["$taskItem.isDone", true] }, 1, 0,
+              ]
             },
           },
-          fixVersionTicktes: {
+          notDone: {
             $sum: {
-              $cond: [
-                {
-                  $eq: ["$diffItem.updatedField.fieldName", "fixVersion"],
-                },
-                1,
-                0,
-              ],
+              $cond: [{ $eq: ["$taskItem.isDone", false] }, 1, 0,
+              ]
             },
-          },
-          totalTasks: {
-            $sum: 1,
           },
         },
       },
+      { $sort: { "_id": 1 } }
     ]);
+    // adding to Done Array 
+    let DoneArray = [], NotDone = [];
+    let tempDate = [], date1 = [];
+    let tempCountDone = [], tempCountNotDone = [];
+    stackedChartDone.forEach(element => {//load data
+      tempCountDone.push(element.done);
+      tempCountNotDone.push(element.notDone);
+      tempDate.push(element._id);
+    });
+    DoneArray.push({ name: "done" }, { data: tempCountDone });
+    NotDone.push({ name: "notDone" }, { data: tempCountNotDone });
+    tempCountDone = [];
+    tempCountNotDone = [];
+    tempCountDone.push(DoneArray);// final array
+    tempCountDone.push(NotDone);
+    tempCountNotDone.push({ "series": tempCountDone })
+    tempCountNotDone.push({ "categories": tempDate })
+    finalArray = tempCountNotDone;
+    res.send({ success: true, error: null, info: finalArray });
   }
+  else {
+    res.send({ success: false, error: null, info: null });
 
-  res.send({ success: true, error: null, info: null });
+  }
+  res.send({ success: false, error: null, info: null });
 
 });
 
 
-// async function test123test() {
-//   datefrom = new Date("2020-08-01T00:00:00.00Z");
-//   dateTo = new Date();
-//   let DailyAlerts = await TaskModel.aggregate([
-//     {
-//       $match: {
-//         "taskItem.updatedTime": { $gte: datefrom, $lte: dateTo },
-//       }
-//     },
+async function test123test() {
+  datefrom = new Date("2020-08-01T00:00:00.00Z");
+  dateTo = new Date();
+  let stackedChartDone = await TaskModel.aggregate([
+    {
+      $match: {
+        "taskItem.updatedTime": { $gte: datefrom, $lte: dateTo },
 
-//     {
-//       $group: {
-//         _id: {
-//           $dateToString: {
-//             format: "%d-%m-%Y",
-//             date: "$taskItem.updatedTime"
-//           }  }
-        
-        
-//         }
-//   ]);
+      }
+    },
 
-// console.log("DailyAlertsDailyAlertsDailyAlerts")
-// console.log(DailyAlerts)
-// }
+    {
+      $group: {
+        _id:
+        {
+          $dateToString: {
+            date: "$taskItem.updatedTime",
+            format: "%Y-%m-%d",
+          },
+        },
+        "count": { $sum: 1 },
+        done: {
+          $sum: {
+            $cond: [{ $eq: ["$taskItem.isDone", true] }, 1, 0,
+            ]
+          },
+        },
+        notDone: {
+          $sum: {
+            $cond: [{ $eq: ["$taskItem.isDone", false] }, 1, 0,
+            ]
+          },
+        },
+      },
+    },
+    { $sort: { "_id": 1 } }
+  ]);
+
+  // adding to Done Array 
+  let DoneArray = [], NotDone = [];
+  let tempDate = [], date1 = [];
+  let tempCountDone = [], tempCountNotDone = [];
+  stackedChartDone.forEach(element => {//load data
+    tempCountDone.push(element.done);
+    tempCountNotDone.push(element.notDone);
+    tempDate.push(element._id);
+  });
+  DoneArray.push({ name: "done" }, { data: tempCountDone });
+  NotDone.push({ name: "notDone" }, { data: tempCountNotDone });
+  tempCountDone = [];
+  tempCountNotDone = [];
+  tempCountDone.push(DoneArray);// final array
+  tempCountDone.push(NotDone);
+  tempCountNotDone.push({ "series": tempCountDone })
+  tempCountNotDone.push({ "categories": tempDate })
+
+}
 
 //test123test();
 //stackedChart end 
