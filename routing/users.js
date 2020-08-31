@@ -47,8 +47,7 @@ router.post('/login',(req,res)=>{
         if(users.length>0){
             let table = [];
             for (let index = 0; index < users.length; index++) {
-                table.push({email:users[index].userInfo.employeeEmail,name:users[index].userInfo.employeeName,role:users[index].userInfo.employeeRole})
-                
+                table.push({email:users[index].userInfo.employeeEmail,name:users[index].userInfo.employeeName,role:users[index].userInfo.employeeRole,id:users[index]._id})
             }
             
             res.send({success:true,error:null,info:{table}})
