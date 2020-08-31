@@ -50,3 +50,12 @@
 .header__table {
   position: sticky;
 }
+
+.filterSelect {
+  width: 200px;
+  margin: 4px;
+}
+.container__filterSelect {
+  display: flex;
+  justify-items: center;
+}
