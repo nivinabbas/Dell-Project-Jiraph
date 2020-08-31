@@ -37,3 +37,13 @@ const bellaRouting = require('./routing/bellaRouting');
 app.use("/api/PostBellaData", bellaRouting);
 
 app.listen(4000, () => { console.log("App is Listening to 4000") })
+
+
+
+
+
+
+
+
+
+

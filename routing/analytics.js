@@ -1,4 +1,5 @@
 const express = require("express");
+
 const router = express.Router();
 const mongoose = require('mongoose');
 const UserSchema = require('../schemas/UserSchema');
@@ -199,4 +200,140 @@ router.post('/modificationByFieldFilters', async (req, res) => {
     res.send(tasks)
 })
 
+
+router.post('/changeOfJIRATicketsStatus', async (req, res) => {
+
+    // const filterValue = 'newValue'     //old or new value
+    // const filterStatus = 'Backlog'     // Done , in progress , Backlog ,In Integration ...
+    // const filterQaRep = 'Sally'
+
+    const filterValue = req.body.values[0]
+    const filterStatus = req.body.status[0]
+    const filterQaRep = req.body.qaRepresentative[0]
+
+    console.log("nimer")
+    console.log(filterValue, filterStatus, filterQaRep)
+    console.log("nimer")
+
+
+    //here we build the match expression according to the user's filters.
+    let matchFilterValue = {
+        'diffItem.type': 'Update',
+        'diffItem.updatedField.fieldName': 'status',
+
+    }
+    
+    if (filterStatus != undefined) {
+        matchFilterValue[`diffItem.updatedField.${filterValue}`] = filterStatus
+    }
+
+    if (filterQaRep != undefined) {
+        matchFilterValue['jiraItem.qaRepresentative'] = filterQaRep
+    }
+   
+
+    console.log(matchFilterValue)
+
+    const tasks = await TaskModel.aggregate([
+        {
+            $match: matchFilterValue
+        },
+        {
+            $group: {
+                _id: {
+
+                    Val: `$diffItem.updatedField.${filterValue}`
+
+                },
+                tasks: { $push: "$$ROOT" },
+            }
+        },
+        {
+            $group: {
+                _id: "$_id.Val",
+                arr: { $push: { tasks: "$tasks", size: { $size: "$tasks" } } },
+
+            }
+
+        }
+
+    ])
+
+
+    // console.log("YOUSEF")
+    let total = 0;
+    tasks.forEach(element => {
+        total += element.arr[0].size
+    })
+    tasks.total = total
+    // console.log(tasks)
+
+    // tasks.forEach(element => {
+    //     console.log(element.arr[0].tasks[0].jiraItem)
+    // })
+
+
+    res.send(tasks);
+
+})
+
+
+
+//  !!-------------------------------------------- Sally --------------------------------------------!!
+router.post('/changeOfJIRATicketsStatusFilters', async (req, res) => {
+
+    console.log("AAAAAAAAAAAAAAAAAAAAA")
+    let tasks = []
+    let matchFilters = ''
+    let groupFilters = ''
+    const { serverFilters } = req.body;
+    console.log(serverFilters)
+
+    let filterVal = 'newValue'
+    filterStatus = ''
+    if (filterVal == 'oldValue') {
+        groupFilters = "$diffItem.updatedField.oldValue"
+    }
+    else {
+        groupFilters = "$diffItem.updatedField.newValue"
+    }
+    if (filterStatus.length != 0) {
+        matchFilters = {
+            'diffItem.type': 'Update',
+            'diffItem.updatedField.fieldName': 'status',
+            // 'diffItem.updatedField.oldValue': filterStatus,
+            // 'jiraItem.qaRepresentative': filterQaRep
+        }
+    }
+    else {
+        matchFilters = {
+            'diffItem.type': 'Update',
+            'diffItem.updatedField.fieldName': 'status'
+        }
+    }
+
+    tasks = await TaskModel.aggregate([
+        {
+            $match: matchFilters
+        },
+        {
+            $group: {
+                _id: null,
+                status: { $addToSet: { "label": groupFilters, "value":groupFilters } },
+                qa: { $addToSet: { "label": "$jiraItem.qaRepresentative","value":"$jiraItem.qaRepresentative" } }
+            },
+        }
+    ])
+
+
+    console.log(tasks)
+    res.send(tasks)
+
+})
+
+
+/*
+1.filters and      NOT NOW =>  uiobj without filters
+2.for each change in the filters, send new uiobj according to the filters applied
+*/
 module.exports = router;
