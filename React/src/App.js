@@ -1,6 +1,6 @@
 import React from "react";
 import Login from "./view/pages/Admin/components/Login/Login"
-import UserList from "./view/pages/Admin/components/UsersList/UserList"
+import UserList from "./view/pages/Admin/components/usersList/UserList"
 
 import ForgetPassword from "./view/pages/Admin/components/ForgetPassword/ForgetPassword";
 
@@ -53,7 +53,7 @@ import {
           <Route path="/forgotPassword">
               <ForgetPassword></ForgetPassword>
           </Route>
-          <Route path="/userList">
+          <Route path="/UserList">
           <UserList></UserList>
           </Route>
           <Route path="/analysis">
