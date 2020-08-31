@@ -1,11 +1,12 @@
 import React from "react";
 import "./StatusPage.css";
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import DashBoard from "../DashBoard/DashBoard";
 
 import Table from "../Table/Table";
 import StackedChart from "../Chart/StackedChart";
 import PieChart from "../Chart/PieChart";
+import DateFilter from "../DateFilter/DateFilter";
 
 // let array = [
 // { name: "functionalTests", number: 12 },
@@ -21,7 +22,7 @@ import PieChart from "../Chart/PieChart";
 // ];
 
 const StatusPage = (props) => {
-    /*********TABLEEEEEEE 
+  /*********TABLEEEEEEE 
   const [data, setData] = useState([]);
   const [filters, setFilters] = useState({
     oldnewvalue: "oldValue",
@@ -66,92 +67,120 @@ const StatusPage = (props) => {
   };
 */
 
-    // *********** pie chart 1 :
-    const [FunctionalPieContent, setFunctionalPieContent] = useState([]);
-    const [cardsContent, setCardsContent] = useState([]);
-    const [openTasks, setOpenTasks] = useState([]);
-    const [isDone, setIsDone] = useState(false);
+  // *********** pie chart 1 :
+  const [FunctionalPieContent, setFunctionalPieContent] = useState([]);
+  const [cardsContent, setCardsContent] = useState([]);
+  const [openTasks, setOpenTasks] = useState([]);
+  const [isDone, setIsDone] = useState(false);
+  const [BarChart, setBarChart] = useState([]);
 
-    useEffect(() => {
-        console.log("getDailyalerts");
-        fetch("/api/status/dailyalerts").then((res) => res.json()).then((data) => {
-            console.log("daily alert", data);
-            let {success, error, info} = data;
-            if (success) {
-                setCardsContent(info);
-            } else {
-                alert(error);
-            }
-        });
-    }, []);
+  useEffect(() => {
+    console.log("getDailyalerts");
+    fetch("/api/status/dailyalerts")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("daily alert", data);
+        let { success, error, info } = data;
+        if (success) {
+          setCardsContent(info);
+        } else {
+          alert(error);
+        }
+      });
+  }, []);
 
-    useEffect(() => {
-        console.log("heyyy");
-        fetch("/api/status/openTasks").then((res) => res.json()).then((data) => {
-            let {success, error, info} = data;
-            if (success) {
-                setOpenTasks(info.doc);
-            } else {
-                alert(error);
-            }
-        });
-    }, []);
-    console.log(openTasks);
-    const handleDoneClick = async (jiraId) => {
-        console.log("jira", jiraId);
-        const userId = null;
-        const result = openTasks.filter((openTask) => openTask.jiraItem.jiraId !== jiraId);
-        setOpenTasks(result);
-        await fetch("/api/status/updateTasks", {
-            method: "POST",
-            body: JSON.stringify(
-                {jiraId, userId}
-            ),
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-    };
+  useEffect(() => {
+    console.log("heyyy");
+    fetch("/api/status/openTasks")
+      .then((res) => res.json())
+      .then((data) => {
+        let { success, error, info } = data;
+        if (success) {
+          setOpenTasks(info.doc);
+        } else {
+          alert(error);
+        }
+      });
+  }, []);
+  console.log(openTasks);
+  const handleDoneClick = async (jiraId) => {
+    console.log("jira", jiraId);
+    const userId = null;
+    const result = openTasks.filter(
+      (openTask) => openTask.jiraItem.jiraId !== jiraId
+    );
+    setOpenTasks(result);
+    await fetch("/api/status/updateTasks", {
+      method: "POST",
+      body: JSON.stringify({ jiraId, userId }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  };
 
-    return (<div className="statusPageContainer">
-        <div className="statuspage__dashboard">
-            <DashBoard cardsContent={cardsContent}/>
+  //date
+  const handleDateClick = async (CurrentstartDate, CurrentEndtDate) => {
+    console.log("date", CurrentstartDate, CurrentEndtDate);
+
+    await fetch("/api/status/barChart", {
+      method: "POST",
+      body: JSON.stringify({ CurrentstartDate, CurrentEndtDate }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        let { success, error, info } = data;
+        if (success) {
+          setBarChart(info);
+        } else {
+          alert(error);
+        }
+      });
+  };
+
+  return (
+    <div className="statusPageContainer">
+      <div className="statuspage__dashboard">
+        <DashBoard cardsContent={cardsContent} />
+      </div>
+
+      <div className="statuspage__table">
+        <Table openTasks={openTasks} onDoneClick={handleDoneClick} />
+      </div>
+      <div className="statuspage__filters">
+        <DateFilter onDateFilterClick={handleDateClick} />
+      </div>
+      <div className="statusPageContainerTableColumn">
+        <div className="statuspage__chart">
+          <StackedChart />
         </div>
-        <div className="statusPageContainerTableColumn">
-            <div className="statuspage__table">
-                <Table openTasks={openTasks}
-                    onDoneClick={handleDoneClick}/>
-            </div>
-            <div className="statuspage__chart">
-                <StackedChart/>
-            </div>
-        </div>
+
         <div className="statuspage__chartpie">
-            <div className="statuspage__chart">
-                <StackedChart/>
-            </div>
-            <div className="statuspage__pie">
-                <PieChart/>
-                <PieChart/>
-            </div>
+          <PieChart />
+          <PieChart />
         </div>
-    </div>);
+      </div>
+    </div>
+  );
 
-    // fetch("/api/Functionalpiechart", {
-    // method: "POST",
-    // body: JSON.stringify({}),
-    // headers: {
-    //     "Content-Type": "application/json",
-    // },
-    // })
-    // .then((res) => res.json())
-    // .then((data) => {
-    //     let { success, error, info } = data;
-    //     if (success) {
-    //       setFunctionalPieContent(info);
-    //     } else {
-    //       alert(error);
-    //     }
-    // });
+  // fetch("/api/Functionalpiechart", {
+  // method: "POST",
+  // body: JSON.stringify({}),
+  // headers: {
+  //     "Content-Type": "application/json",
+  // },
+  // })
+  // .then((res) => res.json())
+  // .then((data) => {
+  //     let { success, error, info } = data;
+  //     if (success) {
+  //       setFunctionalPieContent(info);
+  //     } else {
+  //       alert(error);
+  //     }
+  // });
 };
 export default StatusPage;
