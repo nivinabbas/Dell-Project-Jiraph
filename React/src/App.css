@@ -22,9 +22,7 @@
 
 }
 
-.jiraph__logo{
-  height: 1.7rem;
-}
+
 
 .sidebar__header-wrapper{
   /* background-color:#405c0b; */
@@ -61,59 +59,8 @@
   grid-template-columns: 13vw auto;
 }
 
-.menu__item {
-  /* background-color:#b6b913; */
-  text-align: left;
-  padding-top: 1.5rem;
-  color: #808080;
-  font-weight: 500;
-  /* line-height: 1.5rem; */
-  /* margin-top: 2rem; */
-  font-family: 'Roboto Slab', serif;
-}
-
-.analysis-options{
-  /* background-color:#13b945; */
-  /* padding-top: 2rem;
-  padding-bottom: 1rem; */
-  color: #808080;
-  margin-top:.8rem;
-}
-
-.analysis__item{
-
-  background-color: #EEEEEE;
-  padding-top: .3rem;
-  text-align: left;
-}
-
-.MainForm__status--btn{
-  /* background-color:#7713b9; */
-  font-size: 13px;
-  font-weight: 500;
-  font-family: 'Roboto Slab', serif;
-  color: #444444;
-  transition: all 0.4s;
-}
 
 
-.MainForm__status--btn:hover{
-  font-size: 14px;
-  color:#0076CE;
-}
-.menu__link {
-  /* background-color:#b98d13; */
-  font-size: 25px;
-  color:#808080;
-  position: relative;
-  transition: all 0.4s
-}
-
-.menu__link:hover {
-  /* background-color:#b98d13; */
-  font-size: 26px;
-  color:#444444;
-}
 
 /*
 .social-media {

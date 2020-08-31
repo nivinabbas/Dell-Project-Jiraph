@@ -1,0 +1,44 @@
+nav {
+    font-family: 'Roboto Slab', serif;
+}
+
+.menu__link--selected {
+    font-size: 3rem !important;
+}
+
+.jiraph__logo {
+    height: 33px;
+}
+
+.menu-subLink {
+    /* background-color:#7713b9; */
+    font-size: 13px;
+    font-weight: 500;
+    font-family: 'Roboto Slab', serif;
+    color: #444444;
+    transition: all 0.4s;
+}
+
+.menu-subLink--selected {
+    font-size: 14px;
+    color: #0076CE;
+}
+
+.menu-subLink:hover {
+    font-size: 14px;
+    color: #0076CE;
+}
+
+.menu__link {
+    /* background-color:#b98d13; */
+    font-size: 25px;
+    color: #808080;
+    position: relative;
+    transition: all 0.4s
+}
+
+.menu__link:hover {
+    /* background-color:#b98d13; */
+    font-size: 26px;
+    color: #444444;
+}
