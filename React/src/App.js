@@ -5,7 +5,7 @@ import Login from "./view/pages/Admin/components/Login/Login"
 import ForgetPassword from "./view/pages/Admin/components/ForgetPassword/ForgetPassword";
 import MainPage from "./view/pages/Analytics/components/mainPage/MainPage";
 import ModificationByField from "./view/pages/Analytics/components/ModificationByField/ModificationByField";
-import DeletedJiraTickets from "./view/pages/Analytics/components/DeletedJiraTickets/DeletedJiraTickets";
+import DeletedJira from "./view/pages/Analytics/components/DeletedJiraTickets/Deletedjira";
 import ChangesInJiraTickets from "./view/pages/Analytics/components/ChangesInJiraTickets/ChangesInJiraTickets";
 import ChangesByParentId from "./view/pages/Analytics/components/ChangesByParentId/ChangesByParentId";
 import DelaysInDelivery from "./view/pages/Analytics/components/DelaysInDelivery/DelaysInDelivery";
@@ -108,7 +108,7 @@ function App() {
               <ModificationByField />
             </Route>
             <Route path="/DeletedJiraTickets">
-              <DeletedJiraTickets />
+              <DeletedJira />
             </Route>
             <Route path="/ChangesInJiraTickets">
               <ChangesInJiraTickets />

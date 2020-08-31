@@ -7,7 +7,7 @@ import Select from 'react-select'
 import { useState , useEffect } from 'react';
 
 
-function DeletedJiraTickets() {
+function DeletedJira() {
   // Default Date 
   const date = new Date()
   const date1MonthAgo = new Date(new Date().setMonth(date.getMonth() - 1));
@@ -94,13 +94,13 @@ const serverFilters={priority:[], functionalTest:[], label:["weekly"], qaReprese
   
   ///change functionaltest
   const HandlefunctionalTestChange=(status=>{
-    serverFilter.status=[status.value];
+    serverFilters.status=[status.value];
         
            render(serverFilters);
   })
   ///change qaRepresentative:
   const HandleqaRepresentativeChange=(Qa=>{
-    serverFilter.Qa=[Qa.value];
+    serverFilters.Qa=[Qa.value];
    
         render(serverFilters);
     })
@@ -108,13 +108,13 @@ const serverFilters={priority:[], functionalTest:[], label:["weekly"], qaReprese
   const HandleStartDateChange=(date=>{
     console.log(date)
 
-    serverFilte.date=(date.target.value);
+    serverFilters.date=(date.target.value);
     render(serverFilters);
   })
    ///change EndDate:
   const HandleEndDateChange=(date=>{
     console.log(date.value)
-    serverFilte.date=(date.target.value);
+    serverFilters.date=(date.target.value);
  
 
     render(serverFilters);
@@ -122,12 +122,12 @@ const serverFilters={priority:[], functionalTest:[], label:["weekly"], qaReprese
   /// change leLabel:
   const HandleLabelChange=(label=>{
       console.log(label.value)
-      serverFilte.label=[label.value];
+      serverFilters.label=[label.value];
 
 
       render(serverFilters);
   })
-  export default function App() {
+ 
   return (
 
     <div className='DeletedJiraTicketsWrapper'>
@@ -195,7 +195,7 @@ const serverFilters={priority:[], functionalTest:[], label:["weekly"], qaReprese
   )
   }
 
-}
 
 
-export default DeletedJiraTickets;
+
+export default DeletedJira;
