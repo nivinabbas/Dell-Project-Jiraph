@@ -95,7 +95,7 @@ router.post('/modificationByFieldFilters', async (req, res) => {
 })
 
 
-router.get('/changeOfJIRATicketsStatus', async (req, res) => {
+router.post('/changeOfJIRATicketsStatus', async (req, res) => {
 
 
     /*
@@ -321,7 +321,8 @@ router.get('/changeOfJIRATicketsStatusFilters', async (req, res) => {
         {
             $group: {
                 _id: null,
-                labels: { $addToSet: { "label": groupFilters, } }
+                labels: { $addToSet: { "label": groupFilters, } },
+                qa: { $addToSet: { "label": "$jiraItem.qaRepresentative", } }
             },
         }
     ])
@@ -344,8 +345,7 @@ router.get('/changeOfJIRATicketsStatusFilters', async (req, res) => {
     ])
 
     console.log(tasks)
-    console.log(qa)
-    res.send({tasks:tasks, QA:qa})
+    res.send(tasks)
 
 })
 

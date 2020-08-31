@@ -53,14 +53,15 @@ function ChangesInJiraTickets() {
       .then(data => {
 
         //set state (UiObj)
-        setStatusOptions(data.tasks[0].labels);
+        setStatusOptions(data[0].labels);
       })
       fetch('/api/analytics/changeOfJIRATicketsStatusFilters')
       .then(res => res.json())
       .then(data => {
 
         //set state (UiObj)
-        setQaRepresentativeOptions(data.QA[0].qa);
+        console.log(data)
+        setQaRepresentativeOptions(data[0].qa);
       })
 
   }, [])
