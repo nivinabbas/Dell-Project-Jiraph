@@ -55,6 +55,14 @@ router.post('/login',(req,res)=>{
      })
  })
 
+ router.delete('/deleteUse',(req,res)=>{
+    const {id} = req.body;
+    console.log(id)
+
+ })
+
+
+
 
  router.post('/forgotPassword',(req,res)=>{
      const { email } = req.body;
@@ -113,7 +121,7 @@ router.post('/login',(req,res)=>{
 // })
 
 router.post('/createUser',(req,res)=>{
-    const { email , password , name , role} = req.body;
+    const { name , email , role , password} = req.body;
     if(validator.validate(email)){
         UserModel.find({"userInfo.employeeEmail":email}).then(checkEmail=>{
           if(checkEmail.length>0){
