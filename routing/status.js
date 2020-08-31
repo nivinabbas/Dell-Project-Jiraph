@@ -250,14 +250,14 @@ router.post("/updateTasks", (req, res) => {
 // end update task
 
 async function testdate(startDate) {
-  console.log(startDate.toString());
+  console.log(startDate);
   console.log("the test work");
 
   let donetasks = await TaskModel.aggregate([
     {
-      // $match: {  $dateToString: {date: "taskItem.updatedTime",format: "%Y-%m-%d"}, { $gte: startDate, $lte: endDate } },
+    
       $match: {
-        "itemTask.updatedTime": { $gte: startDate.toString() },
+        "taskItem.updatedTime": { $gte: new Date( '2020-08-26'), $lte:new Date( '2020-08-27') },
       },
     },
   ]);
@@ -268,6 +268,6 @@ async function testdate(startDate) {
 }
 
 // testdate("2020-08-26T10:04:35.204+00:00", "2020-08-30T10:23:58.116+00:00");
-testdate(new Date("1970-01-01"));
+testdate(new Date("1945-01-01"));
 
 module.exports = router;
