@@ -60,44 +60,44 @@ router.post('/modificationByFieldFilters', async (req, res) => {
         tasks = await TaskModel.aggregate([
             {
                 $group: {
-                    _id:null,
-                    labels: {$addToSet: {"label":"$diffItem.updatedField.fieldName"}}
+                    _id: null,
+                    labels: { $addToSet: { "label": "$diffItem.updatedField.fieldName" } }
                 },
                 //fieldNames: {$addToSet : "$diffItem.updatedField.fieldName"}
 
-            
+
             }
         ])
     }
-    else{
+    else {
         const name = fieldName[0];
         tasks = await TaskModel.aggregate([
             {
-                $match:{"diffItem.updatedField.fieldName":name, "diffItem.type": "Update"}
+                $match: { "diffItem.updatedField.fieldName": name, "diffItem.type": "Update" }
 
 
             },
             {
                 $group: {
-                    _id:null,
-                    QA: {$addToSet: {"label":"$jiraItem.qaRepresentative"}},
-                    Values: {$addToSet: {"label":"$diffItem.updatedField.newValue"}},
-                    tasks:{$push: "$$ROOT"}
+                    _id: null,
+                    QA: { $addToSet: { "label": "$jiraItem.qaRepresentative" } },
+                    Values: { $addToSet: { "label": "$diffItem.updatedField.newValue" } },
+                    tasks: { $push: "$$ROOT" }
                 },
                 //fieldNames: {$addToSet : "$diffItem.updatedField.fieldName"}
 
-            
+
             }
         ])
     }
 
-res.send(tasks)
+    res.send(tasks)
 })
 
 
 router.get('/changeOfJIRATicketsStatus', async (req, res) => {
 
-    
+
     /*
     const tasks = await TaskModel.aggregate([
         {
@@ -212,13 +212,13 @@ router.get('/changeOfJIRATicketsStatus', async (req, res) => {
     // const filterQaRep = req.body.qaRepresentative[0] 
 
     console.log("nimer")
-    console.log( filterValue, filterStatus, filterQaRep)
+    console.log(filterValue, filterStatus, filterQaRep)
 
     //here we build the match expression according to the user's filters.
     let matchFilterValue = {}
 
     if (filterValue == 'newValue') {
-        
+
         matchFilterValue = {
             'diffItem.type': 'Update',
             'diffItem.updatedField.fieldName': 'status',
@@ -285,7 +285,9 @@ router.get('/changeOfJIRATicketsStatus', async (req, res) => {
 //  !!-------------------------------------------- Sally --------------------------------------------!!
 router.get('/changeOfJIRATicketsStatusFilters', async (req, res) => {
 
+    console.log("yousef")
     let tasks = []
+    let qa = []
     let matchFilters = ''
     let groupFilters = ''
     const { serverFilters } = req.body;
@@ -318,14 +320,32 @@ router.get('/changeOfJIRATicketsStatusFilters', async (req, res) => {
         },
         {
             $group: {
-                _id:null,
-                labels: {$addToSet: {"label": groupFilters,}}
+                _id: null,
+                labels: { $addToSet: { "label": groupFilters, } }
+            },
+        }
+    ])
+
+    qa = await TaskModel.aggregate([
+        {
+            $match: {
+                'diffItem.type': 'Update',
+                'diffItem.updatedField.fieldName': 'status',
+                // 'diffItem.updatedField.oldValue': filterStatus,
+                // 'jiraItem.qaRepresentative': filterQaRep
+            }
+        },
+        {
+            $group: {
+                _id: null,
+                qa: { $addToSet: { "label": "$jiraItem.qaRepresentative", } }
             },
         }
     ])
 
     console.log(tasks)
-    res.send(tasks)
+    console.log(qa)
+    res.send({tasks:tasks, QA:qa})
 
 })
 
