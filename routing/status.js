@@ -264,17 +264,72 @@ router.post("/stackedChart", async function (req, res) {
     res.send({ success: true, error: null, info: finalArray });
   }
   else {
-    res.send({ success: false, error: null, info: null });
+    datefrom = new Date(time1+"T00:00:00.00Z");
+    dateTo = new Date(time2+"T23:59:59.0099Z");
+    let stackedChartDone = await TaskModel.aggregate([
+      {
+        $match: {
+          "taskItem.updatedTime": { $gte: datefrom, $lte: dateTo },
+  
+        }
+      },
+  
+      {
+        $group: {
+          _id:
+          {
+            $dateToString: {
+              date: "$taskItem.updatedTime",
+              format: "%Y-%m-%d",
+            },
+          },
+          "count": { $sum: 1 },
+          done: {
+            $sum: {
+              $cond: [{ $eq: ["$taskItem.isDone", true] }, 1, 0,
+              ]
+            },
+          },
+          notDone: {
+            $sum: {
+              $cond: [{ $eq: ["$taskItem.isDone", false] }, 1, 0,
+              ]
+            },
+          },
+        },
+      },
+      { $sort: { "_id": 1 } }
+    ]);
+
+    // adding to Done Array 
+    let DoneArray = [], NotDone = [];
+    let tempDate = [], date1 = [];
+    let tempCountDone = [], tempCountNotDone = [];
+    stackedChartDone.forEach(element => {//load data
+      tempCountDone.push(element.done);
+      tempCountNotDone.push(element.notDone);
+      tempDate.push(element._id);
+    });
+    DoneArray.push({ name: "done" }, { data: tempCountDone });
+    NotDone.push({ name: "notDone" }, { data: tempCountNotDone });
+    tempCountDone = [];
+    tempCountNotDone = [];
+    tempCountDone.push(DoneArray);// final array
+    tempCountDone.push(NotDone);
+    tempCountNotDone.push({ "series": tempCountDone })
+    tempCountNotDone.push({ "categories": tempDate })
+    finalArray = tempCountNotDone;
+
+    res.send({ success: true, error: null, info: finalArray });
 
   }
   res.send({ success: false, error: null, info: null });
-
 });
 
 
-async function test123test() {
-  datefrom = new Date("2020-08-01T00:00:00.00Z");
-  dateTo = new Date();
+async function test123test(time1,time2) {
+  datefrom = new Date(time1+"T00:00:00.00Z");
+  dateTo = new Date(time2+"T23:59:59.0099Z");
   let stackedChartDone = await TaskModel.aggregate([
     {
       $match: {
@@ -327,10 +382,10 @@ async function test123test() {
   tempCountDone.push(NotDone);
   tempCountNotDone.push({ "series": tempCountDone })
   tempCountNotDone.push({ "categories": tempDate })
-
+  // console.log(tempCountNotDone)
 }
 
-//test123test();
+// test123test("2020-09-01","2020-09-02");
 //stackedChart end 
 module.exports = router;
 
