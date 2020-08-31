@@ -1,7 +1,15 @@
 import React from "react";
+
+//components
 import Login from "./view/pages/Admin/components/Login/Login"
 import ForgetPassword from "./view/pages/Admin/components/ForgetPassword/ForgetPassword";
-import MainPage from "./view/pages/Analytics/components/MainPage/MainPage"
+import MainPage from "./view/pages/Analytics/components/mainPage/MainPage";
+import ModificationByField from "./view/pages/Analytics/components/ModificationByField/ModificationByField";
+import DeletedJiraTickets from "./view/pages/Analytics/components/DeletedJiraTickets/DeletedJiraTickets";
+import ChangesInJiraTickets from "./view/pages/Analytics/components/ChangesInJiraTickets/ChangesInJiraTickets";
+import ChangesByParentId from "./view/pages/Analytics/components/ChangesByParentId/ChangesByParentId";
+import DelaysInDelivery from "./view/pages/Analytics/components/DelaysInDelivery/DelaysInDelivery";
+
 import "./App.css"
 import logo from "./JiraphLogo.jpg"
 
@@ -22,13 +30,13 @@ function App() {
   return (
     <Router>
       <div className='app'>
-      <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@200;300;400;500;531;600;700;800&display=swap" rel="stylesheet"></link>
-      <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@200;300;400;500;531;600;700;800&display=swap" rel="stylesheet"></link>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
         <nav className="sidebar">
 
           <div className="sidebar__header-wrapper">
-            <img className="jiraph__logo" src={logo} alt="this is a logo"/>
-           JIRAPH 
+            <img className="jiraph__logo" src={logo} alt="this is a logo" />
+           JIRAPH
           </div>
 
           <div className="menu__wrapper">
@@ -66,11 +74,11 @@ function App() {
                   <Link className="MainForm__status--btn" to="/DelaysInDelivery">Delays In Delivery</Link>
                 </div>
               </div>
-              </div>
+            </div>
           </div>
 
           <div className="sidebar__footer">
-           FOOTER
+            FOOTER
           </div>
         </nav>
 
@@ -95,9 +103,23 @@ function App() {
             <Route path="/analysis">
               <MainPage />
             </Route>
-            <Route path="/status">
 
+            <Route path="/ModificationByField">
+              <ModificationByField />
             </Route>
+            <Route path="/DeletedJiraTickets">
+              <DeletedJiraTickets />
+            </Route>
+            <Route path="/ChangesInJiraTickets">
+              <ChangesInJiraTickets />
+            </Route>
+            <Route path="/ChangesInParentID">
+              <ChangesByParentId />
+            </Route>
+            <Route path="/DelaysInDelivery">
+              <DelaysInDelivery />
+            </Route>
+
           </Switch>
         </div>
       </div>
