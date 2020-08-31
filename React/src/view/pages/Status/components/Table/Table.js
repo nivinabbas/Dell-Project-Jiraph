@@ -3,33 +3,58 @@ import "./style.css";
 import Select from "react-select";
 
 const optionSprint = [
-  { value: "All", label: "All" },
-  { value: "Create", label: "Create" },
-  { value: "Update", label: "Update" },
-  { value: "Delete", label: "Delete" },
+  { value: "all", label: "All" },
+  { value: "create", label: "Create" },
+  { value: "update", label: "Update" },
+  { value: "delete", label: "Delete" },
 ];
 
 const optionFunctional = [
-  { value: "Status", label: "Status" },
-  { value: "Priority", label: "Priority" },
+  { value: "status", label: "Status" },
+  { value: "priority", label: "Priority" },
   { value: "qaRepresentitive", label: "QA representitive" },
 ];
 
 const optionValue = [
-  { value: "True", label: "true" },
-  { value: "False", label: "false" },
+  { value: "true", label: "True" },
+  { value: "false", label: "False" },
 ];
-export default function TasksTable({ openTasks, onDoneClick }) {
+
+export default function TasksTable({
+  openTasks,
+  onDoneClick,
+  onSelect,
+  onTableFilterClick,
+}) {
   return (
     <div className="open-tasks">
       <div className="open-tasks-title">
         <h3>Open Tasks</h3>
       </div>
       <div className="container__filterSelect">
-        <Select options={optionFunctional} className="filterSelect" />
-        <Select options={optionSprint} className="filterSelect" />
-        <Select options={optionValue} className="filterSelect" />
-        <input type="submit" className="submitButton" />
+        <Select
+          options={optionFunctional}
+          className="filterSelect"
+          onChange={(filter, action) => onSelect(filter, action)}
+          name="modificationType"
+        />
+        <Select
+          options={optionSprint}
+          className="filterSelect"
+          onChange={(filter, action) => onSelect(filter, action)}
+          name="modificationField"
+        />
+        <Select
+          options={optionValue}
+          className="filterSelect"
+          onChange={(filter, action) => onSelect(filter, action)}
+          name="modificationValue"
+        />
+        <input
+          type="submit"
+          className="submitButton"
+          onClick={onTableFilterClick}
+        />
       </div>
       <div className="open-tasks-table">
         <table className="container">

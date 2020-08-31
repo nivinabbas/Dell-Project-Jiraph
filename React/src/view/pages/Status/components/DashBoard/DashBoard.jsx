@@ -10,8 +10,6 @@ import DashBoardCard from "../DashBoardCard/DashBoardCard";
 // ];
 
 const DashBoard = ({ cardsContent }) => {
-  console.log(cardsContent);
-
   return (
     <div className="dashboard">
       {cardsContent.map((cardsContentItem, index) => {

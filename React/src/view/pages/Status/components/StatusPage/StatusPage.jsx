@@ -73,13 +73,12 @@ const StatusPage = (props) => {
   const [openTasks, setOpenTasks] = useState([]);
   const [isDone, setIsDone] = useState(false);
   const [BarChart, setBarChart] = useState([]);
+  const [filters, setFilters] = useState([]);
 
   useEffect(() => {
-    console.log("getDailyalerts");
     fetch("/api/status/dailyalerts")
       .then((res) => res.json())
       .then((data) => {
-        console.log("daily alert", data);
         let { success, error, info } = data;
         if (success) {
           setCardsContent(info);
@@ -90,7 +89,6 @@ const StatusPage = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log("heyyy");
     fetch("/api/status/openTasks")
       .then((res) => res.json())
       .then((data) => {
@@ -102,9 +100,8 @@ const StatusPage = (props) => {
         }
       });
   }, []);
-  console.log(openTasks);
+
   const handleDoneClick = async (jiraId) => {
-    console.log("jira", jiraId);
     const userId = null;
     const result = openTasks.filter(
       (openTask) => openTask.jiraItem.jiraId !== jiraId
@@ -121,8 +118,6 @@ const StatusPage = (props) => {
 
   //date
   const handleDateClick = async (CurrentstartDate, CurrentEndtDate) => {
-    console.log("date", CurrentstartDate, CurrentEndtDate);
-
     await fetch("/api/status/barChart", {
       method: "POST",
       body: JSON.stringify({ CurrentstartDate, CurrentEndtDate }),
@@ -141,6 +136,17 @@ const StatusPage = (props) => {
       });
   };
 
+  const handleSelect = (filter, action) => {
+    console.log("filter:", filter);
+    console.log("action", action);
+    // const name = action.name;
+    setFilters([...filters, filter]);
+  };
+  const handelTableFilterClick = () => {
+    console.log("sdadasadasdasdasdasdasdasa", filters);
+    //fetch
+  };
+  console.log("asdasdas", filters);
   return (
     <div className="statusPageContainer">
       <div className="statuspage__dashboard">
@@ -148,7 +154,12 @@ const StatusPage = (props) => {
       </div>
 
       <div className="statuspage__table">
-        <Table openTasks={openTasks} onDoneClick={handleDoneClick} />
+        <Table
+          openTasks={openTasks}
+          onDoneClick={handleDoneClick}
+          onSelect={handleSelect}
+          onTableFilterClick={handelTableFilterClick}
+        />
       </div>
       <div className="statuspage__filters">
         <DateFilter onDateFilterClick={handleDateClick} />
