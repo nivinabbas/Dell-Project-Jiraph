@@ -2,5 +2,6 @@
   width: 100%;
 }
 .Date-Filter input {
-  margin-left: 3%;
+  width: 200px;
+  margin: 4px;
 }

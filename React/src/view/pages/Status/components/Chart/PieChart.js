@@ -25,16 +25,15 @@ const dummyData = {
   },
 };
 
-const optionDone = [
-  { value: "Done", label: "Done" },
-  { value: "Not Done", label: "Not Done" },
-];
-const PieChart = ({ onmodificationTypePieSelect }) => {
+
+const PieChart = ({ onmodificationTypePieSelect, name, selectOptions }) => {
+
+  let selectName = name;
   return (
     <div id="chart">
       <Select
-        options={optionDone}
-        onChange={(filter) => onmodificationTypePieSelect(filter)}
+        options={selectOptions}
+        onChange={(filter, name) => onmodificationTypePieSelect(filter, selectName)}
       />
       <Chart
         options={dummyData.options}

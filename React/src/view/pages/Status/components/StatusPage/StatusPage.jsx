@@ -8,18 +8,19 @@ import StackedChart from "../Chart/StackedChart";
 import PieChart from "../Chart/PieChart";
 import DateFilter from "../DateFilter/DateFilter";
 
-// let array = [
-// { name: "functionalTests", number: 12 },
-// { name: "fixVersions", number: 10 },
-// { name: "deletedTasks", number: 20 },
-// { name: "totalTasks", number: 36 },
-// ];
+const optionSprint = [
+  { value: "all", label: "All" },
+  { value: "create", label: "Create" },
+  { value: "update", label: "Update" },
+  { value: "delete", label: "Delete" },
+];
 
-// const optionSprint = [
-// { value: "Backlog", label: "Backlog" },
-// { value: "inProgress", label: "In Progress" },
-// { value: "Done", label: "Done" },
-// ];
+const optionFunctional = [
+  { value: "all", label: "All" },
+  { value: "status", label: "Status" },
+  { value: "priority", label: "Priority" },
+  { value: "qaRepresentitive", label: "QA representitive" },
+];
 
 const StatusPage = (props) => {
   /*********TABLEEEEEEE 
@@ -73,8 +74,8 @@ const StatusPage = (props) => {
   const [openTasks, setOpenTasks] = useState([]);
   const [isDone, setIsDone] = useState(false);
   const [BarChart, setBarChart] = useState([]);
-  const [filterTypePie, setFilterTypePie] = useState([]);
-  const [filterFieldPie, setFilterFieldPie] = useState([]);
+  const [filterTypePie, setFilterTypePie] = useState("");
+  const [filterFieldPie, setFilterFieldPie] = useState("");
   const [filters, setFilters] = useState([
     { name: "modificationType", value: "" },
     { name: "modificationField", value: "" },
@@ -122,30 +123,52 @@ const StatusPage = (props) => {
       },
     });
   };
-  const handlemodificationTypePieSelect = (filter) => {
-    console.log("handlemodificationTypePieSelect", filter);
-    setFilterTypePie(filter);
+  const handlemodificationTypePieSelect = (filter, name) => {
+    if (name === "pie1") setFilterTypePie(filter.value);
+    if (name === "pie2") setFilterFieldPie(filter.value);
   };
   //date
   const handleDateClick = async (CurrentstartDate, CurrentEndtDate) => {
     const TypePie = filterTypePie;
+    const FieldPie = filterFieldPie;
 
-    await fetch("/api/status/typePieChart", {
-      method: "POST",
-      body: JSON.stringify({ TypePie, CurrentstartDate, CurrentEndtDate }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        let { success, error, info } = data;
-        if (success) {
-          setBarChart(info);
-        } else {
-          alert(error);
-        }
-      });
+    if (TypePie !== "") {
+      await fetch("/api/status/typePieChart", {
+        method: "POST",
+        body: JSON.stringify({ TypePie, CurrentstartDate, CurrentEndtDate }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          let { success, error, info } = data;
+          if (success) {
+            setBarChart(info);
+          } else {
+            alert(error);
+          }
+        });
+    }
+
+    if (FieldPie !== "") {
+      await fetch("/api/status/fieldPieChart", {
+        method: "POST",
+        body: JSON.stringify({ FieldPie, CurrentstartDate, CurrentEndtDate }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          let { success, error, info } = data;
+          if (success) {
+            setBarChart(info);
+          } else {
+            alert(error);
+          }
+        });
+    }
   };
 
   const handleSelect = (filter, name) => {
@@ -189,9 +212,15 @@ const StatusPage = (props) => {
 
         <div className="statuspage__chartpie">
           <PieChart
+            selectOptions={optionSprint}
+            name="pie1"
             onmodificationTypePieSelect={handlemodificationTypePieSelect}
           />
-          <PieChart />
+          <PieChart
+            selectOptions={optionFunctional}
+            name="pie2"
+            onmodificationTypePieSelect={handlemodificationTypePieSelect}
+          />
         </div>
       </div>
     </div>
