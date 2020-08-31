@@ -8,7 +8,7 @@ const UserModel = mongoose.model("UserModel", UserSchema)
 var nodemailer = require('nodemailer')
 var validator = require("email-validator");
 
-
+let keys = [];
 
 const u = new UserModel({
     userInfo: {
@@ -72,7 +72,6 @@ router.delete('/deleteUser', (req, res) => {
                 }
             })
         }
-        console.log("Successful deletion");
     })
 
 })
@@ -108,6 +107,7 @@ router.post('/forgotPassword', (req, res) => {
                         console.log('Email sent: ' + info.response);
                     }
                 });
+                keys.push({email:email , key:key , time:Date.now()})
                 res.send({ success: true, error: null, info: { key: key } })
 
             } else {
@@ -166,6 +166,23 @@ router.post('/createUser',  (req, res) => {
         })
     } else {
         res.send({ success: false, error: "Email not valid", info: null })
+    }
+})
+
+router.post('/checkSendedPassword', (req, res) => {
+    const { email , key } = req.body;
+    for (let index = 0; index < keys.length; index++) {
+        if(keys[index].email == email){
+            if(keys[index].key == key){
+                if((Date.now()-keys[index].time)<=1800000){
+                    res.send({success:true , error:null , info:null})
+                }else{
+                    res.send({success:false , error:'time expired' , info:null})
+                }
+            }else{
+                res.send({success:false , error:'key is incorrect' , info:null})
+            }
+        }
     }
 })
 
