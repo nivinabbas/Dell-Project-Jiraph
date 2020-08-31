@@ -33,6 +33,14 @@ function ChangesInJiraTickets() {
         // setQaRepresentativeOptions(data[0].qa);
 
       })
+      fetch('/api/analytics/changeOfJIRATicketsStatusFilters')
+      .then(res => res.json())
+      .then(data => {
+
+        //set state (UiObj)
+        console.log(data)
+        setQaRepresentativeOptions(data[0].qa);
+      })
 
       /*fetch('/api/analytics/changeOfJIRATicketsStatus')
       .then(res => res.json())
@@ -48,34 +56,15 @@ function ChangesInJiraTickets() {
   const render = (serverFilters) => {
     fetch('/api/analytics/changeOfJIRATicketsStatus', {
       method: 'POST',
-      body: JSON.stringify(serverFilters),
+      body: JSON.stringify(serverFilters ),
       headers: {
         "Content-Type": "application/json"
       }
     })
       .then((res) => res.json())
-      .then((data) => { console.log(data) } )
+      .then((data) => { console.log(data) })
 
   }
-
-  // const renderFilters = (serverFilters) => {
-  //   fetch('/api/analytics/modificationByFieldFilters', {
-  //     method: 'POST',
-  //     body: JSON.stringify({ status:serverFilters.status }),
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     }
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => { 
-  //       if(data.length>0){
-  //         console.log(data)
-  //               setQaRepresentativeOptions(data[0].QA);
-                
-  //       }
-                 
-  //     })
-  // }
 
    // To set UiObj from the filtered Data we recieved from server 
    const [UiObjs, setUiObjs] = useState([]);
