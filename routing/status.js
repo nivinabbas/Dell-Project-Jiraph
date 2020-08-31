@@ -36,7 +36,7 @@ router.get("/dailyalerts", async function (req, res) {
           $sum: {
             $cond: [
               {
-                $eq: ["$jiraItem.specialFields.functionalTest", true],
+                $eq: ["$jiraItem.functionalTest", true],
               },
               1,
               0,
@@ -59,6 +59,17 @@ router.get("/dailyalerts", async function (req, res) {
             $cond: [
               {
                 $eq: ["$diffItem.updatedField.fieldName", "fixVersion"],
+              },
+              1,
+              0,
+            ],
+          },
+        },
+        NotDone: {
+          $sum: {
+            $cond: [
+              {
+                $eq: ["$taskItem.isDone", false],
               },
               1,
               0,
@@ -89,6 +100,10 @@ router.get("/dailyalerts", async function (req, res) {
         name: "totalTasks",
         number: 0,
       },
+      {
+        name: "NotDone",
+        number:0,
+      },
     ];
   } else {
     DailyAlerts = [
@@ -108,12 +123,15 @@ router.get("/dailyalerts", async function (req, res) {
         name: "totalTasks",
         number: DailyAlerts[0].totalTasks,
       },
+      {
+        name: "NotDone",
+        number: DailyAlerts[0].NotDone,
+      },
     ];
   }
-  console.log("DailyAlertsStart");
-  console.log(DailyAlerts);
-  console.log("DailyAlertsFinal");
-
+  // console.log("DailyAlertsStart");
+  // console.log(DailyAlerts);
+  // console.log("DailyAlertsFinal");
   res.send({ success: true, error: null, info: DailyAlerts });
 });
 
@@ -126,85 +144,6 @@ function dateFormat() {
 
   return `${ye}-${mo}-${da}`;
 }
-
-async function teststau() {
-  // let Today = new Date().toLocaleDateString();
-  // var milliseconds = Today.getTime();
-  Today = dateFormat();
-  console.log("123 ", Today);
-  Today = dateFormat();
-  let DailyAlerts = await TaskModel.aggregate([
-    {
-      $match: {
-        $expr: {
-          $eq: [
-            Today,
-            {
-              $dateToString: {
-                date: "$diffItem.updatedTime",
-                format: "%Y-%m-%d",
-              },
-            },
-          ],
-        },
-      },
-    },
-    {
-      $group: {
-        _id: "DailyAlerts",
-        functionalTest: {
-          $sum: {
-            $cond: [
-              {
-                $eq: ["$jiraItem.specialFields.functionalTest", true],
-              },
-              1,
-              0,
-            ],
-          },
-        },
-        deletedTicktes: {
-          $sum: {
-            $cond: [
-              {
-                $eq: ["$diffItem.type", "Delete"],
-              },
-              1,
-              0,
-            ],
-          },
-        },
-        fixVersionTicktes: {
-          $sum: {
-            $cond: [
-              {
-                $eq: ["$diffItem.updatedField.fieldName", "fixVersion"],
-              },
-              1,
-              0,
-            ],
-          },
-        },
-        TotalTasks: {
-          $sum: 1,
-        },
-      },
-    },
-  ]);
-  if (DailyAlerts.length == 0 || DailyAlerts == []) {
-    DailyAlerts = {
-      _id: "DailyAlerts",
-      functionalTest: 0,
-      deletedTicktes: 0,
-      fixVersionTicktes: 0,
-      TotalTasks: 0,
-    };
-  }
-  console.log("DailyAlerts");
-  console.log(DailyAlerts);
-  console.log("DailyAlertsFF");
-}
-// teststau();
 // End daily status alert !
 
 // start open tasks
@@ -268,4 +207,150 @@ router.post("/PieChart", (req, res) => {
   );
 });
 // end update task
+
+//stackedChart start 
+
+router.post("/stackedChart", async function (req, res) {
+  let { label, datefrom, dateTo } = req.body;
+  let DailyAlerts;
+  if (datefrom == null && dateTo == null)//default, label daily 
+  {
+    DailyAlerts = await TaskModel.aggregate([
+      {
+        $match: {
+          $expr: {
+            $gte: [
+              datefrom,
+              {
+                $dateToString: {
+                  date: "$diffItem.updatedTime",
+                  format: "%Y-%m-%d",
+                },
+              },
+            ],
+          },
+          $lte: {
+            $gte: [
+              dateTo,
+              {
+                $dateToString: {
+                  date: "$diffItem.updatedTime",
+                  format: "%Y-%m-%d",
+                },
+              },
+            ],
+          },
+        },
+      },
+      {
+        $group: {
+          _id: "DailyAlerts",
+          functionalTest: {
+            $sum: {
+              $cond: [
+                {
+                  $eq: ["$jiraItem.functionalTest", true],
+                },
+                1,
+                0,
+              ],
+            },
+          },
+          deletedTicktes: {
+            $sum: {
+              $cond: [
+                {
+                  $eq: ["$diffItem.type", "Delete"],
+                },
+                1,
+                0,
+              ],
+            },
+          },
+          fixVersionTicktes: {
+            $sum: {
+              $cond: [
+                {
+                  $eq: ["$diffItem.updatedField.fieldName", "fixVersion"],
+                },
+                1,
+                0,
+              ],
+            },
+          },
+          totalTasks: {
+            $sum: 1,
+          },
+        },
+      },
+    ]);
+  }
+
+  res.send({ success: true, error: null, info: null });
+
+});
+
+
+// async function test123test() {
+//   datefrom = new Date("2020-08-01T00:00:00.00Z");
+//   dateTo = new Date();
+//   let DailyAlerts = await TaskModel.aggregate([
+//     {
+//       $match: {
+//         "taskItem.updatedTime": { $gte: datefrom, $lte: dateTo },
+//       }
+//     },
+
+//     {
+//       $group: {
+//         _id: {
+//           $dateToString: {
+//             format: "%d-%m-%Y",
+//             date: "$taskItem.updatedTime"
+//           }  }
+        
+        
+//         }
+//   ]);
+
+// console.log("DailyAlertsDailyAlertsDailyAlerts")
+// console.log(DailyAlerts)
+// }
+
+//test123test();
+//stackedChart end 
 module.exports = router;
+
+
+
+
+
+
+
+  // $expr:
+        // {
+        //   $and: [
+        //     {
+        //       $gte: [
+        //         dateTo,
+        //         {
+        //           $dateToString: {
+        //             date: "$taskItem.updatedTime",
+        //             format: "%Y-%m-%d",
+        //           },
+        //         },
+        //       ],
+        //     },
+        //     {
+        //       "$lte": [
+        //         datefrom,
+        //         {
+        //           $dateToString: {
+        //             date: "$taskItem.updatedTime",
+        //             format: "%Y-%m-%d",
+        //           },
+        //         },
+        //       ],
+        //     }
+        //   ]
+        // },
