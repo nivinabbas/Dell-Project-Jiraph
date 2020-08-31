@@ -74,6 +74,8 @@ const StatusPage = (props) => {
   const [isDone, setIsDone] = useState(false);
   const [BarChart, setBarChart] = useState([]);
   const [filters, setFilters] = useState([]);
+  const [filterTypePie, setFilterTypePie] = useState([]);
+  const [filterFieldPie, setFilterFieldPie] = useState([]);
 
   useEffect(() => {
     fetch("/api/status/dailyalerts")
@@ -115,12 +117,17 @@ const StatusPage = (props) => {
       },
     });
   };
-
+  const handlemodificationTypePieSelect = (filter) => {
+    console.log("handlemodificationTypePieSelect", filter);
+    setFilterTypePie(filter);
+  };
   //date
   const handleDateClick = async (CurrentstartDate, CurrentEndtDate) => {
-    await fetch("/api/status/barChart", {
+    const TypePie = filterTypePie;
+
+    await fetch("/api/status/typePieChart", {
       method: "POST",
-      body: JSON.stringify({ CurrentstartDate, CurrentEndtDate }),
+      body: JSON.stringify({ TypePie, CurrentstartDate, CurrentEndtDate }),
       headers: {
         "Content-Type": "application/json",
       },
@@ -140,10 +147,18 @@ const StatusPage = (props) => {
     console.log("filter:", filter);
     console.log("action", action);
     // const name = action.name;
-    setFilters([...filters, filter]);
+    setFilters([
+      ...filters,
+      filters.map((m) => {
+        return m.name === action.name
+          ? { name: action.name, value: filter.value }
+          : null;
+      }),
+    ]);
   };
+
   const handelTableFilterClick = () => {
-    console.log("sdadasadasdasdasdasdasdasa", filters);
+    console.log("handelTableFilterClick", filters);
     //fetch
   };
   console.log("asdasdas", filters);
@@ -170,7 +185,9 @@ const StatusPage = (props) => {
         </div>
 
         <div className="statuspage__chartpie">
-          <PieChart />
+          <PieChart
+            onmodificationTypePieSelect={handlemodificationTypePieSelect}
+          />
           <PieChart />
         </div>
       </div>

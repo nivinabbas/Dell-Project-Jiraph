@@ -1,6 +1,7 @@
 import React from "react";
 import Chart from "react-apexcharts";
-import Select from "react-select";
+import Select from 'react-select'
+
 
 const dummyData = {
   series: [44, 55],
@@ -28,10 +29,13 @@ const optionDone = [
   { value: "Done", label: "Done" },
   { value: "Not Done", label: "Not Done" },
 ];
-const PieChart = (props) => {
+const PieChart = ({ onmodificationTypePieSelect }) => {
   return (
     <div id="chart">
-      <Select options={optionDone} />
+      <Select
+        options={optionDone}
+        onChange={(filter) => onmodificationTypePieSelect(filter)}
+      />
       <Chart
         options={dummyData.options}
         series={dummyData.series}
