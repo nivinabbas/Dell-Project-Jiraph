@@ -126,13 +126,12 @@ const StatusPage = (props) => {
           <Table openTasks={openTasks} onDoneClick={handleDoneClick} />
         </div>
         <div className="statuspage__chart">
+          <input type="date" />
+          <input type="date" />
           <StackedChart />
         </div>
       </div>
       <div className="statuspage__chartpie">
-        <div className="statuspage__chart">
-          <StackedChart />
-        </div>
         <div className="statuspage__pie">
           <PieChart />
           <PieChart />
