@@ -131,16 +131,16 @@ router.post('/createUser',  (req, res) => {
     let table = [];
 
     if (validator.validate(email)) {
-        User.find({ "userInfo.employeeEmail": email }).then(async (checkEmail) => {
+        UserModel.find({ "userInfo.employeeEmail": email }).then(async (checkEmail) => {
             if (checkEmail.length > 0) {
                 res.send({ success: false, error: "Email is already in use", info: null })
             } 
             
             
             else {
-               await User.insertMany({ userInfo: { employeeName: name, employeeEmail: email, employeeRole: role, password: password } })
+               await UserModel.insertMany({ userInfo: { employeeName: name, employeeEmail: email, employeeRole: role, password: password } })
 
-                User.find({}).then(users => {
+               UserModel.find({}).then(users => {
                     if (users.length > 0) {
                         
                         for (let index = 0; index < users.length; index++) {

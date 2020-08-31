@@ -8,7 +8,7 @@ import UserRow from './UserRow';
 function UserList() {
     const [users, setUsers] = useState([]);
     //-------------------------------------
-    
+
 
     useEffect(() => {
         fetch('/api/users/getUsersList')
@@ -43,18 +43,18 @@ function UserList() {
             <form name='create' onSubmit={createUser} >
 
                 <input name="inputName" type="text" placeholder='Enter Name' required ></input>
-                <input name="inputEmail" type="email" placeholder='Enter Email' required></input>
-                <select name="inputRole" required >
+                <input name="inputEmail" type="email" placeholder='Enter Email' required ></input>
+                <select name="inputRole" required  >
                     <option value="Admin">Admin</option>
                     <option value="QA manager">QA manager</option>
                     <option value="TOP manager">TOP manager</option>
                 </select>
-                <input name="inputPassword" type="password" placeholder='Enter pass' required></input>
+                <input name="inputPassword" type="password" placeholder='Enter pass' required ></input>
                 <button type='submit'>Create</button>
             </form>
 
-            
-            { users.map((user, index) => <UserRow key={index+'users'} user={user} /> )}
+
+            {users.map((user, index) => <UserRow setUsers={setUsers} key={index + 'users'} user={user} />)}
 
 
 
@@ -64,18 +64,15 @@ function UserList() {
 
     function createUser(e) {
         e.preventDefault();
-        let {inputName, inputEmail, inputRole, inputPassword} = e.target.elements;
+        let { inputName, inputEmail, inputRole, inputPassword } = e.target.elements;
         inputName = inputName.value;
         inputEmail = inputEmail.value;
         inputRole = inputRole.value;
         inputPassword = inputPassword.value;
 
-        //  console.log(inputName, inputEmail, inputRole, inputPassword)
-
-
         fetch('/api/users/createUser', {
             method: 'POST',
-            body: JSON.stringify({name:inputName,email: inputEmail, role:inputRole,password: inputPassword}),
+            body: JSON.stringify({ name: inputName, email: inputEmail, role: inputRole, password: inputPassword }),
             headers: {
                 "Content-Type": "application/json"
             }
@@ -85,7 +82,7 @@ function UserList() {
                 console.log(data.info.table)
                 if (data.success = true) {
                     setUsers(data.info.table)
-                    // console.log(data.info.table)
+
                     return (alert('created sucsses'))
                 }
                 else if (data = false) {

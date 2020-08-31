@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 export default props => {
 
-    const { user } = props;
+    const { user, setUsers } = props;
 
     const [edit, setEdit] = useState(false)
     
@@ -73,7 +73,7 @@ export default props => {
     function deleteUser(e, id) {
         e.preventDefault();
         if (!window.confirm('Are you sure you want to delete this User?')) {
-            console.log("Not Deleted")
+            alert("Not Deleted")
             return;
         }
         fetch('/api/users/deleteUse', {
@@ -86,6 +86,7 @@ export default props => {
             .then(response => response.json())
             .then(data => {
                 if (data.success = true) {
+                    setUsers(data.info.table);
                     return alert('Deleted sucsses')
                 }
                 else if (data.success = false) {
