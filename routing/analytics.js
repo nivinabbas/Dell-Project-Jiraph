@@ -214,8 +214,8 @@ router.post('/changeOfJIRATicketsStatusFilters', async (req, res) => {
         {
             $group: {
                 _id: null,
-                status: { $addToSet: { "label": groupFilters, } },
-                qa: { $addToSet: { "label": "$jiraItem.qaRepresentative", } }
+                status: { $addToSet: { "label": groupFilters, "value":groupFilters } },
+                qa: { $addToSet: { "label": "$jiraItem.qaRepresentative","value":"$jiraItem.qaRepresentative" } }
             },
         }
     ])
