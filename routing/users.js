@@ -58,7 +58,7 @@ router.get('/getUsersList', (req, res) => {
 router.delete('/deleteUser', (req, res) => {
     const { id } = req.body;
     let table = [];
-    UserModel.findOneAndRemove({ _id: id }, async function (err) {
+    UserModel.remove({ _id: id }, async function (err) {
         if (err) {
             res.send({success:false , error:err , info:null })
         }else{
@@ -151,7 +151,7 @@ router.post('/createUser',  (req, res) => {
             else {
                await UserModel.insertMany({ userInfo: { employeeName: name, employeeEmail: email, employeeRole: role, password: password } })
 
-               UserModel.find({}).then(users => {
+               await UserModel.find({}).then(users => {
                     if (users.length > 0) {
                         
                         for (let index = 0; index < users.length; index++) {
