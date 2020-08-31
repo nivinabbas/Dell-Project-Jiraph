@@ -127,8 +127,18 @@ router.post('/createUser',(req,res)=>{
           if(checkEmail.length>0){
                 res.send({success:false,error:"Email is already in use",info:null})          
           }else{
-            UserModel.insertMany({userInfo:{employeeName:name,employeeEmail:email,employeeRole:role,password:password}}).then(docs=>{console.log(docs)})
-              res.send({success:true,error:null,info:null})
+            UserModel.insertMany({userInfo:{employeeName:name,employeeEmail:email,employeeRole:role,password:password}})
+            UserModel.find({}).then(users=>{
+                if(users.length>0){
+                    let table = [];
+                    for (let index = 0; index < users.length; index++) {
+                        table.push({email:users[index].userInfo.employeeEmail,name:users[index].userInfo.employeeName,role:users[index].userInfo.employeeRole,id:users[index]._id})
+                    }
+                    
+                    
+                }
+             })
+             res.send({success:true,error:null,info:{table}})
           }
        })
       }else{
