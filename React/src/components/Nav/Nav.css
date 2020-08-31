@@ -2,54 +2,67 @@ nav {
   font-family: "Roboto Slab", serif;
 }
 
-.sidebar__header-wrapper{
-    /* background-color:#405c0b; */
-    height: 10vh;
-    grid-area: header;
-    background-color:white;
-    text-align: center;
-    padding-top: 2.2vh;
-    color: #00447C;
-    font-weight: 800;
-    font-size: 29px;
-    font-family: 'Roboto Slab', serif;
-  }
-  .menu__wrapper{
-    margin-top: 8vh;
-    /* background-color:#5c0b0b; */
-    padding-top: 1rem;
-    height: 80vh;
-    grid-area: menu;
-    background-color: #EEEEEE;
-  }
-  
-  .sidebar__footer{
-   height: 5vh;
-   background-color: #00447C;
-   grid-area: footer;
-   color:white;
-   text-align: center;
-   margin-top: 0.5rem;
-  }
+.sidebar {
+  background-color: #eeeeee;
+  height: 100vh;
+  width: 13vw;
+  display: grid;
+  grid-template-columns: 1.1vw 11.2vw 0.7vw;
+  grid-template-rows: 10vh 85vh 5vh;
+  grid-template-areas:
+    "header header header"
+    ". menu ."
+    " footer footer footer ";
+}
+
+.sidebar__header-wrapper {
+  /* background-color:#405c0b; */
+  height: 10vh;
+  grid-area: header;
+  background-color: white;
+  text-align: center;
+  padding-top: 2.2vh;
+  color: #00447c;
+  font-weight: 800;
+  font-size: 29px;
+  font-family: "Roboto Slab", serif;
+}
+.menu__wrapper {
+  margin-top: 8vh;
+  /* background-color:#5c0b0b; */
+  padding-top: 1rem;
+  height: 80vh;
+  grid-area: menu;
+  background-color: #eeeeee;
+}
+
+.sidebar__footer {
+  height: 5vh;
+  background-color: #00447c;
+  grid-area: footer;
+  color: white;
+  text-align: center;
+  margin-top: 0.5rem;
+}
 
 .menu__link {
-    /* background-color:#b98d13; */
-    font-size: 25px;
-    color: #808080;
-    position: relative;
-    line-height: 3rem;
-    transition: all 0.4s
+  /* background-color:#b98d13; */
+  font-size: 25px;
+  color: #808080;
+  position: relative;
+  line-height: 3rem;
+  transition: all 0.4s;
 }
 
 .menu__link:hover {
-    /* background-color:#b98d13; */
-    font-size: 26px;
-    color: #444444;
+  /* background-color:#b98d13; */
+  font-size: 26px;
+  color: #444444;
 }
 
 .menu__link--selected {
-    font-size: 26px !important;
-    color: #444444;
+  font-size: 26px !important;
+  color: #444444;
 }
 
 .jiraph__logo {
@@ -57,22 +70,20 @@ nav {
 }
 
 .menu__subLink {
-    /* background-color:#7713b9; */
-    font-size: 13px;
-    font-weight: 500;
-    font-family: 'Roboto Slab', serif;
-    color: #444444;
-    line-height: 2rem;
-    transition: all 0.4s;
+  /* background-color:#7713b9; */
+  font-size: 13px;
+  font-weight: 500;
+  font-family: "Roboto Slab", serif;
+  color: #444444;
+  line-height: 2rem;
+  transition: all 0.4s;
 }
 .menu__subLink:hover {
-    font-size: 14px;
-    color: #0076CE;
+  font-size: 14px;
+  color: #0076ce;
 }
 
 .menu-subLink--selected {
-    font-size: 14px;
-    color: #0076CE;
+  font-size: 14px;
+  color: #0076ce;
 }
-
-
