@@ -73,9 +73,14 @@ const StatusPage = (props) => {
   const [openTasks, setOpenTasks] = useState([]);
   const [isDone, setIsDone] = useState(false);
   const [BarChart, setBarChart] = useState([]);
-  const [filters, setFilters] = useState([]);
   const [filterTypePie, setFilterTypePie] = useState([]);
   const [filterFieldPie, setFilterFieldPie] = useState([]);
+  const [filters, setFilters] = useState([
+    { name: "modificationType", value: "" },
+    { name: "modificationField", value: "" },
+    { name: "modificationValue", value: "" },
+  ]);
+  const [modificationType, setModificationType] = useState({});
 
   useEffect(() => {
     fetch("/api/status/dailyalerts")
@@ -143,25 +148,21 @@ const StatusPage = (props) => {
       });
   };
 
-  const handleSelect = (filter, action) => {
-    console.log("filter:", filter);
-    console.log("action", action);
-    // const name = action.name;
-    setFilters([
-      ...filters,
-      filters.map((m) => {
-        return m.name === action.name
-          ? { name: action.name, value: filter.value }
-          : null;
-      }),
-    ]);
+  const handleSelect = (filter, name) => {
+    const newFilters = [...filters].map((f) => {
+      if (f.name === name) f.value = filter.value;
+      return f;
+    });
+    setFilters(newFilters);
   };
 
   const handelTableFilterClick = () => {
-    console.log("handelTableFilterClick", filters);
+    const newFilters =
+      filters[0].value === "update" ? [...filters] : [{ ...filters[0] }];
+
     //fetch
   };
-  console.log("asdasdas", filters);
+
   return (
     <div className="statusPageContainer">
       <div className="statuspage__dashboard">
@@ -173,7 +174,9 @@ const StatusPage = (props) => {
           openTasks={openTasks}
           onDoneClick={handleDoneClick}
           onSelect={handleSelect}
+          onChange={setModificationType}
           onTableFilterClick={handelTableFilterClick}
+          filters={filters}
         />
       </div>
       <div className="statuspage__filters">
