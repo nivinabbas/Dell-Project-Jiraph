@@ -1,6 +1,6 @@
 .DeletedJiraTicketsWrapper{
     display: grid;
-    grid-template-columns: 5vw 90vw 5vw;
+    grid-template-columns: 5vw 75vw 5vw;
     grid-template-rows: 10vh 5vh 5vh auto;
     grid-template-areas: 
     ". header ."
@@ -9,7 +9,7 @@
     ". table . "
     "chartColors table .";
     
-    background-color: whitesmoke;
+    background-color: #C8C9C7;
   }
   .DeletedJiraTickets__Table {
     grid-area: table;
@@ -20,7 +20,7 @@
   font-weight: bold;
     grid-area: header;
     text-align: center;
-    background-color: #20283E;
+    background-color: #00447C;
     color: white;
     height: 100%;
   }
