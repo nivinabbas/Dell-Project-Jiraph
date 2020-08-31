@@ -240,7 +240,7 @@ router.post("/updateTasks", (req, res) => {
       if (err)
         res.send({
           success: false,
-          error: "This task has already been completed",
+          error: "This task has already been completed", // or return err
           info: { doc },
         });
       res.send({ success: true, error: null, info: { doc } });
@@ -249,23 +249,25 @@ router.post("/updateTasks", (req, res) => {
 });
 // end update task
 
-// start PieChart
-router.post("/PieChart", (req, res) => {
-  const { jiraId, userId } = req.body;
+async function testdate(startDate) {
+  console.log(startDate.toString());
+  console.log("the test work");
 
-  TaskModel.updateOne(
-    { "jiraItem.jiraId": jiraId, "taskItem.user._id": userId },
-    { $set: { "taskItem.isDone": true } },
-    function (err, doc) {
-      if (err)
-        res.send({
-          success: false,
-          error: "This task has already been completed",
-          info: { doc },
-        });
-      res.send({ success: true, error: null, info: { doc } });
-    }
-  );
-});
-// end update task
+  let donetasks = await TaskModel.aggregate([
+    {
+      // $match: {  $dateToString: {date: "taskItem.updatedTime",format: "%Y-%m-%d"}, { $gte: startDate, $lte: endDate } },
+      $match: {
+        "itemTask.updatedTime": { $gte: startDate.toString() },
+      },
+    },
+  ]);
+
+  console.log("donetasks");
+  console.log(donetasks);
+  console.log("donetasksFF");
+}
+
+// testdate("2020-08-26T10:04:35.204+00:00", "2020-08-30T10:23:58.116+00:00");
+testdate(new Date("1970-01-01"));
+
 module.exports = router;
