@@ -57,7 +57,8 @@ router.get('/getUsersList', (req, res) => {
 
 router.delete('/deleteUser', (req, res) => {
     const { id } = req.body;
-    UserModel.deleteOne({ _id: id }, async function (err) {
+    let table = [];
+    UserModel.findOneAndRemove({ _id: id }, async function (err) {
         if (err) {
             res.send({success:false , error:err , info:null })
         }else{
