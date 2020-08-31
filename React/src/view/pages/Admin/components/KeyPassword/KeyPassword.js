@@ -1,31 +1,27 @@
 import React from 'react';
 import { useHistory } from "react-router-dom";
+import ChangePassword from "../ChangePassword/ChangePassword"
+import {
+    useParams
+} from "react-router-dom";
+
 // import './ForgetPassword.css'
 
 
 function KeyPassword(props) {
-    let history = useHistory();
-    let email = props;
+    const history = useHistory();
+    const { email } = useParams();
+    // console.log('email:', email)
 
-
-    return (
-        <div className='forgotpassword'>
-
-            <form id="confirmCodeForm" onSubmit={onConfirmCode} >
-                <input id="confCodeInp" name="confCodeInp" placeholder="Enter your confirmation code"></input>
-                <button type="submit">Confirm</button>
-            </form>
-
-        </div>
-
-    )
 
 
     function onConfirmCode(e) {
         e.preventDefault();
 
         const { confCodeInp } = e.target.elements;
-        const { key } = confCodeInp.value;
+        const key = confCodeInp.value;
+        console.log(email, key)
+
 
         fetch("/api/users/checkSendedPassword", {
             method: "POST",
@@ -38,15 +34,28 @@ function KeyPassword(props) {
             .then((data) => {
                 const { success } = data;
                 const { error } = data;
+                const { info } = data;
+                console.log(info)
+                history.push(`/ChangePassword/${email}`)
                 if (success) {
-                    return(<ChangePassword email={email} />)
-                    // history.push("/ChangePassword")
+                    return (history.push(`/ChangePassword/${email}`))
                 }
                 else {
-                    console.log(error)
+                    alert(error)
                 }
             }
             )
     }
+
+    return (
+        <div className='forgotpassword'>
+            <form id="confirmCodeForm" onSubmit={onConfirmCode} >
+                <input id="confCodeInp" name="confCodeInp" placeholder="Enter your confirmation code"></input>
+                <button type="submit">Confirm</button>
+            </form>
+
+        </div>
+
+    )
 }
 export default KeyPassword;

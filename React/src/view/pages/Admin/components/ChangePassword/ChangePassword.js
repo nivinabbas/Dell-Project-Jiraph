@@ -1,25 +1,20 @@
 import React from 'react';
 import { useHistory } from "react-router-dom";
-import './ChangePassword.css'
-import './ForgetPassword.css'
+import Login from "../Login/Login"
+import {
+    useParams
+} from "react-router-dom";
+
+// import './ChangePassword.css'
+// import './ForgetPassword.css'
 
 
 
 
 function ChangePassword(props) {
-    let history = useHistory();
-    let email = props;
-
-
-    return (
-        <div className='forgotpassword'>
-            <form id="resetPasswordForm" onSubmit={onResetPassword} >
-                <input id="resetNPswInp" name="resetNPswInp" placeholder="Choose a new Password"></input>
-                <input id="confirmNPswInp" name="confirmNPswInp" placeholder="confirm the new Password"></input>
-                <button type="submit">Save</button>
-            </form>
-        </div>
-    )
+    const history = useHistory();
+    const { email } = useParams();
+    console.log('email Change password:', email)
 
     function onResetPassword(e) {
         e.preventDefault();
@@ -50,6 +45,15 @@ function ChangePassword(props) {
             console.log("Password doesn't match")
         }
     }
+    return (
+        <div className='forgotpassword'>
+            <form id="resetPasswordForm" onSubmit={onResetPassword} >
+                <input id="resetNPswInp" name="resetNPswInp" placeholder="Choose a new Password"></input>
+                <input id="confirmNPswInp" name="confirmNPswInp" placeholder="confirm the new Password"></input>
+                <button type="submit">Save</button>
+            </form>
+        </div>
+    )
 }
 
 
