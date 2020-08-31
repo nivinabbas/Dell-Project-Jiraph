@@ -25,7 +25,7 @@ export default props => {
                 <button type='submit'>Save</button>
             }
             <button  onClick={e => { deleteUser(e, user.id) }}>Delete</button>
-
+            <div>{user.id}</div>
         </form>
     )
 
@@ -90,10 +90,10 @@ export default props => {
                 if (data.success = true) {
                     console.log(data.info.table)
                     setUsers(data.info.table);
-                    return alert('Deleted sucsses')
+                    // return alert('Deleted sucsses')
                 }
                 else if (data.success = false) {
-                    return alert(data.error)
+                    alert(data.error)
                 }
 
             })

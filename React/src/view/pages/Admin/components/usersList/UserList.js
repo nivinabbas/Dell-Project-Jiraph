@@ -24,6 +24,10 @@ function UserList() {
             })
     }, []);
 
+    useEffect(()=>{
+        console.log('users changed')
+        console.dir(users)
+    },[users])
 
 
     return (
@@ -54,7 +58,7 @@ function UserList() {
             </form>
 
 
-            {users.map((user, index) => <UserRow setUsers={setUsers} key={index + 'users'} user={user} />)}
+            {users.map(user => <UserRow setUsers={setUsers} key={user.id} user={user} />)}
 
 
 
