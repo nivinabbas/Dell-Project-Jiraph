@@ -33,9 +33,10 @@ function ChangesInJiraTickets() {
     })
       .then((res) => res.json())
       .then((data) => { 
-        setStatusOptions(data[0].labels) 
+        setStatusOptions(data[0].status) 
         setQaRepresentativeOptions(data[0].qa) 
         console.log("filters has arrived")
+        console.log(data)
       })
 
       console.log('11111111')
@@ -106,7 +107,7 @@ function ChangesInJiraTickets() {
 
 
   const HandleStatusChange = (status => {
-    
+    console.log(status)
     serverFilters.status = [status[0].label]
     render(serverFilters);
   })

@@ -91,6 +91,7 @@ router.post('/modificationByFieldFilters', async (req, res) => {
         ])
     }
 
+    console.loglog(task)
     res.send(tasks)
 })
 
@@ -102,8 +103,8 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
     // const filterQaRep = 'Sally'
 
     const filterValue = req.body.values[0]
-    const filterStatus = req.body.status[0] 
-    const filterQaRep = req.body.qaRepresentative[0] 
+    const filterStatus = req.body.status[0]
+    const filterQaRep = req.body.qaRepresentative[0]
 
     console.log("nimer")
     console.log(filterValue, filterStatus, filterQaRep)
@@ -111,28 +112,23 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
 
 
     //here we build the match expression according to the user's filters.
-    let matchFilterValue = {}
+    let matchFilterValue = {
+        'diffItem.type': 'Update',
+        'diffItem.updatedField.fieldName': 'status',
 
-    if (filterValue == 'newValue') {
-
-        matchFilterValue = {
-            'diffItem.type': 'Update',
-            'diffItem.updatedField.fieldName': 'status',
-            'diffItem.updatedField.newValue': filterStatus,
-            // 'jiraItem.qaRepresentative': filterQaRep
-        }
-    } else {
-        matchFilterValue = {
-            'diffItem.type': 'Update',
-            'diffItem.updatedField.fieldName': 'status',
-            'diffItem.updatedField.oldValue': filterStatus,
-            // 'jiraItem.qaRepresentative': filterQaRep
-
-        }
+    }
+    
+    if (filterStatus != undefined) {
+        matchFilterValue[`diffItem.updatedField.${filterValue}`] = filterStatus
     }
 
+    if (filterQaRep != undefined) {
+        matchFilterValue['jiraItem.qaRepresentative'] = filterQaRep
+    }
+   
 
-    // console.log(matchFilterValue)
+    console.log(matchFilterValue)
+
     const tasks = await TaskModel.aggregate([
         {
             $match: matchFilterValue
@@ -218,21 +214,21 @@ router.post('/changeOfJIRATicketsStatusFilters', async (req, res) => {
         {
             $group: {
                 _id: null,
-                labels: { $addToSet: { "label": groupFilters, } },
+                status: { $addToSet: { "label": groupFilters, } },
                 qa: { $addToSet: { "label": "$jiraItem.qaRepresentative", } }
             },
         }
     ])
 
 
-    // console.log(tasks)
+    console.log(tasks)
     res.send(tasks)
 
 })
 
 
 /*
-1.filters and uiobj without filters
+1.filters and      NOT NOW =>  uiobj without filters
 2.for each change in the filters, send new uiobj according to the filters applied
 */
 module.exports = router;
