@@ -6,17 +6,15 @@
   ". header ."
   
   ". filterButtons ."
-  ". chart ."
-  "chartColors table .";
+  ". . ."
+  "chartColors chart .";
   
   background-color: whitesmoke;
 }
 .ModificationByField__Table{
-grid-area: table;
-}
-.charti{
   grid-area: chart;
 }
+
 
 .ModificationByField__MainTitle{
   font-size: 30px;
