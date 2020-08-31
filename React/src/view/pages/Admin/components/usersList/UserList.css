@@ -1,0 +1,18 @@
+#saveBtn{
+    display: none;
+}
+
+.h1 { grid-area: header; }
+.h2 { grid-area: header; }
+.h3 { grid-area: header; }
+.h4 { grid-area: header; }
+
+
+#Names{
+    display: grid;
+    font-size: 40px;
+    grid-template-areas:
+      'header header header header '
+
+}
+

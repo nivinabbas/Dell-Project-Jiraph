@@ -1,5 +1,7 @@
 import React from "react";
 import Login from "./view/pages/Admin/components/Login/Login"
+import UserList from "./view/pages/Admin/components/usersList/UserList"
+
 import ForgetPassword from "./view/pages/Admin/components/ForgetPassword/ForgetPassword";
 
 
@@ -27,7 +29,7 @@ import {
             </li>
 
             <li>
-              <Link to="/Admin">Admin</Link>
+              <Link to="/UserList">Admin</Link>
             </li>
             <li>
               <Link to="/analysis">Analysis</Link>
@@ -51,9 +53,8 @@ import {
           <Route path="/forgotPassword">
               <ForgetPassword></ForgetPassword>
           </Route>
-          <Route path="/Admin">
-          <h1>Admin</h1>
-            
+          <Route path="/UserList">
+          <UserList></UserList>
           </Route>
           <Route path="/analysis">
 

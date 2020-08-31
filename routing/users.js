@@ -8,6 +8,8 @@ const UserModel = mongoose.model("UserModel", UserSchema)
 var nodemailer = require('nodemailer')
 var validator = require("email-validator");
 
+
+
 const u = new UserModel({
     userInfo: {
         employeeName: "yousef",
@@ -47,6 +49,7 @@ router.post('/login',(req,res)=>{
             for (let index = 0; index < users.length; index++) {
                 table.push({email:users[index].userInfo.employeeEmail,name:users[index].userInfo.employeeName,role:users[index].userInfo.employeeRole,id:users[index]._id})
             }
+            
             res.send({success:true,error:null,info:{table}})
         }
      })
@@ -125,24 +128,24 @@ router.post('/createUser',(req,res)=>{
       }
 })
 
-router.put('/editUser',(req,res)=>{
-    const { id , email , password , name , role} = req.body;
+router.post('/editUser',(req,res)=>{
+    const { newName, newEmail, newRole, newPassword} = req.body;
     
-    if(validator.validate(email)){
+    if(validator.validate(newEmail)){
 
 
-        UserModel.find({"userInfo.employeeEmail":email}).then(checkEmail=>{
+        UserModel.find({"userInfo.employeeEmail":newEmail}).then(checkEmail=>{
           if(checkEmail.length>0){
-            UserModel.find({_id:id,"userInfo.employeeEmail":email}).then(checkUserEmail=>{
+            UserModel.find({"userInfo.employeeEmail":newEmail}).then(checkUserEmail=>{
                   if(checkUserEmail.length>0){
                       
                     UserModel.update(
-                        {_id:id},{$set:
+                        {$set:
                             {userInfo:
-                                {employeeName:name,
-                                    employeeEmail:email,
-                                    employeeRole:role,
-                                    password:password
+                                {employeeName:newName,
+                                    employeeEmail:newEmail,
+                                    employeeRole:newRole,
+                                    password:newPassword
                                 }
                             }
                         })
@@ -155,10 +158,10 @@ router.put('/editUser',(req,res)=>{
             UserModel.update(
                 {_id:id},{$set:
                     {userInfo:
-                        {employeeName:name,
-                            employeeEmail:email,
-                            employeeRole:role,
-                            password:password
+                        {employeeName:newName,
+                            employeeEmail:newEmail,
+                            employeeRole:newRole,
+                            password:newPassword
                         }
                     }
                 })
