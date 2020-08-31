@@ -54,7 +54,7 @@ function ModificationByField(props) {
       .then((res) => res.json())
       .then((data) => {
         if (data.length > 0) {
-          console.log(data)
+          console.log("select",data[0].Values)
           setQaRepresentativeOptions(data[0].QA);
           setValueOptions(data[0].Values);
         }
@@ -83,6 +83,7 @@ function ModificationByField(props) {
   const handleChangeFieldName = (change => {
     serverFilters.fieldName = [change.label];
     renderFilters(serverFilters);
+    render(serverFilters);
   })
 
   const handleChangeValues = (change => {
@@ -99,6 +100,7 @@ function ModificationByField(props) {
     render(serverFilters);
   })
   const handleChangeStartDate = (change => {
+    console.log(new Date(change.target.value))
     serverFilters.startDate = [change.target.value];
     render(serverFilters);
   })
