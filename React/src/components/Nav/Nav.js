@@ -16,7 +16,7 @@ export default props => {
   
     return (
         <nav className="sidebar">
-
+            <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
             <div className="sidebar__header-wrapper">
                 <img className="jiraph__logo" src={logo} alt="this is a logo" />
            JIRAPH
@@ -45,16 +45,16 @@ export default props => {
                         </div>
 
                         <div className="analysis__item">
-                            <Link className="menu-subLink" to="/DeletedJiraTickets">Deleted Jiras</Link>
+                            <Link className={location === "/DeletedJiraTickets"?'menu__subLink menu-subLink--selected':"menu__subLink"} to="/DeletedJiraTickets">Deleted Jiras</Link>
                         </div>
                         <div className="analysis__item">
-                            <Link className="menu-subLink" to="/ChangesInJiraTickets">Changes In Jira Tickets</Link>
+                            <Link className={location === "/ChangesInJiraTickets"?'menu__subLink menu-subLink--selected':"menu__subLink"} to="/ChangesInJiraTickets">Changes In Jira Tickets</Link>
                         </div>
                         <div className="analysis__item">
-                            <Link className="menu-subLink" to="/ChangesInParentID">Changes In Parent ID</Link>
+                            <Link className={location === "/ChangesInParentID"?'menu__subLink menu-subLink--selected':"menu__subLink"} to="/ChangesInParentID">Changes In Parent ID</Link>
                         </div>
                         <div className="analysis__item">
-                            <Link className="menu-subLink" to="/DelaysInDelivery">Delays In Delivery</Link>
+                            <Link className={location === "/DelaysInDelivery"?'menu__subLink menu-subLink--selected':"menu__subLink"} to="/DelaysInDelivery">Delays In Delivery</Link>
                         </div>
                     </div>
                 </div>
