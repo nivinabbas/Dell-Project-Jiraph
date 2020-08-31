@@ -97,13 +97,10 @@ router.get("/dailyalerts", async function (req, res) {
         number: 0,
       },
       {
-        name: "totalTasks",
-        number: 0,
+        name: "totalTasks/NotDone",
+        number: 0+"/"+0,
       },
-      {
-        name: "NotDone",
-        number:0,
-      },
+      
     ];
   } else {
     DailyAlerts = [
@@ -120,13 +117,10 @@ router.get("/dailyalerts", async function (req, res) {
         number: DailyAlerts[0].fixVersionTicktes,
       },
       {
-        name: "totalTasks",
-        number: DailyAlerts[0].totalTasks,
+        name: "totalTasks/NotDone",
+        number: DailyAlerts[0].totalTasks+"/"+DailyAlerts[0].NotDone,
       },
-      {
-        name: "NotDone",
-        number: DailyAlerts[0].NotDone,
-      },
+      
     ];
   }
   // console.log("DailyAlertsStart");
