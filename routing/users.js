@@ -7,8 +7,9 @@ const UserModel = mongoose.model("UserModel", UserSchema)
 
 var nodemailer = require('nodemailer')
 var validator = require("email-validator");
+const { find } = require("../schemas/TaskSchema");
 
-let keys = [];
+var keys = [];
 
 const u = new UserModel({
     userInfo: {
@@ -171,19 +172,31 @@ router.post('/createUser',  (req, res) => {
 
 router.post('/checkSendedPassword', (req, res) => {
     const { email , key } = req.body;
-    for (let index = 0; index < keys.length; index++) {
-        if(keys[index].email == email){
-            if(keys[index].key == key){
-                if((Date.now()-keys[index].time)<=1800000){
+    keys.map((item,index)=>{
+        if(item.email == email){
+            //console.log('email is okay')
+            if(item.key == key){
+                if((Date.now()-item.time)<=1800000){
+                    //console.log("okay")
                     res.send({success:true , error:null , info:null})
                 }else{
+                   // console.log("time")
                     res.send({success:false , error:'time expired' , info:null})
                 }
             }else{
+                //console.log("incorrect")
                 res.send({success:false , error:'key is incorrect' , info:null})
             }
         }
-    }
+    })
+
+})
+
+router.put('/updatePassword',(req,res)=>{
+    const { email , password } = req.body;
+    UserModel.updateOne({email:email},{$set:{password:password}}).then(docs=>{
+        console.log(docs)
+    })
 })
 
 router.post('/editUser', (req, res) => {
