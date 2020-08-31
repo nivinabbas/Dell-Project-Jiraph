@@ -125,7 +125,7 @@ router.post('/forgotPassword', (req, res) => {
 //       }
 // })
 
-app.post('/createUser',  (req, res) => {
+router.post('/createUser',  (req, res) => {
 
     const { name, email, role, password } = req.body;
     let table = [];
