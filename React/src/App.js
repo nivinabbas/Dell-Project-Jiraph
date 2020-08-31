@@ -3,7 +3,7 @@ import React from "react";
 //components
 import Nav from './components/Nav/Nav';
 import ForgetPassword from "./view/pages/Admin/components/ForgetPassword/ForgetPassword";
-import MainPage from "./view/pages/Analytics/components/mainPage/MainPage";
+import MainPage from "./view/pages/Analytics/components/MainPage/MainPage";
 import ModificationByField from "./view/pages/Analytics/components/ModificationByField/ModificationByField";
 import DeletedJiraTickets from "./view/pages/Analytics/components/DeletedJiraTickets/DeletedJiraTickets";
 import ChangesInJiraTickets from "./view/pages/Analytics/components/ChangesInJiraTickets/ChangesInJiraTickets";
