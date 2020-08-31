@@ -178,8 +178,8 @@ const StatusPage = (props) => {
       method: "POST",
       body: JSON.stringify({
         label: null,
-        datefrom: null,
-        dateTo: null,
+        datefrom: CurrentstartDate,
+        dateTo: CurrentEndtDate,
       }),
       headers: {
         "Content-Type": "application/json",
