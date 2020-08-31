@@ -1,6 +1,6 @@
 import React from "react";
 import "./style.css";
-import SelectInput from "../Select/SelectInput";
+import Select from "react-select";
 
 const optionSprint = [
   { value: "All", label: "All" },
@@ -25,10 +25,10 @@ export default function TasksTable({ openTasks, onDoneClick }) {
       <div className="open-tasks-title">
         <h3>Open Tasks</h3>
       </div>
-      <div style={{ display: "flex" }}>
-        <SelectInput options={optionFunctional} />
-        <SelectInput options={optionSprint} />
-        <SelectInput options={optionValue} />
+      <div className="container__filterSelect">
+        <Select options={optionFunctional} className="filterSelect" />
+        <Select options={optionSprint} className="filterSelect" />
+        <Select options={optionValue} className="filterSelect" />
         <input type="submit" className="submitButton" />
       </div>
       <div className="open-tasks-table">
