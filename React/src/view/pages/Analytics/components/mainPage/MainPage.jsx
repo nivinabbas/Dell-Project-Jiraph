@@ -9,7 +9,7 @@ import {
 } from "react-router-dom";
 import ModificationByField from "../ModificationByField/ModificationByField";
 // import DeletedJiraTickets from "../DeletedJiraTickets/DeletedJiraTickets";
-// import ChangesInJiraTickets from "../ChangesInJiraTickets/ChangesInJiraTickets";
+import ChangesInJiraTickets from "../ChangesInJiraTickets/ChangesInJiraTickets";
 import ChangesByParentId from "../ChangesByParentId/ChangesByParentId";
 import DelaysInDelivery from "../DelaysInDelivery/DelaysInDelivery";
 
@@ -30,10 +30,10 @@ return(
 
             {/* <li>
               <Link className="MainForm__status--btn" to="/DeletedJiraTickets">Deleted Jiras</Link>
-            </li>
+            </li>*/}
             <li>
               <Link className="MainForm__status--btn" to="/ChangesInJiraTickets">Changes In Jira Tickets</Link>
-            </li> */}
+            </li> 
             <li>
               <Link className="MainForm__status--btn" to="/ChangesInParentID">Changes In Parent ID</Link>
             </li>
@@ -49,10 +49,10 @@ return(
           </Route>
           {/* <Route path="/DeletedJiraTickets">
             <DeletedJiraTickets/>
-          </Route>
+          </Route>*/}
           <Route path="/ChangesInJiraTickets">
              <ChangesInJiraTickets/>
-          </Route> */}
+          </Route> 
           <Route path="/ChangesInParentID">
             <ChangesByParentId/>
           </Route>
