@@ -146,17 +146,19 @@ const StatusPage = (props) => {
       <div className="statuspage__dashboard">
         <DashBoard cardsContent={cardsContent} />
       </div>
+
+      <div className="statuspage__table">
+        <Table openTasks={openTasks} onDoneClick={handleDoneClick} />
+      </div>
+      <div className="statuspage__filters">
+        <DateFilter onDateFilterClick={handleDateClick} />
+      </div>
       <div className="statusPageContainerTableColumn">
-        <div className="statuspage__table">
-          <Table openTasks={openTasks} onDoneClick={handleDoneClick} />
-        </div>
         <div className="statuspage__chart">
-          <DateFilter onDateFilterClick={handleDateClick} />
           <StackedChart />
         </div>
-      </div>
-      <div className="statuspage__chartpie">
-        <div className="statuspage__pie">
+
+        <div className="statuspage__chartpie">
           <PieChart />
           <PieChart />
         </div>
