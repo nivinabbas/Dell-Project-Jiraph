@@ -56,7 +56,7 @@ export default function TasksTable({ openTasks, onDoneClick }) {
                 <td>
                   <input
                     type="checkbox"
-                    onKeyPress={() => onDoneClick(task.jiraItem.jiraId)}
+                    onClick={() => onDoneClick(task.jiraItem.jiraId)}
                   />
                 </td>
               </tr>
