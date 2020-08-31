@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import "./ModificationByField.css";
 import { useState } from 'react';
-import MainTable from "../MainTable/MainTable"
+
 import Select from "react-select"
 import Chart from "../charts/Chart"
 // import ApexChart from "../ApexChart/ApexChart"
@@ -10,28 +10,30 @@ import Chart from "../charts/Chart"
 
 
 function ModificationByField(props) {
-  
+  const serverFilters = { fieldName: [], values: [], qaRepresentative: [], startDate: [], endDate: [], label: ["weekly"] };
+
+
   useEffect(() => {
-   
+
     fetch('/api/analytics/modificationByFieldFilters', {
       method: 'POST',
-      body: JSON.stringify({fieldName}),
+      body: JSON.stringify({ fieldName: serverFilters.fieldName }),
       headers: {
         "Content-Type": "application/json"
       }
     })
       .then(res => res.json())
       .then(data => {
-        
-       setFieldNameOptions(data[0].labels)
-       console.log(data);
+
+        setFieldNameOptions(data[0].labels)
+        console.log(data);
       })
   },[])
-  
-  const render = () => {
+
+  const render = (serverFilters) => {
     fetch('/api/analytics/modificationByField', {
       method: 'POST',
-      body: JSON.stringify({ fieldName, values, label, qaRepresentative }),
+      body: JSON.stringify(serverFilters),
       headers: {
         "Content-Type": "application/json"
       }
@@ -40,100 +42,77 @@ function ModificationByField(props) {
       .then((data) => { setUiObjs(data) })
   }
 
- 
-  const renderFilters = (fieldName2) => {
-    console.log(fieldName2)
+
+  const renderFilters = (serverFilters) => {
     fetch('/api/analytics/modificationByFieldFilters', {
       method: 'POST',
-      body: JSON.stringify({ fieldName:fieldName2 }),
+      body: JSON.stringify({ fieldName: serverFilters.fieldName }),
       headers: {
         "Content-Type": "application/json"
       }
     })
       .then((res) => res.json())
-      .then((data) => { 
-        if(data.length>0){
+      .then((data) => {
+        if (data.length > 0) {
           console.log(data)
-                setQaRepresentativeOptions(data[0].QA);
-                setValueOptions(data[0].Values);
+          setQaRepresentativeOptions(data[0].QA);
+          setValueOptions(data[0].Values);
         }
-                 
+
       })
   }
-
-
-  const date = new Date()
-  const date1MonthAgo = new Date(new Date().setMonth(date.getMonth() - 1));
-
-  const [fieldName, setFieldName] = useState([]);
-  const [values, setValues] = useState([]);
-  const [qaRepresentative, setQaRepresentative] = useState([]);
-  const [label, setLabel] = useState([]);
-  const [startDate, setStartDate] = useState(date1MonthAgo);
-  const [endDate, setEndDate] = useState(date);
 
 
   const [UiObjs, setUiObjs] = useState([]);
   const [fieldNameOptions, setFieldNameOptions] = useState([]);
   const [valueOptions, setValueOptions] = useState([]);
   const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([]);
-  const [labelOptions, setLabelOptions] = useState([
-    { label: "Daily"  , value: "daily" }, 
-    { label: "Weekly" , value: "weekly" },
-    { label: "Monthly", value: "monthly" },
-    { label: "Yearly" , value: "yearly" }
-  ]);
+  const labelOptions = [
+    { label: "daily" },
+    { label: "weekly" },
+    { label: "monthly" },
+    { label: "yearly" }
+  ];
 
 
   const handleChangeLabel = (change => {
-    setLabel([change.value])
-
-    render();
+    serverFilters.label = [change.value]
+    render(serverFilters);
   })
 
   const handleChangeFieldName = (change => {
-    console.log(change)
-    setFieldName([change.label])
-    renderFilters([change.label]);
+    serverFilters.fieldName = [change.label];
+    renderFilters(serverFilters);
   })
 
   const handleChangeValues = (change => {
-    setValues([change.label])
-    console.log(values)
-    render();
-
+    console.log(change)
+    if (change!=null)
+    serverFilters.values = [change.label];
+    else 
+    serverFilters.values = [];
+    render(serverFilters);
   })
+
   const handleChangeQaRepresentative = (change => {
-    setQaRepresentative([change.label])
-    render();
+    serverFilters.qaRepresentative = [change.label];
+    render(serverFilters);
   })
   const handleChangeStartDate = (change => {
-    setStartDate(change.target.value)
-    console.log(startDate)
-    render();
+    serverFilters.startDate = [change.target.value];
+    render(serverFilters);
   })
+
   const handleChangeEndDate = (change => {
-    setEndDate(change.target.value)
-    console.log(endDate)
-    render();
-    })
-
-
-
-
-
+    serverFilters.endDate = [change.target.value];
+    render(serverFilters);
+  })
 
   return (
-
-
-
     <div className='ModificationByField__Wrapper'>
-     
-      <div className="charti"> {UiObjs.length>0 && <Chart UiObjs={UiObjs}/>}</div>
-      
+      <div className="ModificationByField__Chart"> {UiObjs.length > 0 && <Chart UiObjs={UiObjs} />}</div>
       <div className="ModificationByField__MainTitle">Modification By Field</div>
-      <div className="ModificationByField__Chart">
-      </div>
+
       <div className="ModificationByField__Filters">
 
 
@@ -184,7 +163,7 @@ function ModificationByField(props) {
 
       </div>
 
-  
+
 
     </div>
   )

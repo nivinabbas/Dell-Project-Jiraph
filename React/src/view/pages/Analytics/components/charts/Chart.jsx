@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import "./Chart.css";
 import MainTable from "../MainTable/MainTable"
 import { useState } from 'react';
@@ -17,13 +17,13 @@ function Chart(props) {
       {UiObjs.length > 0 && UiObjs.map((columns, index) => {
         return (
           <div
-            className='chart__column'
+            className='chart__column' key={index}
             // style={{ height: "100%" }}
             >
             <div  className="chart__Each_column">
               {columns.arr.length > 0 && columns.arr.map((column, index) => {
                 return (
-                  <div style={{height:`${(column.size / columns.maxLength) * 100}%`}} onClick={() => handleClick(column.tasks)}  className="chart__innerColumn">
+                  <div key={index} style={{height:`${(column.size / columns.maxLength) * 100}%`}} onClick={() => handleClick(column.tasks)}  className="chart__innerColumn">
                     {column.size}
                   </div>
                 )
