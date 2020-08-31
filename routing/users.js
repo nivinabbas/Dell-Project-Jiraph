@@ -55,7 +55,7 @@ router.get('/getUsersList', (req, res) => {
     })
 })
 
-router.delete('/deleteUse', (req, res) => {
+router.delete('/deleteUser', (req, res) => {
     const { id } = req.body;
     UserModel.deleteOne({ _id: id }, function (err) {
         if (err) {
@@ -125,25 +125,33 @@ router.post('/forgotPassword', (req, res) => {
 //       }
 // })
 
-router.post('/createUser', (req, res) => {
+app.post('/createUser',  (req, res) => {
+
     const { name, email, role, password } = req.body;
+    let table = [];
+
     if (validator.validate(email)) {
-        UserModel.find({ "userInfo.employeeEmail": email }).then(checkEmail => {
+        User.find({ "userInfo.employeeEmail": email }).then(async (checkEmail) => {
             if (checkEmail.length > 0) {
                 res.send({ success: false, error: "Email is already in use", info: null })
-            } else {
-                UserModel.insertMany({ userInfo: { employeeName: name, employeeEmail: email, employeeRole: role, password: password } })
-                UserModel.find({}).then(users => {
+            } 
+            
+            
+            else {
+               await User.insertMany({ userInfo: { employeeName: name, employeeEmail: email, employeeRole: role, password: password } })
+
+                User.find({}).then(users => {
                     if (users.length > 0) {
-                        let table = [];
+                        
                         for (let index = 0; index < users.length; index++) {
                             table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id })
                         }
                         res.send({ success: true, error: null, info: { table } })
                     }
                 })
-                
             }
+
+
         })
     } else {
         res.send({ success: false, error: "Email not valid", info: null })
