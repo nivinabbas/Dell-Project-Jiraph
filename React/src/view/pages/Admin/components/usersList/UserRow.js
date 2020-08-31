@@ -25,7 +25,7 @@ export default props => {
                 <button type='submit'>Save</button>
             }
             <button  onClick={e => { deleteUser(e, user.id) }}>Delete</button>
-            <div>{user.id}</div>
+            
         </form>
     )
 

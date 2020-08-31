@@ -74,6 +74,10 @@ function UserList() {
         inputRole = inputRole.value;
         inputPassword = inputPassword.value;
 
+        e.target.elements.inputName.value='';
+        e.target.elements.inputEmail.value='';
+        e.target.elements.inputPassword.value='';
+
         fetch('/api/users/createUser', {
             method: 'POST',
             body: JSON.stringify({ name: inputName, email: inputEmail, role: inputRole, password: inputPassword }),
@@ -86,9 +90,7 @@ function UserList() {
                 console.log(data.info.table)
                 if (data.success = true) {
                     setUsers(data.info.table)
-                    // e.target.elements.inputName.value='';
-                    // e.target.elements.inputEmail.value='';
-                    // e.target.elements.inputPassword.value='';
+                  
                     return (alert('created sucsses'))
                 }
                 else if (data = false) {
