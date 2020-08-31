@@ -57,11 +57,11 @@ router.get('/getUsersList', (req, res) => {
 
 router.delete('/deleteUser', (req, res) => {
     const { id } = req.body;
-    UserModel.deleteOne({ _id: id }, function (err) {
+    UserModel.deleteOne({ _id: id }, async function (err) {
         if (err) {
             res.send({success:false , error:err , info:null })
         }else{
-            UserModel.find({}).then(users => {
+            await UserModel.find({}).then(users => {
                 if (users.length > 0) {
                     
                     for (let index = 0; index < users.length; index++) {
