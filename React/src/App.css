@@ -1,40 +1,68 @@
-.App {
+* {
+  margin: 0;
+  padding: 0;
+  outline: none;
+  box-sizing: border-box;
+  list-style: none;
+  text-decoration: none;
+}
+
+.sidebar {
+  background-color: #eeeeee;
+  height: 100vh;
+  width: 13vw;
+  display: grid;
+  grid-template-columns: 1.1vw 11.2vw 0.7vw;
+  grid-template-rows: 10vh 85vh 5vh;
+  grid-template-areas:
+    "header header header"
+    ". menu ."
+    " footer footer footer ";
+}
+
+.sidebar__header-wrapper {
+  /* background-color:#405c0b; */
+  height: 10vh;
+  grid-area: header;
+  background-color: white;
   text-align: center;
+  padding-top: 2.2vh;
+  color: #00447c;
+  font-weight: 800;
+  font-size: 29px;
+  font-family: "Roboto Slab", serif;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.app {
+  background-color: #c8c9c7;
+  display: grid;
+  grid-template-columns: 13vw auto;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/*
+.social-media {
+  position: absolute;
+  bottom: 3rem;
+  width: 100%;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
 
-.App-link {
-  color: #61dafb;
-}
+} */
+/* 
+.social-media i{
+  font-size: 2.2rem;
+  margin: 3rem;
+  width: 4.5rem;
+  height: 4.5rem;
+  background-color:rgb(148, 114, 130);
+  color:white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  transition: background-color 0.3s;
+} */
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/*test*/
+/* .social-media i:hover{
+  background-color:  rgb(223, 166, 192);
+}  */
