@@ -14,6 +14,7 @@ function UserList() {
         fetch('/api/users/getUsersList')
             .then(res => res.json())
             .then(data => {
+                console.log(data.info.table)
                 if (data.success == true) {
                     setUsers(data.info.table);
                 }
