@@ -156,9 +156,6 @@ const StatusPage = (props) => {
         </div>
       </div>
       <div className="statuspage__chartpie">
-        <div className="statuspage__chart">
-          <StackedChart />
-        </div>
         <div className="statuspage__pie">
           <PieChart />
           <PieChart />
