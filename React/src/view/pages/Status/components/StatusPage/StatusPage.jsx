@@ -129,13 +129,14 @@ const StatusPage = (props) => {
   };
   //date
   const handleDateClick = async (CurrentstartDate, CurrentEndtDate) => {
-    const TypePie = filterTypePie;
-    const FieldPie = filterFieldPie;
-
-    if (TypePie !== "") {
+    if (filterTypePie !== "") {
       await fetch("/api/status/typePieChart", {
         method: "POST",
-        body: JSON.stringify({ TypePie, CurrentstartDate, CurrentEndtDate }),
+        body: JSON.stringify({
+          filterTypePie,
+          CurrentstartDate,
+          CurrentEndtDate,
+        }),
         headers: {
           "Content-Type": "application/json",
         },
@@ -151,10 +152,14 @@ const StatusPage = (props) => {
         });
     }
 
-    if (FieldPie !== "") {
+    if (filterFieldPie !== "") {
       await fetch("/api/status/fieldPieChart", {
         method: "POST",
-        body: JSON.stringify({ FieldPie, CurrentstartDate, CurrentEndtDate }),
+        body: JSON.stringify({
+          filterFieldPie,
+          CurrentstartDate,
+          CurrentEndtDate,
+        }),
         headers: {
           "Content-Type": "application/json",
         },
@@ -169,6 +174,27 @@ const StatusPage = (props) => {
           }
         });
     }
+    await fetch("/api/status/stackedChart", {
+      method: "POST",
+      body: JSON.stringify({
+        label: null,
+        datefrom: null,
+        dateTo: null,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        let { success, error, info } = data;
+        if (success) {
+          console.log(info);
+          //setBarChart(info);
+        } else {
+          alert(error);
+        }
+      });
   };
 
   const handleSelect = (filter, name) => {
