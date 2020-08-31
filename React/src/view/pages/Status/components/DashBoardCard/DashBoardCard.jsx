@@ -3,7 +3,7 @@ import "./DashBoardCard.css";
 
 
 function DashBoardCard({cardsContentItem}) {
-    console.log(cardsContentItem)
+    
     return (
         <div>
             
