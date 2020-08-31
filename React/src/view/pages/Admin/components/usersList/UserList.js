@@ -14,7 +14,6 @@ function UserList() {
         fetch('/api/users/getUsersList')
             .then(res => res.json())
             .then(data => {
-                console.log(data.info.table)
                 if (data.success == true) {
                     setUsers(data.info.table);
                 }
@@ -70,7 +69,7 @@ function UserList() {
         inputRole = inputRole.value;
         inputPassword = inputPassword.value;
 
-        console.log(inputName, inputEmail, inputRole, inputPassword)
+        //  console.log(inputName, inputEmail, inputRole, inputPassword)
 
 
         fetch('/api/users/createUser', {
@@ -82,13 +81,15 @@ function UserList() {
         })
             .then(response => response.json())
             .then(data => {
-                if (data = true) {
-                    
-                    return (alert('created sucsses'))
-                }
-                else if (data = false) {
-                    return (alert('not sucsses '))
-                }
+                console.log(data.info.table)
+                // if (data.success = true) {
+                //     setUsers(data.info.table)
+                //     console.log(data.info.table)
+                //     return (alert('created sucsses'))
+                // }
+                // else if (data = false) {
+                //     return (alert(data.error))
+                // }
 
             })
     }
