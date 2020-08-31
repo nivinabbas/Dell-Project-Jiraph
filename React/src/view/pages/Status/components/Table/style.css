@@ -24,6 +24,29 @@
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: center;
-  background-color: steelblue;
+  background-color: #007db8;
   color: white;
+}
+
+.filtersContainer {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+}
+
+.submitButton {
+  width: 80px;
+  height: 39px;
+  min-height: 39px;
+  background-color: white;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  margin: 4px;
+
+  outline: none;
+  cursor: pointer;
+}
+
+.header__table {
+  position: sticky;
 }

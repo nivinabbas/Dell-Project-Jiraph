@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { Switch, Route, useRouteMatch } from "react-router-dom";
 import NavBar from "../../../components/common/NavBar/index";
 import StatusPage from "../Status/components/StatusPage/StatusPage";
