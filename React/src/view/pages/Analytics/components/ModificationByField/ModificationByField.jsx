@@ -24,8 +24,7 @@ function ModificationByField(props) {
     })
       .then(res => res.json())
       .then(data => {
-
-        setFieldNameOptions(data[0].labels)
+        setFieldNameOptions(data)
         console.log(data);
       })
   },[])

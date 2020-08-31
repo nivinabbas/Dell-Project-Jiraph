@@ -13,7 +13,7 @@ router.post('/modificationByField', async (req, res) => {
     let tasks = []
     const { fieldName, values,qaRepresentative,startDate,endDate,label } = req.body;
     console.log( fieldName, values, label, qaRepresentative)
-    if (fieldName.length == 0) {
+    if (fieldName.length == 0) { // returns all the tasks a month ago when reloading
         tasks = await TaskModel.aggregate([
             {
                 $group: {
@@ -36,6 +36,21 @@ router.post('/modificationByField', async (req, res) => {
 
         ])
     }
+    else{ // return tasks with the fieldName that I receive
+        
+        if(qaRepresentative.length == 0 && values.length == 0 ){ //match just according to fieldName
+
+        }
+        else if(qaRepresentative.length > 0 && values.length == 0){ // match according to fieldName and qaRep
+
+        }
+        else if(values.length > 0 && qaRepresentative.length ==0){
+
+        }
+        else{
+
+        }
+    }
     let maxLength = -1;
     let sumLength = 0;
     let myArray = tasks[0].arr;
@@ -56,7 +71,7 @@ router.post('/modificationByField', async (req, res) => {
 router.post('/modificationByFieldFilters', async (req, res) => {
     let tasks = []
     const {fieldName} = req.body
-    if (fieldName.length == 0) {
+    if (fieldName.length == 0) { // runs to bring all the fieldNames when reloading
         tasks = await TaskModel.aggregate([
             {
                 $group: {
@@ -78,7 +93,7 @@ router.post('/modificationByFieldFilters', async (req, res) => {
             }
         ])
     }
-    else{
+    else{ // runs when choosing the fieldName
         const name = fieldName[0];
         tasks = await TaskModel.aggregate([
             {
