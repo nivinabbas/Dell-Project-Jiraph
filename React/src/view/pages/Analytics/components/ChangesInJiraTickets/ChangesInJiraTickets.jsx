@@ -1,18 +1,16 @@
 import React from 'react';
-import "./ChangesInJiraTickets.css";
-import MainTable from "../MainTable/MainTable"
-import Select from 'react-select'
-
 import { useState, useEffect } from 'react';
+import "./ChangesInJiraTickets.css";
+
+//Components 
+import Select from 'react-select'
+import Chart from "../charts/Chart"
 
 
-function ChangesInJiraTickets() {
-  
-  // Default Date
-  const date = new Date()
-  const date1MonthAgo = new Date(new Date().setMonth(date.getMonth() - 1));
 
-  // Options To Send == > Server 
+function ChangesInJiraTickets() { 
+
+   // Options To Send == > Server 
   const serverFilters = {
     values: [],
     status: [],
@@ -21,39 +19,19 @@ function ChangesInJiraTickets() {
     endDate: [], // date
     label: ["weekly"]
   };
-
-
-  // To set UiObj from the filtered Data we recieved from server 
-  const [UiObjs, setUiObjs] = useState([]);
-
-  // Options To get From Server 
-
-  const [statusOptions, setStatusOptions] = useState([])
-  const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([])
-
-  const [valueOptions, setValueOptions] = useState([
-    { value: "newValue", label: "New Value" },
-    { value: "oldValue", label: "Old Value" }
-  ])
-
-  const [labelOptions, setLabelOptions] = useState([
-    { name: "label", value: "Daily", label: "Daily" },
-    { name: "label", value: "Weekly", label: "Weekly" },
-    { name: "label", value: "Monthly", label: "Monthly" },
-    { name: "label", value: "Yearly", label: "Yearly" }
-  ])
-
-
+  
   // Functions ==> Fetch : 
 
-   useEffect(() => {
+  useEffect(() => {
 
     fetch('/api/analytics/changeOfJIRATicketsStatusFilters')
       .then(res => res.json())
       .then(data => {
 
-        //set state (UiObj)
+        
         setStatusOptions(data[0].labels);
+        // setQaRepresentativeOptions(data[0].qa);
+
       })
       fetch('/api/analytics/changeOfJIRATicketsStatusFilters')
       .then(res => res.json())
@@ -63,6 +41,14 @@ function ChangesInJiraTickets() {
         console.log(data)
         setQaRepresentativeOptions(data[0].qa);
       })
+
+      /*fetch('/api/analytics/changeOfJIRATicketsStatus')
+      .then(res => res.json())
+      .then(data => {
+
+        //set state (UiObj)
+        setUiObjs(data);
+      })*/
 
   }, [])
 
@@ -80,17 +66,30 @@ function ChangesInJiraTickets() {
 
   }
 
-  /*  const getFiltersValues = () => {
-      fetch('/api/analytics/ChangesInJiraTicketsFilters')
-      
-        .then((res) => res.json())
-        .then((data) => {
-          data.map(array =>{
-            
-          })
-         })
-  
-    }*/
+   // To set UiObj from the filtered Data we recieved from server 
+   const [UiObjs, setUiObjs] = useState([]);
+
+   // Options To get From Server 
+ 
+   const [statusOptions, setStatusOptions] = useState([])
+   const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([])
+ 
+   const [valueOptions, setValueOptions] = useState([
+     { value: "newValue", label: "New Value" },
+     { value: "oldValue", label: "Old Value" }
+   ])
+ 
+   const [labelOptions, setLabelOptions] = useState([
+     { name: "label", value: "daily", label: "Daily" },
+     { name: "label", value: "weekly", label: "Weekly" },
+     { name: "label", value: "monthly", label: "Monthly" },
+     { name: "label", value: "yearly", label: "Yearly" }
+   ])
+ 
+
+  // Default Date
+  const date = new Date()
+  const date1MonthAgo = new Date(new Date().setMonth(date.getMonth() - 1));
 
 
 
@@ -130,9 +129,8 @@ function ChangesInJiraTickets() {
   return (
 
     <div className='ChangeOfJiraTicketWrapper'>
-      <div className="ChangeOfJiraTicket__Table" >
-        <MainTable changes={true} />
-
+      <div className="ChangeOfJiraTicket__Chart"> 
+      { UiObjs.length > 0 && <Chart UiObjs={UiObjs} />  } 
       </div>
 
       <div className="ChangeOfJiraTicket__Title">Changes Of Jira Tickets</div>
