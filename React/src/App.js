@@ -1,9 +1,9 @@
 import React from "react";
 
 //components
-import Nav from './components/Nav/Nav';
+import Nav from "./components/Nav/Nav";
 import ForgetPassword from "./view/pages/Admin/components/ForgetPassword/ForgetPassword";
-import Status from "./view/pages/Home/index.jsx";
+import StatusPage from "./view/pages/Status/components/StatusPage/StatusPage";
 import MainPage from "./view/pages/Analytics/components/mainPage/MainPage";
 import ModificationByField from "./view/pages/Analytics/components/ModificationByField/ModificationByField";
 import DeletedJiraTickets from "./view/pages/Analytics/components/DeletedJiraTickets/DeletedJiraTickets";
@@ -11,8 +11,7 @@ import ChangesInJiraTickets from "./view/pages/Analytics/components/ChangesInJir
 import ChangesByParentId from "./view/pages/Analytics/components/ChangesByParentId/ChangesByParentId";
 import DelaysInDelivery from "./view/pages/Analytics/components/DelaysInDelivery/DelaysInDelivery";
 
-import "./App.css"
-
+import "./App.css";
 
 import {
   BrowserRouter as Router,
@@ -21,11 +20,7 @@ import {
   Redirect,
   Link,
   useLocation,
-  Link
-
 } from "react-router-dom";
-
-
 
 function App() {
   // let location = useLocation();
@@ -33,24 +28,30 @@ function App() {
 
   return (
     <Router>
-      <div className='app'>
-        <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@200;300;400;500;531;600;700;800&display=swap" rel="stylesheet"></link>
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
+      <div className="app">
+        <link
+          href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@200;300;400;500;531;600;700;800&display=swap"
+          rel="stylesheet"
+        ></link>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+          rel="stylesheet"
+        ></link>
         <Nav />
-        <div className='mainPage'>
+        <div className="mainPage">
           <Switch>
             <Route exact={true} path="/">
               <h1>login</h1>
             </Route>
-            <Route path="/register">
-
-            </Route>
+            <Route path="/register"></Route>
             <Route path="/forgotPassword">
               <ForgetPassword></ForgetPassword>
             </Route>
             <Route path="/Admin">
               <h1>Admin</h1>
-
+            </Route>
+            <Route path="/status">
+              <StatusPage />
             </Route>
             <Route path="/analysis">
               <MainPage />
@@ -71,11 +72,10 @@ function App() {
             <Route path="/DelaysInDelivery">
               <DelaysInDelivery />
             </Route>
-
           </Switch>
         </div>
       </div>
-    </Router >
+    </Router>
   );
 }
 
