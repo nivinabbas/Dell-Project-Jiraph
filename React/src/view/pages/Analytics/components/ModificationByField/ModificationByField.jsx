@@ -110,6 +110,7 @@ function ModificationByField(props) {
 
   return (
     <div className='ModificationByField__Wrapper'>
+      <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
       <div className="ModificationByField__Chart"> {UiObjs.length > 0 && <Chart UiObjs={UiObjs} />}</div>
       <div className="ModificationByField__MainTitle">Modification By Field</div>
 
