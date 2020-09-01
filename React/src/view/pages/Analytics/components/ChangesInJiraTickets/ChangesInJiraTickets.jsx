@@ -12,8 +12,8 @@ const serverFilters = {
   values: [],
   status: [],
   qaRepresentative: [],
-  startDate: [],
-  endDate: [],
+  startDate: "",
+  endDate: "",
   label: ["weekly"]
 };
 
@@ -97,8 +97,8 @@ function ChangesInJiraTickets() {
 
 
   // Default Date
-  const date = new Date()
-  const date1MonthAgo = new Date(new Date().setMonth(date.getMonth() - 1));
+  // const date = new Date()
+  // const date1MonthAgo = new Date(new Date().setMonth(date.getMonth() - 1));
 
 
 
@@ -111,31 +111,38 @@ function ChangesInJiraTickets() {
 
 
   const HandleStatusChange = (status => {
-
     serverFilters.status = []
+    if(status!=null){
     status.map((item, index) => {
-      serverFilters.status.push(item.value)
-    })
+     return serverFilters.status.push(item.value)
+    })}
+    else {
+      serverFilters.status = []
+    }
 
     render(serverFilters);
   })
 
   const HandleqaRepresentativeChange = (Qa => {
     serverFilters.qaRepresentative = []
+    if(Qa!=null){
     Qa.map((item, index) => {
-      serverFilters.qaRepresentative.push(item.value)
-    })
+      return serverFilters.qaRepresentative.push(item.value)
+    })}
+    else {
+      serverFilters.qaRepresentative=[]
+    }
 
     render(serverFilters);
   })
 
   const HandleStartDateChange = (date => {
-    serverFilters.startDate = [date.target.value]
+    serverFilters.startDate = (date.target.value)
     render(serverFilters);
   })
 
   const HandleEndDateChange = (date => {
-    serverFilters.endDate = [date.target.value]
+    serverFilters.endDate = (date.target.value)
     render(serverFilters);
   })
 
