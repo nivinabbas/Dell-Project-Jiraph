@@ -218,7 +218,7 @@ router.put('/editUser', (req, res) => {
     const { id , name, email, role, password } = req.body;
 
     if (validator.validate(email)) {
-
+ 
 
         UserModel.find({ "userInfo.employeeEmail": email }).then(checkEmail => {
             if (checkEmail.length > 0) {
