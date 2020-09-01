@@ -40,9 +40,7 @@ function Login(props) {
                     if (info.role === 'TOP manager') {
                         history.push("/analytics")
                     }
-                    // else {
-                    //     alert(error)
-                    // }
+            
                 }
 
                 else {

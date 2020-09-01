@@ -43,7 +43,7 @@ function ChangePassword(props) {
                 })
         }
         else {
-            console.log("Password doesn't match")
+            alert("Password doesn't match")
         }
     }
     return (
