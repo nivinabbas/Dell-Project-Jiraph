@@ -208,9 +208,9 @@ router.post("/fillterStackedChart", async function (req, res) {
   let { label, datefrom, dateTo } = req.body;
   let DailyAlerts;
   let formatLabel;
-  if(label=="daily"){formatLabel="%Y-%m-%d";}
-  else if(label=="month"){formatLabel="%Y-%m";}
-  else{formatLabel="%Y";}
+  if (label == "daily") { formatLabel = "%Y-%m-%d"; }
+  else if (label == "month") { formatLabel = "%Y-%m"; }
+  else { formatLabel = "%Y"; }
   if (datefrom == null && dateTo == null)//default, label daily 
   {
     datefrom = new Date(0)//new Date("2020-08-01T00:00:00.00Z");
@@ -268,16 +268,16 @@ router.post("/fillterStackedChart", async function (req, res) {
     res.send({ success: true, error: null, info: finalArray });
   }
   else {
-    datefrom = new Date(time1+"T00:00:00.00Z");
-    dateTo = new Date(time2+"T23:59:59.0099Z");
+    datefrom = new Date(time1 + "T00:00:00.00Z");
+    dateTo = new Date(time2 + "T23:59:59.0099Z");
     let stackedChartDone = await TaskModel.aggregate([
       {
         $match: {
           "taskItem.updatedTime": { $gte: datefrom, $lte: dateTo },
-  
+
         }
       },
-  
+
       {
         $group: {
           _id:
@@ -328,10 +328,10 @@ router.post("/fillterStackedChart", async function (req, res) {
   res.send({ success: false, error: null, info: null });
 });
 
-async function test123test(time1,time2) {
+async function test123test(time1, time2) {
   datefrom = new Date(0);//new Date(time1+"T00:00:00.00Z");
   dateTo = new Date()//time2+"T23:59:59.0099Z");
-  let formatLabel="%Y-%m";
+  let formatLabel = "%Y-%m";
   let stackedChartDone = await TaskModel.aggregate([
     {
       $match: {
@@ -368,31 +368,45 @@ async function test123test(time1,time2) {
   ]);
 
   // adding to Done Array 
-  let DoneArray = [], NotDone = [];
-  let tempDate = [], date1 = [];
+  let tempDate = [];
   let tempCountDone = [], tempCountNotDone = [];
+  let series = {
+    series: [],
+    options: {
+      xaxis: {
+        type: "datetime",
+        categories: []
+      },
+    }
+  };
+  let finalArray = [];
   stackedChartDone.forEach(element => {//load data
     tempCountDone.push(element.done);
     tempCountNotDone.push(element.notDone);
     tempDate.push(element._id);
   });
-  DoneArray.push({ name: "done" }, { data: tempCountDone });
-  NotDone.push({ name: "notDone" }, { data: tempCountNotDone });
-  tempCountDone = [];
-  tempCountNotDone = [];
-  tempCountDone.push(DoneArray);// final array
-  tempCountDone.push(NotDone);
-  tempCountNotDone.push({ "series": tempCountDone })
-  tempCountNotDone.push({ "categories": tempDate })
-  console.log(tempCountNotDone)
+  series.series.push({
+    name: "done",
+    square: tempCountDone
+  });
+  series.series.push({
+    name: "notDone",
+    data: tempCountNotDone
+  });
+  series.options.xaxis.categories.push({
+    data: tempDate
+  });
+
+  finalArray.push(series);
+  console.log("finalArray", series)
 }
 
- //test123test("2020-09-01","2020-09-02");
- //stackedChart end 
+//test123test("2020-09-01", "2020-09-02");
+//stackedChart end 
 
 
- router.get("/stackedChart", async function (req, res) {
-   //default, label daily 
+router.get("/stackedChart", async function (req, res) {
+  //default, label daily 
   {
     datefrom = new Date(0)//new Date("2020-08-01T00:00:00.00Z");
     dateTo = new Date();
@@ -429,24 +443,40 @@ async function test123test(time1,time2) {
       { $sort: { "_id": 1 } }
     ]);
     // adding to Done Array 
-    let DoneArray = [], NotDone = [];
-    let tempDate = [], date1 = [];
+    let tempDate = [];
     let tempCountDone = [], tempCountNotDone = [];
+    let series = {
+      series: [],
+      options: {
+        xaxis: {
+          type: "datetime",
+          categories: []
+        },
+      }
+    };
     stackedChartDone.forEach(element => {//load data
       tempCountDone.push(element.done);
       tempCountNotDone.push(element.notDone);
       tempDate.push(element._id);
     });
-    DoneArray.push({ name: "done" }, { data: tempCountDone });
-    NotDone.push({ name: "notDone" }, { data: tempCountNotDone });
-    tempCountDone = [];
-    tempCountNotDone = [];
-    tempCountDone.push(DoneArray);// final array
-    tempCountDone.push(NotDone);
-    tempCountNotDone.push({ "series": tempCountDone })
-    tempCountNotDone.push({ "categories": tempDate })
-    finalArray = tempCountNotDone;
-    res.send({ success: true, error: null, info: finalArray });
+    stackedChartDone.forEach(element => {//load data
+      tempCountDone.push(element.done);
+      tempCountNotDone.push(element.notDone);
+      tempDate.push(element._id);
+    });
+    series.series.push({
+      name: "done",
+      square: tempCountDone
+    });
+    series.series.push({
+      name: "notDone",
+      data: tempCountNotDone
+    });
+    series.options.xaxis.categories.push({
+      data: tempDate
+    });
+  
+    res.send({ success: true, error: null, info: series });
   }
 });
 module.exports = router;
@@ -484,3 +514,19 @@ module.exports = router;
         //     }
         //   ]
         // },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
