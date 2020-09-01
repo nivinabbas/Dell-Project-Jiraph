@@ -218,14 +218,14 @@ router.put('/editUser', (req, res) => {
     const { id , name, email, role, password } = req.body;
 
     if (validator.validate(email)) {
- 
 
-        UserModel.find({ "userInfo.employeeEmail": email }).then(checkEmail => {
+
+        User.find({ "userInfo.employeeEmail": email }).then(checkEmail => {
             if (checkEmail.length > 0) {
-                UserModel.find({ "userInfo.employeeEmail": email }).then(checkUserEmail => {
+                User.find({ "userInfo.employeeEmail": email }).then(checkUserEmail => {
                     if (checkUserEmail.length > 0) {
 
-                        UserModel.update(
+                        User.updateOne({_id:id},
                             {
                                 $set:
                                 {
@@ -244,7 +244,7 @@ router.put('/editUser', (req, res) => {
                     }
                 })
             } else {
-                UserModel.update(
+                User.updateOne(
                     { _id: id }, {
                         $set:
                         {
