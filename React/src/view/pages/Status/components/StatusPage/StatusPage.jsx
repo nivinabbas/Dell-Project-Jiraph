@@ -33,12 +33,16 @@ const StatusPage = (props) => {
     { name: "modificationField", value: "" },
     { name: "modificationValue", value: "" },
   ]);
-  const [modificationType, setModificationType] = useState({});
   const [barChart, setBarChart] = useState({});
   const [stackedChart, setStackedChart] = useState({});
   const [typePieChart, setTypePieChart] = useState({});
   const [fieldPieChart, setFieldPieChart] = useState({});
-  const [typeSelect, setTypeSelect] = useState(optionSprint);
+  const [modificationTypeOptions, setModificationTypeOptions] = useState({});
+  const [modificationFieldOptions, setModificationFieldOptions] = useState({});
+  const [
+    modificationFieldValueOptions,
+    setModificationFieldValueOptions,
+  ] = useState({});
 
   useEffect(() => {
     fetch("/api/status/dailyalerts")
@@ -105,17 +109,39 @@ const StatusPage = (props) => {
   }, []);
 
   useEffect(() => {
-    fetch("/api/status/typeSelect")
+    // const newFilters =
+    //   filters[0].value === "Update" ? [...filters] : [{ ...filters[0] }];
+    fetch("/api/status/modificationTypeOptions")
       .then((res) => res.json())
       .then((data) => {
         let { success, error, info } = data;
         if (success) {
-          setTypeSelect(info);
+          setModificationTypeOptions(info.Data);
         } else {
           alert(error);
         }
       });
   }, []);
+
+  useEffect(() => {
+    console.log(filters[0].name);
+    if (
+      filters[0].name === "modificationType" &&
+      filters[0].value === "Update"
+    ) {
+      console.log("check");
+      fetch("/api/status/modificationFieldOptions")
+        .then((res) => res.json())
+        .then((data) => {
+          let { success, error, info } = data;
+          if (success) {
+            setModificationFieldOptions(info.Data);
+          } else {
+            alert(error);
+          }
+        });
+    }
+  }, [filters]);
 
   // setFieldPieChart(pieTypeDummyData);
   const handleDoneClick = async (jiraId) => {
@@ -207,20 +233,47 @@ const StatusPage = (props) => {
   };
 
   const handleSelect = (filter, name) => {
-    // const newFilters = [...filters].map((f) => {
-    //   if (f.name === name) f.value = filter.value;
-    //   return f;
-    // });
-    // setFilters(newFilters);
-    console.log(filter);
+    const newFilters = [...filters].map((f) => {
+      if (f.name === name) f.value = filter.value;
+      return f;
+    });
+    console.log("eheheheheh");
+    setFilters(newFilters);
+    console.log(...filters);
+    fetch("/api/status/modificationFieldValueOptions", {
+      method: "POST",
+      body: JSON.stringify({ ...filters }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log("res", res);
+        setModificationFieldValueOptions(res.info);
+      });
+
+    // fetch("/api/status/openTasksSelected", {
+    //   method: "POST",
+    //   body: JSON.stringify({ filters }),
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // })
+    //   .then((res) => res.json())
+    //   .then((res) => {
+    //   setOpenTasks(res);
+    //   });
+
+    console.log(filters);
   };
 
-  const handelTableFilterClick = () => {
-    const newFilters =
-      filters[0].value === "update" ? [...filters] : [{ ...filters[0] }];
+  // const handelTableFilterClick = () => {
+  //   const newFilters =
+  //     filters[0].value === "Update" ? [...filters] : [{ ...filters[0] }];
 
-    //fetch
-  };
+  //   //fetch
+  // };
 
   return (
     <div className="statusPageContainer">
@@ -230,12 +283,13 @@ const StatusPage = (props) => {
 
       <div className="statuspage__table">
         <Table
-          selectOptions={typeSelect}
+          modificationFieldValueOptions={modificationFieldValueOptions}
+          modificationFieldOptions={modificationFieldOptions}
+          modificationTypeOptions={modificationTypeOptions}
           openTasks={openTasks}
           onDoneClick={handleDoneClick}
           onSelect={handleSelect}
-          onChange={setModificationType}
-          onTableFilterClick={handelTableFilterClick}
+          //onTableFilterClick={handelTableFilterClick}
           filters={filters}
         />
       </div>
