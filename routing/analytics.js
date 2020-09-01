@@ -13,6 +13,17 @@ router.post('/modificationByField', async (req, res) => {
     const { serverFilters } = req.body
     const { fieldName, values, qaRepresentative, startDate, endDate, label } = serverFilters;
     console.log(fieldName, values, label, qaRepresentative)
+    // let dateFormat = '';
+    // if (label[0] == 'daily') {
+    //     dateFormat = "%Y-%m-%d"
+    // }
+    // else if (label[0] == 'yearly') {
+    //     dateFormat = "%Y"
+    // }
+    // else {
+    //     dateFormat = "%Y-%m"
+    // }
+
 
     //here we build the match expression according to the user's filters.
 
@@ -57,24 +68,40 @@ router.post('/modificationByField', async (req, res) => {
         {
             $group: {
                 _id: "$_id.date",
+                //_id: { $dateFromString: { dateString: "$_id.date" , format: "%Y-%m-%d" } },
                 arr: { $push: { fieldName: "$_id.fieldName", tasks: "$tasks", size: { $size: "$tasks" } } },
 
             }
 
         }
     ])
+    // var curr = new Date();
+    // var firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()));
+    // var lastday = new Date(curr.setDate(curr.getDate() - curr.getDay() + 6));
+    // console.log(firstday)
+    // console.log(lastday)
+    // let d1 = new Date(tasks[0]._id)
+    // console.log(d1)
+    // console.log(new Date(d1.setDate(d1.getDate() + 5)))
     let maxLength = 0;
     let sumLength = 0;
-    if(tasks.length > 0){
-        let myArray = tasks[0].arr;
-        myArray.forEach(element => {
-            if (element.size > maxLength) {
-                maxLength = element.size
-            }
-            sumLength += element.size
+    if (tasks.length > 0) {
+        tasks.map((item, index) => {
+            let myArray = item.arr;
+            myArray.forEach(element => {
+                if (element.size > maxLength) {
+                    maxLength = element.size
+                }
+                sumLength += element.size
+            })
+        item.maxLength = maxLength
+        item.sumLength = sumLength
+        maxLength=0;
+        sumLength = 0;
         })
-        tasks[0].maxLength = maxLength
-        tasks[0].sumLength = sumLength
+        tasks.map((item,index)=>{
+            item.arr.sort((a, b) => (a.fieldName > b.fieldName) ? 1 : -1)
+        })
     }
     res.send(tasks)
 })
@@ -103,7 +130,7 @@ router.post('/modificationByFieldFilters', async (req, res) => {
             {
                 $group: {
                     _id: null,
-                   // QA: { $addToSet: { "label": "$jiraItem.qaRepresentative", "value": "$jiraItem.qaRepresentative" } },
+                    // QA: { $addToSet: { "label": "$jiraItem.qaRepresentative", "value": "$jiraItem.qaRepresentative" } },
                     Values: { $addToSet: { "label": "$diffItem.updatedField.newValue", "value": "$diffItem.updatedField.newValue" } },
                 }
             },
