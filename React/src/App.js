@@ -1,13 +1,19 @@
 import React from "react";
-import Login from "./view/pages/Admin/components/Login/Login"
-import UserList from "./view/pages/Admin/components/usersList/UserList"
+
 
 
 //components
 import Nav from './components/Nav/Nav';
+
+//admin
+import Login from "./view/pages/Admin/components/Login/Login"
 import ForgetPassword from "./view/pages/Admin/components/ForgetPassword/ForgetPassword";
+import ChangePassword from "./view/pages/Admin/components/ChangePassword/ChangePassword";
 import KeyPassword from "./view/pages/Admin/components/KeyPassword/KeyPassword";
-import MainPage from "./view/pages/Analytics/components/MainPage/MainPage";
+import UserList from "./view/pages/Admin/components/usersList/UserList";
+
+
+import MainPage from './view/pages/Analytics/components/mainPage/MainPage';
 import ModificationByField from "./view/pages/Analytics/components/ModificationByField/ModificationByField";
 import DeletedJira from "./view/pages/Analytics/components/DeletedJiraTickets/Deletedjira";
 import ChangesInJiraTickets from "./view/pages/Analytics/components/ChangesInJiraTickets/ChangesInJiraTickets";
@@ -21,18 +27,13 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect,
-  Link,
-  useParams
-  useLocation,
-  Link
 
 } from "react-router-dom";
-import ChangePassword from "./view/pages/Admin/components/ChangePassword/ChangePassword";
 
 
 
-function App() {
+
+
 function App() {
   // let location = useLocation();
   // console.log(location);
@@ -46,17 +47,19 @@ function App() {
         <div className='mainPage'>
           <Switch>
             <Route exact={true} path="/">
-              <h1>login</h1>
+              <Login />
             </Route>
-            <Route path="/register">
-
+            <Route path="/changePassword">
+              <ChangePassword />
             </Route>
             <Route path="/forgotPassword">
-              <ForgetPassword></ForgetPassword>
+              <ForgetPassword />
+            </Route>
+            <Route path="/keyPassword">
+              <KeyPassword />
             </Route>
             <Route path="/Admin">
-              <h1>Admin</h1>
-
+              <UserList />
             </Route>
             <Route path="/analysis">
               <MainPage />
@@ -84,5 +87,6 @@ function App() {
     </Router >
   );
 }
+
 
 export default App;

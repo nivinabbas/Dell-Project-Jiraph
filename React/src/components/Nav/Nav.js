@@ -33,7 +33,7 @@ export default props => {
 
                 <div className='menu__item'>
                 
-                    <Link className={location === "/register"?'menu__link menu__link--selected':"menu__link"} to="/register"><img className="register__logo" src={regIcon} alt="this is a logo" />Register</Link>
+                    <Link className={location === "/register"?'menu__link menu__link--selected':"menu__link"} to="/"><img className="register__logo" src={regIcon} alt="this is a logo" />Login</Link>
                 </div>
                 <div className="menu__item">
                     <Link className={location === "/Admin"?'menu__link menu__link--selected':"menu__link"} to="/Admin"><img className="admin__logo" src={adminIcon} alt="this is a logo" />Admin</Link>

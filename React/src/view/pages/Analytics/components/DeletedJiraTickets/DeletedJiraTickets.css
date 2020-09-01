@@ -1,120 +1,63 @@
-<<<<<<< HEAD
-.DeletedJiraTicketsWrapper{
+.DeletedJiraTicketsWrapper {
   display: grid;
   grid-template-columns: 2vw 82vw 4vw;
   grid-template-rows: 10vh 15vh 5vh auto;
-  grid-template-areas: 
-  "header header header "
-  
-  ". filterButtons ."
-  ". . ."
-  "chartColors chart .";
-  
+  grid-template-areas: "header header header " ". filterButtons ." ". . ." "chartColors chart .";
   background-color: #C8C9C7;
-  }
-  .DeletedJiraTickets__Table {
-    grid-area: table;
-  }
+}
 
-  .DeletedJiraTickets__Title{
-    font-weight: 500;
-    grid-area: header;
-    text-align: center;
-    color: #00447C;
-    background-color: white;
-    height: 100%;
-    font-family: 'Roboto Slab', serif;
-    font-size: 26px;
-    padding-top: 3vh;
-  }
-  .DeletedJiraTickets__Filters{
-    
-    grid-area: filterButtons;
-  }
- /* .ModificationByFieldTable{
-    grid-area: table;
-  }*/
-  .DeletedJiraTickets__Filters{
-    margin-top: 1rem;
-    /* padding-top: 2vh; */
-    grid-area: filterButtons;
-    display: flex;
-    justify-content: space-between;
-    background-color: #EEEEEE;
-    align-items: center;
-    text-align: center;
-    height: 5rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    border-radius: 3px;
-    box-shadow: 0px 0.3px 0.3px rgba(0, 0, 0, 0.2);
-  }
-  .DeletedJiraTickets__Filter{
-    width: 10rem;
-    /* border: 0.1px solid black; */
-    box-sizing: border-box;
-    background-color:   #EEEEEE;
-    border-radius: 4px;
-    color: black;
-    box-shadow: 0px 0.1px 0.3px rgba(0, 0, 0, 0.8);
-    padding-top:0.5rem;
-    padding-bottom:0.5rem;
-  }
- 
-  
-  .DeletedJiraTickets__Chart{
-    grid-area: chart;
-  }
+.DeletedJiraTickets__Table {
+  grid-area: table;
+}
 
-  
-=======
-.DeletedJiraTicketsWrapper{
-    display: grid;
-    grid-template-columns: 5vw 75vw 5vw;
-    grid-template-rows: 10vh 5vh 5vh auto;
-    grid-template-areas: 
-    ". header ."
-    ". filterButtons ."
-    ". . ."
-    ". table . "
-    "chartColors table .";
-    
-    background-color: #C8C9C7;
-  }
-  .DeletedJiraTickets__Table {
-    grid-area: table;
-  }
+.DeletedJiraTickets__Title {
+  font-weight: 500;
+  grid-area: header;
+  text-align: center;
+  color: #00447C;
+  background-color: white;
+  height: 100%;
+  font-family: 'Roboto Slab', serif;
+  font-size: 26px;
+  padding-top: 3vh;
+}
 
-  .DeletedJiraTickets__Title{
-    font-size: 30px;
-  font-weight: bold;
-    grid-area: header;
-    text-align: center;
-    background-color: #00447C;
-    color: white;
-    height: 100%;
-  }
-  .DeletedJiraTickets__Filters{
-    
-    grid-area: filterButtons;
-  }
- /* .ModificationByFieldTable{
+.DeletedJiraTickets__Filters {
+  grid-area: filterButtons;
+}
+
+/* .ModificationByFieldTable{
     grid-area: table;
   }*/
-  .DeletedJiraTickets__Filters{
-    display: flex;
-    justify-content: space-evenly;
-  }
-  .DeletedJiraTickets__Filter{
-  width: 100%;
-  
-  }
- 
-  
-  .DeletedJiraTickets__Chart{
-    grid-area: chart;
-  }
 
-  
->>>>>>> Nimer
-  
+.DeletedJiraTickets__Filters {
+  margin-top: 1rem;
+  /* padding-top: 2vh; */
+  grid-area: filterButtons;
+  display: flex;
+  justify-content: space-between;
+  background-color: #EEEEEE;
+  align-items: center;
+  text-align: center;
+  height: 5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-radius: 3px;
+  box-shadow: 0px 0.3px 0.3px rgba(0, 0, 0, 0.2);
+}
+
+.DeletedJiraTickets__Filter {
+  width: 10rem;
+  /* border: 0.1px solid black; */
+  box-sizing: border-box;
+  background-color: #EEEEEE;
+  border-radius: 4px;
+  color: black;
+  box-shadow: 0px 0.1px 0.3px rgba(0, 0, 0, 0.8);
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.DeletedJiraTickets__Chart {
+  grid-area: chart;
+}
