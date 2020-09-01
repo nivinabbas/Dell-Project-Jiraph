@@ -29,11 +29,42 @@ router.post("/GetBellaData", async function (req, res) {
         newDwata = Data;
         addTaskItem(newDwata);
         TaskModel.insertMany(newDwata).then(console.log("Adding Success.!"));
-         res.send({ "success": "ture" });
+        res.send({ "success": "ture" });
     } else {
         res.send({ "success": "false" });
     };
 });
+
+
+
+
+
+function convertUpdatedFields(data) {
+    let newData = [];
+    data.forEach(ticket => {
+        let jiraItem = ticket.jiraItem;
+        let qcItem = ticket.qcItem;
+        let updatedFields = ticket.diffItem.updatedFields;
+        let diffItem = ticket.diffItem;
+        updatedFields.forEach(field => {
+            newData.push({
+                jiraItem,
+                qcItem,
+                diffItem: {
+                    updatedField: {
+                        fieldName: field.fieldName,
+                        newValue: field.newValue,
+                        oldValue: field.oldValue
+                    },
+                    updatedTime: diffItem.updateTime,
+                    type: diffItem.type
+                }
+            })
+        })
+    });
+    return newData;
+}
+
 
 
 

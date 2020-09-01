@@ -6,6 +6,10 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
     extended: true
 }));
 
+const TaskModel = require('./schemas/TaskSchema');
+
+
+
 app.use(express.static('public'))
 
 const url = "mongodb+srv://nimer:N1N1N1N1@cluster0.tejcy.mongodb.net/server";
@@ -13,6 +17,11 @@ const url = "mongodb+srv://nimer:N1N1N1N1@cluster0.tejcy.mongodb.net/server";
 
 const mongoose = require('mongoose');
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
+
+// const data = []
+
+// TaskModel.insertMany(data).then(console.log('Done!'))
+
 
 
 const userRouter = require('./routing/users');
@@ -28,3 +37,13 @@ const bellaRouting = require('./routing/bellaRouting');
 app.use("/api/PostBellaData", bellaRouting);
 
 app.listen(4000, () => { console.log("App is Listening to 4000") })
+
+
+
+
+
+
+
+
+
+
