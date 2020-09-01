@@ -222,12 +222,12 @@ router.put('/editUser', (req, res) => {
     if (validator.validate(email)) {
 
 
-        User.find({ "userInfo.employeeEmail": email }).then(checkEmail => {
+        UserModel.find({ "userInfo.employeeEmail": email }).then(checkEmail => {
             if (checkEmail.length > 0) {
-                User.find({ "userInfo.employeeEmail": email }).then(checkUserEmail => {
+                UserModel.find({ "userInfo.employeeEmail": email }).then(checkUserEmail => {
                     if (checkUserEmail.length > 0) {
 
-                        User.updateOne({_id:id},
+                        UserModel.updateOne({_id:id},
                             {
                                 $set:
                                 {
@@ -246,7 +246,7 @@ router.put('/editUser', (req, res) => {
                     }
                 })
             } else {
-                User.updateOne(
+                UserModel.updateOne(
                     { _id: id }, {
                         $set:
                         {
