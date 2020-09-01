@@ -199,7 +199,7 @@ router.put('/updatePassword',(req,res)=>{
     })
 })
 
-router.post('/editUser', (req, res) => {
+router.put('/editUser', (req, res) => {
     const { newName, newEmail, newRole, newPassword } = req.body;
 
     if (validator.validate(newEmail)) {
