@@ -18,11 +18,12 @@ function ChangePassword(props) {
 
     function onResetPassword(e) {
         e.preventDefault();
-
-        const { password } = e.target.elements.resetNPswInp.value;
-        const { password1 } = e.target.elements.confirmNPswInp.value;
-
+        const { resetNPswInp, confirmNPswInp } = e.target.elements;
+        const password = resetNPswInp.value;
+        const password1 = confirmNPswInp.value;
+        console.log(password, password1)
         if (password === password1) {
+            console.log(email, password)
             fetch("/api/users/updatePassword", {
                 method: "PUT",
                 body: JSON.stringify({ email, password }),
@@ -34,15 +35,15 @@ function ChangePassword(props) {
                     const { success } = data;
                     const { error } = data;
                     if (success) {
-                        history.push("/Login")
+                        history.push("/")
                     }
                     else {
-                        console.log(error)
+                        alert(error)
                     }
                 })
         }
         else {
-            console.log("Password doesn't match")
+            alert("Password doesn't match")
         }
     }
     return (

@@ -9,7 +9,7 @@ import {
 
 function Login(props) {
     const history = useHistory();
-
+    let error='';
 
     function handleLogin(e) {
         e.preventDefault();
@@ -32,22 +32,20 @@ function Login(props) {
                 if (success) {
                     const { info } = data;
                     if (info.role === 'Admin') {
-                        history.push("/userList")
+                        history.push("/UserList")
                     }
-                    if (info.role === 'Qa Manager') {
+                    if (info.role === 'QA manager') {
                         history.push("/status")
                     }
-                    if (info.role === 'Top Manager') {
+                    if (info.role === 'TOP manager') {
                         history.push("/analytics")
                     }
-                    else {
-                        console.log(error)
-                    }
+            
                 }
 
                 else {
                     const { error } = data;
-                    console.log(error)
+                    alert(error)
 
                 }
 
@@ -62,7 +60,6 @@ function Login(props) {
                 <button type="submit">Login</button>
             </form>
             <Link to="/forgotPassword">Forgot Password?</Link>
-            <div className='res'></div>
 
         </div>
     )
