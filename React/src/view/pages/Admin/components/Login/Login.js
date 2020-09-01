@@ -56,7 +56,7 @@ function Login(props) {
             <h3>Welcome to Jiraph System</h3>
             <form id="loginForm" onSubmit={handleLogin} >
                 <input id="userEmail-Inp" name="userEmailInp" placeholder="Enter your Emailadress"></input>
-                <input id="userPsw-Inp" name="userPswInp" placeholder="Enter your Password"></input>
+                <input id="userPsw-Inp" type="password" name="userPswInp" placeholder="Enter your Password"></input>
                 <button type="submit">Login</button>
             </form>
             <Link to="/forgotPassword">Forgot Password?</Link>
