@@ -75,11 +75,6 @@ router.post('/modificationByField', async (req, res) => {
 
         }
     ])
-    // var curr = new Date();
-    // var firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()));
-    // var lastday = new Date(curr.setDate(curr.getDate() - curr.getDay() + 6));
-    // console.log(firstday)
-    // console.log(lastday)
     // let d1 = new Date(tasks[0]._id)
     // console.log(d1)
     // console.log(new Date(d1.setDate(d1.getDate() + 5)))
@@ -94,14 +89,14 @@ router.post('/modificationByField', async (req, res) => {
                 }
                 sumLength += element.size
             })
-        item.maxLength = maxLength
-        item.sumLength = sumLength
-        //maxLength=0;
-        sumLength = 0;
+            item.maxLength = maxLength
+            item.sumLength = sumLength
+            //maxLength=0;
+            sumLength = 0;
         })
-        tasks.map((item,index)=>{
+        tasks.map((item, index) => {
             item.arr.sort((a, b) => (a.fieldName > b.fieldName) ? 1 : -1);
-            if(item.maxLength < maxLength){
+            if (item.maxLength < maxLength) {
                 item.maxLength = maxLength
             }
         })
@@ -113,7 +108,7 @@ router.post('/modificationByField', async (req, res) => {
 router.post('/modificationByFieldFilters', async (req, res) => {
     let tasks = []
     const { fieldName } = req.body
-    if (fieldName.length == 0) { // runs to bring all the fieldNames when reloading
+    if (fieldName.length == 0) { // runs to bring all the fieldNames and QA when reloading
         tasks = await TaskModel.aggregate([
             {
                 $group: {
@@ -123,8 +118,12 @@ router.post('/modificationByFieldFilters', async (req, res) => {
                 },
             }
         ])
+        tasks.map((item, index) => {
+            item.labels.sort((a, b) => (a.label > b.label) ? 1 : -1);
+            item.QA.sort((a, b) => (a.label > b.label) ? 1 : -1);
+        })
     }
-    else { // bring all the QA and Values
+    else { // bring all the Values for the fieldName
         const name = fieldName[0];
         tasks = await TaskModel.aggregate([
             {
@@ -138,9 +137,58 @@ router.post('/modificationByFieldFilters', async (req, res) => {
                 }
             },
         ])
+        tasks.map((item, index) => {
+            item.Values.sort((a, b) => (a.label > b.label) ? 1 : -1);
+        })
     }
 
     res.send(tasks)
+})
+
+
+router.post('/deletedJiraTicketsFilters', async (req, res) => {
+    let tasks = []
+    const { startDate, endDate, label} = req.body
+    console.log(startDate,endDate,label)
+    //if (fieldName.length == 0) { // runs to bring all the fieldNames and QA when reloading
+        tasks = await TaskModel.aggregate([
+            {
+                $match: {"diffItem.type": "Delete" }
+            },
+            {
+                $group: {
+                    _id: null,
+                    priorities: { $addToSet: { "label": "$jiraItem.priority", "value": "$jiraItem.priority" } },
+                    QA: { $addToSet: { "label": "$jiraItem.qaRepresentative", "value": "$jiraItem.qaRepresentative" } }
+                },
+            }
+        ])
+        tasks.map((item, index) => {
+            item.priorities.sort((a, b) => (a.label > b.label) ? 1 : -1);
+            item.QA.sort((a, b) => (a.label > b.label) ? 1 : -1);
+        })
+  //  }
+    // else { // bring all the QA and Values
+    //     const name = fieldName[0];
+    //     tasks = await TaskModel.aggregate([
+    //         {
+    //             $match: { "diffItem.updatedField.fieldName": name, "diffItem.type": "Update" }
+    //         },
+    //         {
+    //             $group: {
+    //                 _id: null,
+    //                 // QA: { $addToSet: { "label": "$jiraItem.qaRepresentative", "value": "$jiraItem.qaRepresentative" } },
+    //                 Values: { $addToSet: { "label": "$diffItem.updatedField.newValue", "value": "$diffItem.updatedField.newValue" } },
+    //             }
+    //         },
+    //     ])
+    //     tasks.map((item, index) => {
+    //         item.Values.sort((a, b) => (a.label > b.label) ? 1 : -1);
+    //     })
+    // }
+
+    res.send(tasks)
+
 })
 
 
