@@ -195,11 +195,23 @@ router.post('/checkSendedPassword', (req, res) => {
 router.put('/updatePassword',(req,res)=>{
     const { email , password } = req.body;
     UserModel.findOne({"userInfo.employeeEmail":email}).then(docs=>{
-         docs.userInfo.password = password
-         docs.save();
-        
-    })
-    res.send({ success: true, error: null, info: null }) 
+        if(docs){
+        const name = docs.userInfo.employeeName
+        const role = docs.userInfo.employeeRole
+        const id = docs._id
+        UserModel.updateOne({_id:id},{$set:{userInfo:{employeeName:name,employeeEmail:email,employeeRole:role,password:password}}}).then(doc=>{
+            if(doc.n>0){
+               res.send({ success: true, error: null, info: null }) 
+            }else{
+               res.send({ success: false, error: null, info: null }) 
+            }
+       })
+    }else{
+        res.send({ success: false, error: "email not valid", info: null }) 
+    }
+       
+   })
+    
 })
 
 router.put('/editUser', (req, res) => {
