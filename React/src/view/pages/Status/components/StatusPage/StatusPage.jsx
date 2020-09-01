@@ -107,18 +107,21 @@ const StatusPage = (props) => {
   }, []);
 
   const handleDoneClick = async (jiraId) => {
-    const userId = null;
-    const result = openTasks.filter(
-      (openTask) => openTask.jiraItem.jiraId !== jiraId
-    );
-    setOpenTasks(result);
-    await fetch("/api/status/updateTasks", {
-      method: "POST",
-      body: JSON.stringify({ jiraId, userId }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    try {
+      const userId = null;
+      const result = openTasks.filter(
+        (openTask) => openTask.jiraItem.jiraId !== jiraId
+      );
+      setOpenTasks(result);
+      console.log(jiraId);
+      await fetch("/api/status/updateTasks", {
+        method: "POST",
+        body: JSON.stringify({ jiraId, userId }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (error) {}
   };
 
   //date
