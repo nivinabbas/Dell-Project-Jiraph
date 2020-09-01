@@ -9,7 +9,7 @@ import {
 
 function Login(props) {
     const history = useHistory();
-
+    let error='';
 
     function handleLogin(e) {
         e.preventDefault();
@@ -60,7 +60,6 @@ function Login(props) {
                 <button type="submit">Login</button>
             </form>
             <Link to="/forgotPassword">Forgot Password?</Link>
-            <div className='res'></div>
 
         </div>
     )
