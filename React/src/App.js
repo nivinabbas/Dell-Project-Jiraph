@@ -1,5 +1,7 @@
 import React from "react";
 import Login from "./view/pages/Admin/components/Login/Login"
+import UserList from "./view/pages/Admin/components/usersList/UserList"
+
 import ForgetPassword from "./view/pages/Admin/components/ForgetPassword/ForgetPassword";
 import KeyPassword from "./view/pages/Admin/components/KeyPassword/KeyPassword";
 
@@ -30,7 +32,7 @@ function App() {
             </li>
 
             <li>
-              <Link to="/Admin">Admin</Link>
+              <Link to="/UserList">Admin</Link>
             </li>
             <li>
               <Link to="/analysis">Analysis</Link>
@@ -55,9 +57,7 @@ function App() {
             <ForgetPassword></ForgetPassword>
           </Route>
           <Route path="/KeyPassword/:email" children={<KeyPassword  />} />
-          <Route path="/ChangePassword">
-            <ChangePassword></ChangePassword>
-          </Route>
+
           <Route path="/ChangePassword/:email" children={<ChangePassword  />} />
           
           <Route path="/Admin">

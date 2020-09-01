@@ -32,22 +32,22 @@ function Login(props) {
                 if (success) {
                     const { info } = data;
                     if (info.role === 'Admin') {
-                        history.push("/userList")
+                        history.push("/UserList")
                     }
-                    if (info.role === 'Qa Manager') {
+                    if (info.role === 'QA manager') {
                         history.push("/status")
                     }
-                    if (info.role === 'Top Manager') {
+                    if (info.role === 'TOP manager') {
                         history.push("/analytics")
                     }
-                    else {
-                        console.log(error)
-                    }
+                    // else {
+                    //     alert(error)
+                    // }
                 }
 
                 else {
                     const { error } = data;
-                    console.log(error)
+                    alert(error)
 
                 }
 

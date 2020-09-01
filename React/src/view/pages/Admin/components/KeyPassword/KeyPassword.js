@@ -20,7 +20,6 @@ function KeyPassword(props) {
 
         const { confCodeInp } = e.target.elements;
         const key = confCodeInp.value;
-        console.log(email, key)
 
 
         fetch("/api/users/checkSendedPassword", {
@@ -35,8 +34,7 @@ function KeyPassword(props) {
                 const { success } = data;
                 const { error } = data;
                 const { info } = data;
-                console.log(info)
-                history.push(`/ChangePassword/${email}`)
+              
                 if (success) {
                     return (history.push(`/ChangePassword/${email}`))
                 }
