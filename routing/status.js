@@ -147,6 +147,31 @@ router.get("/openTasks", async function (req, res) {
 });
 // end open tasks
 
+// start openTasksWithFilter
+router.post("/openTasksWithFilter", async function (req, res) {
+  const { filter } = req.body;
+  if (filter.type === "Update") {
+    TaskModel.find(
+      {
+        "diffItem.type": filter.type,
+        "diffItem.updatedField.fieldName": filter.fieldName,
+        "taskItem.isDone": false,
+      },
+      function (err, doc) {
+        res.send({ success: true, error: null, info: { doc } });
+      }
+    ).then((err) => console.log(err));
+  } else {
+    TaskModel.find(
+      { "diffItem.type": filter.type, "taskItem.isDone": false },
+      function (err, doc) {
+        res.send({ success: true, error: null, info: { doc } });
+      }
+    ).then((err) => console.log(err));
+  }
+});
+// end openTasksWithFilter
+
 // start update task
 router.post("/updateTasks", (req, res) => {
   console.log(req.body.jiraId);
@@ -369,5 +394,30 @@ async function test123test(time1, time2) {
 
 // test123test("2020-08-25", "2020-08-31");
 //stackedChart end
+
+//////////////////////
+
+function openTasksWithFilter(type, fieldName) {
+  if (type === "Update") {
+    TaskModel.find(
+      {
+        "diffItem.type": type,
+        "diffItem.updatedField.fieldName": fieldName,
+        "taskItem.isDone": false,
+      },
+      function (err, doc) {
+        console.log(doc);
+      }
+    );
+  } else {
+    TaskModel.find(
+      { "diffItem.type": type, "taskItem.isDone": false },
+      function (err, doc) {
+        console.log(doc);
+      }
+    );
+  }
+}
+openTasksWithFilter("Create", "qaRepresentative");
 
 module.exports = router;
