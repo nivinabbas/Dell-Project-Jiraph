@@ -720,7 +720,24 @@ function openTasksWithFilter(type, fieldName) {
   }
 }
 // openTasksWithFilter("Update", "qaRepresentative1");
+//fieldName start
+router.get("/getFieldName", async function (req, res) {
+  TaskModel.distinct("diffItem.updatedField.fieldName", function (err, doc) {
+    // success:T/F,error:string,info{TaskItem[Task]
 
+    res.send({ success: true, error: null, info: { doc } });
+  }).then((err) => console.log(err));
+});
+//fieldName end
+
+//getType start
+router.get("/getType", async function (req, res) {
+  TaskModel.distinct("diffItem.type", function (err, doc) {
+    // success:T/F,error:string,info{TaskItem[Task]
+    res.send({ success: true, error: null, info: { doc } });
+  }).then((err) => console.log(err));
+});
+//getType end
 module.exports = router;
 
 
