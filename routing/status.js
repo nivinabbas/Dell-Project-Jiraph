@@ -265,11 +265,6 @@ router.post("/fillterStackedChart", async function (req, res) {
       tempCountNotDone.push(element.notDone);
       tempDate.push(element._id);
     });
-    stackedChartDone.forEach(element => {//load data
-      tempCountDone.push(element.done);
-      tempCountNotDone.push(element.notDone);
-      tempDate.push(element._id);
-    });
     series.series.push({
       name: "done",
       data: tempCountDone
@@ -278,9 +273,8 @@ router.post("/fillterStackedChart", async function (req, res) {
       name: "notDone",
       data: tempCountNotDone
     });
-    series.options.xaxis.categories.push({
-      data: tempDate
-    });
+    series.options.xaxis.categories=tempDate;
+
     res.send({ success: true, error: null, info: series });
   }
   else {
@@ -338,11 +332,6 @@ router.post("/fillterStackedChart", async function (req, res) {
       tempCountNotDone.push(element.notDone);
       tempDate.push(element._id);
     });
-    stackedChartDone.forEach(element => {//load data
-      tempCountDone.push(element.done);
-      tempCountNotDone.push(element.notDone);
-      tempDate.push(element._id);
-    });
     series.series.push({
       name: "done",
       square: tempCountDone
@@ -351,9 +340,7 @@ router.post("/fillterStackedChart", async function (req, res) {
       name: "notDone",
       data: tempCountNotDone
     });
-    series.options.xaxis.categories.push({
-      data: tempDate
-    });
+    series.options.xaxis.categories=tempDate;
     res.send({ success: true, error: null, info: series });
   }
   res.send({ success: false, error: null, info: null });
@@ -481,15 +468,10 @@ router.get("/stackedChart", async function (req, res) {
       options: {
         xaxis: {
           type: "datetime",
-          categories: []
+          categories: ""
         },
       }
     };
-    stackedChartDone.forEach(element => {//load data
-      tempCountDone.push(element.done);
-      tempCountNotDone.push(element.notDone);
-      tempDate.push(element._id);
-    });
     stackedChartDone.forEach(element => {//load data
       tempCountDone.push(element.done);
       tempCountNotDone.push(element.notDone);
@@ -503,9 +485,7 @@ router.get("/stackedChart", async function (req, res) {
       name: "notDone",
       data: tempCountNotDone
     });
-    series.options.xaxis.categories.push({
-      data: tempDate
-    });
+    series.options.xaxis.categories=tempDate;
   
     res.send({ success: true, error: null, info: series });
   }
