@@ -1,27 +1,79 @@
 import React from 'react';
-import "./ChangesInJiraTickets.css";
-import MainTable from "../MainTable/MainTable"
-import Select from 'react-select'
-
 import { useState, useEffect } from 'react';
+import "./ChangesInJiraTickets.css";
 
+//Components 
+import Select from 'react-select'
+import Chart from "../charts/Chart"
+//import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
+
+// Options To Send == > Server 
+const serverFilters = {
+  values: [],
+  status: [],
+  qaRepresentative: [],
+  startDate: [],
+  endDate: [],
+  label: ["weekly"]
+};
 
 function ChangesInJiraTickets() {
-  
-  // Default Date
-  const date = new Date()
-  const date1MonthAgo = new Date(new Date().setMonth(date.getMonth() - 1));
 
-  // Options To Send == > Server 
-  const serverFilters = {
-    values: [],
-    status: [],
-    qaRepresentative: [],
-    startDate: [], // date1MonthAgo
-    endDate: [], // date
-    label: ["weekly"]
-  };
 
+  // Functions ==> Fetch : 
+
+  useEffect(() => {
+
+    fetch('/api/analytics/changeOfJIRATicketsStatusFilters', {
+      method: 'POST',
+      body: JSON.stringify(serverFilters),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data)
+        setStatusOptions(data[0].status)
+        setQaRepresentativeOptions(data[0].qa)
+
+      })
+
+    fetch('/api/analytics/changeOfJIRATicketsStatus', {
+      method: 'POST',
+      body: JSON.stringify(serverFilters),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+
+        console.log(data)
+        setUiObjs(data)
+
+      })
+
+  }, [])
+
+
+  const render = (serverFilters) => {
+    console.log(serverFilters)
+    fetch('/api/analytics/changeOfJIRATicketsStatus', {
+      method: 'POST',
+      body: JSON.stringify(serverFilters),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data)
+
+        setUiObjs(data)
+      })
+
+  }
 
   // To set UiObj from the filtered Data we recieved from server 
   const [UiObjs, setUiObjs] = useState([]);
@@ -37,69 +89,16 @@ function ChangesInJiraTickets() {
   ])
 
   const [labelOptions, setLabelOptions] = useState([
-    { name: "label", value: "Daily", label: "Daily" },
-    { name: "label", value: "Weekly", label: "Weekly" },
-    { name: "label", value: "Monthly", label: "Monthly" },
-    { name: "label", value: "Yearly", label: "Yearly" }
+    { name: "label", value: "daily", label: "Daily" },
+    { name: "label", value: "weekly", label: "Weekly" },
+    { name: "label", value: "monthly", label: "Monthly" },
+    { name: "label", value: "yearly", label: "Yearly" }
   ])
 
 
-  // Functions ==> Fetch : 
-
-   useEffect(() => {
-
-    fetch('/api/analytics/changeOfJIRATicketsStatusFilters')
-      .then(res => res.json())
-      .then(data => {
-
-        
-        setStatusOptions(data[0].labels);
-        // setQaRepresentativeOptions(data[0].qa);
-
-      })
-
-      /*fetch('/api/analytics/changeOfJIRATicketsStatus')
-      .then(res => res.json())
-      .then(data => {
-
-        //set state (UiObj)
-        setUiObjs(data);
-      })*/
-
-  }, [])
-
-
-  const render = (serverFilters) => {
-    fetch('/api/analytics/changeOfJIRATicketsStatus', {
-      method: 'POST',
-      body: JSON.stringify(serverFilters),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-      .then((res) => res.json())
-      .then((data) => { console.log(data) } )
-
-  }
-
-  // const renderFilters = (serverFilters) => {
-  //   fetch('/api/analytics/modificationByFieldFilters', {
-  //     method: 'POST',
-  //     body: JSON.stringify({ status:serverFilters.status }),
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     }
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => { 
-  //       if(data.length>0){
-  //         console.log(data)
-  //               setQaRepresentativeOptions(data[0].QA);
-                
-  //       }
-                 
-  //     })
-  // }
+  // Default Date
+  const date = new Date()
+  const date1MonthAgo = new Date(new Date().setMonth(date.getMonth() - 1));
 
 
 
@@ -112,12 +111,21 @@ function ChangesInJiraTickets() {
 
 
   const HandleStatusChange = (status => {
-    serverFilters.status = [status.label]
+
+    serverFilters.status = []
+    status.map((item, index) => {
+      serverFilters.status.push(item.value)
+    })
+
     render(serverFilters);
   })
 
   const HandleqaRepresentativeChange = (Qa => {
-    serverFilters.qaRepresentative = [Qa.label]
+    serverFilters.qaRepresentative = []
+    Qa.map((item, index) => {
+      serverFilters.qaRepresentative.push(item.value)
+    })
+
     render(serverFilters);
   })
 
@@ -133,15 +141,18 @@ function ChangesInJiraTickets() {
 
   const HandleLabelChange = (label => {
     serverFilters.label = [label.value]
+
     render(serverFilters);
   })
+
+
 
   return (
 
     <div className='ChangeOfJiraTicketWrapper'>
-      <div className="ChangeOfJiraTicket__Table" >
-        <MainTable changes={true} />
 
+      <div className="ChangeOfJiraTicket__Chart">
+        {UiObjs.length > 0 && <Chart UiObjs={UiObjs} />}
       </div>
 
       <div className="ChangeOfJiraTicket__Title">Changes Of Jira Tickets</div>

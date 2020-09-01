@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react';
 import "./ModificationByField.css";
 import { useState } from 'react';
-
+//import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
 import Select from "react-select"
 import Chart from "../charts/Chart"
 // import ApexChart from "../ApexChart/ApexChart"
 
 
 
+const serverFilters = { fieldName: [], values: [], qaRepresentative: [], startDate: [], endDate: [], label: ["weekly"] };
 
 function ModificationByField(props) {
-  const serverFilters = { fieldName: [], values: [], qaRepresentative: [], startDate: [], endDate: [], label: ["weekly"] };
 
 
   useEffect(() => {
@@ -24,22 +24,38 @@ function ModificationByField(props) {
     })
       .then(res => res.json())
       .then(data => {
-
         setFieldNameOptions(data[0].labels)
-        console.log(data);
+        setQaRepresentativeOptions(data[0].QA);
       })
-  },[])
+
+      fetch('/api/analytics/modificationByField', {
+        method: 'POST',
+        body: JSON.stringify({ serverFilters }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+        .then(res => res.json())
+        .then(data => {
+          console.log(data)
+          setUiObjs(data)
+        })
+
+  }, [])
 
   const render = (serverFilters) => {
     fetch('/api/analytics/modificationByField', {
       method: 'POST',
-      body: JSON.stringify(serverFilters),
+      body: JSON.stringify({serverFilters}),
       headers: {
         "Content-Type": "application/json"
       }
     })
       .then((res) => res.json())
-      .then((data) => { setUiObjs(data) })
+      .then((data) => {
+        console.log(data)
+        setUiObjs(data)
+      })
   }
 
 
@@ -53,10 +69,13 @@ function ModificationByField(props) {
     })
       .then((res) => res.json())
       .then((data) => {
+        console.log(data)
         if (data.length > 0) {
-          console.log(data)
-          setQaRepresentativeOptions(data[0].QA);
+          console.log(data);
+          if(data.length==1)
           setValueOptions(data[0].Values);
+          else 
+          setValueOptions([]);
         }
 
       })
@@ -76,29 +95,38 @@ function ModificationByField(props) {
 
 
   const handleChangeLabel = (change => {
-    serverFilters.label = [change.value]
+    serverFilters.label=[change.value];
     render(serverFilters);
   })
 
   const handleChangeFieldName = (change => {
-    serverFilters.fieldName = [change.label];
+  serverFilters.fieldName=[change.value];
+   
+    render(serverFilters)
     renderFilters(serverFilters);
   })
 
   const handleChangeValues = (change => {
-    console.log(change)
-    if (change!=null)
-    serverFilters.values = [change.label];
-    else 
-    serverFilters.values = [];
+    serverFilters.values = []
+    if (change != null) {
+      change.map((item,index)=>{
+        serverFilters.values.push(item.value)
+      })
+    }
+    else {
+      serverFilters.values = [];
+    }
     render(serverFilters);
   })
 
   const handleChangeQaRepresentative = (change => {
-    serverFilters.qaRepresentative = [change.label];
+
+    serverFilters.qaRepresentative=[change.value];
     render(serverFilters);
   })
+
   const handleChangeStartDate = (change => {
+    console.log(new Date(change.target.value))
     serverFilters.startDate = [change.target.value];
     render(serverFilters);
   })
@@ -110,6 +138,7 @@ function ModificationByField(props) {
 
   return (
     <div className='ModificationByField__Wrapper'>
+      <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
       <div className="ModificationByField__Chart"> {UiObjs.length > 0 && <Chart UiObjs={UiObjs} />}</div>
       <div className="ModificationByField__MainTitle">Modification By Field</div>
 
