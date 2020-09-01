@@ -7,8 +7,9 @@ const UserModel = mongoose.model("UserModel", UserSchema)
 
 var nodemailer = require('nodemailer')
 var validator = require("email-validator");
+const { find } = require("../schemas/TaskSchema");
 
-
+var keys = [];
 
 const u = new UserModel({
     userInfo: {
@@ -74,8 +75,6 @@ router.delete('/deleteUser', (req, res) => {
                 }
             })
         }
-        console.log(table)
-        console.log("Successful deletion");
     })
 
 })
@@ -111,6 +110,7 @@ router.post('/forgotPassword', (req, res) => {
                         console.log('Email sent: ' + info.response);
                     }
                 });
+                keys.push({email:email , key:key , time:Date.now()})
                 res.send({ success: true, error: null, info: { key: key } })
 
             } else {
@@ -172,15 +172,44 @@ router.post('/createUser',  (req, res) => {
     }
 })
 
-router.post('/editUser', (req, res) => {
-    const { newName, newEmail, newRole, newPassword } = req.body;
+router.post('/checkSendedPassword', (req, res) => {
+    const { email , key } = req.body;
+    keys.map((item,index)=>{
+        if(item.email == email){
+            //console.log('email is okay')
+            if(item.key == key){
+                if((Date.now()-item.time)<=1800000){
+                    //console.log("okay")
+                    res.send({success:true , error:null , info:null})
+                }else{
+                   // console.log("time")
+                    res.send({success:false , error:'time expired' , info:null})
+                }
+            }else{
+                //console.log("incorrect")
+                res.send({success:false , error:'key is incorrect' , info:null})
+            }
+        }
+    })
 
-    if (validator.validate(newEmail)) {
+})
+
+router.put('/updatePassword',(req,res)=>{
+    const { email , password } = req.body;
+    UserModel.updateOne({email:email},{$set:{userInfo:{password:password}}}).then(docs=>{
+        console.log(docs)
+    })
+})
+
+router.put('/editUser', (req, res) => {
+    const { id , name, email, role, password } = req.body;
+
+    if (validator.validate(email)) {
 
 
-        UserModel.find({ "userInfo.employeeEmail": newEmail }).then(checkEmail => {
+        UserModel.find({ "userInfo.employeeEmail": email }).then(checkEmail => {
             if (checkEmail.length > 0) {
-                UserModel.find({ "userInfo.employeeEmail": newEmail }).then(checkUserEmail => {
+                UserModel.find({ "userInfo.employeeEmail": email }).then(checkUserEmail => {
                     if (checkUserEmail.length > 0) {
 
                         UserModel.update(
@@ -189,10 +218,10 @@ router.post('/editUser', (req, res) => {
                                 {
                                     userInfo:
                                     {
-                                        employeeName: newName,
-                                        employeeEmail: newEmail,
-                                        employeeRole: newRole,
-                                        password: newPassword
+                                        employeeName: name,
+                                        employeeEmail: email,
+                                        employeeRole: role,
+                                        password: password
                                     }
                                 }
                             })
@@ -208,10 +237,10 @@ router.post('/editUser', (req, res) => {
                         {
                             userInfo:
                             {
-                                employeeName: newName,
-                                employeeEmail: newEmail,
-                                employeeRole: newRole,
-                                password: newPassword
+                                employeeName: name,
+                                employeeEmail: email,
+                                employeeRole: role,
+                                password: password
                             }
                         }
                 })
