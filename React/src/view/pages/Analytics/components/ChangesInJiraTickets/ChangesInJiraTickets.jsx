@@ -150,6 +150,7 @@ function ChangesInJiraTickets() {
   return (
 
     <div className='ChangeOfJiraTicketWrapper'>
+      <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
 
       <div className="ChangeOfJiraTicket__Chart">
         {UiObjs.length > 0 && <Chart UiObjs={UiObjs} />}
