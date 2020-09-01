@@ -27,7 +27,7 @@ function ChangesByParentId() {
   //     } 
       
   useEffect(() => {
-    fetch('/api/analytics/ChangesByParentId', {
+    fetch('/api/analytics/ChangesByParentIdFilters', {
       method: 'POST',
       body: JSON.stringify({serverFilters}),
       headers: {
@@ -35,24 +35,25 @@ function ChangesByParentId() {
       }
     })
       .then((res) => res.json())
-      .then((data) => { console.log(data) })
+      .then((data) => { console.log(data)
+      setfixVersionOptions(data) })
     } , [])
 
 
 
   const HandlefixVersionChange=(version=>{
     serverFilters.fixVersion=[version.label];
-    render (serverFilters);
+    // render (serverFilters);
 })
 
     const HandleStartDateChange=(date=>{
       serverFilters.startDate=[date.target.value];
-        render (serverFilters);
+        // render (serverFilters);
     })
     
       const HandleEndDateChange=(date=>{
         serverFilters.endDate=[date.target.value];
-        render (serverFilters);
+        // render (serverFilters);
     })
   
   return (
