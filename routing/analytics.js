@@ -108,7 +108,7 @@ router.post('/modificationByField', async (req, res) => {
 router.post('/modificationByFieldFilters', async (req, res) => {
     let tasks = []
     const { fieldName } = req.body
-    if (fieldName.length == 0) { // runs to bring all the fieldNames when reloading
+    if (fieldName.length == 0) { // runs to bring all the fieldNames and QA when reloading
         tasks = await TaskModel.aggregate([
             {
                 $group: {
@@ -118,6 +118,54 @@ router.post('/modificationByFieldFilters', async (req, res) => {
                 },
             }
         ])
+        tasks.map((item, index) => {
+            item.labels.sort((a, b) => (a.label > b.label) ? 1 : -1);
+            item.QA.sort((a, b) => (a.label > b.label) ? 1 : -1);
+        })
+    }
+    else { // bring all the Values for the fieldName
+        const name = fieldName[0];
+        tasks = await TaskModel.aggregate([
+            {
+                $match: { "diffItem.updatedField.fieldName": name, "diffItem.type": "Update" }
+            },
+            {
+                $group: {
+                    _id: null,
+                    // QA: { $addToSet: { "label": "$jiraItem.qaRepresentative", "value": "$jiraItem.qaRepresentative" } },
+                    Values: { $addToSet: { "label": "$diffItem.updatedField.newValue", "value": "$diffItem.updatedField.newValue" } },
+                }
+            },
+        ])
+        tasks.map((item, index) => {
+            item.Values.sort((a, b) => (a.label > b.label) ? 1 : -1);
+        })
+    }
+
+    res.send(tasks)
+})
+
+
+router.post('/deletedJiraTickets', async (req, res) => {
+    let tasks = []
+    const { fieldName } = req.body
+    if (fieldName.length == 0) { // runs to bring all the fieldNames and QA when reloading
+        tasks = await TaskModel.aggregate([
+            {
+                $match: {"diffItem.type": "Delete" }
+            },
+            {
+                $group: {
+                    _id: null,
+                    priorities: { $addToSet: { "label": "$jiraItem.priority", "value": "$jiraItem.priority" } },
+                    QA: { $addToSet: { "label": "$jiraItem.qaRepresentative", "value": "$jiraItem.qaRepresentative" } }
+                },
+            }
+        ])
+        tasks.map((item, index) => {
+            item.priorities.sort((a, b) => (a.label > b.label) ? 1 : -1);
+            item.QA.sort((a, b) => (a.label > b.label) ? 1 : -1);
+        })
     }
     else { // bring all the QA and Values
         const name = fieldName[0];
@@ -133,9 +181,13 @@ router.post('/modificationByFieldFilters', async (req, res) => {
                 }
             },
         ])
+        tasks.map((item, index) => {
+            item.Values.sort((a, b) => (a.label > b.label) ? 1 : -1);
+        })
     }
 
     res.send(tasks)
+
 })
 
 
