@@ -19,8 +19,17 @@ function DelaysInDelivery() {
 
   // Options To get From Server 
   const [fixVersionOptions, setfixVersionOptions] = useState([])
-  const [jiraTypeOptions, setJiraTypeOptions] = useState([])
   const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([])
+
+  const [jiraTypeOptions, setJiraTypeOptions] = useState([
+    {  value: "epic", label: "Epic" },
+    {  value: "feature", label: "Feature" },
+    {  value: "initiative", label: "Initiative" },
+    {  value: "version", label: "Version" }
+    
+    
+  ])
+
 
   const [labelOptions, setLabelOptions] = useState([
     { name: "label", value: "daily", label: "Daily" },
@@ -57,7 +66,7 @@ function DelaysInDelivery() {
         setfixVersionOptions(data[0].fixVersion)
 
       })
-    })
+    },[])
 
     const renderFilters = (serverFilters) => {
       fetch('api/analytics/delaysInDeliveryFilters', {
@@ -69,8 +78,8 @@ function DelaysInDelivery() {
       })
         .then((res) => res.json())
         .then((data) => { 
-          setJiraTypeOptions(data[0].Jira);
-          setQaRepresentativeOptions(data[0].QA); 
+          
+          setQaRepresentativeOptions(data[0].qa); 
         })
   
     }
@@ -85,14 +94,7 @@ function DelaysInDelivery() {
       })
 
   const HandlejiraTypeChange = (type => {
-    serverFilters.jiraType=[]
-    if(type!=null){
-      type.map((item, index) => {
-        return serverFilters.jiraType.push(item.value)
-      })}
-      else {
-        serverFilters.jiraType=[]
-      }
+    serverFilters.jiraType=[type.value]
     render(serverFilters);
   })
 
