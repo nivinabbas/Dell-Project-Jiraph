@@ -92,10 +92,7 @@ function ModificationByField(props) {
 
 
   const handleChangeLabel = (change => {
-    serverFilters.label = []
-    change.map((item,index)=>{
-      serverFilters.label.push(item.value)
-    })
+    serverFilters.label=[change.value];
     render(serverFilters);
   })
 
@@ -183,7 +180,7 @@ function ModificationByField(props) {
         />
 
 
-        <ReactMultiSelectCheckboxes
+        <Select
           name="label"
           onChange={handleChangeLabel}
           placeholder="Label"
