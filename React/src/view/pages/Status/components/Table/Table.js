@@ -23,13 +23,16 @@ const optionValue = [
 export default function TasksTable({
   openTasks,
   selectOptions,
+  modificationFieldOptions,
+  modificationTypeOptions,
+  modificationFieldValueOptions,
   onDoneClick,
   onSelect,
   onTableFilterClick,
   filters,
 }) {
   const disableSelect = () => {
-    return filters[0].value !== "update" ? true : false;
+    return filters[0].value !== "Update" ? true : false;
   };
   return (
     <div className="open-tasks">
@@ -38,13 +41,13 @@ export default function TasksTable({
       </div>
       <div className="container__filterSelect">
         <Select
-          options={selectOptions}
+          options={modificationTypeOptions}
           className="filterSelect"
           onChange={(filter, name) => onSelect(filter, "modificationType")}
         />
 
         <Select
-          options={optionFunctional}
+          options={modificationFieldOptions}
           className="filterSelect"
           onChange={(filterObj, name) =>
             onSelect(filterObj, "modificationField")
@@ -52,15 +55,10 @@ export default function TasksTable({
           isDisabled={disableSelect()}
         />
         <Select
-          options={optionValue}
+          options={modificationFieldValueOptions}
           className="filterSelect"
           onChange={(filter, name) => onSelect(filter, "modificationValue")}
           isDisabled={disableSelect()}
-        />
-        <input
-          type="submit"
-          className="submitButton"
-          onClick={onTableFilterClick}
         />
       </div>
       <div className="open-tasks-table">
