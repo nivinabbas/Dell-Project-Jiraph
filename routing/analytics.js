@@ -146,10 +146,11 @@ router.post('/modificationByFieldFilters', async (req, res) => {
 })
 
 
-router.post('/deletedJiraTickets', async (req, res) => {
+router.post('/deletedJiraTicketsFilters', async (req, res) => {
     let tasks = []
-    const { fieldName } = req.body
-    if (fieldName.length == 0) { // runs to bring all the fieldNames and QA when reloading
+    const { serverFilters } = req.body
+    const { startDate, endDate, label} = serverFilters;
+    //if (fieldName.length == 0) { // runs to bring all the fieldNames and QA when reloading
         tasks = await TaskModel.aggregate([
             {
                 $match: {"diffItem.type": "Delete" }
@@ -166,25 +167,25 @@ router.post('/deletedJiraTickets', async (req, res) => {
             item.priorities.sort((a, b) => (a.label > b.label) ? 1 : -1);
             item.QA.sort((a, b) => (a.label > b.label) ? 1 : -1);
         })
-    }
-    else { // bring all the QA and Values
-        const name = fieldName[0];
-        tasks = await TaskModel.aggregate([
-            {
-                $match: { "diffItem.updatedField.fieldName": name, "diffItem.type": "Update" }
-            },
-            {
-                $group: {
-                    _id: null,
-                    // QA: { $addToSet: { "label": "$jiraItem.qaRepresentative", "value": "$jiraItem.qaRepresentative" } },
-                    Values: { $addToSet: { "label": "$diffItem.updatedField.newValue", "value": "$diffItem.updatedField.newValue" } },
-                }
-            },
-        ])
-        tasks.map((item, index) => {
-            item.Values.sort((a, b) => (a.label > b.label) ? 1 : -1);
-        })
-    }
+  //  }
+    // else { // bring all the QA and Values
+    //     const name = fieldName[0];
+    //     tasks = await TaskModel.aggregate([
+    //         {
+    //             $match: { "diffItem.updatedField.fieldName": name, "diffItem.type": "Update" }
+    //         },
+    //         {
+    //             $group: {
+    //                 _id: null,
+    //                 // QA: { $addToSet: { "label": "$jiraItem.qaRepresentative", "value": "$jiraItem.qaRepresentative" } },
+    //                 Values: { $addToSet: { "label": "$diffItem.updatedField.newValue", "value": "$diffItem.updatedField.newValue" } },
+    //             }
+    //         },
+    //     ])
+    //     tasks.map((item, index) => {
+    //         item.Values.sort((a, b) => (a.label > b.label) ? 1 : -1);
+    //     })
+    // }
 
     res.send(tasks)
 
