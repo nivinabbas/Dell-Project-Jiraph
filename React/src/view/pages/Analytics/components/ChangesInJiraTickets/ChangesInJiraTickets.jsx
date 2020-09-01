@@ -110,20 +110,27 @@ function ChangesInJiraTickets() {
 
 
   const HandleStatusChange = (status => {
-
     serverFilters.status = []
+    if(status!=null){
     status.map((item, index) => {
       serverFilters.status.push(item.value)
-    })
+    })}
+    else {
+      serverFilters.status = []
+    }
 
     render(serverFilters);
   })
 
   const HandleqaRepresentativeChange = (Qa => {
     serverFilters.qaRepresentative = []
+    if(Qa!=null){
     Qa.map((item, index) => {
       serverFilters.qaRepresentative.push(item.value)
-    })
+    })}
+    else {
+      serverFilters.qaRepresentative=[]
+    }
 
     render(serverFilters);
   })
