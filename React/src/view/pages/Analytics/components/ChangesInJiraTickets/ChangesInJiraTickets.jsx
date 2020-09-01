@@ -5,20 +5,20 @@ import "./ChangesInJiraTickets.css";
 //Components 
 import Select from 'react-select'
 import Chart from "../charts/Chart"
-
-
-
-function ChangesInJiraTickets() { 
+//import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
 
    // Options To Send == > Server 
   const serverFilters = {
     values: [],
     status: [],
     qaRepresentative: [],
-    startDate: [], // date1MonthAgo
-    endDate: [], // date
+    startDate: [], 
+    endDate: [], 
     label: ["weekly"]
   };
+
+function ChangesInJiraTickets() { 
+
   
   // Functions ==> Fetch : 
 
@@ -33,13 +33,12 @@ function ChangesInJiraTickets() {
     })
       .then((res) => res.json())
       .then((data) => { 
+        console.log(data)
         setStatusOptions(data[0].status) 
         setQaRepresentativeOptions(data[0].qa) 
-        console.log("filters has arrived")
-        console.log(data)
+     
       })
 
-      console.log('11111111')
       fetch('/api/analytics/changeOfJIRATicketsStatus',{
         method: 'POST',
         body: JSON.stringify(serverFilters ),
@@ -49,10 +48,9 @@ function ChangesInJiraTickets() {
       })
       .then(res => res.json())
       .then(data => {
-        console.log(data)
+       setUiObjs(data)
         
       })
-      console.log('222222')
 
   }, [])
 
@@ -67,7 +65,7 @@ function ChangesInJiraTickets() {
       }
     })
       .then((res) => res.json())
-      .then((data) => { console.log(data) })
+      .then((data) => { setUiObjs(data) })
 
   }
 
@@ -107,13 +105,21 @@ function ChangesInJiraTickets() {
 
 
   const HandleStatusChange = (status => {
-    console.log(status)
-    serverFilters.status = [status[0].label]
+    
+    serverFilters.status = []
+    status.map((item,index)=>{
+      serverFilters.status.push(item.value)
+    })
+    
     render(serverFilters);
   })
 
   const HandleqaRepresentativeChange = (Qa => {
-    serverFilters.qaRepresentative = [Qa[0].label]
+    serverFilters.qaRepresentative = []
+    Qa.map((item,index)=>{
+      serverFilters.qaRepresentative.push(item.value)
+    })
+    
     render(serverFilters);
   })
 
@@ -129,12 +135,16 @@ function ChangesInJiraTickets() {
 
   const HandleLabelChange = (label => {
     serverFilters.label = [label.value]
+    
     render(serverFilters);
   })
+
+ 
 
   return (
 
     <div className='ChangeOfJiraTicketWrapper'>
+
       <div className="ChangeOfJiraTicket__Chart"> 
       { UiObjs.length > 0 && <Chart UiObjs={UiObjs} />  } 
       </div>
@@ -153,7 +163,7 @@ function ChangesInJiraTickets() {
           onChange={HandleValuesChange}
         />
 
-        <Select
+        <Select 
           name="status"
           isMulti
           options={statusOptions}
@@ -185,7 +195,7 @@ function ChangesInJiraTickets() {
           onChange={HandleEndDateChange}
         />
 
-        <Select
+        <Select 
           name="labels"
           options={labelOptions}
           placeholder="Label"

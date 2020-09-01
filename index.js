@@ -6,7 +6,7 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
     extended: true
 }));
 
-//const TaskModel = require('./schemas/TaskSchema');
+const TaskModel = require('./schemas/TaskSchema');
 
 
 
@@ -21,6 +21,7 @@ mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
 // const data = []
 
 // TaskModel.insertMany(data).then(console.log('Done!'))
+
 
 
 const userRouter = require('./routing/users');

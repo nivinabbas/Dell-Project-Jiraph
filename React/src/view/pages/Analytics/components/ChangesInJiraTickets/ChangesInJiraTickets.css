@@ -1,7 +1,7 @@
 .ChangeOfJiraTicketWrapper{
     display: grid;
  
-    grid-template-columns: 5vw 90vw 5vw;
+    grid-template-columns: 5vw 75vw 5vw;
     grid-template-rows: 10vh 5vh 5vh auto;
     grid-template-areas: 
     ". header ."
@@ -10,7 +10,7 @@
     ". . ."
     "chartColors chart .";
     
-    background-color: whitesmoke;
+    background-color: #C8C9C7;
   }
   .ChangeOfJiraTicket__Table{
     grid-area: Table;
@@ -27,7 +27,7 @@
     margin-bottom: 5px;
     font:bolder;
     font-size: 20px;
-    color:white;
+    color:#C8C9C7;
     background-color: #D9514EFF;
     width: fit-content;
     height: fit-content;
@@ -37,7 +37,7 @@
     margin-bottom: 5px;
     font: bolder;
     font-size: 20px;
-    color: white;
+    color: #C8C9C7;
     background-color: #2A2B2DFF;
     width: fit-content;
     height: fit-content;
@@ -47,7 +47,7 @@
     margin-bottom: 5px;
     font: bolder;
     font-size: 20px;
-    color: white;
+    color:#C8C9C7;
     background-color: #2DA8D8FF;
     width: fit-content;
     height: fit-content;
@@ -58,7 +58,7 @@
   font-weight: bold;
     grid-area: header;
     text-align: center;
-    background-color: #20283E;
+    background-color: #00447C;
     color: white;
     height: 100%;
   }
@@ -81,7 +81,7 @@
     width: 15%;
    border-radius: 15px;
     border: black;
-    background-color: lightgray;
+    background-color: #C8C9C7;
   }
   .ChangeOfJiraTicket__Chart{
     grid-area: chart;
