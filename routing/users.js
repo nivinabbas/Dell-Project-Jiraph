@@ -194,7 +194,7 @@ router.post('/checkSendedPassword', (req, res) => {
 
 router.put('/updatePassword',(req,res)=>{
     const { email , password } = req.body;
-    UserModel.findByIdAndUpdate({userInfo: {employeeEmail: email}},{$set:{userInfo:{password:password}}}, function(err, doc) {
+    UserModel.findOneAndUpdate({"userInfo.employeeEmail": email},{$set:{userInfo:{password:password}}}, function(err, doc) {
         if (err) {
         return res.send({success:false , error:'not updated' , info:null});
         }else{
