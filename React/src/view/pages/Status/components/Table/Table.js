@@ -2,12 +2,12 @@ import React from "react";
 import "./style.css";
 import Select from "react-select";
 
-const optionSprint = [
-  { value: "all", label: "All" },
-  { value: "create", label: "Create" },
-  { value: "update", label: "Update" },
-  { value: "delete", label: "Delete" },
-];
+// const optionSprint = [
+//   { value: "all", label: "All" },
+//   { value: "create", label: "Create" },
+//   { value: "update", label: "Update" },
+//   { value: "delete", label: "Delete" },
+// ];
 
 const optionFunctional = [
   { value: "status", label: "Status" },
@@ -22,6 +22,7 @@ const optionValue = [
 
 export default function TasksTable({
   openTasks,
+  selectOptions,
   onDoneClick,
   onSelect,
   onTableFilterClick,
@@ -37,7 +38,7 @@ export default function TasksTable({
       </div>
       <div className="container__filterSelect">
         <Select
-          options={optionSprint}
+          options={selectOptions}
           className="filterSelect"
           onChange={(filter, name) => onSelect(filter, "modificationType")}
         />
