@@ -75,11 +75,6 @@ router.post('/modificationByField', async (req, res) => {
 
         }
     ])
-    // var curr = new Date();
-    // var firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()));
-    // var lastday = new Date(curr.setDate(curr.getDate() - curr.getDay() + 6));
-    // console.log(firstday)
-    // console.log(lastday)
     // let d1 = new Date(tasks[0]._id)
     // console.log(d1)
     // console.log(new Date(d1.setDate(d1.getDate() + 5)))
@@ -94,14 +89,14 @@ router.post('/modificationByField', async (req, res) => {
                 }
                 sumLength += element.size
             })
-        item.maxLength = maxLength
-        item.sumLength = sumLength
-        //maxLength=0;
-        sumLength = 0;
+            item.maxLength = maxLength
+            item.sumLength = sumLength
+            //maxLength=0;
+            sumLength = 0;
         })
-        tasks.map((item,index)=>{
+        tasks.map((item, index) => {
             item.arr.sort((a, b) => (a.fieldName > b.fieldName) ? 1 : -1);
-            if(item.maxLength < maxLength){
+            if (item.maxLength < maxLength) {
                 item.maxLength = maxLength
             }
         })
