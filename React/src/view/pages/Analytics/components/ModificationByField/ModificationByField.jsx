@@ -71,8 +71,11 @@ function ModificationByField(props) {
       .then((data) => {
         console.log(data)
         if (data.length > 0) {
-          
+          console.log(data);
+          if(data.length==1)
           setValueOptions(data[0].Values);
+          else 
+          setValueOptions([]);
         }
 
       })
