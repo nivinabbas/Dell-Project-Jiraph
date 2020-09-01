@@ -6,88 +6,7 @@ function MainTable(props) {
 
 
   const { changes } = props;
-  const tasks = [
-    {
-      "diffItem": {
-        "updateTime": 1568309401000,
-        "type": "Update",
-        "updatedField": {
-          "fieldName": "status",
-          "newValue": "In Progress",
-          "oldValue": "Done"
-        }
-      },
-      "jiraItem": {
-        "priority": "P00",
-        "status": "Backlog",
-        "jiraType": "Epic",
-        "jiraName": "PSI 41: SAR Support for FSCK/Recovery",
-        "qaRepresentative": null,
-        "functionalTest": "Yes",
-        "fixVersion": "PSI_41",
-        "jiraId": "TRIES-41773",
-        "jiraParentId": "TRIF-842"
-      },
-      "qcItem": {
-        "status": "Backlog",
-        "requirementType": "Epic",
-        "requirementId": "2164"
-      }
-    },
-    {
-      "diffItem": {
-        "updateTime": 1568395801000,
-        "type": "Update",
-        "updatedField": {
-          "fieldName": "status",
-          "newValue": "In Progress",
-          "oldValue": "Done"
-        }
-      },
-      "jiraItem": {
-        "priority": "P00",
-        "status": "Implementing",
-        "jiraType": "Epic",
-        "jiraName": "PSI 41: FSCK Support for Late Dedup and VLB Defrag Phase 1 & 2",
-        "qaRepresentative": null,
-        "functionalTest": "Yes",
-        "fixVersion": "PSI_41",
-        "jiraId": "TRIES-37201",
-        "jiraParentId": "TRIF-842"
-      },
-      "qcItem": {
-        "status": "In Progress",
-        "requirementType": "Epic",
-        "requirementId": "2011"
-      }
-    },
-    {
-      "diffItem": {
-        "updateTime": 1568482201000,
-        "type": "Update",
-        "updatedField": {
-          "fieldName": "status",
-          "newValue": "In Progress",
-          "oldValue": "Done"
-        }
-      },
-      "jiraItem": {
-        "priority": "P01",
-        "status": "Done",
-        "jiraType": "Epic",
-        "jiraName": "PSI 39: RAID fsck - Infrastructure update and validation rules expansion",
-        "qaRepresentative": null,
-        "functionalTest": "Yes",
-        "fixVersion": "PSI_39",
-        "jiraId": "TRIES-36948",
-        "jiraParentId": "TRIF-842"
-      },
-      "qcItem": {
-        "status": "Done",
-        "requirementType": "Epic",
-        "requirementId": "2008"
-      }
-    }]
+  const {tasks} = props
   return (
 
     <div className='MainTable'>
@@ -116,10 +35,10 @@ function MainTable(props) {
 
       <div className="MainTable__Body" />
 
-      {tasks.length > 0 && tasks.map((task) => {
+      {tasks && tasks.map((task,index) => {
         return (
           
-          <div className="MainTable__Row">
+          <div key={index} className="MainTable__Row">
 
             <div className="MainTable__Body__Cell">{task.jiraItem.jiraId}</div>
             <div className="MainTable__Body__Cell">{task.jiraItem.jiraName}</div>

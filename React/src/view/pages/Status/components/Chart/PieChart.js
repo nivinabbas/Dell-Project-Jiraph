@@ -1,6 +1,6 @@
 import React from "react";
 import Chart from "react-apexcharts";
-import SelectInput from "../Select/SelectInput";
+import Select from "react-select";
 
 const dummyData = {
   series: [44, 55],
@@ -31,7 +31,7 @@ const optionDone = [
 const PieChart = (props) => {
   return (
     <div id="chart">
-      <SelectInput options={optionDone} />
+      <Select options={optionDone} />
       <Chart
         options={dummyData.options}
         series={dummyData.series}

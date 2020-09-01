@@ -73,13 +73,17 @@ const StatusPage = (props) => {
   const [openTasks, setOpenTasks] = useState([]);
   const [isDone, setIsDone] = useState(false);
   const [BarChart, setBarChart] = useState([]);
+  const [filters, setFilters] = useState([
+    { name: "modificationType", value: "" },
+    { name: "modificationField", value: "" },
+    { name: "modificationValue", value: "" },
+  ]);
+  const [modificationType, setModificationType] = useState({});
 
   useEffect(() => {
-    console.log("getDailyalerts");
     fetch("/api/status/dailyalerts")
       .then((res) => res.json())
       .then((data) => {
-        console.log("daily alert", data);
         let { success, error, info } = data;
         if (success) {
           setCardsContent(info);
@@ -90,7 +94,6 @@ const StatusPage = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log("heyyy");
     fetch("/api/status/openTasks")
       .then((res) => res.json())
       .then((data) => {
@@ -102,9 +105,8 @@ const StatusPage = (props) => {
         }
       });
   }, []);
-  console.log(openTasks);
+
   const handleDoneClick = async (jiraId) => {
-    console.log("jira", jiraId);
     const userId = null;
     const result = openTasks.filter(
       (openTask) => openTask.jiraItem.jiraId !== jiraId
@@ -121,8 +123,6 @@ const StatusPage = (props) => {
 
   //date
   const handleDateClick = async (CurrentstartDate, CurrentEndtDate) => {
-    console.log("date", CurrentstartDate, CurrentEndtDate);
-
     await fetch("/api/status/barChart", {
       method: "POST",
       body: JSON.stringify({ CurrentstartDate, CurrentEndtDate }),
@@ -141,6 +141,21 @@ const StatusPage = (props) => {
       });
   };
 
+  const handleSelect = (filter, name) => {
+    const newFilters = [...filters].map((f) => {
+      if (f.name === name) f.value = filter.value;
+      return f;
+    });
+    setFilters(newFilters);
+  };
+
+  const handelTableFilterClick = () => {
+    const newFilters =
+      filters[0].value === "update" ? [...filters] : [{ ...filters[0] }];
+
+    //fetch
+  };
+
   return (
     <div className="statusPageContainer">
       <div className="statuspage__dashboard">
@@ -148,7 +163,14 @@ const StatusPage = (props) => {
       </div>
 
       <div className="statuspage__table">
-        <Table openTasks={openTasks} onDoneClick={handleDoneClick} />
+        <Table
+          openTasks={openTasks}
+          onDoneClick={handleDoneClick}
+          onSelect={handleSelect}
+          onChange={setModificationType}
+          onTableFilterClick={handelTableFilterClick}
+          filters={filters}
+        />
       </div>
       <div className="statuspage__filters">
         <DateFilter onDateFilterClick={handleDateClick} />
