@@ -19,8 +19,17 @@ function DelaysInDelivery() {
 
   // Options To get From Server 
   const [fixVersionOptions, setfixVersionOptions] = useState([])
-  const [jiraTypeOptions, setJiraTypeOptions] = useState([])
   const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([])
+
+  const [jiraTypeOptions, setJiraTypeOptions] = useState([
+    {  value: "epic", label: "Epic" },
+    {  value: "feature", label: "Feature" },
+    {  value: "initiative", label: "Initiative" },
+    {  value: "version", label: "Version" }
+    
+    
+  ])
+
 
   const [labelOptions, setLabelOptions] = useState([
     { name: "label", value: "daily", label: "Daily" },
@@ -85,14 +94,7 @@ function DelaysInDelivery() {
       })
 
   const HandlejiraTypeChange = (type => {
-    serverFilters.jiraType=[]
-    if(type!=null){
-      type.map((item, index) => {
-        return serverFilters.jiraType.push(item.value)
-      })}
-      else {
-        serverFilters.jiraType=[]
-      }
+    serverFilters.jiraType=[type.value]
     render(serverFilters);
   })
 
