@@ -41,18 +41,18 @@ function DeletedJira() {
 
   // Functions ==> Fetch : 
 
-  const render = (serverFilters)=> {
+  const render = (serverFilters) => {
     fetch('/api/analytics/deletedJiraTickets', {
-        method: 'POST',
-        body: JSON.stringify({serverFilters}),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-        .then((res) => res.json())
-        .then((data) => { console.log(data) })
-
+      method: 'POST',
+      body: JSON.stringify({ serverFilters }),
+      headers: {
+        "Content-Type": "application/json"
       }
+    })
+      .then((res) => res.json())
+      .then((data) => { console.log(data) })
+
+  }
 
 
   useEffect(() => {
@@ -66,119 +66,127 @@ function DeletedJira() {
     //   })
 
     fetch('/api/analytics/deletedJiraTicketsFilters', {
-        method: 'POST',
-        body: JSON.stringify({startDate:serverFilters.startDate,endDate:serverFilters.endDate,label: ["weekly"]}),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
+      method: 'POST',
+      body: JSON.stringify({ startDate: serverFilters.startDate, endDate: serverFilters.endDate }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
       .then((res) => res.json())
-      .then((data) => { console.log(data) })
+      .then((data) => {
+        console.log(data)
+        setPriorityOptions(data[0].priorities)
+        setQaRepresentativeOptions(data[0].QA)
+      })
 
   }
-  , [])
+    , [])
 
-///change priority:
-const HandlePriorityChange = (priority => {
-  console.log(priority.value)
-  serverFilters.priority = [priority.value];
-  render(serverFilters);
-})
+  ///change priority:
+  const HandlePriorityChange = (priority => {
+    console.log(priority.value)
+    serverFilters.priority = [priority.value];
+    render(serverFilters);
+  })
 
-///change functionaltest
-const HandlefunctionalTestChange = (status => {
-  serverFilters.status = [status.value];
-  render(serverFilters);
-})
-///change qaRepresentative:
-const HandleqaRepresentativeChange = (Qa => {
-  serverFilters.Qa = [Qa.value];
-  render(serverFilters);
-})
-///change StartDate:
-const HandleStartDateChange = (date => {
-  console.log(date)
-  serverFilters.date = (date.target.value);
-  render(serverFilters);
-})
-///change EndDate:
-const HandleEndDateChange = (date => {
-  console.log(date.value)
-  serverFilters.date = (date.target.value);
-  render(serverFilters);
-})
-/// change leLabel:
-const HandleLabelChange = (label => {
-  console.log(label.value)
-  serverFilters.label = [label.value];
-  render(serverFilters);
-})
+  ///change functionaltest
+  const HandlefunctionalTestChange = (status => {
+    serverFilters.status = [status.value];
+    render(serverFilters);
+  })
 
-return (
+  ///change qaRepresentative:
+  const HandleqaRepresentativeChange = (Qa => {
+    serverFilters.Qa = [Qa.value];
+    render(serverFilters);
+  })
 
-  <div className='DeletedJiraTicketsWrapper'>
-    <div className="DeletedJiraTickets__Table" >
-      <MainTable changes={true} />
+  ///change StartDate:
+  const HandleStartDateChange = (date => {
+    console.log(date)
+    serverFilters.date = (date.target.value);
+    render(serverFilters);
+  })
 
+  ///change EndDate:
+  const HandleEndDateChange = (date => {
+    console.log(date.value)
+    serverFilters.date = (date.target.value);
+    render(serverFilters);
+  })
+
+  /// change leLabel:
+  const HandleLabelChange = (label => {
+    console.log(label.value)
+    serverFilters.label = [label.value];
+    render(serverFilters);
+  })
+
+  return (
+
+    <div className='DeletedJiraTicketsWrapper'>
+      <div className="DeletedJiraTickets__Table" >
+        <MainTable changes={true} />
+
+      </div>
+      <div className="DeletedJiraTickets__Title">Deleted Jira Tickets</div>
+
+      {/* Select Filters */}
+
+      <form className="DeletedJiraTickets__Filters">
+        {/* select */}
+        <Select
+          name="priority"
+          options={priorityOptions}
+          placeholder="priority "
+          className="DeletedJiraTickets__Filter"
+          onChange={HandlePriorityChange}
+        />
+
+        <Select
+          name="functional test"
+          isMulti
+          options={functionalTestOptions}
+          placeholder="functional-Test "
+          className="DeletedJiraTickets__Filter"
+          onChange={HandlefunctionalTestChange}
+        />
+
+        <Select
+          name="qaRepresentative"
+          isMulti
+          options={qaRepresentativeOptions}
+          placeholder="Qa Representative "
+          className="DeletedJiraTickets__Filter"
+          onChange={HandleqaRepresentativeChange}
+        />
+
+        <input
+          className="DeletedJiraTickets__Filter"
+          type="date"
+          name="startDate"
+          onChange={HandleStartDateChange}
+        />
+
+
+        <input
+          className="DeletedJiraTickets__Filter"
+          type="date"
+          name="endDate"
+          onChange={HandleEndDateChange}
+        />
+
+        <Select
+          name="labels"
+          options={labelOptions}
+          placeholder="Label"
+          className="DeletedJiraTickets__Filter"
+          onChange={HandleLabelChange}
+        />
+
+      </form>
     </div>
-    <div className="DeletedJiraTickets__Title">Deleted Jira Tickets</div>
-
-    {/* Select Filters */}
-
-    <form className="DeletedJiraTickets__Filters">
-      {/* select */}
-      <Select
-        name="priority"
-        options={priorityOptions}
-        placeholder="priority "
-        className="DeletedJiraTickets__Filter"
-        onChange={HandlePriorityChange}
-      />
-
-      <Select
-        name="functional test"
-        isMulti
-        options={functionalTestOptions}
-        placeholder="functional-Test "
-        className="DeletedJiraTickets__Filter"
-        onChange={HandlefunctionalTestChange}
-      />
-
-      <Select
-        name="qaRepresentative"
-        isMulti
-        options={qaRepresentativeOptions}
-        placeholder="Qa Representative "
-        className="DeletedJiraTickets__Filter"
-        onChange={HandleqaRepresentativeChange}
-      />
-
-      <input
-        className="DeletedJiraTickets__Filter"
-        type="date"
-        name="startDate"
-        onChange={HandleStartDateChange}
-      />
-
-
-      <input
-        className="DeletedJiraTickets__Filter"
-        type="date"
-        name="endDate"
-        onChange={HandleEndDateChange}
-      />
-
-      <Select
-        name="labels"
-        options={labelOptions}
-        placeholder="Label"
-        className="DeletedJiraTickets__Filter"
-        onChange={HandleLabelChange}
-      />
-
-    </form>
-  </div>
-)
+  )
 }
 
 
