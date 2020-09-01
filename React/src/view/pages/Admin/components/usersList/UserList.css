@@ -1,32 +1,84 @@
-#saveBtn{
-    display: none;
-}
-
-.h1 { grid-area: header; }
-.h2 { grid-area: header; }
-.h3 { grid-area: header; }
-.h4 { grid-area: header; }
-
-
-#Names{
-    display: grid;
-    font-size: 40px;
-    grid-template-areas:
-      'header header header header '
-
-}
-
-#alert{
-    display: none;
-            background-color: #F3F5F6;
-            color: #000000;
-            border: 1px solid #aaa;
-            position: fixed;
-            width: 300px;
-            height: 100px;
-            left: 50%;
-            margin-left: -100px;
-            padding: 10px 20px 10px;
-            box-sizing: border-box;
-            text-align: center;
-}
+body {
+    background-color: #EFEFEF;
+    font-size: 16px;
+}   
+   /* Header */
+   #header {
+        padding: 5vh;
+        background-color: #EFEFEF;
+    }
+    .adminPage {
+    margin-left: 10vw;
+    margin-right:10vw;
+    background-color: white;
+    }
+    .AdminTable {
+    }
+    .TableColHeeader {
+    }
+    .TableColHeeader {
+        display: flex;
+        flex-direction: row;
+        padding:0;
+        text-align: center;
+        background-color: #007DB8;
+    }
+    .TableColHeeader h4 {
+        width: 20%;
+        height: 1.9rem;
+        margin-bottom: 0;
+        border: 1px  ridge  gray;
+        background-color: #007DB8;
+        color: #FFFFFF;
+        border:none;
+    /* Table Create Row */
+    }
+    .TableCreateRow {
+        /* margin-bottom: 4px; */
+        height: 1.9rem;
+        border: 1px groove gray ;
+    }
+    .TableCreateRow #createBtn {
+        background-color: #007DB8;
+        height: 1.8rem;
+        border: none;
+        color: white;
+    } 
+    /* Table Body CSS */
+    .TableBody {
+        margin:0;
+        padding:0;
+        margin-bottom: 4px;
+        border: 1px groove gray ;
+        border:none;
+    }
+    .TableBody input, .TableCreateRow input {
+        margin:0;
+        padding:0;
+        width: 20%;
+        height: 1.9rem;
+        border:none;
+        text-align: center;
+        background-color: white;
+    }
+    .TableBody select, .TableCreateRow select {
+        width: 20%;
+        height: 1.9rem;
+        border:none;
+        text-align: center;
+        background-color: white;
+        border: none;
+    }
+    .TableBody button {
+        border:none;
+        background-color: transparent;
+        color:#007DB8;
+        margin-right: 0.2rem;
+        font-size: 16px;
+    }
+    .saveBtn {
+        color:green;
+    }
+    .deleteBtn {
+        color:red;
+    }
