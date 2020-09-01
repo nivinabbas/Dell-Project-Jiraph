@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import './UserList.css'
+
 
 export default props => {
 
@@ -8,7 +10,7 @@ export default props => {
     
     
     return (
-        <form id={user.id} onSubmit={onSave} >
+        <form id={user.id} onSubmit={(e=>onSave(e, user.id))} >
 
             <input name="name" disabled={!edit} type="text" defaultValue={user.name} ></input>
             <input disabled={!edit} type="email" name='email' defaultValue={user.email}></input>
@@ -29,7 +31,7 @@ export default props => {
         </form>
     )
 
-    function onSave(e) {
+    function onSave(e, id) {
         e.preventDefault()
         setEdit(false)
 
@@ -40,11 +42,9 @@ export default props => {
         role = role.value;
         password = password.value;
 
-        console.log(name, email,role,password)
         fetch('/api/users/editUser', {
-            
             method: 'POST',
-            body: JSON.stringify({name, email,role,password}),
+            body: JSON.stringify({id,name, email,role,password}),
             headers: {
                 "Content-Type": "application/json"
             }
@@ -52,10 +52,10 @@ export default props => {
             .then(response => response.json())
             .then(data => {
                 if (data.success = true) {
-                    console.log('update sucsses');
+                    alert('update sucsses');
                 }
                 else if (data.success = false) {
-                    console.log('Not update ')
+                    alert(data.error)
                 }
             })
 
@@ -72,12 +72,10 @@ export default props => {
 
     function deleteUser(e, id) {
         e.preventDefault();
-        console.log(id)
         if (!window.confirm('Are you sure you want to delete this User?')) {
             alert("Not Deleted")
             return;
         }
-        console.log(id)
         fetch('/api/users/deleteUser', {
             method: 'Delete',
             body: JSON.stringify({id}),
@@ -88,9 +86,8 @@ export default props => {
             .then(response => response.json())
             .then(data => {
                 if (data.success = true) {
-                    console.log(data.info.table)
                     setUsers(data.info.table);
-                    // return alert('Deleted sucsses')
+                    return alert('Deleted sucsses')
                 }
                 else if (data.success = false) {
                     alert(data.error)

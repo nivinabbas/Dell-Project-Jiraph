@@ -14,20 +14,19 @@ function UserList() {
         fetch('/api/users/getUsersList')
             .then(res => res.json())
             .then(data => {
-                console.log(data.info.table)
                 if (data.success == true) {
                     setUsers(data.info.table);
                 }
                 else {
-                    console.log(data.error)
+                    alert(data.error)
                 }
             })
     }, []);
 
-    useEffect(()=>{
-        console.log('users changed')
-        console.dir(users)
-    },[users])
+    // useEffect(()=>{
+    //     console.log('users changed')
+    //     console.dir(users)
+    // },[users])
 
 
     return (
@@ -87,10 +86,9 @@ function UserList() {
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data.info.table)
+               
                 if (data.success = true) {
                     setUsers(data.info.table)
-                  
                     return (alert('created sucsses'))
                 }
                 else if (data = false) {
