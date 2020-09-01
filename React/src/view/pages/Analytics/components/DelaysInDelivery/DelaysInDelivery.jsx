@@ -44,7 +44,7 @@ function DelaysInDelivery() {
   }
 
   useEffect(() => {
-    fetch('api/analytics/filters/delaysInDelivery', {
+    fetch('api/analytics/delaysInDeliveryFilters', {
       method: 'POST',
       body: JSON.stringify(serverFilters),
       headers: {
