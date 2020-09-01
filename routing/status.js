@@ -201,9 +201,7 @@ router.post("/PieChart", (req, res) => {
   );
 });
 // end update task
-
 //stackedChart start 
-
 router.post("/fillterStackedChart", async function (req, res) {
   let { label, datefrom, dateTo } = req.body;
   let DailyAlerts;
