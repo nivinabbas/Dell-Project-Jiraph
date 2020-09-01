@@ -148,8 +148,8 @@ router.post('/modificationByFieldFilters', async (req, res) => {
 
 router.post('/deletedJiraTicketsFilters', async (req, res) => {
     let tasks = []
-    const { serverFilters } = req.body
-    const { startDate, endDate, label} = serverFilters;
+    const { startDate, endDate, label} = req.body
+    console.log(startDate,endDate,label)
     //if (fieldName.length == 0) { // runs to bring all the fieldNames and QA when reloading
         tasks = await TaskModel.aggregate([
             {
