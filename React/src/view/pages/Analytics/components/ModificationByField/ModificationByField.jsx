@@ -72,7 +72,7 @@ function ModificationByField(props) {
         console.log(data)
         if (data.length > 0) {
           console.log(data);
-          if(data.length==1){
+          if(data.length>0){
             setValueOptions(data[0].Values);
           }
           else{
@@ -112,8 +112,10 @@ function ModificationByField(props) {
   const handleChangeValues = (change => {
     serverFilters.values = []
     if (change != null) {
-      change.map((item,index)=>{
+      change.map((item)=>{
+        return(
         serverFilters.values.push(item.value)
+        )
       })
     }
     else {

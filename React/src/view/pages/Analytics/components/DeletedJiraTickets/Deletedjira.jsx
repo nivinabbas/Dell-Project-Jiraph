@@ -88,31 +88,41 @@ function DeletedJira() {
     , [])
 
   ///change priority:
-  const HandlePriorityChange = (priority => {
+  const HandlePriorityChange = (change => {
     serverFilters.priority = []
-    priority.map((item,index)=>{
+    
+    if(change!=null)(
+      change.map((item)=>{
+      return (
       serverFilters.priority.push(item.value)
-    })
+      )
+
+    }))
     
     render(serverFilters);
   })
 
   ///change functionaltest
-  const HandlefunctionalTestChange = (status => {
+  const HandlefunctionalTestChange = (change => {
     serverFilters.functionalTest = []
-    status.map((item,index)=>{
+    if(change!=null)(
+    change.map((item)=>{
+      return (
       serverFilters.functionalTest.push(item.value)
-    })
-    
+      )
+    })) 
     render(serverFilters);
   })
 
   ///change qaRepresentative:
-  const HandleqaRepresentativeChange = (Qa => {
+  const HandleqaRepresentativeChange = (change => {
     serverFilters.qaRepresentative = []
-    Qa.map((item,index)=>{
+    if(change!=null)(
+      change.map((item)=>{
+        return(
       serverFilters.qaRepresentative.push(item.value)
-    })
+        )
+    }))
     
     render(serverFilters);
   })

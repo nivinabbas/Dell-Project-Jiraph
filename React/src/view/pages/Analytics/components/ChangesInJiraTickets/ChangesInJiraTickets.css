@@ -1,12 +1,11 @@
 .ChangeOfJiraTicketWrapper{
   display: grid;
-  grid-template-columns: 2vw 82vw 4vw;
+  grid-template-columns: 2vw 82vw 2vw;
   grid-template-rows: 10vh 15vh 5vh auto;
   grid-template-areas: 
   "header header header "
   ". filterButtons ."
   ". . ."
-  ". Table . "
   "chartColors chart .";
   
   background-color: #C8C9C7;
@@ -105,4 +104,6 @@
   }
   .ChangeOfJiraTicket__Chart{
     grid-area: chart;
+    /* max-width: 90%;
+    overflow-x: auto; */
   }
