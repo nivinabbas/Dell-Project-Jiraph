@@ -99,10 +99,8 @@ function ModificationByField(props) {
   })
 
   const handleChangeFieldName = (change => {
-    serverFilters.fieldName = []
-    change.map((item,index)=>{
-      serverFilters.fieldName.push(item.value)
-    })
+  serverFilters.fieldName=[change.value];
+   
     render(serverFilters)
     renderFilters(serverFilters);
   })
@@ -122,15 +120,7 @@ function ModificationByField(props) {
 
   const handleChangeQaRepresentative = (change => {
 
-     serverFilters.qaRepresentative = []
-    if (change != null) {
-      change.map((item,index)=>{
-        serverFilters.qaRepresentative.push(item.value)
-      })
-    }
-    else {
-      serverFilters.qaRepresentative = [];
-    }
+    serverFilters.qaRepresentative=[change.value];
     render(serverFilters);
   })
 
@@ -154,14 +144,14 @@ function ModificationByField(props) {
       <div className="ModificationByField__Filters">
 
 
-        <ReactMultiSelectCheckboxes
+        <Select
           name="fieldName"
           onChange={handleChangeFieldName}
           placeholder="fieldName"
           className="ModificationByField__Filter"
           options={fieldNameOptions} />
 
-        <ReactMultiSelectCheckboxes
+        <Select
           name="value"
           onChange={handleChangeValues}
           isMulti
@@ -169,7 +159,7 @@ function ModificationByField(props) {
           className="ModificationByField__Filter"
           options={valueOptions} />
 
-        <ReactMultiSelectCheckboxes
+        <Select
           name="qaRepresentative"
           onChange={handleChangeQaRepresentative}
           placeholder="Qa Rep"
