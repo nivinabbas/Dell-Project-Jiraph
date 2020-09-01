@@ -49,8 +49,8 @@ function ChangePassword(props) {
     return (
         <div className='forgotpassword'>
             <form id="resetPasswordForm" onSubmit={onResetPassword} >
-                <input id="resetNPswInp" name="resetNPswInp" placeholder="Choose a new Password"></input>
-                <input id="confirmNPswInp" name="confirmNPswInp" placeholder="confirm the new Password"></input>
+                <input id="resetNPswInp" type="password" name="resetNPswInp" placeholder="Choose a new Password"></input>
+                <input id="confirmNPswInp" type="password" name="confirmNPswInp" placeholder="confirm the new Password"></input>
                 <button type="submit">Save</button>
             </form>
         </div>
