@@ -37,7 +37,7 @@ const StatusPage = (props) => {
   ]);
   const [modificationType, setModificationType] = useState({});
   const [barChart, setBarChart] = useState({});
-  const [stackedChart, setStackedChart] = useState({});
+  const [stackedChart, setStackedChart] = useState([]);
 
   useEffect(() => {
     fetch("/api/status/dailyalerts")
@@ -71,6 +71,7 @@ const StatusPage = (props) => {
       .then((data) => {
         let { success, error, info } = data;
         if (success) {
+          console.log("first", info);
           setStackedChart(info);
         } else {
           alert(error);
