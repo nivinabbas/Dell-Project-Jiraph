@@ -150,7 +150,7 @@ router.get("/openTasks", async function (req, res) {
 // start openTasksWithFilter
 router.post("/openTasksWithFilter", async function (req, res) {
   const { filter } = req.body;
-  if (filter.type === "Update") {
+  if (filter.type === "Update" && filter.fieldName != "") {
     TaskModel.find(
       {
         "diffItem.type": filter.type,
@@ -334,6 +334,7 @@ router.get("/getType", async function (req, res) {
 });
 //getType end
 
+////////////////////////TEST FUNCTIONS/////////////////////////
 async function test123test(time1, time2) {
   datefrom = new Date(time1 + "T00:00:00.00Z");
   dateTo = new Date(time2 + "T23:59:59.0099Z");
@@ -391,14 +392,12 @@ async function test123test(time1, time2) {
   tempCountNotDone.push({ categories: tempDate });
   console.log(tempCountNotDone);
 }
-
 // test123test("2020-08-25", "2020-08-31");
 //stackedChart end
 
-//////////////////////
-
+//////////test function for open task with filter
 function openTasksWithFilter(type, fieldName) {
-  if (type === "Update") {
+  if (type === "Update" && fieldName != "") {
     TaskModel.find(
       {
         "diffItem.type": type,
@@ -418,6 +417,6 @@ function openTasksWithFilter(type, fieldName) {
     );
   }
 }
-openTasksWithFilter("Create", "qaRepresentative");
+// openTasksWithFilter("Update", "qaRepresentative1");
 
 module.exports = router;
