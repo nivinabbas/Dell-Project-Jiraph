@@ -10,7 +10,7 @@ const serverFilters = { priority: [], functionalTest: [], label: ["weekly"], qaR
 
 
 
-function DeletedJira() {
+function DeletedJiraTickets() {
   // To set UiObj from the filtered Data we recieved from server 
   const [UiObjs, setUiObjs] = useState([]);
 
@@ -216,4 +216,4 @@ function DeletedJira() {
 
 
 
-export default DeletedJira;
+export default DeletedJiraTickets;

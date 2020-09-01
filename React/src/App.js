@@ -15,7 +15,7 @@ import UserList from "./view/pages/Admin/components/usersList/UserList";
 
 
 import ModificationByField from "./view/pages/Analytics/components/ModificationByField/ModificationByField";
-import DeletedJira from "./view/pages/Analytics/components/DeletedJiraTickets/Deletedjira";
+import DeletedJiraTickets from "./view/pages/Analytics/components/DeletedJiraTickets/DeletedJiraTickets";
 import ChangesInJiraTickets from "./view/pages/Analytics/components/ChangesInJiraTickets/ChangesInJiraTickets";
 import ChangesByParentId from "./view/pages/Analytics/components/ChangesByParentId/ChangesByParentId";
 import DelaysInDelivery from "./view/pages/Analytics/components/DelaysInDelivery/DelaysInDelivery";
@@ -69,7 +69,7 @@ function App() {
               <ModificationByField />
             </Route>
             <Route path="/DeletedJiraTickets">
-              <DeletedJira />
+              <DeletedJiraTickets />
             </Route>
             <Route path="/ChangesInJiraTickets">
               <ChangesInJiraTickets />
