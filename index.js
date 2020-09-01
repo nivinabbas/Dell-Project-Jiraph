@@ -6,7 +6,7 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
     extended: true
 }));
 
-//const TaskModel = require('./schemas/TaskSchema');
+const TaskModel = require('./schemas/TaskSchema');
 
 
 
@@ -23,6 +23,7 @@ mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
 // TaskModel.insertMany(data).then(console.log('Done!'))
 
 
+
 const userRouter = require('./routing/users');
 app.use("/api/users", userRouter);
 
@@ -36,3 +37,13 @@ const bellaRouting = require('./routing/bellaRouting');
 app.use("/api/PostBellaData", bellaRouting);
 
 app.listen(4000, () => { console.log("App is Listening to 4000") })
+
+
+
+
+
+
+
+
+
+

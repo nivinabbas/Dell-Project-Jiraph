@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .ChangeOfJiraTicketWrapper{
   display: grid;
   grid-template-columns: 2vw 82vw 4vw;
@@ -105,4 +106,93 @@
   }
   .ChangeOfJiraTicket__Chart{
     grid-area: chart;
+=======
+.ChangeOfJiraTicketWrapper{
+    display: grid;
+ 
+    grid-template-columns: 5vw 75vw 5vw;
+    grid-template-rows: 10vh 5vh 5vh auto;
+    grid-template-areas: 
+    ". header ."
+  
+    ". filterButtons ."
+    ". . ."
+    "chartColors chart .";
+    
+    background-color: #C8C9C7;
+  }
+  .ChangeOfJiraTicket__Table{
+    grid-area: Table;
+  }
+
+  .chart_Colors{
+    margin-left: 10px;
+    /* display: flex; */
+    grid-area: chartColors;
+    justify-content: center;
+    justify-content: space-around;
+  }
+  .chart_Colors_Status{
+    margin-bottom: 5px;
+    font:bolder;
+    font-size: 20px;
+    color:#C8C9C7;
+    background-color: #D9514EFF;
+    width: fit-content;
+    height: fit-content;
+    border-radius: 5px;
+  }
+  .chart_Colors_Priority{
+    margin-bottom: 5px;
+    font: bolder;
+    font-size: 20px;
+    color: #C8C9C7;
+    background-color: #2A2B2DFF;
+    width: fit-content;
+    height: fit-content;
+    border-radius: 5px;
+  }
+  .chart_Colors_QaRepresentative{
+    margin-bottom: 5px;
+    font: bolder;
+    font-size: 20px;
+    color:#C8C9C7;
+    background-color: #2DA8D8FF;
+    width: fit-content;
+    height: fit-content;
+    border-radius: 5px;
+  }
+  .ChangeOfJiraTicket__Title{
+    font-size: 30px;
+  font-weight: bold;
+    grid-area: header;
+    text-align: center;
+    background-color: #00447C;
+    color: white;
+    height: 100%;
+  }
+  .ChangeOfJiraTicket__Filters{
+    
+    grid-area: filterButtons;
+  }
+ /* .ModificationByFieldTable{
+    grid-area: table;
+  }*/
+  .ChangeOfJiraTicket__Filters{
+    display: flex;
+    justify-content: space-evenly;
+  }
+  .ChangeOfJiraTicket__Filter{
+  width: 100%;
+  
+  }
+  .ChangeOfJiraTicket__Submit{
+    width: 15%;
+   border-radius: 15px;
+    border: black;
+    background-color: #C8C9C7;
+  }
+  .ChangeOfJiraTicket__Chart{
+    grid-area: chart;
+>>>>>>> Nimer
   }
