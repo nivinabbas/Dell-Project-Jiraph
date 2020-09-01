@@ -194,6 +194,7 @@ router.post('/checkSendedPassword', (req, res) => {
 
 router.put('/updatePassword',(req,res)=>{
     const { email , password } = req.body;
+    console.log(email,password)
     UserModel.findOne({"userInfo.employeeEmail":email}).then(docs=>{
         if(docs){
         const name = docs.userInfo.employeeName

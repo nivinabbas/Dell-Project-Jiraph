@@ -34,8 +34,7 @@ function KeyPassword(props) {
                 const { success } = data;
                 const { error } = data;
                 const { info } = data;
-                console.log(success)
-                history.push(`/ChangePassword/${email}`)
+              
                 if (success) {
                     return (history.push(`/ChangePassword/${email}`))
                 }
