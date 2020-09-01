@@ -7,19 +7,6 @@
   text-decoration: none;
 }
 
-.sidebar {
-  background-color: #eeeeee;
-  height: 100vh;
-  width: 13vw;
-  display: grid;
-  grid-template-columns: 1.1vw 11.2vw 0.7vw;
-  grid-template-rows: 10vh 85vh 5vh;
-  grid-template-areas:
-    "header header header"
-    ". menu ."
-    " footer footer footer ";
-}
-
 .sidebar__header-wrapper {
   /* background-color:#405c0b; */
   height: 10vh;
