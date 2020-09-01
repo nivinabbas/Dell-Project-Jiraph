@@ -73,7 +73,12 @@ const StatusPage = (props) => {
   const [openTasks, setOpenTasks] = useState([]);
   const [isDone, setIsDone] = useState(false);
   const [BarChart, setBarChart] = useState([]);
-  const [filters, setFilters] = useState([]);
+  const [filters, setFilters] = useState([
+    { name: "modificationType", value: "" },
+    { name: "modificationField", value: "" },
+    { name: "modificationValue", value: "" },
+  ]);
+  const [modificationType, setModificationType] = useState({});
 
   useEffect(() => {
     fetch("/api/status/dailyalerts")
@@ -102,18 +107,21 @@ const StatusPage = (props) => {
   }, []);
 
   const handleDoneClick = async (jiraId) => {
-    const userId = null;
-    const result = openTasks.filter(
-      (openTask) => openTask.jiraItem.jiraId !== jiraId
-    );
-    setOpenTasks(result);
-    await fetch("/api/status/updateTasks", {
-      method: "POST",
-      body: JSON.stringify({ jiraId, userId }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    try {
+      const userId = null;
+      const result = openTasks.filter(
+        (openTask) => openTask.jiraItem.jiraId !== jiraId
+      );
+      setOpenTasks(result);
+      console.log(jiraId);
+      await fetch("/api/status/updateTasks", {
+        method: "POST",
+        body: JSON.stringify({ jiraId, userId }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (error) {}
   };
 
   //date
@@ -136,17 +144,21 @@ const StatusPage = (props) => {
       });
   };
 
-  const handleSelect = (filter, action) => {
-    console.log("filter:", filter);
-    console.log("action", action);
-    // const name = action.name;
-    setFilters([...filters, filter]);
+  const handleSelect = (filter, name) => {
+    const newFilters = [...filters].map((f) => {
+      if (f.name === name) f.value = filter.value;
+      return f;
+    });
+    setFilters(newFilters);
   };
+
   const handelTableFilterClick = () => {
-    console.log("sdadasadasdasdasdasdasdasa", filters);
+    const newFilters =
+      filters[0].value === "update" ? [...filters] : [{ ...filters[0] }];
+
     //fetch
   };
-  console.log("asdasdas", filters);
+
   return (
     <div className="statusPageContainer">
       <div className="statuspage__dashboard">
@@ -158,7 +170,9 @@ const StatusPage = (props) => {
           openTasks={openTasks}
           onDoneClick={handleDoneClick}
           onSelect={handleSelect}
+          onChange={setModificationType}
           onTableFilterClick={handelTableFilterClick}
+          filters={filters}
         />
       </div>
       <div className="statuspage__filters">

@@ -25,7 +25,11 @@ export default function TasksTable({
   onDoneClick,
   onSelect,
   onTableFilterClick,
+  filters,
 }) {
+  const disableSelect = () => {
+    return filters[0].value !== "update" ? true : false;
+  };
   return (
     <div className="open-tasks">
       <div className="open-tasks-title">
@@ -33,22 +37,24 @@ export default function TasksTable({
       </div>
       <div className="container__filterSelect">
         <Select
-          options={optionFunctional}
-          className="filterSelect"
-          onChange={(filter, action) => onSelect(filter, action)}
-          name="modificationType"
-        />
-        <Select
           options={optionSprint}
           className="filterSelect"
-          onChange={(filter, action) => onSelect(filter, action)}
-          name="modificationField"
+          onChange={(filter, name) => onSelect(filter, "modificationType")}
+        />
+
+        <Select
+          options={optionFunctional}
+          className="filterSelect"
+          onChange={(filterObj, name) =>
+            onSelect(filterObj, "modificationField")
+          }
+          isDisabled={disableSelect()}
         />
         <Select
           options={optionValue}
           className="filterSelect"
-          onChange={(filter, action) => onSelect(filter, action)}
-          name="modificationValue"
+          onChange={(filter, name) => onSelect(filter, "modificationValue")}
+          isDisabled={disableSelect()}
         />
         <input
           type="submit"
@@ -82,6 +88,7 @@ export default function TasksTable({
                   <input
                     type="checkbox"
                     onClick={() => onDoneClick(task.jiraItem.jiraId)}
+                    key={task._id}
                   />
                 </td>
               </tr>
