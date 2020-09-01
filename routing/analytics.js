@@ -399,7 +399,6 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
 
 })
 
-//  !!-------------------------------------------- Sally --------------------------------------------!!
 router.post('/changeOfJIRATicketsStatusFilters', async (req, res) => {
 
     let tasks = []
@@ -453,11 +452,11 @@ router.post('/changeOfJIRATicketsStatusFilters', async (req, res) => {
 
 
 
-router.get('/delaysInDelivery', (req, res) => {
+router.post('/delaysInDelivery', (req, res) => {
 
 })
 
-router.get('/delaysInDeliveryFilter', async (req, res) => {
+router.post('/delaysInDeliveryFilters', async (req, res) => {
     let filters = await TaskModel.aggregate([
         {
             $match: {}

@@ -44,7 +44,7 @@ function DelaysInDelivery() {
   }
 
   useEffect(() => {
-    fetch('api/analytics/filters/delaysInDelivery', {
+    fetch('api/analytics/delaysInDeliveryFilters', {
       method: 'POST',
       body: JSON.stringify(serverFilters),
       headers: {
@@ -57,7 +57,7 @@ function DelaysInDelivery() {
         setfixVersionOptions(data[0].fixVersion)
 
       })
-    })
+    },[])
 
     const renderFilters = (serverFilters) => {
       fetch('api/analytics/delaysInDeliveryFilters', {
@@ -69,8 +69,8 @@ function DelaysInDelivery() {
       })
         .then((res) => res.json())
         .then((data) => { 
-          setJiraTypeOptions(data[0].Jira);
-          setQaRepresentativeOptions(data[0].QA); 
+          
+          setQaRepresentativeOptions(data[0].qa); 
         })
   
     }
