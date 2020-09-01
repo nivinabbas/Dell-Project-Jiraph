@@ -196,20 +196,31 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
         }
 
     ])
+    tasks.map((item, index) => {
+        item.arr.sort((a, b) => (a.value > b.value) ? 1 : -1);
+    })
+    tasks.sort((a, b) => (a._id > b._id) ? 1 : -1);
 
     //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
     // console.log("YOUSEF")
     let maxLength = -1;
-    let sum = 0;
-    tasks[0].arr.forEach(element => {
-        sum += element.size
-        if (element.size > maxLength)
-            maxLength = element.size
+
+    tasks.map((task, index) => {
+        let sum = 0;
+        task.arr.forEach(element => {
+            sum += element.size
+            if (element.size > maxLength)
+                maxLength = element.size
+        })
+        tasks[index].sum = sum
+        console.log(tasks[index].arr)
     })
-    tasks[0].sum = sum
-    tasks[0].maxLength = maxLength
-    console.log(tasks[0].arr)
+    
+    tasks.map((task, index)=>{
+        tasks[index].maxLength = maxLength
+    })
+
 
     // tasks.forEach(element => {
     //     console.log(element.arr[0].tasks[0].jiraItem)
