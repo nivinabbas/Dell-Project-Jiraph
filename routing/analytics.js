@@ -107,9 +107,8 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
     const filterStatus = req.body.status
     const filterQaRep = req.body.qaRepresentative
 
-    console.log("nimer")
     console.log(filterValue, filterStatus, filterQaRep)
-    console.log("nimer")
+
 
 
     //here we build the match expression according to the user's filters.
@@ -118,6 +117,7 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
     //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
     let matchFilterValue = { "$and": [] };
+    let ValToAgg = filterValue.length == 0 ? "$diffItem.updatedField.newValue":`$diffItem.updatedField.${filterValue}`
 
     let filtersArray = [];
 
@@ -126,9 +126,8 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
     filtersArray.push({ 'diffItem.type': 'Update' })
     filtersArray.push({ 'diffItem.updatedField.fieldName': 'status' })
 
-    // if (filterQaRep != undefined) {
-    //     filtersArray['jiraItem.qaRepresentative'] = filterQaRep
-    // }
+
+
 
     //multiselect status
     if (filterStatus[0] != undefined && filterValue[0] != undefined) {
@@ -169,6 +168,11 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
 
 
 
+    if (filterValue.length == 0) {
+        console.log("ASASASASASASAASASASAASASASASAS")
+        matchFilterValue = {}
+
+    }
     console.log(matchFilterValue)
 
     const tasks = await TaskModel.aggregate([
@@ -179,7 +183,8 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
             $group: {
                 _id: {
                     date: { $dateToString: { format: "%Y-%m-%d", date: "$diffItem.updatedTime" } },
-                    Val: `$diffItem.updatedField.${filterValue}`
+                    Val: ValToAgg
+                    // Val: `$diffItem.updatedField.${filterValue}`
 
                 },
                 tasks: { $push: "$$ROOT" },
@@ -196,38 +201,40 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
         }
 
     ])
-    tasks.map((item, index) => {
-        item.arr.sort((a, b) => (a.value > b.value) ? 1 : -1);
-    })
-    tasks.sort((a, b) => (a._id > b._id) ? 1 : -1);
-
-    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-    // console.log("YOUSEF")
-    let maxLength = -1;
-
-    tasks.map((task, index) => {
-        let sum = 0;
-        task.arr.forEach(element => {
-            sum += element.size
-            if (element.size > maxLength)
-                maxLength = element.size
+    if (tasks.length != 0) {
+        tasks.map((item, index) => {
+            item.arr.sort((a, b) => (a.value > b.value) ? 1 : -1);
         })
-        tasks[index].sum = sum
-        console.log(tasks[index].arr)
-    })
-    
-    tasks.map((task, index)=>{
-        tasks[index].maxLength = maxLength
-    })
+        tasks.sort((a, b) => (a._id > b._id) ? 1 : -1);
 
 
+        let maxLength = -1;
+
+        tasks.map((task, index) => {
+            let sum = 0;
+            task.arr.forEach(element => {
+                sum += element.size
+                if (element.size > maxLength)
+                    maxLength = element.size
+            })
+            tasks[index].sum = sum
+            // console.log(tasks[index].arr)
+        })
+
+        tasks.map((task, index) => {
+            tasks[index].maxLength = maxLength
+        })
+
+    }
     // tasks.forEach(element => {
     //     console.log(element.arr[0].tasks[0].jiraItem)
     // })
 
 
-    res.send(tasks);
+    console.log("llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll",tasks)
+
+
+    res.send({tasks});
 
 })
 
@@ -236,12 +243,10 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
 //  !!-------------------------------------------- Sally --------------------------------------------!!
 router.post('/changeOfJIRATicketsStatusFilters', async (req, res) => {
 
-    console.log("AAAAAAAAAAAAAAAAAAAAA")
     let tasks = []
     let matchFilters = ''
     let groupFilters = ''
     const { serverFilters } = req.body;
-    console.log(serverFilters)
 
     let filterVal = 'newValue'
     filterStatus = ''
@@ -255,8 +260,6 @@ router.post('/changeOfJIRATicketsStatusFilters', async (req, res) => {
         matchFilters = {
             'diffItem.type': 'Update',
             'diffItem.updatedField.fieldName': 'status',
-            // 'diffItem.updatedField.oldValue': filterStatus,
-            // 'jiraItem.qaRepresentative': filterQaRep
         }
     }
     else {
@@ -284,7 +287,7 @@ router.post('/changeOfJIRATicketsStatusFilters', async (req, res) => {
     })
 
 
-    console.log(tasks)
+    // console.log(tasks)
     res.send(tasks)
 
 })
