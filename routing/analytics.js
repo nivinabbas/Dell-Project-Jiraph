@@ -27,7 +27,7 @@ router.post('/modificationByField', async (req, res) => {
 
     //here we build the match expression according to the user's filters.
 
-    let filtersArray = [] // add the startdate and enddate and label here
+    let filtersArray = [{"diffItem.type": "Update"}] // add the startdate and enddate and label here
     let matchFilterValue = {
         "$and": []
     }
@@ -44,12 +44,12 @@ router.post('/modificationByField', async (req, res) => {
         })
         filtersArray.push({ "$or": valuesArray })
     }
-    if (filtersArray.length == 0) { // we should remove this condition after we add the time
-        delete matchFilterValue.$and;
-    }
-    else {
+    // if (filtersArray.length == 0) { // we should remove this condition after we add the time
+    //     delete matchFilterValue.$and;
+    // }
+    // else {
         matchFilterValue["$and"] = filtersArray
-    }
+  //  }
 
     tasks = await TaskModel.aggregate([
         {
@@ -146,28 +146,135 @@ router.post('/modificationByFieldFilters', async (req, res) => {
 })
 
 
+router.post('/deletedJiraTickets', async (req, res) => {
+    let tasks = []
+    const { serverFilters } = req.body
+    const { priorities, qaRepresentative, functionalTest, startDate, endDate, label } = serverFilters;
+    console.log(priorities, qaRepresentative, functionalTest, startDate, endDate, label)
+    // let dateFormat = '';
+    // if (label[0] == 'daily') {
+    //     dateFormat = "%Y-%m-%d"
+    // }
+    // else if (label[0] == 'yearly') {
+    //     dateFormat = "%Y"
+    // }
+    // else {
+    //     dateFormat = "%Y-%m"
+    // }
+
+
+    //here we build the match expression according to the user's filters.
+
+    let filtersArray = [{"diffItem.type": "Delete"}] // add the startdate and enddate and label here
+    let matchFilterValue = {
+        "$and": []
+    }
+    if (priorities.length != 0) {
+        let valuesArray = []
+        values.map((item, index) => {
+            valuesArray.push({ "jiraItem.priority": item })
+        })
+        filtersArray.push({ "$or": valuesArray })
+    }
+    if (qaRepresentative.length != 0) {
+        let valuesArray = []
+        values.map((item, index) => {
+            valuesArray.push({ "jiraItem.qaRepresentative": item })
+        })
+        filtersArray.push({ "$or": valuesArray })
+    }
+    if (functionalTest.length != 0) {
+        let valuesArray = []
+        values.map((item, index) => {
+            valuesArray.push({ "jiraItem.functionalTest": item })
+        })
+        filtersArray.push({ "$or": valuesArray })
+    }
+    // if (filtersArray.length == 0) { // we should remove this condition after we add the time
+    //     delete matchFilterValue.$and;
+    // }
+    //else {
+        matchFilterValue["$and"] = filtersArray
+    //}
+
+    tasks = await TaskModel.aggregate([
+        {
+            $match: matchFilterValue
+        },
+        {
+            $group: {
+                _id: {
+                    date: { $dateToString: { format: "%Y-%m-%d", date: "$diffItem.updatedTime" } },
+                    priority: "$jiraItem.priority"
+
+                },
+                tasks: { $push: "$$ROOT" },
+            }
+        },
+        {
+            $group: {
+                _id: "$_id.date",
+                //_id: { $dateFromString: { dateString: "$_id.date" , format: "%Y-%m-%d" } },
+                arr: { $push: { priority: "$_id.priority", tasks: "$tasks", size: { $size: "$tasks" } } },
+
+            }
+
+        }
+    ])
+    // let d1 = new Date(tasks[0]._id)
+    // console.log(d1)
+    // console.log(new Date(d1.setDate(d1.getDate() + 5)))
+    let maxLength = 0;
+    let sumLength = 0;
+    if (tasks.length > 0) {
+        tasks.map((item, index) => {
+            let myArray = item.arr;
+            myArray.forEach(element => {
+                if (element.size > maxLength) {
+                    maxLength = element.size
+                }
+                sumLength += element.size
+            })
+            item.maxLength = maxLength
+            item.sumLength = sumLength
+            //maxLength=0;
+            sumLength = 0;
+        })
+        tasks.map((item, index) => {
+            item.arr.sort((a, b) => (a.priority > b.priority) ? 1 : -1);
+            if (item.maxLength < maxLength) {
+                item.maxLength = maxLength
+            }
+        })
+    }
+    res.send(tasks)
+})
+
+
+
+
 router.post('/deletedJiraTicketsFilters', async (req, res) => {
     let tasks = []
-    const { startDate, endDate, label} = req.body
-    console.log(startDate,endDate,label)
+    const { startDate, endDate, label } = req.body
+    console.log(startDate, endDate, label)
     //if (fieldName.length == 0) { // runs to bring all the fieldNames and QA when reloading
-        tasks = await TaskModel.aggregate([
-            {
-                $match: {"diffItem.type": "Delete" }
+    tasks = await TaskModel.aggregate([
+        {
+            $match: { "diffItem.type": "Delete" }
+        },
+        {
+            $group: {
+                _id: null,
+                priorities: { $addToSet: { "label": "$jiraItem.priority", "value": "$jiraItem.priority" } },
+                QA: { $addToSet: { "label": "$jiraItem.qaRepresentative", "value": "$jiraItem.qaRepresentative" } }
             },
-            {
-                $group: {
-                    _id: null,
-                    priorities: { $addToSet: { "label": "$jiraItem.priority", "value": "$jiraItem.priority" } },
-                    QA: { $addToSet: { "label": "$jiraItem.qaRepresentative", "value": "$jiraItem.qaRepresentative" } }
-                },
-            }
-        ])
-        tasks.map((item, index) => {
-            item.priorities.sort((a, b) => (a.label > b.label) ? 1 : -1);
-            item.QA.sort((a, b) => (a.label > b.label) ? 1 : -1);
-        })
-  //  }
+        }
+    ])
+    tasks.map((item, index) => {
+        item.priorities.sort((a, b) => (a.label > b.label) ? 1 : -1);
+        item.QA.sort((a, b) => (a.label > b.label) ? 1 : -1);
+    })
+    //  }
     // else { // bring all the QA and Values
     //     const name = fieldName[0];
     //     tasks = await TaskModel.aggregate([
