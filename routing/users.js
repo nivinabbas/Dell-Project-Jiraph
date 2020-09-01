@@ -194,9 +194,13 @@ router.post('/checkSendedPassword', (req, res) => {
 
 router.put('/updatePassword',(req,res)=>{
     const { email , password } = req.body;
-    UserModel.updateOne({email:email},{$set:{userInfo:{password:password}}}).then(docs=>{
-        console.log(docs)
-    })
+    UserModel.updateOne({email:email},{$set:{userInfo:{password:password}}}, function(err, doc) {
+        if (err) {
+        return res.send({success:false , error:'not updated' , info:null});
+        }else{
+        return res.send({success:true , error:null , info:null});
+        }
+    });
 })
 
 router.put('/editUser', (req, res) => {
