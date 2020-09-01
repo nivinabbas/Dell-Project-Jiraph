@@ -171,21 +171,21 @@ router.post('/deletedJiraTickets', async (req, res) => {
     }
     if (priority.length != 0) {
         let valuesArray = []
-        values.map((item, index) => {
+        priority.map((item, index) => {
             valuesArray.push({ "jiraItem.priority": item })
         })
         filtersArray.push({ "$or": valuesArray })
     }
     if (qaRepresentative.length != 0) {
         let valuesArray = []
-        values.map((item, index) => {
+        qaRepresentative.map((item, index) => {
             valuesArray.push({ "jiraItem.qaRepresentative": item })
         })
         filtersArray.push({ "$or": valuesArray })
     }
     if (functionalTest.length != 0) {
         let valuesArray = []
-        values.map((item, index) => {
+        functionalTest.map((item, index) => {
             valuesArray.push({ "jiraItem.functionalTest": item })
         })
         filtersArray.push({ "$or": valuesArray })
@@ -256,7 +256,6 @@ router.post('/deletedJiraTickets', async (req, res) => {
 router.post('/deletedJiraTicketsFilters', async (req, res) => {
     let tasks = []
     const { startDate, endDate, label } = req.body
-    console.log(startDate, endDate, label)
     //if (fieldName.length == 0) { // runs to bring all the fieldNames and QA when reloading
     tasks = await TaskModel.aggregate([
         {
