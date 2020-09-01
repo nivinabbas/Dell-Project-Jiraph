@@ -92,18 +92,13 @@ function ModificationByField(props) {
 
 
   const handleChangeLabel = (change => {
-    serverFilters.label = []
-    change.map((item,index)=>{
-      serverFilters.label.push(item.value)
-    })
+    serverFilters.label=[change.value];
     render(serverFilters);
   })
 
   const handleChangeFieldName = (change => {
-    serverFilters.fieldName = []
-    change.map((item,index)=>{
-      serverFilters.fieldName.push(item.value)
-    })
+  serverFilters.fieldName=[change.value];
+   
     render(serverFilters)
     renderFilters(serverFilters);
   })
@@ -123,15 +118,7 @@ function ModificationByField(props) {
 
   const handleChangeQaRepresentative = (change => {
 
-     serverFilters.qaRepresentative = []
-    if (change != null) {
-      change.map((item,index)=>{
-        serverFilters.qaRepresentative.push(item.value)
-      })
-    }
-    else {
-      serverFilters.qaRepresentative = [];
-    }
+    serverFilters.qaRepresentative=[change.value];
     render(serverFilters);
   })
 
@@ -148,20 +135,21 @@ function ModificationByField(props) {
 
   return (
     <div className='ModificationByField__Wrapper'>
+      <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
       <div className="ModificationByField__Chart"> {UiObjs.length > 0 && <Chart UiObjs={UiObjs} />}</div>
       <div className="ModificationByField__MainTitle">Modification By Field</div>
 
       <div className="ModificationByField__Filters">
 
 
-        <ReactMultiSelectCheckboxes
+        <Select
           name="fieldName"
           onChange={handleChangeFieldName}
           placeholder="fieldName"
           className="ModificationByField__Filter"
           options={fieldNameOptions} />
 
-        <ReactMultiSelectCheckboxes
+        <Select
           name="value"
           onChange={handleChangeValues}
           isMulti
@@ -169,7 +157,7 @@ function ModificationByField(props) {
           className="ModificationByField__Filter"
           options={valueOptions} />
 
-        <ReactMultiSelectCheckboxes
+        <Select
           name="qaRepresentative"
           onChange={handleChangeQaRepresentative}
           placeholder="Qa Rep"
@@ -192,7 +180,7 @@ function ModificationByField(props) {
         />
 
 
-        <ReactMultiSelectCheckboxes
+        <Select
           name="label"
           onChange={handleChangeLabel}
           placeholder="Label"
