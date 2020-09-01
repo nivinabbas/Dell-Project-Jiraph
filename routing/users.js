@@ -194,20 +194,24 @@ router.post('/checkSendedPassword', (req, res) => {
 
 router.put('/updatePassword',(req,res)=>{
     const { email , password } = req.body;
-    UserModel.updateOne({email:email},{$set:{userInfo:{password:password}}}).then(docs=>{
-        console.log(docs)
-    })
+    UserModel.updateOne({email:email},{$set:{userInfo:{password:password}}}, function(err, doc) {
+        if (err) {
+        return res.send({success:false , error:'not updated' , info:null});
+        }else{
+        return res.send({success:true , error:null , info:null});
+        }
+    });
 })
 
-router.post('/editUser', (req, res) => {
-    const { newName, newEmail, newRole, newPassword } = req.body;
+router.put('/editUser', (req, res) => {
+    const { id , name, email, role, password } = req.body;
 
-    if (validator.validate(newEmail)) {
+    if (validator.validate(email)) {
 
 
-        UserModel.find({ "userInfo.employeeEmail": newEmail }).then(checkEmail => {
+        UserModel.find({ "userInfo.employeeEmail": email }).then(checkEmail => {
             if (checkEmail.length > 0) {
-                UserModel.find({ "userInfo.employeeEmail": newEmail }).then(checkUserEmail => {
+                UserModel.find({ "userInfo.employeeEmail": email }).then(checkUserEmail => {
                     if (checkUserEmail.length > 0) {
 
                         UserModel.update(
@@ -216,10 +220,10 @@ router.post('/editUser', (req, res) => {
                                 {
                                     userInfo:
                                     {
-                                        employeeName: newName,
-                                        employeeEmail: newEmail,
-                                        employeeRole: newRole,
-                                        password: newPassword
+                                        employeeName: name,
+                                        employeeEmail: email,
+                                        employeeRole: role,
+                                        password: password
                                     }
                                 }
                             })
@@ -235,10 +239,10 @@ router.post('/editUser', (req, res) => {
                         {
                             userInfo:
                             {
-                                employeeName: newName,
-                                employeeEmail: newEmail,
-                                employeeRole: newRole,
-                                password: newPassword
+                                employeeName: name,
+                                employeeEmail: email,
+                                employeeRole: role,
+                                password: password
                             }
                         }
                 })
