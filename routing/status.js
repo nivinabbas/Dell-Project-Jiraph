@@ -248,24 +248,40 @@ router.post("/fillterStackedChart", async function (req, res) {
       { $sort: { "_id": 1 } }
     ]);
     // adding to Done Array 
-    let DoneArray = [], NotDone = [];
-    let tempDate = [], date1 = [];
+    // adding to Done Array 
+    let tempDate = [];
     let tempCountDone = [], tempCountNotDone = [];
+    let series = {
+      series: [],
+      options: {
+        xaxis: {
+          type: "datetime",
+          categories: []
+        },
+      }
+    };
     stackedChartDone.forEach(element => {//load data
       tempCountDone.push(element.done);
       tempCountNotDone.push(element.notDone);
       tempDate.push(element._id);
     });
-    DoneArray.push({ name: "done" }, { data: tempCountDone });
-    NotDone.push({ name: "notDone" }, { data: tempCountNotDone });
-    tempCountDone = [];
-    tempCountNotDone = [];
-    tempCountDone.push(DoneArray);// final array
-    tempCountDone.push(NotDone);
-    tempCountNotDone.push({ "series": tempCountDone })
-    tempCountNotDone.push({ "categories": tempDate })
-    finalArray = tempCountNotDone;
-    res.send({ success: true, error: null, info: finalArray });
+    stackedChartDone.forEach(element => {//load data
+      tempCountDone.push(element.done);
+      tempCountNotDone.push(element.notDone);
+      tempDate.push(element._id);
+    });
+    series.series.push({
+      name: "done",
+      square: tempCountDone
+    });
+    series.series.push({
+      name: "notDone",
+      data: tempCountNotDone
+    });
+    series.options.xaxis.categories.push({
+      data: tempDate
+    });
+    res.send({ success: true, error: null, info: series });
   }
   else {
     datefrom = new Date(time1 + "T00:00:00.00Z");
@@ -306,24 +322,39 @@ router.post("/fillterStackedChart", async function (req, res) {
     ]);
 
     // adding to Done Array 
-    let DoneArray = [], NotDone = [];
-    let tempDate = [], date1 = [];
+    let tempDate = [];
     let tempCountDone = [], tempCountNotDone = [];
+    let series = {
+      series: [],
+      options: {
+        xaxis: {
+          type: "datetime",
+          categories: []
+        },
+      }
+    };
     stackedChartDone.forEach(element => {//load data
       tempCountDone.push(element.done);
       tempCountNotDone.push(element.notDone);
       tempDate.push(element._id);
     });
-    DoneArray.push({ name: "done" }, { data: tempCountDone });
-    NotDone.push({ name: "notDone" }, { data: tempCountNotDone });
-    tempCountDone = [];
-    tempCountNotDone = [];
-    tempCountDone.push(DoneArray);// final array
-    tempCountDone.push(NotDone);
-    tempCountNotDone.push({ "series": tempCountDone })
-    tempCountNotDone.push({ "categories": tempDate })
-    finalArray = tempCountNotDone;
-    res.send({ success: true, error: null, info: finalArray });
+    stackedChartDone.forEach(element => {//load data
+      tempCountDone.push(element.done);
+      tempCountNotDone.push(element.notDone);
+      tempDate.push(element._id);
+    });
+    series.series.push({
+      name: "done",
+      square: tempCountDone
+    });
+    series.series.push({
+      name: "notDone",
+      data: tempCountNotDone
+    });
+    series.options.xaxis.categories.push({
+      data: tempDate
+    });
+    res.send({ success: true, error: null, info: series });
   }
   res.send({ success: false, error: null, info: null });
 });
