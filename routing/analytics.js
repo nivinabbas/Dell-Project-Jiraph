@@ -149,8 +149,8 @@ router.post('/modificationByFieldFilters', async (req, res) => {
 router.post('/deletedJiraTickets', async (req, res) => {
     let tasks = []
     const { serverFilters } = req.body
-    const { priorities, qaRepresentative, functionalTest, startDate, endDate, label } = serverFilters;
-    console.log(priorities, qaRepresentative, functionalTest, startDate, endDate, label)
+    const { priority, qaRepresentative, functionalTest, startDate, endDate, label } = serverFilters;
+    console.log(priority, qaRepresentative, functionalTest, startDate, endDate, label)
     // let dateFormat = '';
     // if (label[0] == 'daily') {
     //     dateFormat = "%Y-%m-%d"
@@ -169,7 +169,7 @@ router.post('/deletedJiraTickets', async (req, res) => {
     let matchFilterValue = {
         "$and": []
     }
-    if (priorities.length != 0) {
+    if (priority.length != 0) {
         let valuesArray = []
         values.map((item, index) => {
             valuesArray.push({ "jiraItem.priority": item })
