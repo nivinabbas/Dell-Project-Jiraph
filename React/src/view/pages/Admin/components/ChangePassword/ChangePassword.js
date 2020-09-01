@@ -34,7 +34,7 @@ function ChangePassword(props) {
                     const { success } = data;
                     const { error } = data;
                     if (success) {
-                        history.push("/Login")
+                        history.push("/")
                     }
                     else {
                         console.log(error)
@@ -42,7 +42,7 @@ function ChangePassword(props) {
                 })
         }
         else {
-            console.log("Password doesn't match")
+            alert("Password doesn't match")
         }
     }
     return (

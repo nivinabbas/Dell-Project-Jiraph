@@ -9,7 +9,7 @@ import {
 
 function Login(props) {
     const history = useHistory();
-
+    let error='';
 
     function handleLogin(e) {
         e.preventDefault();
@@ -32,12 +32,12 @@ function Login(props) {
                 if (success) {
                     const { info } = data;
                     if (info.role === 'Admin') {
-                        history.push("/userList")
+                        history.push("/UserList")
                     }
                     if (info.role === 'Qa Manager') {
                         history.push("/status")
                     }
-                    if (info.role === 'Top Manager') {
+                    if (info.role === 'TOP manager') {
                         history.push("/analytics")
                     }
                     else {
@@ -62,7 +62,6 @@ function Login(props) {
                 <button type="submit">Login</button>
             </form>
             <Link to="/forgotPassword">Forgot Password?</Link>
-            <div className='res'></div>
 
         </div>
     )

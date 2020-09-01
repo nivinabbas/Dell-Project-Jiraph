@@ -57,9 +57,10 @@ function App() {
             <ForgetPassword></ForgetPassword>
           </Route>
           <Route path="/KeyPassword/:email" children={<KeyPassword  />} />
-          <Route path="/ChangePassword">
+
+          {/* <Route path="/ChangePassword">
             <ChangePassword></ChangePassword>
-          </Route>
+          </Route> */}
           <Route path="/ChangePassword/:email" children={<ChangePassword  />} />
           
           <Route path="/Admin">
