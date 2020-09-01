@@ -13,8 +13,8 @@ font-weight: bold;
 .MainTable__Header{
   display: table-header-group;
   background-color: gray;
-  font-weight: bold;
-  font-size: 10px;
+  font-weight: 300;
+  font-size:10px;
 
   
 }
@@ -30,6 +30,7 @@ font-weight: bold;
 /* background-color: #1F3F49; */
 background-color: #20283E;
 border: grey solid 1px;
+
 font-size: 15px;
 }
 .MainTable__Body{
@@ -39,6 +40,7 @@ font-size: 15px;
 }
 .MainTable__Row{
   display: table-row;
+  /* max-width: 50vw; */
   
 }
 
