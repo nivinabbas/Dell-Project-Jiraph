@@ -12,8 +12,8 @@ const serverFilters = {
   values: [],
   status: [],
   qaRepresentative: [],
-  startDate: [],
-  endDate: [],
+  startDate: "",
+  endDate: "",
   label: ["weekly"]
 };
 
@@ -97,8 +97,8 @@ function ChangesInJiraTickets() {
 
 
   // Default Date
-  const date = new Date()
-  const date1MonthAgo = new Date(new Date().setMonth(date.getMonth() - 1));
+  // const date = new Date()
+  // const date1MonthAgo = new Date(new Date().setMonth(date.getMonth() - 1));
 
 
 
@@ -137,12 +137,12 @@ function ChangesInJiraTickets() {
   })
 
   const HandleStartDateChange = (date => {
-    serverFilters.startDate = [date.target.value]
+    serverFilters.startDate = (date.target.value)
     render(serverFilters);
   })
 
   const HandleEndDateChange = (date => {
-    serverFilters.endDate = [date.target.value]
+    serverFilters.endDate = (date.target.value)
     render(serverFilters);
   })
 
