@@ -1,18 +1,18 @@
 import React from 'react';
 import "./DeletedJiraTickets.css";
-import MainTable from "../MainTable/MainTable"
+import Chart from "../charts/Chart";
 
-import Select from 'react-select'
+import Select from 'react-select';
 
 import { useState, useEffect } from 'react';
 
-const serverFilters = { priority: [], functionalTest: [], label: ["weekly"], qaRepresentative: [], startDate: [], endDate: [] };
+const serverFilters = { priority: [], functionalTest: [], label: ["weekly"], qaRepresentative: [], startDate: "", endDate: "" };
 
 
 
 function DeletedJira() {
   // To set UiObj from the filtered Data we recieved from server 
-  // const [UiObjs, setUiObjs] = useState([]);
+  const [UiObjs, setUiObjs] = useState([]);
 
   // Options To Send == > Server 
 
@@ -24,9 +24,8 @@ function DeletedJira() {
   const [priorityOptions, setPriorityOptions] = useState([])
   const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([])
   const functionalTestOptions = [
-    { name: "functionalTest", value: "True", label: "True" },
-    { name: "functionalTest", value: "False", label: "False" },
-
+    { name: "functionalTest", value: "true", label: "True" },
+    { name: "functionalTest", value: "false", label: "False" },
   ]
 
 
@@ -50,20 +49,26 @@ function DeletedJira() {
       }
     })
       .then((res) => res.json())
-      .then((data) => { console.log(data) })
+      .then((data) => {setUiObjs(data) })
 
   }
 
 
   useEffect(() => {
 
-    // fetch('/api/analytics/----')
-    //   .then(res => res.json())
-    //   .then(data => {
-
-    //     //set state (news)
-    //     setUiObjs(data);
-    //   })
+    fetch('/api/analytics/deletedJiraTickets', {
+      method: 'POST',
+      body: JSON.stringify({ serverFilters }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data)
+        setUiObjs(data);
+       
+      })
 
     fetch('/api/analytics/deletedJiraTicketsFilters', {
       method: 'POST',
@@ -84,20 +89,31 @@ function DeletedJira() {
 
   ///change priority:
   const HandlePriorityChange = (priority => {
-    console.log(priority.value)
-    serverFilters.priority = [priority.value];
+    serverFilters.priority = []
+    priority.map((item,index)=>{
+      serverFilters.priority.push(item.value)
+    })
+    
     render(serverFilters);
   })
 
   ///change functionaltest
   const HandlefunctionalTestChange = (status => {
-    serverFilters.status = [status.value];
+    serverFilters.functionalTest = []
+    status.map((item,index)=>{
+      serverFilters.functionalTest.push(item.value)
+    })
+    
     render(serverFilters);
   })
 
   ///change qaRepresentative:
   const HandleqaRepresentativeChange = (Qa => {
-    serverFilters.Qa = [Qa.value];
+    serverFilters.qaRepresentative = []
+    Qa.map((item,index)=>{
+      serverFilters.qaRepresentative.push(item.value)
+    })
+    
     render(serverFilters);
   })
 
@@ -125,18 +141,16 @@ function DeletedJira() {
   return (
 
     <div className='DeletedJiraTicketsWrapper'>
-      <div className="DeletedJiraTickets__Table" >
-        <MainTable changes={true} />
-
-      </div>
+      <div className="DeletedJiraTickets__Chart"> {UiObjs.length > 0 && <Chart UiObjs={UiObjs} />}</div>
       <div className="DeletedJiraTickets__Title">Deleted Jira Tickets</div>
 
       {/* Select Filters */}
 
       <form className="DeletedJiraTickets__Filters">
         {/* select */}
-        <Select
+        <Select        
           name="priority"
+          isMulti
           options={priorityOptions}
           placeholder="priority "
           className="DeletedJiraTickets__Filter"
