@@ -98,9 +98,9 @@ router.get("/dailyalerts", async function (req, res) {
       },
       {
         name: "totalTasks/NotDone",
-        number: 0+"/"+0,
+        number: 0 + "/" + 0,
       },
-      
+
     ];
   } else {
     DailyAlerts = [
@@ -118,9 +118,9 @@ router.get("/dailyalerts", async function (req, res) {
       },
       {
         name: "totalTasks/NotDone",
-        number: DailyAlerts[0].totalTasks+"/"+DailyAlerts[0].NotDone,
+        number: DailyAlerts[0].totalTasks + "/" + DailyAlerts[0].NotDone,
       },
-      
+
     ];
   }
   // console.log("DailyAlertsStart");
@@ -201,118 +201,350 @@ router.post("/PieChart", (req, res) => {
   );
 });
 // end update task
-
 //stackedChart start 
-
-router.post("/stackedChart", async function (req, res) {
+router.post("/fillterStackedChart", async function (req, res) {
   let { label, datefrom, dateTo } = req.body;
   let DailyAlerts;
+  let formatLabel;
+  if (label == "daily") { formatLabel = "%Y-%m-%d"; }
+  else if (label == "month") { formatLabel = "%Y-%m"; }
+  else { formatLabel = "%Y"; }
   if (datefrom == null && dateTo == null)//default, label daily 
   {
-    DailyAlerts = await TaskModel.aggregate([
+    datefrom = new Date(0)//new Date("2020-08-01T00:00:00.00Z");
+    dateTo = new Date();
+    let stackedChartDone = await TaskModel.aggregate([
       {
         $match: {
-          $expr: {
-            $gte: [
-              datefrom,
-              {
-                $dateToString: {
-                  date: "$diffItem.updatedTime",
-                  format: "%Y-%m-%d",
-                },
-              },
-            ],
-          },
-          $lte: {
-            $gte: [
-              dateTo,
-              {
-                $dateToString: {
-                  date: "$diffItem.updatedTime",
-                  format: "%Y-%m-%d",
-                },
-              },
-            ],
-          },
-        },
+          "taskItem.updatedTime": { $gte: datefrom, $lte: dateTo },
+        }
       },
       {
         $group: {
-          _id: "DailyAlerts",
-          functionalTest: {
-            $sum: {
-              $cond: [
-                {
-                  $eq: ["$jiraItem.functionalTest", true],
-                },
-                1,
-                0,
-              ],
+          _id:
+          {
+            $dateToString: {
+              date: "$taskItem.updatedTime",
+              format: "%Y-%m-%d",
             },
           },
-          deletedTicktes: {
+          "count": { $sum: 1 },
+          done: {
             $sum: {
-              $cond: [
-                {
-                  $eq: ["$diffItem.type", "Delete"],
-                },
-                1,
-                0,
-              ],
+              $cond: [{ $eq: ["$taskItem.isDone", true] }, 1, 0,
+              ]
             },
           },
-          fixVersionTicktes: {
+          notDone: {
             $sum: {
-              $cond: [
-                {
-                  $eq: ["$diffItem.updatedField.fieldName", "fixVersion"],
-                },
-                1,
-                0,
-              ],
+              $cond: [{ $eq: ["$taskItem.isDone", false] }, 1, 0,
+              ]
             },
-          },
-          totalTasks: {
-            $sum: 1,
           },
         },
       },
+      { $sort: { "_id": 1 } }
     ]);
+    // adding to Done Array 
+    // adding to Done Array 
+    let tempDate = [];
+    let tempCountDone = [], tempCountNotDone = [];
+    let series = {
+      series: [],
+      options: {
+        xaxis: {
+          type: "datetime",
+          categories: []
+        },
+      }
+    };
+    stackedChartDone.forEach(element => {//load data
+      tempCountDone.push(element.done);
+      tempCountNotDone.push(element.notDone);
+      tempDate.push(element._id);
+    });
+    series.series.push({
+      name: "done",
+      data: tempCountDone
+    });
+    series.series.push({
+      name: "notDone",
+      data: tempCountNotDone
+    });
+    series.options.xaxis.categories = tempDate;
+
+    res.send({ success: true, error: null, info: series });
   }
+  else {
+    datefrom = new Date(time1 + "T00:00:00.00Z");
+    dateTo = new Date(time2 + "T23:59:59.0099Z");
+    let stackedChartDone = await TaskModel.aggregate([
+      {
+        $match: {
+          "taskItem.updatedTime": { $gte: datefrom, $lte: dateTo },
 
-  res.send({ success: true, error: null, info: null });
+        }
+      },
 
+      {
+        $group: {
+          _id:
+          {
+            $dateToString: {
+              date: "$taskItem.updatedTime",
+              format: formatLabel,//"%Y-%m-%d",
+            },
+          },
+          "count": { $sum: 1 },
+          done: {
+            $sum: {
+              $cond: [{ $eq: ["$taskItem.isDone", true] }, 1, 0,
+              ]
+            },
+          },
+          notDone: {
+            $sum: {
+              $cond: [{ $eq: ["$taskItem.isDone", false] }, 1, 0,
+              ]
+            },
+          },
+        },
+      },
+      { $sort: { "_id": 1 } }
+    ]);
+
+    // adding to Done Array 
+    let tempDate = [];
+    let tempCountDone = [], tempCountNotDone = [];
+    let series = {
+      series: [],
+      options: {
+        xaxis: {
+          type: "datetime",
+          categories: []
+        },
+      }
+    };
+    stackedChartDone.forEach(element => {//load data
+      tempCountDone.push(element.done);
+      tempCountNotDone.push(element.notDone);
+      tempDate.push(element._id);
+    });
+    series.series.push({
+      name: "done",
+      square: tempCountDone
+    });
+    series.series.push({
+      name: "notDone",
+      data: tempCountNotDone
+    });
+    series.options.xaxis.categories = tempDate;
+    res.send({ success: true, error: null, info: series });
+  }
+  res.send({ success: false, error: null, info: null });
 });
 
+router.get("/stackedChart", async function (req, res) {
+  //default, label daily 
+  {
+    datefrom = new Date(0)//new Date("2020-08-01T00:00:00.00Z");
+    dateTo = new Date();
+    let stackedChartDone = await TaskModel.aggregate([
+      {
+        $match: {
+          "taskItem.updatedTime": { $gte: datefrom, $lte: dateTo },
+        }
+      },
+      {
+        $group: {
+          _id:
+          {
+            $dateToString: {
+              date: "$taskItem.updatedTime",
+              format: "%Y-%m-%d",
+            },
+          },
+          "count": { $sum: 1 },
+          done: {
+            $sum: {
+              $cond: [{ $eq: ["$taskItem.isDone", true] }, 1, 0,
+              ]
+            },
+          },
+          notDone: {
+            $sum: {
+              $cond: [{ $eq: ["$taskItem.isDone", false] }, 1, 0,
+              ]
+            },
+          },
+        },
+      },
+      { $sort: { "_id": 1 } }
+    ]);
+    // adding to Done Array 
+    let tempDate = [];
+    let tempCountDone = [], tempCountNotDone = [];
+    let series = {
+      series: [],
+      options: {
+        xaxis: {
+          type: "datetime",
+          categories: ""
+        },
+      }
+    };
+    stackedChartDone.forEach(element => {//load data
+      tempCountDone.push(element.done);
+      tempCountNotDone.push(element.notDone);
+      tempDate.push(element._id);
+    });
+    series.series.push({
+      name: "done",
+      data: tempCountDone
+    });
+    series.series.push({
+      name: "notDone",
+      data: tempCountNotDone
+    });
+    series.options.xaxis.categories = tempDate;
 
-// async function test123test() {
-//   datefrom = new Date("2020-08-01T00:00:00.00Z");
-//   dateTo = new Date();
-//   let DailyAlerts = await TaskModel.aggregate([
-//     {
-//       $match: {
-//         "taskItem.updatedTime": { $gte: datefrom, $lte: dateTo },
-//       }
-//     },
+    res.send({ success: true, error: null, info: series });
+  }
+});
+//stackedChart end
 
-//     {
-//       $group: {
-//         _id: {
-//           $dateToString: {
-//             format: "%d-%m-%Y",
-//             date: "$taskItem.updatedTime"
-//           }  }
-        
-        
-//         }
-//   ]);
+// start pie fieldPie
+router.get("/TypePie", async function (req, res) {
+ 
+  datefrom = new Date(0)//new Date("2020-08-01T00:00:00.00Z");
+  dateTo = new Date();
+  let stackedChartDone = await TaskModel.aggregate([
+    {
+      $match: {
+        "taskItem.updatedTime": { $gte: datefrom, $lte: dateTo },
+      }
+    },
+    {
+      $group: {
+        _id:
+        {
+          $dateToString: {
+            date: "$taskItem.updatedTime",
+            format: "%Y-%m-%d",
+          },
+        },
+        "count": { $sum: 1 },
+        done: {
+          $sum: {
+            $cond: [{ $eq: ["$taskItem.isDone", true] }, 1, 0,
+            ]
+          },
+        },
+        notDone: {
+          $sum: {
+            $cond: [{ $eq: ["$taskItem.isDone", false] }, 1, 0,
+            ]
+          },
+        },
+      },
+    },
+    { $sort: { "_id": 1 } }
+  ]);
+  // adding to Done Array 
+  let tempDate = [];
+  let tempCountDone = [], tempCountNotDone = [];
+  let Data = {
+    series: [],
+    options: {
+      chart: {
+        type: "donut",
+      },
+    }
+  };  stackedChartDone.forEach(element => {//load data
+    tempCountDone.push(element.done);
+    tempCountNotDone.push(element.notDone);
+    tempDate.push(element._id);
+  });
+  let sumDoneNotDone=0;
+  tempCountDone.forEach(element => {
+    sumDoneNotDone+=element
+  });
+  Data.series.push(sumDoneNotDone);
+  sumDoneNotDone=0;
+  tempCountNotDone.forEach(element => {
+    sumDoneNotDone+=element
+  });
+  Data.series.push(sumDoneNotDone);
+  //console.log(Data)
+  res.send({ success: true, error: null, info: Data });
+});
 
-// console.log("DailyAlertsDailyAlertsDailyAlerts")
-// console.log(DailyAlerts)
-// }
+async function test123(){
 
-//test123test();
-//stackedChart end 
+  datefrom = new Date(0)//new Date("2020-08-01T00:00:00.00Z");
+  dateTo = new Date();
+  let stackedChartDone = await TaskModel.aggregate([
+    {
+      $match: {
+        "taskItem.updatedTime": { $gte: datefrom, $lte: dateTo },
+      }
+    },
+    {
+      $group: {
+        _id:
+        {
+          $dateToString: {
+            date: "$taskItem.updatedTime",
+            format: "%Y-%m-%d",
+          },
+        },
+        "count": { $sum: 1 },
+        done: {
+          $sum: {
+            $cond: [{ $eq: ["$taskItem.isDone", true] }, 1, 0,
+            ]
+          },
+        },
+        notDone: {
+          $sum: {
+            $cond: [{ $eq: ["$taskItem.isDone", false] }, 1, 0,
+            ]
+          },
+        },
+      },
+    },
+    { $sort: { "_id": 1 } }
+  ]);
+  // adding to Done Array 
+  let tempDate = [];
+  let tempCountDone = [], tempCountNotDone = [];
+  let Data = {
+    series: [],
+    options: {
+      chart: {
+        type: "donut",
+      },
+    }
+  };  stackedChartDone.forEach(element => {//load data
+    tempCountDone.push(element.done);
+    tempCountNotDone.push(element.notDone);
+    tempDate.push(element._id);
+  });
+  let sumDoneNotDone=0;
+  tempCountDone.forEach(element => {
+    sumDoneNotDone+=element
+  });
+  Data.series.push(sumDoneNotDone);
+  sumDoneNotDone=0;
+  tempCountNotDone.forEach(element => {
+    sumDoneNotDone+=element
+  });
+  Data.series.push(sumDoneNotDone);
+  console.log(Data)
+
+}
+test123();
+//end pie
 module.exports = router;
 
 
@@ -348,3 +580,19 @@ module.exports = router;
         //     }
         //   ]
         // },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
