@@ -271,7 +271,7 @@ router.post("/fillterStackedChart", async function (req, res) {
       name: "notDone",
       data: tempCountNotDone
     });
-    series.options.xaxis.categories=tempDate;
+    series.options.xaxis.categories = tempDate;
 
     res.send({ success: true, error: null, info: series });
   }
@@ -338,7 +338,7 @@ router.post("/fillterStackedChart", async function (req, res) {
       name: "notDone",
       data: tempCountNotDone
     });
-    series.options.xaxis.categories=tempDate;
+    series.options.xaxis.categories = tempDate;
     res.send({ success: true, error: null, info: series });
   }
   res.send({ success: false, error: null, info: null });
@@ -406,12 +406,145 @@ router.get("/stackedChart", async function (req, res) {
       name: "notDone",
       data: tempCountNotDone
     });
-    series.options.xaxis.categories=tempDate;
-  
+    series.options.xaxis.categories = tempDate;
+
     res.send({ success: true, error: null, info: series });
   }
 });
-//stackedChart end 
+//stackedChart end
+
+// start pie fieldPie
+router.get("/TypePie", async function (req, res) {
+ 
+  datefrom = new Date(0)//new Date("2020-08-01T00:00:00.00Z");
+  dateTo = new Date();
+  let stackedChartDone = await TaskModel.aggregate([
+    {
+      $match: {
+        "taskItem.updatedTime": { $gte: datefrom, $lte: dateTo },
+      }
+    },
+    {
+      $group: {
+        _id:
+        {
+          $dateToString: {
+            date: "$taskItem.updatedTime",
+            format: "%Y-%m-%d",
+          },
+        },
+        "count": { $sum: 1 },
+        done: {
+          $sum: {
+            $cond: [{ $eq: ["$taskItem.isDone", true] }, 1, 0,
+            ]
+          },
+        },
+        notDone: {
+          $sum: {
+            $cond: [{ $eq: ["$taskItem.isDone", false] }, 1, 0,
+            ]
+          },
+        },
+      },
+    },
+    { $sort: { "_id": 1 } }
+  ]);
+  // adding to Done Array 
+  let tempDate = [];
+  let tempCountDone = [], tempCountNotDone = [];
+  let Data = {
+    series: [],
+    options: {
+      chart: {
+        type: "donut",
+      },
+    }
+  };  stackedChartDone.forEach(element => {//load data
+    tempCountDone.push(element.done);
+    tempCountNotDone.push(element.notDone);
+    tempDate.push(element._id);
+  });
+  let sumDoneNotDone=0;
+  tempCountDone.forEach(element => {
+    sumDoneNotDone+=element
+  });
+  Data.series.push(sumDoneNotDone);
+  sumDoneNotDone=0;
+  tempCountNotDone.forEach(element => {
+    sumDoneNotDone+=element
+  });
+  Data.series.push(sumDoneNotDone);
+  //console.log(Data)
+  res.send({ success: true, error: null, info: Data });
+});
+
+async function test123(){
+
+  datefrom = new Date(0)//new Date("2020-08-01T00:00:00.00Z");
+  dateTo = new Date();
+  let stackedChartDone = await TaskModel.aggregate([
+    {
+      $match: {
+        "taskItem.updatedTime": { $gte: datefrom, $lte: dateTo },
+      }
+    },
+    {
+      $group: {
+        _id:
+        {
+          $dateToString: {
+            date: "$taskItem.updatedTime",
+            format: "%Y-%m-%d",
+          },
+        },
+        "count": { $sum: 1 },
+        done: {
+          $sum: {
+            $cond: [{ $eq: ["$taskItem.isDone", true] }, 1, 0,
+            ]
+          },
+        },
+        notDone: {
+          $sum: {
+            $cond: [{ $eq: ["$taskItem.isDone", false] }, 1, 0,
+            ]
+          },
+        },
+      },
+    },
+    { $sort: { "_id": 1 } }
+  ]);
+  // adding to Done Array 
+  let tempDate = [];
+  let tempCountDone = [], tempCountNotDone = [];
+  let Data = {
+    series: [],
+    options: {
+      chart: {
+        type: "donut",
+      },
+    }
+  };  stackedChartDone.forEach(element => {//load data
+    tempCountDone.push(element.done);
+    tempCountNotDone.push(element.notDone);
+    tempDate.push(element._id);
+  });
+  let sumDoneNotDone=0;
+  tempCountDone.forEach(element => {
+    sumDoneNotDone+=element
+  });
+  Data.series.push(sumDoneNotDone);
+  sumDoneNotDone=0;
+  tempCountNotDone.forEach(element => {
+    sumDoneNotDone+=element
+  });
+  Data.series.push(sumDoneNotDone);
+  console.log(Data)
+
+}
+test123();
+//end pie
 module.exports = router;
 
 
