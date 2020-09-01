@@ -212,17 +212,21 @@ router.post("/PieChart", (req, res) => {
   );
 });
 // end update task
-//stackedChart start 
+//stackedChart start
 router.post("/fillterStackedChart", async function (req, res) {
   let { label, datefrom, dateTo } = req.body;
   let DailyAlerts;
   let formatLabel;
-  if (label == "daily") { formatLabel = "%Y-%m-%d"; }
-  else if (label == "month") { formatLabel = "%Y-%m"; }
-  else { formatLabel = "%Y"; }
-  if (datefrom == null && dateTo == null)//default, label daily 
-  {
-    datefrom = new Date(0)//new Date("2020-08-01T00:00:00.00Z");
+  if (label == "daily") {
+    formatLabel = "%Y-%m-%d";
+  } else if (label == "month") {
+    formatLabel = "%Y-%m";
+  } else {
+    formatLabel = "%Y";
+  }
+  if (datefrom == null && dateTo == null) {
+    //default, label daily
+    datefrom = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
     dateTo = new Date();
     let stackedChartDone = await TaskModel.aggregate([
       {
@@ -253,45 +257,45 @@ router.post("/fillterStackedChart", async function (req, res) {
       },
       { $sort: { _id: 1 } },
     ]);
-    // adding to Done Array 
-    // adding to Done Array 
+    // adding to Done Array
+    // adding to Done Array
     let tempDate = [];
-    let tempCountDone = [], tempCountNotDone = [];
+    let tempCountDone = [],
+      tempCountNotDone = [];
     let series = {
       series: [],
       options: {
         xaxis: {
           type: "datetime",
-          categories: []
+          categories: [],
         },
-      }
+      },
     };
-    stackedChartDone.forEach(element => {//load data
+    stackedChartDone.forEach((element) => {
+      //load data
       tempCountDone.push(element.done);
       tempCountNotDone.push(element.notDone);
       tempDate.push(element._id);
     });
     series.series.push({
       name: "done",
-      data: tempCountDone
+      data: tempCountDone,
     });
     series.series.push({
       name: "notDone",
-      data: tempCountNotDone
+      data: tempCountNotDone,
     });
     series.options.xaxis.categories = tempDate;
 
     res.send({ success: true, error: null, info: series });
-  }
-  else {
+  } else {
     datefrom = new Date(datefrom + "T00:00:00.00Z");
     dateTo = new Date(dateTo + "T23:59:59.0099Z");
     let stackedChartDone = await TaskModel.aggregate([
       {
         $match: {
           "taskItem.updatedTime": { $gte: datefrom, $lte: dateTo },
-
-        }
+        },
       },
 
       {
@@ -299,7 +303,7 @@ router.post("/fillterStackedChart", async function (req, res) {
           _id: {
             $dateToString: {
               date: "$taskItem.updatedTime",
-              format: formatLabel,//"%Y-%m-%d",
+              format: formatLabel, //"%Y-%m-%d",
             },
           },
           count: { $sum: 1 },
@@ -318,30 +322,32 @@ router.post("/fillterStackedChart", async function (req, res) {
       { $sort: { _id: 1 } },
     ]);
 
-    // adding to Done Array 
+    // adding to Done Array
     let tempDate = [];
-    let tempCountDone = [], tempCountNotDone = [];
+    let tempCountDone = [],
+      tempCountNotDone = [];
     let series = {
       series: [],
       options: {
         xaxis: {
           type: "datetime",
-          categories: []
+          categories: [],
         },
-      }
+      },
     };
-    stackedChartDone.forEach(element => {//load data
+    stackedChartDone.forEach((element) => {
+      //load data
       tempCountDone.push(element.done);
       tempCountNotDone.push(element.notDone);
       tempDate.push(element._id);
     });
     series.series.push({
       name: "done",
-      square: tempCountDone
+      square: tempCountDone,
     });
     series.series.push({
       name: "notDone",
-      data: tempCountNotDone
+      data: tempCountNotDone,
     });
     series.options.xaxis.categories = tempDate;
     res.send({ success: true, error: null, info: series });
@@ -350,66 +356,65 @@ router.post("/fillterStackedChart", async function (req, res) {
 });
 
 router.get("/stackedChart", async function (req, res) {
-  //default, label daily 
+  //default, label daily
   {
-    datefrom = new Date(0)//new Date("2020-08-01T00:00:00.00Z");
+    datefrom = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
     dateTo = new Date();
     let stackedChartDone = await TaskModel.aggregate([
       {
         $match: {
           "taskItem.updatedTime": { $gte: datefrom, $lte: dateTo },
-        }
+        },
       },
       {
         $group: {
-          _id:
-          {
+          _id: {
             $dateToString: {
               date: "$taskItem.updatedTime",
               format: "%Y-%m-%d",
             },
           },
-          "count": { $sum: 1 },
+          count: { $sum: 1 },
           done: {
             $sum: {
-              $cond: [{ $eq: ["$taskItem.isDone", true] }, 1, 0,
-              ]
+              $cond: [{ $eq: ["$taskItem.isDone", true] }, 1, 0],
             },
           },
           notDone: {
             $sum: {
-              $cond: [{ $eq: ["$taskItem.isDone", false] }, 1, 0,
-              ]
+              $cond: [{ $eq: ["$taskItem.isDone", false] }, 1, 0],
             },
           },
         },
       },
-      { $sort: { "_id": 1 } }
+      { $sort: { _id: 1 } },
     ]);
-    // adding to Done Array 
+    // adding to Done Array
     let tempDate = [];
-    let tempCountDone = [], tempCountNotDone = [];
+    let tempCountDone = [],
+      tempCountNotDone = [];
     let series = {
       series: [],
       options: {
         xaxis: {
           type: "datetime",
-          categories: ""
+          categories: "",
         },
-      }
+      },
     };
-    stackedChartDone.forEach(element => {//load data
+    stackedChartDone.forEach((element) => {
+      //load data
       tempCountDone.push(element.done);
       tempCountNotDone.push(element.notDone);
       tempDate.push(element._id);
     });
     series.series.push({
       name: "done",
-      data: tempCountDone
+      data: tempCountDone,
     });
     series.series.push({
       name: "notDone",
-      data: tempCountNotDone
+      data: tempCountNotDone,
     });
     series.options.xaxis.categories = tempDate;
 
@@ -420,153 +425,13 @@ router.get("/stackedChart", async function (req, res) {
 
 // start  type pie fieldPie
 router.get("/TypePie", async function (req, res) {
-
-  datefrom = new Date(0)//new Date("2020-08-01T00:00:00.00Z");
+  datefrom = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
   dateTo = new Date();
   let TypePieOb = await TaskModel.aggregate([
     {
       $match: {
         "taskItem.updatedTime": { $gte: datefrom, $lte: dateTo },
-      }
-    },
-    {
-      $group: {
-        _id:
-        {
-          $dateToString: {
-            date: "$taskItem.updatedTime",
-            format: "%Y-%m-%d",
-          },
-        },
-        "count": { $sum: 1 },
-        done: {
-          $sum: {
-            $cond: [{ $eq: ["$taskItem.isDone", true] }, 1, 0,
-            ]
-          },
-        },
-        notDone: {
-          $sum: {
-            $cond: [{ $eq: ["$taskItem.isDone", false] }, 1, 0,
-            ]
-          },
-        },
       },
-    },
-    { $sort: { "_id": 1 } }
-  ]);
-  // adding to Done Array 
-  let tempDate = [];
-  let tempCountDone = [], tempCountNotDone = [];
-  let Data = {
-    series: [],
-    options: {
-      chart: {
-        type: "donut",
-      },
-    }
-  };
-  TypePieOb.forEach(element => {//load data
-    tempCountDone.push(element.done);
-    tempCountNotDone.push(element.notDone);
-    tempDate.push(element._id);
-  });
-  let sumDoneNotDone = 0;
-  tempCountDone.forEach(element => {
-    sumDoneNotDone += element
-  });
-  Data.series.push(sumDoneNotDone);
-  sumDoneNotDone = 0;
-  tempCountNotDone.forEach(element => {
-    sumDoneNotDone += element
-  });
-  Data.series.push(sumDoneNotDone);
-  //console.log(Data)
-  res.send({ success: true, error: null, info: Data });
-});
-
-router.post("/fillterTypePie", async function (req, res) {
-  let { modificationType, datefrom, dateTo,label } = req.body;
-  let formatLabel;
-  if (label == "daily") { formatLabel = "%Y-%m-%d"; }
-  else if (label == "month") { formatLabel = "%Y-%m"; }
-  else { formatLabel = "%Y";}
-  datefrom = new Date(datefrom + "T00:00:00.00Z");
-  dateTo = new Date(dateTo + "T23:59:59.0099Z");
-  let TypePieOb = await TaskModel.aggregate([
-    {
-      $match: {
-        "taskItem.updatedTime": { $gte: datefrom, $lte: dateTo },
-        "diffItem.type" :modificationType
-      }
-    },
-    {
-      $group: {
-        _id:
-        {
-          $dateToString: {
-            date: "$taskItem.updatedTime",
-            format: formatLabel,//"%Y-%m-%d",
-          },
-        },
-        "count": { $sum: 1 },
-        done: {
-          $sum: {
-            $cond: [{ $eq: ["$taskItem.isDone", true] }, 1, 0,
-            ]
-          },
-        },
-        notDone: {
-          $sum: {
-            $cond: [{ $eq: ["$taskItem.isDone", false] }, 1, 0,
-            ]
-          },
-        },
-      },
-    },
-    { $sort: { "_id": 1 } }
-  ]);
-  // adding to Done Array 
-  let tempDate = [];
-  let tempCountDone = [], tempCountNotDone = [];
-  let Data = {
-    series: [],
-    options: {
-      chart: {
-        type: "donut",
-      },
-    }
-  };
-  TypePieOb.forEach(element => {//load data
-    tempCountDone.push(element.done);
-    tempCountNotDone.push(element.notDone);
-    tempDate.push(element._id);
-  });
-  let sumDoneNotDone = 0;
-  tempCountDone.forEach(element => {
-    sumDoneNotDone += element
-  });
-  Data.series.push(sumDoneNotDone);
-  sumDoneNotDone = 0;
-  tempCountNotDone.forEach(element => {
-    sumDoneNotDone += element
-  });
-  Data.series.push(sumDoneNotDone);
-  res.send({ success: true, error: null, info: Data });
-});
-//end type pie
-
-// start pie field
-router.get("/fieldPie", async function (req, res) {
-
-  datefrom = new Date(0)//new Date("2020-08-01T00:00:00.00Z");
-  dateTo = new Date();
-  let TypePieOb = await TaskModel.aggregate([
-    {
-      $match: {
-        "taskItem.updatedTime": { $gte: datefrom, $lte: dateTo },
-        "diffItem.type":"Update",
-      }
     },
     {
       $group: {
@@ -591,125 +456,310 @@ router.get("/fieldPie", async function (req, res) {
     },
     { $sort: { _id: 1 } },
   ]);
-  // adding to Done Array 
+  // adding to Done Array
   let tempDate = [];
-  let tempCountDone = [], tempCountNotDone = [];
+  let tempCountDone = [],
+    tempCountNotDone = [];
   let Data = {
     series: [],
     options: {
       chart: {
         type: "donut",
       },
-    }
+    },
   };
-  TypePieOb.forEach(element => {//load data
+  TypePieOb.forEach((element) => {
+    //load data
     tempCountDone.push(element.done);
     tempCountNotDone.push(element.notDone);
     tempDate.push(element._id);
   });
   let sumDoneNotDone = 0;
-  tempCountDone.forEach(element => {
-    sumDoneNotDone += element
+  tempCountDone.forEach((element) => {
+    sumDoneNotDone += element;
   });
   Data.series.push(sumDoneNotDone);
   sumDoneNotDone = 0;
-  tempCountNotDone.forEach(element => {
-    sumDoneNotDone += element
+  tempCountNotDone.forEach((element) => {
+    sumDoneNotDone += element;
   });
   Data.series.push(sumDoneNotDone);
+  //console.log(Data)
   res.send({ success: true, error: null, info: Data });
 });
 
-router.post("/fillterFieldPie", async function (req, res) {
-  let { modificationField, datefrom, dateTo,label } = req.body;
+router.post("/fillterTypePie", async function (req, res) {
+  let { modificationType, datefrom, dateTo, label } = req.body;
   let formatLabel;
-  if (label == "daily") { formatLabel = "%Y-%m-%d"; }
-  else if (label == "month") { formatLabel = "%Y-%m"; }
-  else { formatLabel = "%Y";}
+  if (label == "daily") {
+    formatLabel = "%Y-%m-%d";
+  } else if (label == "month") {
+    formatLabel = "%Y-%m";
+  } else {
+    formatLabel = "%Y";
+  }
   datefrom = new Date(datefrom + "T00:00:00.00Z");
   dateTo = new Date(dateTo + "T23:59:59.0099Z");
   let TypePieOb = await TaskModel.aggregate([
     {
       $match: {
         "taskItem.updatedTime": { $gte: datefrom, $lte: dateTo },
-        "diffItem.updatedField.fieldName" :modificationField
-      }
+        "diffItem.type": modificationType,
+      },
     },
     {
       $group: {
-        _id:
-        {
+        _id: {
           $dateToString: {
             date: "$taskItem.updatedTime",
-            format: formatLabel,//"%Y-%m-%d",
+            format: formatLabel, //"%Y-%m-%d",
           },
         },
-        "count": { $sum: 1 },
+        count: { $sum: 1 },
         done: {
           $sum: {
-            $cond: [{ $eq: ["$taskItem.isDone", true] }, 1, 0,
-            ]
+            $cond: [{ $eq: ["$taskItem.isDone", true] }, 1, 0],
           },
         },
         notDone: {
           $sum: {
-            $cond: [{ $eq: ["$taskItem.isDone", false] }, 1, 0,
-            ]
+            $cond: [{ $eq: ["$taskItem.isDone", false] }, 1, 0],
           },
         },
       },
     },
-    { $sort: { "_id": 1 } }
+    { $sort: { _id: 1 } },
   ]);
-  // adding to Done Array 
+  // adding to Done Array
   let tempDate = [];
-  let tempCountDone = [], tempCountNotDone = [];
+  let tempCountDone = [],
+    tempCountNotDone = [];
   let Data = {
     series: [],
     options: {
       chart: {
         type: "donut",
       },
-    }
+    },
   };
-  TypePieOb.forEach(element => {//load data
+  TypePieOb.forEach((element) => {
+    //load data
     tempCountDone.push(element.done);
     tempCountNotDone.push(element.notDone);
     tempDate.push(element._id);
   });
   let sumDoneNotDone = 0;
-  tempCountDone.forEach(element => {
-    sumDoneNotDone += element
+  tempCountDone.forEach((element) => {
+    sumDoneNotDone += element;
   });
   Data.series.push(sumDoneNotDone);
   sumDoneNotDone = 0;
-  tempCountNotDone.forEach(element => {
-    sumDoneNotDone += element
+  tempCountNotDone.forEach((element) => {
+    sumDoneNotDone += element;
   });
   Data.series.push(sumDoneNotDone);
-   res.send({ success: true, error: null, info: Data });
+  res.send({ success: true, error: null, info: Data });
+});
+//end type pie
+
+// start pie field
+router.get("/fieldPie", async function (req, res) {
+  datefrom = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
+  dateTo = new Date();
+  let TypePieOb = await TaskModel.aggregate([
+    {
+      $match: {
+        "taskItem.updatedTime": { $gte: datefrom, $lte: dateTo },
+        "diffItem.type": "Update",
+      },
+    },
+    {
+      $group: {
+        _id: {
+          $dateToString: {
+            date: "$taskItem.updatedTime",
+            format: "%Y-%m-%d",
+          },
+        },
+        count: { $sum: 1 },
+        done: {
+          $sum: {
+            $cond: [{ $eq: ["$taskItem.isDone", true] }, 1, 0],
+          },
+        },
+        notDone: {
+          $sum: {
+            $cond: [{ $eq: ["$taskItem.isDone", false] }, 1, 0],
+          },
+        },
+      },
+    },
+    { $sort: { _id: 1 } },
+  ]);
+  // adding to Done Array
+  let tempDate = [];
+  let tempCountDone = [],
+    tempCountNotDone = [];
+  let Data = {
+    series: [],
+    options: {
+      chart: {
+        type: "donut",
+      },
+    },
+  };
+  TypePieOb.forEach((element) => {
+    //load data
+    tempCountDone.push(element.done);
+    tempCountNotDone.push(element.notDone);
+    tempDate.push(element._id);
+  });
+  let sumDoneNotDone = 0;
+  tempCountDone.forEach((element) => {
+    sumDoneNotDone += element;
+  });
+  Data.series.push(sumDoneNotDone);
+  sumDoneNotDone = 0;
+  tempCountNotDone.forEach((element) => {
+    sumDoneNotDone += element;
+  });
+  Data.series.push(sumDoneNotDone);
+  res.send({ success: true, error: null, info: Data });
+});
+
+router.post("/fillterFieldPie", async function (req, res) {
+  let { modificationField, datefrom, dateTo, label } = req.body;
+  let formatLabel;
+  if (label == "daily") {
+    formatLabel = "%Y-%m-%d";
+  } else if (label == "month") {
+    formatLabel = "%Y-%m";
+  } else {
+    formatLabel = "%Y";
+  }
+  datefrom = new Date(datefrom + "T00:00:00.00Z");
+  dateTo = new Date(dateTo + "T23:59:59.0099Z");
+  let TypePieOb = await TaskModel.aggregate([
+    {
+      $match: {
+        "taskItem.updatedTime": { $gte: datefrom, $lte: dateTo },
+        "diffItem.updatedField.fieldName": modificationField,
+      },
+    },
+    {
+      $group: {
+        _id: {
+          $dateToString: {
+            date: "$taskItem.updatedTime",
+            format: formatLabel, //"%Y-%m-%d",
+          },
+        },
+        count: { $sum: 1 },
+        done: {
+          $sum: {
+            $cond: [{ $eq: ["$taskItem.isDone", true] }, 1, 0],
+          },
+        },
+        notDone: {
+          $sum: {
+            $cond: [{ $eq: ["$taskItem.isDone", false] }, 1, 0],
+          },
+        },
+      },
+    },
+    { $sort: { _id: 1 } },
+  ]);
+  // adding to Done Array
+  let tempDate = [];
+  let tempCountDone = [],
+    tempCountNotDone = [];
+  let Data = {
+    series: [],
+    options: {
+      chart: {
+        type: "donut",
+      },
+    },
+  };
+  TypePieOb.forEach((element) => {
+    //load data
+    tempCountDone.push(element.done);
+    tempCountNotDone.push(element.notDone);
+    tempDate.push(element._id);
+  });
+  let sumDoneNotDone = 0;
+  tempCountDone.forEach((element) => {
+    sumDoneNotDone += element;
+  });
+  Data.series.push(sumDoneNotDone);
+  sumDoneNotDone = 0;
+  tempCountNotDone.forEach((element) => {
+    sumDoneNotDone += element;
+  });
+  Data.series.push(sumDoneNotDone);
+  res.send({ success: true, error: null, info: Data });
 });
 
 //end pie field
 
-
 // start
-router.get("/typeSelect", async function (req, res) {
-  let Data = [{ value: "all", label: "All" },];
-  let obj={};
+router.get("/modificationTypeOptions", async function (req, res) {
+  let Data = [{ value: "all", label: "All" }];
+  let obj = {};
   TaskModel.distinct("diffItem.type", function (err, doc) {
     // success:T/F,error:string,info{TaskItem[Task]
-     doc.forEach(element => {
+    doc.forEach((element) => {
       console.log(element);
-       obj={"value":element,"label":element};
-       Data.push(obj);
-    });     
+      obj = { value: element, label: element };
+      Data.push(obj);
+    });
     res.send({ success: true, error: null, info: { Data } });
   }).then((err) => console.log(err));
 });
 // end
 
+//modificationFieldOptions start
+router.get("/modificationFieldOptions", async function (req, res) {
+  let Data = [];
+  let obj = {};
+  TaskModel.find({ "diffItem.type": "Update" })
+    .distinct("diffItem.updatedField.fieldName", function (err, doc) {
+      // success:T/F,error:string,info{TaskItem[Task]
+      doc.forEach((element) => {
+        console.log(element);
+        obj = { value: element, label: element };
+        Data.push(obj);
+      });
+      res.send({ success: true, error: null, info: { Data } });
+    })
+    .then((err) => console.log(err));
+});
+//modificationFieldOptions end
 
+// modificationFieldOptions start
+router.post("/modificationFieldValueOptions", async function (req, res) {
+  let data = req.body;
+  let returnData = [];
+  console.log(data[0].value, "aaa", data[1].value);
+  TaskModel.find({
+    "diffItem.type": data[0].value,
+    "diffItem.updatedField.fieldName": data[1].value,
+  }).distinct("diffItem.updatedField.newValue", function (err, doc) {
+    doc.forEach((element) => {
+      console.log("docdoc");
+      console.log(element);
+      // if (element != null) {
+      obj = { value: element, label: element };
+      returnData.push(obj);
+      // }
+    });
+    console.log("doc", doc);
+    console.log("returnData", returnData);
+    res.send({ success: true, error: null, info: returnData });
+  });
+  // end
+});
+// modificationFieldOptions end
 
 //////////test function for open task with filter
 function openTasksWithFilter(type, fieldName) {
@@ -753,21 +803,3 @@ router.get("/getType", async function (req, res) {
 });
 //getType end
 module.exports = router;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

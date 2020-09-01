@@ -2,12 +2,12 @@ import React from "react";
 import "./style.css";
 import Select from "react-select";
 
-const optionSprint = [
-  { value: "all", label: "All" },
-  { value: "create", label: "Create" },
-  { value: "update", label: "Update" },
-  { value: "delete", label: "Delete" },
-];
+// const optionSprint = [
+//   { value: "all", label: "All" },
+//   { value: "create", label: "Create" },
+//   { value: "update", label: "Update" },
+//   { value: "delete", label: "Delete" },
+// ];
 
 const optionFunctional = [
   { value: "status", label: "Status" },
@@ -22,13 +22,17 @@ const optionValue = [
 
 export default function TasksTable({
   openTasks,
+  selectOptions,
+  modificationFieldOptions,
+  modificationTypeOptions,
+  modificationFieldValueOptions,
   onDoneClick,
   onSelect,
   onTableFilterClick,
   filters,
 }) {
   const disableSelect = () => {
-    return filters[0].value !== "update" ? true : false;
+    return filters[0].value !== "Update" ? true : false;
   };
   return (
     <div className="open-tasks">
@@ -37,13 +41,13 @@ export default function TasksTable({
       </div>
       <div className="container__filterSelect">
         <Select
-          options={optionSprint}
+          options={modificationTypeOptions}
           className="filterSelect"
           onChange={(filter, name) => onSelect(filter, "modificationType")}
         />
 
         <Select
-          options={optionFunctional}
+          options={modificationFieldOptions}
           className="filterSelect"
           onChange={(filterObj, name) =>
             onSelect(filterObj, "modificationField")
@@ -51,15 +55,10 @@ export default function TasksTable({
           isDisabled={disableSelect()}
         />
         <Select
-          options={optionValue}
+          options={modificationFieldValueOptions}
           className="filterSelect"
           onChange={(filter, name) => onSelect(filter, "modificationValue")}
           isDisabled={disableSelect()}
-        />
-        <input
-          type="submit"
-          className="submitButton"
-          onClick={onTableFilterClick}
         />
       </div>
       <div className="open-tasks-table">
@@ -88,6 +87,7 @@ export default function TasksTable({
                   <input
                     type="checkbox"
                     onClick={() => onDoneClick(task.jiraItem.jiraId)}
+                    key={task._id}
                   />
                 </td>
               </tr>
