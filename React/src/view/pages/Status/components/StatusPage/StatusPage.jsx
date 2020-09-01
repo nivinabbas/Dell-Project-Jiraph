@@ -117,7 +117,7 @@ const StatusPage = (props) => {
   const [barChart, setBarChart] = useState({});
   const [stackedChart, setStackedChart] = useState({});
   const [typePieChart, setTypePieChart] = useState({});
-  // const [fieldPieChart, setFieldPieChart] = useState({});
+  const [fieldPieChart, setFieldPieChart] = useState({});
 
   useEffect(() => {
     fetch("/api/status/dailyalerts")
@@ -167,6 +167,20 @@ const StatusPage = (props) => {
         if (success) {
           console.log("first", info);
           setTypePieChart(info);
+          console.log("type", info);
+        } else {
+          alert(error);
+        }
+      });
+  }, []);
+  useEffect(() => {
+    fetch("/api/status/fieldPie")
+      .then((res) => res.json())
+      .then((data) => {
+        let { success, error, info } = data;
+        if (success) {
+          console.log("first", info);
+          setFieldPieChart(info);
           console.log("type", info);
         } else {
           alert(error);
@@ -310,7 +324,7 @@ const StatusPage = (props) => {
             onmodificationTypePieSelect={handlemodificationTypePieSelect}
           />
           <PieChart
-            dataPieChart={pieTypeDummyData}
+            dataPieChart={fieldPieChart}
             selectOptions={optionFunctional}
             name="pie2"
             onmodificationTypePieSelect={handlemodificationTypePieSelect}
