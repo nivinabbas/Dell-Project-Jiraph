@@ -37,6 +37,7 @@ function ModificationByField(props) {
       })
         .then(res => res.json())
         .then(data => {
+          console.log(data)
           setUiObjs(data)
         })
 
@@ -91,18 +92,13 @@ function ModificationByField(props) {
 
 
   const handleChangeLabel = (change => {
-    serverFilters.label = []
-    change.map((item,index)=>{
-      serverFilters.label.push(item.value)
-    })
+    serverFilters.label=[change.value];
     render(serverFilters);
   })
 
   const handleChangeFieldName = (change => {
-    serverFilters.fieldName = []
-    change.map((item,index)=>{
-      serverFilters.fieldName.push(item.value)
-    })
+  serverFilters.fieldName=[change.value];
+   
     render(serverFilters)
     renderFilters(serverFilters);
   })
@@ -122,15 +118,7 @@ function ModificationByField(props) {
 
   const handleChangeQaRepresentative = (change => {
 
-     serverFilters.qaRepresentative = []
-    if (change != null) {
-      change.map((item,index)=>{
-        serverFilters.qaRepresentative.push(item.value)
-      })
-    }
-    else {
-      serverFilters.qaRepresentative = [];
-    }
+    serverFilters.qaRepresentative=[change.value];
     render(serverFilters);
   })
 
