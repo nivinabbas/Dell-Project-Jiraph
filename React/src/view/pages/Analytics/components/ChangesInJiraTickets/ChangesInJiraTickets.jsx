@@ -5,7 +5,7 @@ import "./ChangesInJiraTickets.css";
 //Components 
 import Select from 'react-select'
 import Chart from "../charts/Chart"
-import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
+//import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
 
    // Options To Send == > Server 
   const serverFilters = {
@@ -48,7 +48,7 @@ function ChangesInJiraTickets() {
       })
       .then(res => res.json())
       .then(data => {
-        console.log(data)
+       setUiObjs(data)
         
       })
 
@@ -65,7 +65,7 @@ function ChangesInJiraTickets() {
       }
     })
       .then((res) => res.json())
-      .then((data) => { console.log(data) })
+      .then((data) => { setUiObjs(data) })
 
   }
 
@@ -139,6 +139,8 @@ function ChangesInJiraTickets() {
     render(serverFilters);
   })
 
+ 
+
   return (
 
     <div className='ChangeOfJiraTicketWrapper'>
@@ -161,7 +163,7 @@ function ChangesInJiraTickets() {
           onChange={HandleValuesChange}
         />
 
-        <ReactMultiSelectCheckboxes 
+        <Select 
           name="status"
           isMulti
           options={statusOptions}
@@ -170,7 +172,7 @@ function ChangesInJiraTickets() {
           onChange={HandleStatusChange}
         />
 
-        <ReactMultiSelectCheckboxes
+        <Select
           name="qaRepresentative"
           isMulti
           options={qaRepresentativeOptions}
