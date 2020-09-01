@@ -32,7 +32,7 @@ function App() {
             </li>
 
             <li>
-              <Link to="/UserList">Admin</Link>
+              <Link to="/userlist">Admin</Link>
             </li>
             <li>
               <Link to="/analysis">Analysis</Link>
@@ -60,8 +60,8 @@ function App() {
 
           <Route path="/ChangePassword/:email" children={<ChangePassword  />} />
           
-          <Route path="/Admin">
-            <h1>Admin</h1>
+          <Route path="/userlist">
+           <UserList />
 
           </Route>
           <Route path="/analysis">

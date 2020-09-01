@@ -50,14 +50,16 @@ router.get('/getUsersList', (req, res) => {
             for (let index = 0; index < users.length; index++) {
                 table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id })
             }
-
+            
             res.send({ success: true, error: null, info: { table } })
         }
     })
 })
 
 router.delete('/deleteUser', (req, res) => {
+    
     const { id } = req.body;
+    console.log(id)
     let table = [];
     UserModel.remove({ _id: id }, async function (err) {
         if (err) {
@@ -221,12 +223,12 @@ router.put('/editUser', (req, res) => {
     if (validator.validate(email)) {
 
 
-        User.find({ "userInfo.employeeEmail": email }).then(checkEmail => {
+        UserModel.find({ "userInfo.employeeEmail": email }).then(checkEmail => {
             if (checkEmail.length > 0) {
-                User.find({ "userInfo.employeeEmail": email }).then(checkUserEmail => {
+                UserModel.find({ "userInfo.employeeEmail": email }).then(checkUserEmail => {
                     if (checkUserEmail.length > 0) {
 
-                        User.updateOne({_id:id},
+                        UserModel.updateOne({_id:id},
                             {
                                 $set:
                                 {
@@ -245,7 +247,7 @@ router.put('/editUser', (req, res) => {
                     }
                 })
             } else {
-                User.updateOne(
+                UserModel.updateOne(
                     { _id: id }, {
                         $set:
                         {

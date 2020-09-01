@@ -49,7 +49,7 @@ function KeyPassword(props) {
         <div className='forgotpassword'>
             <form id="confirmCodeForm" onSubmit={onConfirmCode} >
                 <input id="confCodeInp" name="confCodeInp" placeholder="Enter your confirmation code"></input>
-                <button type="submit">Confirm</button>
+                <button type="submit">Confirm</button> 
             </form>
 
         </div>
