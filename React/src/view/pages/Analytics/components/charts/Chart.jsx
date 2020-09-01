@@ -13,6 +13,7 @@ function Chart(props) {
   
   return (
     <div className="chart__Wrapper">
+              <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
       <div className="chart">
       {UiObjs.length > 0 && UiObjs.map((columns, index) => {
         return (

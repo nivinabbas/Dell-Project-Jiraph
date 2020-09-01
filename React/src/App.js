@@ -1,9 +1,9 @@
 import React from "react";
 
 //components
-import Login from "./view/pages/Admin/components/Login/Login"
+import Nav from './components/Nav/Nav';
 import ForgetPassword from "./view/pages/Admin/components/ForgetPassword/ForgetPassword";
-import MainPage from "./view/pages/Analytics/components/mainPage/MainPage";
+import MainPage from "./view/pages/Analytics/components/MainPage/MainPage";
 import ModificationByField from "./view/pages/Analytics/components/ModificationByField/ModificationByField";
 import DeletedJira from "./view/pages/Analytics/components/DeletedJiraTickets/Deletedjira";
 import ChangesInJiraTickets from "./view/pages/Analytics/components/ChangesInJiraTickets/ChangesInJiraTickets";
@@ -11,13 +11,13 @@ import ChangesByParentId from "./view/pages/Analytics/components/ChangesByParent
 import DelaysInDelivery from "./view/pages/Analytics/components/DelaysInDelivery/DelaysInDelivery";
 
 import "./App.css"
-import logo from "./JiraphLogo.jpg"
+
 
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect,
+  useLocation,
   Link
 
 } from "react-router-dom";
@@ -25,66 +25,15 @@ import {
 
 
 function App() {
-
+  // let location = useLocation();
+  // console.log(location);
 
   return (
     <Router>
       <div className='app'>
         <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@200;300;400;500;531;600;700;800&display=swap" rel="stylesheet"></link>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
-        <nav className="sidebar">
-
-          <div className="sidebar__header-wrapper">
-            <img className="jiraph__logo" src={logo} alt="this is a logo" />
-           JIRAPH
-          </div>
-
-          <div className="menu__wrapper">
-
-            <div className="menu__item">
-              <Link className="menu__link" to="/register">Register</Link>
-            </div>
-            <div className="menu__item">
-              <Link className="menu__link" to="/Admin">Admin</Link>
-            </div>
-
-            <div className="menu__item">
-              <Link className="menu__link" to="/status">Status</Link>
-            </div>
-
-            <div className="menu__item">
-              <Link className="menu__link" to="/analysis">Analysis</Link>
-              <div className="analysis-options">
-
-                <div className="analysis__item">
-                  <Link className="MainForm__status--btn" to="/ModificationByField">Modification By Field</Link>
-
-                </div>
-
-                <div className="analysis__item">
-                  <Link className="MainForm__status--btn" to="/DeletedJiraTickets">Deleted Jiras</Link>
-                </div>
-                <div className="analysis__item">
-                  <Link className="MainForm__status--btn" to="/ChangesInJiraTickets">Changes In Jira Tickets</Link>
-                </div>
-                <div className="analysis__item">
-                  <Link className="MainForm__status--btn" to="/ChangesInParentID">Changes In Parent ID</Link>
-                </div>
-                <div className="analysis__item">
-                  <Link className="MainForm__status--btn" to="/DelaysInDelivery">Delays In Delivery</Link>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="sidebar__footer">
-            FOOTER
-          </div>
-        </nav>
-
-
-        {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
+        <Nav />
         <div className='mainPage'>
           <Switch>
             <Route exact={true} path="/">
