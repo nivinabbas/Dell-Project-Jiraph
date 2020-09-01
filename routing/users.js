@@ -197,7 +197,7 @@ router.put('/updatePassword',(req,res)=>{
     UserModel.findOne({"userInfo.employeeEmail":email}).then(docs=>{
         docs.userInfo.password = password
         docs.save();
-        res.send({ success: true, error: null, info: null })
+        res.send({ success: true, error: null, info: null }) 
     })
 })
 
