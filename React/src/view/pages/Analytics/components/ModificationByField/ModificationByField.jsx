@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import "./ModificationByField.css";
 import { useState } from 'react';
-import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
+//import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
 import Select from "react-select"
 import Chart from "../charts/Chart"
 // import ApexChart from "../ApexChart/ApexChart"
@@ -154,14 +154,14 @@ function ModificationByField(props) {
       <div className="ModificationByField__Filters">
 
 
-        <ReactMultiSelectCheckboxes
+        <Select
           name="fieldName"
           onChange={handleChangeFieldName}
           placeholder="fieldName"
           className="ModificationByField__Filter"
           options={fieldNameOptions} />
 
-        <ReactMultiSelectCheckboxes
+        <Select
           name="value"
           onChange={handleChangeValues}
           isMulti
@@ -169,7 +169,7 @@ function ModificationByField(props) {
           className="ModificationByField__Filter"
           options={valueOptions} />
 
-        <ReactMultiSelectCheckboxes
+        <Select
           name="qaRepresentative"
           onChange={handleChangeQaRepresentative}
           placeholder="Qa Rep"
@@ -192,7 +192,7 @@ function ModificationByField(props) {
         />
 
 
-        <ReactMultiSelectCheckboxes
+        <Select
           name="label"
           onChange={handleChangeLabel}
           placeholder="Label"
