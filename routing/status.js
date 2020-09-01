@@ -272,7 +272,7 @@ router.post("/fillterStackedChart", async function (req, res) {
     });
     series.series.push({
       name: "done",
-      square: tempCountDone
+      data: tempCountDone
     });
     series.series.push({
       name: "notDone",
@@ -497,7 +497,7 @@ router.get("/stackedChart", async function (req, res) {
     });
     series.series.push({
       name: "done",
-      square: tempCountDone
+      data: tempCountDone
     });
     series.series.push({
       name: "notDone",
