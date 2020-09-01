@@ -6,7 +6,7 @@ import Select from 'react-select';
 
 import { useState, useEffect } from 'react';
 
-const serverFilters = { priority: [], functionalTest: [], label: ["weekly"], qaRepresentative: [], startDate: [], endDate: [] };
+const serverFilters = { priority: [], functionalTest: [], label: ["weekly"], qaRepresentative: [], startDate: "", endDate: "" };
 
 
 
@@ -56,13 +56,19 @@ function DeletedJira() {
 
   useEffect(() => {
 
-    // fetch('/api/analytics/----')
-    //   .then(res => res.json())
-    //   .then(data => {
-
-    //     //set state (news)
-    //     setUiObjs(data);
-    //   })
+    fetch('/api/analytics/deletedJiraTickets', {
+      method: 'POST',
+      body: JSON.stringify({ serverFilters }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data)
+        setUiObjs(data);
+       
+      })
 
     fetch('/api/analytics/deletedJiraTicketsFilters', {
       method: 'POST',
