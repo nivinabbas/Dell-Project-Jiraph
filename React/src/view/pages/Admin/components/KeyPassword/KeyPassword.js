@@ -34,8 +34,7 @@ function KeyPassword(props) {
                 const { success } = data;
                 const { error } = data;
                 const { info } = data;
-                console.log(success)
-                history.push(`/ChangePassword/${email}`)
+              
                 if (success) {
                     return (history.push(`/ChangePassword/${email}`))
                 }
@@ -50,7 +49,7 @@ function KeyPassword(props) {
         <div className='forgotpassword'>
             <form id="confirmCodeForm" onSubmit={onConfirmCode} >
                 <input id="confCodeInp" name="confCodeInp" placeholder="Enter your confirmation code"></input>
-                <button type="submit">Confirm</button>
+                <button type="submit">Confirm</button> 
             </form>
 
         </div>

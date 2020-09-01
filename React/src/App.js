@@ -1,81 +1,92 @@
 import React from "react";
-import Login from "./view/pages/Admin/components/Login/Login"
-import UserList from "./view/pages/Admin/components/usersList/UserList"
 
+
+
+//components
+import Nav from './components/Nav/Nav';
+
+//admin
+import Login from "./view/pages/Admin/components/Login/Login"
 import ForgetPassword from "./view/pages/Admin/components/ForgetPassword/ForgetPassword";
+import ChangePassword from "./view/pages/Admin/components/ChangePassword/ChangePassword";
 import KeyPassword from "./view/pages/Admin/components/KeyPassword/KeyPassword";
+import UserList from "./view/pages/Admin/components/usersList/UserList";
+
+
+import MainPage from './view/pages/Analytics/components/mainPage/MainPage';
+import ModificationByField from "./view/pages/Analytics/components/ModificationByField/ModificationByField";
+import DeletedJira from "./view/pages/Analytics/components/DeletedJiraTickets/Deletedjira";
+import ChangesInJiraTickets from "./view/pages/Analytics/components/ChangesInJiraTickets/ChangesInJiraTickets";
+import ChangesByParentId from "./view/pages/Analytics/components/ChangesByParentId/ChangesByParentId";
+import DelaysInDelivery from "./view/pages/Analytics/components/DelaysInDelivery/DelaysInDelivery";
+
+import "./App.css"
 
 
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect,
-  Link,
-  useParams
 
 } from "react-router-dom";
-import ChangePassword from "./view/pages/Admin/components/ChangePassword/ChangePassword";
+
+
 
 
 
 function App() {
+  // let location = useLocation();
+  // console.log(location);
+
   return (
     <Router>
-      <div>
-        <nav>
-          <ul>
+      <div className='app'>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@200;300;400;500;531;600;700;800&display=swap" rel="stylesheet"></link>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
+        <Nav />
+        <div className='mainPage'>
+          <Switch>
+            <Route exact={true} path="/">
+              <Login />
+            </Route>
+            <Route path="/changePassword">
+              <ChangePassword />
+            </Route>
+            <Route path="/forgotPassword">
+              <ForgetPassword />
+            </Route>
+            <Route path="/keyPassword">
+              <KeyPassword />
+            </Route>
+            <Route path="/Admin">
+              <UserList />
+            </Route>
+            <Route path="/analysis">
+              <MainPage />
+            </Route>
 
-            <li>
-              <Link to="/register">Register</Link>
+            <Route path="/ModificationByField">
+              <ModificationByField />
+            </Route>
+            <Route path="/DeletedJiraTickets">
+              <DeletedJira />
+            </Route>
+            <Route path="/ChangesInJiraTickets">
+              <ChangesInJiraTickets />
+            </Route>
+            <Route path="/ChangesInParentID">
+              <ChangesByParentId />
+            </Route>
+            <Route path="/DelaysInDelivery">
+              <DelaysInDelivery />
+            </Route>
 
-            </li>
-
-            <li>
-              <Link to="/userlist">Admin</Link>
-            </li>
-            <li>
-              <Link to="/analysis">Analysis</Link>
-            </li>
-            <li>
-              <Link to="/status">Status</Link>
-            </li>
-          </ul>
-        </nav>
-
-        {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
-        <Switch>
-          <Route exact={true} path="/">
-            <Login></Login>
-
-          </Route>
-          <Route path="/register">
-
-          </Route>
-          <Route path="/forgotPassword">
-            <ForgetPassword></ForgetPassword>
-          </Route>
-          <Route path="/KeyPassword/:email" children={<KeyPassword  />} />
-          <Route path="/ChangePassword">
-            <ChangePassword></ChangePassword>
-          </Route>
-          <Route path="/ChangePassword/:email" children={<ChangePassword  />} />
-          
-          <Route path="/userlist">
-           <UserList />
-
-          </Route>
-          <Route path="/analysis">
-
-          </Route>
-          <Route path="/status">
-
-          </Route>
-        </Switch>
+          </Switch>
+        </div>
       </div>
-    </Router>
+    </Router >
   );
 }
+
 
 export default App;

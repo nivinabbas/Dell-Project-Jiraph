@@ -42,7 +42,7 @@ export default props => {
         role = role.value;
         password = password.value;
         
-        console.log(id,name, email,role,password)
+        
         fetch('/api/users/editUser', {
             method: 'PUT',
             body: JSON.stringify({id,name, email,role,password}),
