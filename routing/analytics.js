@@ -96,11 +96,14 @@ router.post('/modificationByField', async (req, res) => {
             })
         item.maxLength = maxLength
         item.sumLength = sumLength
-        maxLength=0;
+        //maxLength=0;
         sumLength = 0;
         })
         tasks.map((item,index)=>{
-            item.arr.sort((a, b) => (a.fieldName > b.fieldName) ? 1 : -1)
+            item.arr.sort((a, b) => (a.fieldName > b.fieldName) ? 1 : -1);
+            if(item.maxLength < maxLength){
+                item.maxLength = maxLength
+            }
         })
     }
     res.send(tasks)
