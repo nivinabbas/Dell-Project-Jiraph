@@ -38,6 +38,7 @@ const StatusPage = (props) => {
   const [stackedChart, setStackedChart] = useState({});
   const [typePieChart, setTypePieChart] = useState({});
   const [fieldPieChart, setFieldPieChart] = useState({});
+  const [typeSelect, setTypeSelect] = useState(optionSprint);
 
   useEffect(() => {
     fetch("/api/status/dailyalerts")
@@ -97,6 +98,19 @@ const StatusPage = (props) => {
         let { success, error, info } = data;
         if (success) {
           setFieldPieChart(info);
+        } else {
+          alert(error);
+        }
+      });
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/status/typeSelect")
+      .then((res) => res.json())
+      .then((data) => {
+        let { success, error, info } = data;
+        if (success) {
+          setTypeSelect(info);
         } else {
           alert(error);
         }
@@ -193,11 +207,12 @@ const StatusPage = (props) => {
   };
 
   const handleSelect = (filter, name) => {
-    const newFilters = [...filters].map((f) => {
-      if (f.name === name) f.value = filter.value;
-      return f;
-    });
-    setFilters(newFilters);
+    // const newFilters = [...filters].map((f) => {
+    //   if (f.name === name) f.value = filter.value;
+    //   return f;
+    // });
+    // setFilters(newFilters);
+    console.log(filter);
   };
 
   const handelTableFilterClick = () => {
@@ -215,6 +230,7 @@ const StatusPage = (props) => {
 
       <div className="statuspage__table">
         <Table
+          selectOptions={typeSelect}
           openTasks={openTasks}
           onDoneClick={handleDoneClick}
           onSelect={handleSelect}
