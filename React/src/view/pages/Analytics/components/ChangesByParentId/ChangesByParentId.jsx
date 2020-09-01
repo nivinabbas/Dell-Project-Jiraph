@@ -3,10 +3,10 @@ import "./ChangesByParentId.css";
 import Select from 'react-select'
 import { useState , useEffect } from 'react';
 
-
+const serverFilters={fixVersion:[],startDate:[],endDate:[]};
 
 function ChangesByParentId() {
-  const serverFilters={fixVersion:[],startDate:[],endDate:[]};
+
   
   // const [UiObjs, setUiObjs] = useState([]);
   
@@ -14,40 +14,46 @@ function ChangesByParentId() {
    const [fixVersionOptions,setfixVersionOptions]=useState([])
 
   // Functions ==> Fetch :
-  const render = (serverFilters)=> {
-    fetch('/api/analytics/ChangesByParentId/', {
-        method: 'POST',
-        body: JSON.stringify(serverFilters),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-        .then((res) => res.json())
-        .then((data) => { console.log(data) })
-      } 
+  // const render = (serverFilters)=> {
+  //   fetch('/api/analytics/ChangesByParentId', {
+  //       method: 'POST',
+  //       body: JSON.stringify(serverFilters),
+  //       headers: {
+  //         "Content-Type": "application/json"
+  //       }
+  //     })
+  //       .then((res) => res.json())
+  //       .then((data) => { console.log(data) })
+  //     } 
       
   useEffect(() => {
-    fetch('/api/analytics/')
-      .then(res => res.json())
-      .then(data => {
-        console.log(data)
-        setfixVersionOptions(data);
-      })
-}, [])
+    fetch('/api/analytics/ChangesByParentIdFilters', {
+      method: 'POST',
+      body: JSON.stringify({serverFilters}),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then((res) => res.json())
+      .then((data) => { console.log(data)
+      setfixVersionOptions(data) })
+    } , [])
+
+
 
   const HandlefixVersionChange=(version=>{
     serverFilters.fixVersion=[version.label];
-    render (serverFilters);
+    // render (serverFilters);
 })
 
     const HandleStartDateChange=(date=>{
       serverFilters.startDate=[date.target.value];
-        render (serverFilters);
+        // render (serverFilters);
     })
     
       const HandleEndDateChange=(date=>{
         serverFilters.endDate=[date.target.value];
-        render (serverFilters);
+        // render (serverFilters);
     })
   
   return (
@@ -65,7 +71,6 @@ function ChangesByParentId() {
         placeholder="fix Version " 
         className="ChangesByParentId__Filter" 
         onChange={HandlefixVersionChange}
-        
         />
         
         
