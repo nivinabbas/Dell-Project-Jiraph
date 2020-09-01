@@ -5,10 +5,10 @@ import {
   Switch,
   Route,
   Link,
-  useHistory
+
 } from "react-router-dom";
 import ModificationByField from "../ModificationByField/ModificationByField";
-import DeletedJiraTickets from "../DeletedJiraTickets/DeletedJiraTickets";
+// import DeletedJiraTickets from "../DeletedJiraTickets/DeletedJiraTickets";
 import ChangesInJiraTickets from "../ChangesInJiraTickets/ChangesInJiraTickets";
 import ChangesByParentId from "../ChangesByParentId/ChangesByParentId";
 import DelaysInDelivery from "../DelaysInDelivery/DelaysInDelivery";
@@ -16,10 +16,11 @@ import DelaysInDelivery from "../DelaysInDelivery/DelaysInDelivery";
 
 
 function MainPage(props){
-  let history = useHistory()
+
 return(
   <Router>
       <div>
+      <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
         <nav>
           <ul>
 
@@ -28,12 +29,12 @@ return(
 
             </li>
 
-            <li>
+            {/* <li>
               <Link className="MainForm__status--btn" to="/DeletedJiraTickets">Deleted Jiras</Link>
-            </li>
+            </li>*/}
             <li>
               <Link className="MainForm__status--btn" to="/ChangesInJiraTickets">Changes In Jira Tickets</Link>
-            </li>
+            </li> 
             <li>
               <Link className="MainForm__status--btn" to="/ChangesInParentID">Changes In Parent ID</Link>
             </li>
@@ -47,12 +48,12 @@ return(
         <Route path="/ModificationByField">
             <ModificationByField/>
           </Route>
-          <Route path="/DeletedJiraTickets">
+          {/* <Route path="/DeletedJiraTickets">
             <DeletedJiraTickets/>
-          </Route>
+          </Route>*/}
           <Route path="/ChangesInJiraTickets">
              <ChangesInJiraTickets/>
-          </Route>
+          </Route> 
           <Route path="/ChangesInParentID">
             <ChangesByParentId/>
           </Route>

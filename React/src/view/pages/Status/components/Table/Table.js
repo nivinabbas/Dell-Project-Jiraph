@@ -1,35 +1,66 @@
 import React from "react";
 import "./style.css";
-import SelectInput from "../Select/SelectInput";
+import Select from "react-select";
 
 const optionSprint = [
-  { value: "All", label: "All" },
-  { value: "Create", label: "Create" },
-  { value: "Update", label: "Update" },
-  { value: "Delete", label: "Delete" },
+  { value: "all", label: "All" },
+  { value: "create", label: "Create" },
+  { value: "update", label: "Update" },
+  { value: "delete", label: "Delete" },
 ];
 
 const optionFunctional = [
-  { value: "Status", label: "Status" },
-  { value: "Priority", label: "Priority" },
+  { value: "status", label: "Status" },
+  { value: "priority", label: "Priority" },
   { value: "qaRepresentitive", label: "QA representitive" },
 ];
 
 const optionValue = [
-  { value: "True", label: "true" },
-  { value: "False", label: "false" },
+  { value: "true", label: "True" },
+  { value: "false", label: "False" },
 ];
-export default function TasksTable({ openTasks, onDoneClick }) {
+
+export default function TasksTable({
+  openTasks,
+  onDoneClick,
+  onSelect,
+  onTableFilterClick,
+  filters,
+}) {
+  const disableSelect = () => {
+    return filters[0].value !== "update" ? true : false;
+  };
   return (
     <div className="open-tasks">
       <div className="open-tasks-title">
         <h3>Open Tasks</h3>
       </div>
-      <div style={{ display: "flex" }}>
-        <SelectInput options={optionFunctional} />
-        <SelectInput options={optionSprint} />
-        <SelectInput options={optionValue} />
-        <input type="submit" className="submitButton" />
+      <div className="container__filterSelect">
+        <Select
+          options={optionSprint}
+          className="filterSelect"
+          onChange={(filter, name) => onSelect(filter, "modificationType")}
+        />
+
+        <Select
+          options={optionFunctional}
+          className="filterSelect"
+          onChange={(filterObj, name) =>
+            onSelect(filterObj, "modificationField")
+          }
+          isDisabled={disableSelect()}
+        />
+        <Select
+          options={optionValue}
+          className="filterSelect"
+          onChange={(filter, name) => onSelect(filter, "modificationValue")}
+          isDisabled={disableSelect()}
+        />
+        <input
+          type="submit"
+          className="submitButton"
+          onClick={onTableFilterClick}
+        />
       </div>
       <div className="open-tasks-table">
         <table className="container">

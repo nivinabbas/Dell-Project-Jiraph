@@ -9,6 +9,20 @@ const TaskModel = require("../schemas/TaskSchema");
 const mongoose = require("mongoose");
 let Today;
 
+////////////TEMP FUNCTIONS/////////////
+
+// to get the time format YY-MM-DD
+function dateFormat() {
+  const d = new Date();
+  const ye = new Intl.DateTimeFormat("en", { year: "numeric" }).format(d);
+  const mo = new Intl.DateTimeFormat("en", { month: "2-digit" }).format(d);
+  const da = new Intl.DateTimeFormat("en", { day: "2-digit" }).format(d);
+
+  return `${ye}-${mo}-${da}`;
+}
+
+//////////////////////////////////////
+
 // Start daily status alert !
 router.get("/dailyalerts", async function (req, res) {
   let Today = dateFormat();
@@ -100,7 +114,6 @@ router.get("/dailyalerts", async function (req, res) {
         name: "totalTasks/NotDone",
         number: 0 + "/" + 0,
       },
-
     ];
   } else {
     DailyAlerts = [
@@ -120,46 +133,44 @@ router.get("/dailyalerts", async function (req, res) {
         name: "totalTasks/NotDone",
         number: DailyAlerts[0].totalTasks + "/" + DailyAlerts[0].NotDone,
       },
-
     ];
   }
-  // console.log("DailyAlertsStart");
-  // console.log(DailyAlerts);
-  // console.log("DailyAlertsFinal");
   res.send({ success: true, error: null, info: DailyAlerts });
 });
-
-// to get the time format YY-MM-DD
-function dateFormat() {
-  const d = new Date();
-  const ye = new Intl.DateTimeFormat("en", { year: "numeric" }).format(d);
-  const mo = new Intl.DateTimeFormat("en", { month: "2-digit" }).format(d);
-  const da = new Intl.DateTimeFormat("en", { day: "2-digit" }).format(d);
-
-  return `${ye}-${mo}-${da}`;
-}
 // End daily status alert !
 
 // start open tasks
 router.get("/openTasks", async function (req, res) {
-  TaskModel.find(
-    {
-      "taskItem.isDone": false,
-    },
-    function (err, doc) {
-      // success:T/F,error:string,info{TaskItem[Task]
-
-      res.send({
-        success: true,
-        error: null,
-        info: {
-          doc,
-        },
-      });
-    }
-  ).then((err) => console.log(err));
+  TaskModel.find({ "taskItem.isDone": false }, function (err, doc) {
+    res.send({ success: true, error: null, info: { doc } });
+  }).then((err) => console.log(err));
 });
 // end open tasks
+
+// start openTasksWithFilter
+router.post("/openTasksWithFilter", async function (req, res) {
+  const { filter } = req.body;
+  if (filter.type === "Update" && filter.fieldName != "") {
+    TaskModel.find(
+      {
+        "diffItem.type": filter.type,
+        "diffItem.updatedField.fieldName": filter.fieldName,
+        "taskItem.isDone": false,
+      },
+      function (err, doc) {
+        res.send({ success: true, error: null, info: { doc } });
+      }
+    ).then((err) => console.log(err));
+  } else {
+    TaskModel.find(
+      { "diffItem.type": filter.type, "taskItem.isDone": false },
+      function (err, doc) {
+        res.send({ success: true, error: null, info: { doc } });
+      }
+    ).then((err) => console.log(err));
+  }
+});
+// end openTasksWithFilter
 
 // start update task
 router.post("/updateTasks", (req, res) => {
@@ -217,33 +228,30 @@ router.post("/fillterStackedChart", async function (req, res) {
       {
         $match: {
           "taskItem.updatedTime": { $gte: datefrom, $lte: dateTo },
-        }
+        },
       },
       {
         $group: {
-          _id:
-          {
+          _id: {
             $dateToString: {
               date: "$taskItem.updatedTime",
               format: "%Y-%m-%d",
             },
           },
-          "count": { $sum: 1 },
+          count: { $sum: 1 },
           done: {
             $sum: {
-              $cond: [{ $eq: ["$taskItem.isDone", true] }, 1, 0,
-              ]
+              $cond: [{ $eq: ["$taskItem.isDone", true] }, 1, 0],
             },
           },
           notDone: {
             $sum: {
-              $cond: [{ $eq: ["$taskItem.isDone", false] }, 1, 0,
-              ]
+              $cond: [{ $eq: ["$taskItem.isDone", false] }, 1, 0],
             },
           },
         },
       },
-      { $sort: { "_id": 1 } }
+      { $sort: { _id: 1 } },
     ]);
     // adding to Done Array 
     // adding to Done Array 
@@ -288,29 +296,26 @@ router.post("/fillterStackedChart", async function (req, res) {
 
       {
         $group: {
-          _id:
-          {
+          _id: {
             $dateToString: {
               date: "$taskItem.updatedTime",
               format: formatLabel,//"%Y-%m-%d",
             },
           },
-          "count": { $sum: 1 },
+          count: { $sum: 1 },
           done: {
             $sum: {
-              $cond: [{ $eq: ["$taskItem.isDone", true] }, 1, 0,
-              ]
+              $cond: [{ $eq: ["$taskItem.isDone", true] }, 1, 0],
             },
           },
           notDone: {
             $sum: {
-              $cond: [{ $eq: ["$taskItem.isDone", false] }, 1, 0,
-              ]
+              $cond: [{ $eq: ["$taskItem.isDone", false] }, 1, 0],
             },
           },
         },
       },
-      { $sort: { "_id": 1 } }
+      { $sort: { _id: 1 } },
     ]);
 
     // adding to Done Array 
@@ -565,29 +570,26 @@ router.get("/fieldPie", async function (req, res) {
     },
     {
       $group: {
-        _id:
-        {
+        _id: {
           $dateToString: {
             date: "$taskItem.updatedTime",
             format: "%Y-%m-%d",
           },
         },
-        "count": { $sum: 1 },
+        count: { $sum: 1 },
         done: {
           $sum: {
-            $cond: [{ $eq: ["$taskItem.isDone", true] }, 1, 0,
-            ]
+            $cond: [{ $eq: ["$taskItem.isDone", true] }, 1, 0],
           },
         },
         notDone: {
           $sum: {
-            $cond: [{ $eq: ["$taskItem.isDone", false] }, 1, 0,
-            ]
+            $cond: [{ $eq: ["$taskItem.isDone", false] }, 1, 0],
           },
         },
       },
     },
-    { $sort: { "_id": 1 } }
+    { $sort: { _id: 1 } },
   ]);
   // adding to Done Array 
   let tempDate = [];
@@ -694,6 +696,30 @@ router.post("/fillterFieldPie", async function (req, res) {
 
 
 
+
+//////////test function for open task with filter
+function openTasksWithFilter(type, fieldName) {
+  if (type === "Update" && fieldName != "") {
+    TaskModel.find(
+      {
+        "diffItem.type": type,
+        "diffItem.updatedField.fieldName": fieldName,
+        "taskItem.isDone": false,
+      },
+      function (err, doc) {
+        console.log(doc);
+      }
+    );
+  } else {
+    TaskModel.find(
+      { "diffItem.type": type, "taskItem.isDone": false },
+      function (err, doc) {
+        console.log(doc);
+      }
+    );
+  }
+}
+// openTasksWithFilter("Update", "qaRepresentative1");
 
 module.exports = router;
 
