@@ -36,7 +36,7 @@ function ChangesByParentId() {
     })
       .then((res) => res.json())
       .then((data) => { console.log(data)
-      setfixVersionOptions(data) })
+      setfixVersionOptions(data[0].fixVersions) })
     } , [])
 
 
