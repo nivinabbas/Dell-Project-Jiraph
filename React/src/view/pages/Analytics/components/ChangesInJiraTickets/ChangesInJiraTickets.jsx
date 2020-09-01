@@ -114,7 +114,7 @@ function ChangesInJiraTickets() {
     serverFilters.status = []
     if(status!=null){
     status.map((item, index) => {
-      serverFilters.status.push(item.value)
+     return serverFilters.status.push(item.value)
     })}
     else {
       serverFilters.status = []
@@ -127,7 +127,7 @@ function ChangesInJiraTickets() {
     serverFilters.qaRepresentative = []
     if(Qa!=null){
     Qa.map((item, index) => {
-      serverFilters.qaRepresentative.push(item.value)
+      return serverFilters.qaRepresentative.push(item.value)
     })}
     else {
       serverFilters.qaRepresentative=[]

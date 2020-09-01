@@ -8,6 +8,7 @@ import Chart from "../charts/Chart"
 
 
 
+
 const serverFilters = { fieldName: [], values: [], qaRepresentative: [], startDate: [], endDate: [], label: ["weekly"] };
 
 function ModificationByField(props) {
