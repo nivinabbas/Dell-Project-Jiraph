@@ -31,7 +31,7 @@ function Forgotpassword(props) {
                 const { error } = data;
                 const { info } = data;
                 if (success) {
-              
+
                    return(history.push(`/KeyPassword/${email}`))
                     // history.push("/KeyPassword")
 
