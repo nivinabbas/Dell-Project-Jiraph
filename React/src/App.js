@@ -1,8 +1,12 @@
 import React from "react";
+import Login from "./view/pages/Admin/components/Login/Login"
+import UserList from "./view/pages/Admin/components/usersList/UserList"
+
 
 //components
 import Nav from './components/Nav/Nav';
 import ForgetPassword from "./view/pages/Admin/components/ForgetPassword/ForgetPassword";
+import KeyPassword from "./view/pages/Admin/components/KeyPassword/KeyPassword";
 import MainPage from "./view/pages/Analytics/components/MainPage/MainPage";
 import ModificationByField from "./view/pages/Analytics/components/ModificationByField/ModificationByField";
 import DeletedJira from "./view/pages/Analytics/components/DeletedJiraTickets/Deletedjira";
@@ -17,13 +21,18 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
+  Redirect,
+  Link,
+  useParams
   useLocation,
   Link
 
 } from "react-router-dom";
+import ChangePassword from "./view/pages/Admin/components/ChangePassword/ChangePassword";
 
 
 
+function App() {
 function App() {
   // let location = useLocation();
   // console.log(location);
