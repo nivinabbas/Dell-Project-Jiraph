@@ -693,7 +693,21 @@ router.post("/fillterFieldPie", async function (req, res) {
 //end pie field
 
 
-
+// start
+router.get("/typeSelect", async function (req, res) {
+  let Data = [{ value: "all", label: "All" },];
+  let obj={};
+  TaskModel.distinct("diffItem.type", function (err, doc) {
+    // success:T/F,error:string,info{TaskItem[Task]
+     doc.forEach(element => {
+      console.log(element);
+       obj={"value":element,"label":element};
+       Data.push(obj);
+    });     
+    res.send({ success: true, error: null, info: { Data } });
+  }).then((err) => console.log(err));
+});
+// end
 
 
 
