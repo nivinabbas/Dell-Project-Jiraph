@@ -102,8 +102,8 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
     // const filterStatus = 'Backlog'     // Done , in progress , Backlog ,In Integration ...
     // const filterQaRep = 'Sally'
 
-    const filterValue = req.body.values[0]
-    const filterStatus = req.body.status[0]
+    const filterValue = req.body.values
+    const filterStatus = req.body.status
     const filterQaRep = req.body.qaRepresentative[0]
 
     console.log("nimer")
@@ -112,20 +112,75 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
 
 
     //here we build the match expression according to the user's filters.
-    let matchFilterValue = {
-        'diffItem.type': 'Update',
-        'diffItem.updatedField.fieldName': 'status',
 
-    }
-    
-    if (filterStatus != undefined) {
-        matchFilterValue[`diffItem.updatedField.${filterValue}`] = filterStatus
-    }
+    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+    let filtersArray = [];
+    let orArray = [];
+
+    //default filters
+
+    let matchFilterValue ={ "$and": [] };
+    filtersArray.push({ 'diffItem.type': 'Update' })
+    filtersArray.push({ 'diffItem.updatedField.fieldName': 'status' })
+    // matchFilterValue.push({ "$and": [] })
 
     if (filterQaRep != undefined) {
-        matchFilterValue['jiraItem.qaRepresentative'] = filterQaRep
+        filtersArray['jiraItem.qaRepresentative'] = filterQaRep
     }
-   
+
+    //multiselect status
+    if (filterStatus[0] != undefined && filterValue[0] != undefined) {
+        if (filterStatus.length != 0) {
+            let statusArray = []
+            filterStatus.map(item => {
+                if (filterValue == "newValue") {
+                    statusArray.push({ "diffItem.updatedField.newValue": item })
+                }
+                else {
+                    statusArray.push({ "diffItem.updatedField.oldValue": item })
+                }
+            })
+            // orArray.push(statusArray);
+            filtersArray.push({ "$or": statusArray })
+        }
+    }
+
+
+
+    if (filtersArray.length == 0) {
+        delete matchFilterValue.$and;
+    }
+    else {
+        matchFilterValue["$and"] = filtersArray
+    }
+
+    //multiselect QA REP
+    // if(filterQaRep.length != 0){
+    //     let qaArray = []
+    //     filterQaRep.map(item => {
+    //         qaArray.push({'jiraItem.qaRepresentative':item})
+    //     })
+    //     orArray.push(qaArray)
+    // }
+
+    // if(orArray.length != 0){
+
+    //     matchFilterValue.push({"$and":[]}) 
+
+    // }
+    // 'diffItem.type': 'Update',
+    // 'diffItem.updatedField.fieldName': 'status',
+
+    // if (filterStatus != undefined) {
+    //     matchFilterValue[`diffItem.updatedField.${filterValue}`] = filterStatus
+    // }
+
+    // if (filterQaRep != undefined) {
+    //     matchFilterValue['jiraItem.qaRepresentative'] = filterQaRep
+    // }
+
 
     console.log(matchFilterValue)
 
@@ -154,6 +209,7 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
 
     ])
 
+    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
     // console.log("YOUSEF")
     let total = 0;
@@ -214,8 +270,8 @@ router.post('/changeOfJIRATicketsStatusFilters', async (req, res) => {
         {
             $group: {
                 _id: null,
-                status: { $addToSet: { "label": groupFilters, } },
-                qa: { $addToSet: { "label": "$jiraItem.qaRepresentative", } }
+                status: { $addToSet: { "label": groupFilters, "value": groupFilters} },
+                qa: { $addToSet: { "label": "$jiraItem.qaRepresentative","value": "$jiraItem.qaRepresentative" } }
             },
         }
     ])
