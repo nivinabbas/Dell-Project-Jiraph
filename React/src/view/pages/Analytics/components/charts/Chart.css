@@ -1,11 +1,11 @@
 .chart__Wrapper{
   display: grid;
-  grid-template-columns:1vw 70vw 1vw;
+  grid-template-columns:1vw 99% 1vw;
   grid-template-rows: 40vh auto;
   grid-template-areas: 
   ".chart ."
   ".table ."
-  ;
+  ; 
   padding-top: 2rem;
   justify-content: space-around  ;
   text-align: center;
@@ -36,12 +36,13 @@
   align-items: flex-end;
   width: 100%;
  height: 100%;
+ 
 }
 .chart__column{
   height: 90%;
-  width: 100%;
+ 
   text-align: center; 
-  transition: height .7s ease-in;
+  
   cursor: pointer;
 }
 .chart__column .chart__column__Text{
@@ -58,6 +59,7 @@
   margin: auto;
 }
 .chart__innerColumn{
+  transition: height .7s ease-in;
   /* height: 100%; */
   width: 30px;
   justify-content: space-around;

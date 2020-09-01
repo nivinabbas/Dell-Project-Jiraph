@@ -19,10 +19,10 @@ function MainTable(props) {
       <div className="MainTable__Cell">jira Parent Id</div>
       <div className="MainTable__Cell">Functional Test</div>
       <div className="MainTable__Cell">Qa Representative</div>
-      <div className="MainTable__Cell">Fix Version</div>
-      <div className="MainTable__Cell">Qc Requirement Id</div>
+      {/* <div className="MainTable__Cell">Fix Version</div> */}
+      {/* <div className="MainTable__Cell">Qc Requirement Id</div>
       <div className="MainTable__Cell">Qc Requirement Type</div>
-      <div className="MainTable__Cell">QC Status</div>
+      <div className="MainTable__Cell">QC Status</div> */}
 
       {changes &&  <div className="MainTable__Cell">Updated Time</div>}
       {changes &&  <div className="MainTable__Cell">Field Name</div>}
@@ -48,10 +48,10 @@ function MainTable(props) {
             <div className="MainTable__Body__Cell">{task.jiraItem.jiraParentId}</div>
             <div className="MainTable__Body__Cell">{task.jiraItem.functionalTest}</div>
             <div className="MainTable__Body__Cell">{task.jiraItem.qaRepresentative}</div>
-            <div className="MainTable__Body__Cell">{task.jiraItem.fixVersion}</div>
-            <div className="MainTable__Body__Cell">{task.qcItem.requirementId}</div>
+            {/* <div className="MainTable__Body__Cell">{task.jiraItem.fixVersion}</div> */}
+            {/* <div className="MainTable__Body__Cell">{task.qcItem.requirementId}</div>
             <div className="MainTable__Body__Cell">{task.qcItem.requirementType}</div>
-            <div className="MainTable__Body__Cell">{task.qcItem.status}</div>
+            <div className="MainTable__Body__Cell">{task.qcItem.status}</div> */}
 
             {changes &&  <div className="MainTable__Body__Cell">{task.diffItem.updateTime}</div>}
             {changes &&  <div className="MainTable__Body__Cell">{task.diffItem.updatedField.fieldName}</div>}
