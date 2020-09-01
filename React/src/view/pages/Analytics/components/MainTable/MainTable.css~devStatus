@@ -13,8 +13,8 @@ font-weight: bold;
 .MainTable__Header{
   display: table-header-group;
   background-color: gray;
-  font-weight: 300;
-  font-size:10px;
+  font-weight: bold;
+  font-size: 25px;
 
   
 }
@@ -22,16 +22,13 @@ font-weight: bold;
 .MainTable__Cell{
 
 display: table-cell;
-padding: 3px;
+padding: 10px;
 text-align: center;
 color: white;
-font-weight: bold;
 /* background-color: #1C4E80; */
 /* background-color: #1F3F49; */
 background-color: #20283E;
 border: grey solid 1px;
-
-font-size: 15px;
 }
 .MainTable__Body{
   
@@ -40,15 +37,15 @@ font-size: 15px;
 }
 .MainTable__Row{
   display: table-row;
-  /* max-width: 50vw; */
   
 }
-
+.MainTable__Body__Cell:first-child {
+  cursor: pointer;
+}
 .MainTable__Body__Cell{
   
   border: grey solid 1px;
   text-align: justify;
   display: table-cell;
-  font-size: 15px;
 }
 
