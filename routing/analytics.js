@@ -48,6 +48,7 @@ router.post('/modificationByField', async (req, res) => {
     tasks[0].maxLength = maxLength
 
     tasks[0].sumLength = sumLength
+
     res.send(tasks)
 })
 
@@ -113,18 +114,17 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
 
     //here we build the match expression according to the user's filters.
 
+
     //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+    let matchFilterValue = { "$and": [] };
 
     let filtersArray = [];
-    let orArray = [];
 
     //default filters
 
-    let matchFilterValue = { "$and": [] };
     filtersArray.push({ 'diffItem.type': 'Update' })
     filtersArray.push({ 'diffItem.updatedField.fieldName': 'status' })
-    // matchFilterValue.push({ "$and": [] })
 
     // if (filterQaRep != undefined) {
     //     filtersArray['jiraItem.qaRepresentative'] = filterQaRep
@@ -169,23 +169,6 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
 
 
 
-    // if(orArray.length != 0){
-
-    //     matchFilterValue.push({"$and":[]}) 
-
-    // }
-    // 'diffItem.type': 'Update',
-    // 'diffItem.updatedField.fieldName': 'status',
-
-    // if (filterStatus != undefined) {
-    //     matchFilterValue[`diffItem.updatedField.${filterValue}`] = filterStatus
-    // }
-
-    // if (filterQaRep != undefined) {
-    //     matchFilterValue['jiraItem.qaRepresentative'] = filterQaRep
-    // }
-
-
     console.log(matchFilterValue)
 
     const tasks = await TaskModel.aggregate([
@@ -195,7 +178,7 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
         {
             $group: {
                 _id: {
-
+                    date: { $dateToString: { format: "%Y-%m-%d", date: "$diffItem.updatedTime" } },
                     Val: `$diffItem.updatedField.${filterValue}`
 
                 },
@@ -204,8 +187,9 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
         },
         {
             $group: {
-                _id: "$_id.Val",
-                arr: { $push: { tasks: "$tasks", size: { $size: "$tasks" } } },
+
+                _id: "$_id.date",
+                arr: { $push: { value: "$_id.Val", tasks: "$tasks", size: { $size: "$tasks" } } },
 
             }
 
@@ -216,12 +200,16 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
     //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
     // console.log("YOUSEF")
-    let total = 0;
-    tasks.forEach(element => {
-        total += element.arr[0].size
+    let maxLength = -1;
+    let sum = 0;
+    tasks[0].arr.forEach(element => {
+        sum += element.size
+        if (element.size > maxLength)
+            maxLength = element.size
     })
-    tasks.total = total
-    // console.log(tasks)
+    tasks[0].sum = sum
+    tasks[0].maxLength = maxLength
+    console.log(tasks[0].arr)
 
     // tasks.forEach(element => {
     //     console.log(element.arr[0].tasks[0].jiraItem)
@@ -279,6 +267,10 @@ router.post('/changeOfJIRATicketsStatusFilters', async (req, res) => {
             },
         }
     ])
+    tasks.map((item, index) => {
+        item.status.sort((a, b) => (a.label > b.label) ? 1 : -1);
+        item.qa.sort((a, b) => (a.label > b.label) ? 1 : -1);
+    })
 
 
     console.log(tasks)
