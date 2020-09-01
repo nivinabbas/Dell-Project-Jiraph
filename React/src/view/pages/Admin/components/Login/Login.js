@@ -8,7 +8,51 @@ import {
 
 
 function Login(props) {
-    let history = useHistory();
+    const history = useHistory();
+
+
+    function handleLogin(e) {
+        e.preventDefault();
+
+        const { userEmailInp, userPswInp } = e.target.elements;
+        const email = userEmailInp.value;
+        const password = userPswInp.value;
+
+        fetch('/api/users/login', {
+            method: "POST",
+            body: JSON.stringify({ email, password }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                const { success } = data;
+                const { error } = data;
+                if (success) {
+                    const { info } = data;
+                    if (info.role === 'Admin') {
+                        history.push("/userList")
+                    }
+                    if (info.role === 'Qa Manager') {
+                        history.push("/status")
+                    }
+                    if (info.role === 'Top Manager') {
+                        history.push("/analytics")
+                    }
+                    else {
+                        console.log(error)
+                    }
+                }
+
+                else {
+                    const { error } = data;
+                    console.log(error)
+
+                }
+
+            });
+    }
     return (
         <div className='login'>
             <h3>Welcome to Jiraph System</h3>
@@ -22,43 +66,7 @@ function Login(props) {
 
         </div>
     )
-
-    function handleLogin(e) {
-        e.preventDefault();
-
-        const { userEmailInp, userPswInp } = e.target.elements;
-        const email = userEmailInp.value;
-        const password = userPswInp.value;
-
-        fetch("/api/users/login", {
-            method: "POST",
-            body: JSON.stringify({ email, password }),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                const { success } = data;
-                if (success == true) {
-                    const { info } = data;
-                    if (info.role === 'admin') {
-                        history.push("/userList")
-                    }
-                    else {
-                        history.push("/omryPage")
-                    }
-                }
-
-                else {
-                    const { error } = data
-                    document.getElementById("res").innerText = "${error}";
-                }
-
-            });
-    }
 }
 
 export default Login;
 
-// test

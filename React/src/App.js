@@ -1,6 +1,9 @@
 import React from "react";
 import Login from "./view/pages/Admin/components/Login/Login"
+import UserList from "./view/pages/Admin/components/usersList/UserList"
+
 import ForgetPassword from "./view/pages/Admin/components/ForgetPassword/ForgetPassword";
+import KeyPassword from "./view/pages/Admin/components/KeyPassword/KeyPassword";
 
 
 import {
@@ -8,26 +11,28 @@ import {
   Switch,
   Route,
   Redirect,
-  Link
+  Link,
+  useParams
 
 } from "react-router-dom";
+import ChangePassword from "./view/pages/Admin/components/ChangePassword/ChangePassword";
 
 
 
- function App() {
+function App() {
   return (
     <Router>
       <div>
         <nav>
           <ul>
 
-          <li>
+            <li>
               <Link to="/register">Register</Link>
 
             </li>
 
             <li>
-              <Link to="/Admin">Admin</Link>
+              <Link to="/userlist">Admin</Link>
             </li>
             <li>
               <Link to="/analysis">Analysis</Link>
@@ -41,19 +46,25 @@ import {
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
-        <Route exact={true} path="/">
+          <Route exact={true} path="/">
             <Login></Login>
-            
+
           </Route>
           <Route path="/register">
-            
+
           </Route>
           <Route path="/forgotPassword">
-              <ForgetPassword></ForgetPassword>
+            <ForgetPassword></ForgetPassword>
           </Route>
-          <Route path="/Admin">
-          <h1>Admin</h1>
-            
+          <Route path="/KeyPassword/:email" children={<KeyPassword  />} />
+          <Route path="/ChangePassword">
+            <ChangePassword></ChangePassword>
+          </Route>
+          <Route path="/ChangePassword/:email" children={<ChangePassword  />} />
+          
+          <Route path="/userlist">
+           <UserList />
+
           </Route>
           <Route path="/analysis">
 
