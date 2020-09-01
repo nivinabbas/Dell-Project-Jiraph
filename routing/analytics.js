@@ -234,7 +234,7 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
     console.log("llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll",tasks)
 
 
-    res.send({tasks});
+    res.send(tasks);
 
 })
 
