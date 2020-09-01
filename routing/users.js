@@ -196,9 +196,24 @@ router.post('/checkSendedPassword', (req, res) => {
 
 router.put('/updatePassword',(req,res)=>{
     const { email , password } = req.body;
-    UserModel.updateOne({email:email},{$set:{userInfo:{password:password}}}).then(docs=>{
-        console.log(docs)
-    })
+    UserModel.findOne({"userInfo.employeeEmail":email}).then(docs=>{
+        if(docs){
+        const name = docs.userInfo.employeeName
+        const role = docs.userInfo.employeeRole
+        const id = docs._id
+        UserModel.updateOne({_id:id},{$set:{userInfo:{employeeName:name,employeeEmail:email,employeeRole:role,password:password}}}).then(doc=>{
+            if(doc.n>0){
+               res.send({ success: true, error: null, info: null }) 
+            }else{
+               res.send({ success: false, error: null, info: null }) 
+            }
+       })
+    }else{
+        res.send({ success: false, error: "email not valid", info: null }) 
+    }
+       
+   })
+    
 })
 
 router.put('/editUser', (req, res) => {
@@ -207,12 +222,12 @@ router.put('/editUser', (req, res) => {
     if (validator.validate(email)) {
 
 
-        UserModel.find({ "userInfo.employeeEmail": email }).then(checkEmail => {
+        User.find({ "userInfo.employeeEmail": email }).then(checkEmail => {
             if (checkEmail.length > 0) {
-                UserModel.find({ "userInfo.employeeEmail": email }).then(checkUserEmail => {
+                User.find({ "userInfo.employeeEmail": email }).then(checkUserEmail => {
                     if (checkUserEmail.length > 0) {
 
-                        UserModel.update(
+                        User.updateOne({_id:id},
                             {
                                 $set:
                                 {
@@ -231,7 +246,7 @@ router.put('/editUser', (req, res) => {
                     }
                 })
             } else {
-                UserModel.update(
+                User.updateOne(
                     { _id: id }, {
                         $set:
                         {
