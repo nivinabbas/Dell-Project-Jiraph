@@ -451,8 +451,35 @@ router.post('/changeOfJIRATicketsStatusFilters', async (req, res) => {
 
 })
 
-/*
-1.filters and      NOT NOW =>  uiobj without filters
-2.for each change in the filters, send new uiobj according to the filters applied
-*/
+
+
+router.get('/delaysInDelivery', (req, res) => {
+
+})
+
+router.get('/delaysInDeliveryFilter', async (req, res) => {
+    let filters = await TaskModel.aggregate([
+        {
+            $match: {}
+        },
+        {
+            $group: {
+                _id: null,
+                fixVersion: { $addToSet: { "label": "$jiraItem.fixVersion", "value": "$jiraItem.fixVersion" } },
+                jiraType: { $addToSet: { "label": "$jiraItem.jiraType", "value": "$jiraItem.jiraType" } },
+                qa: { $addToSet: { "label": "$jiraItem.qaRepresentative", "value": "$jiraItem.qaRepresentative" } }
+            }
+        }
+    ])
+    filters.map((item, index) => {
+        item.fixVersion.sort((a, b) => (a.label > b.label) ? 1 : -1);
+        item.jiraType.sort((a, b) => (a.label > b.label) ? 1 : -1);
+        item.qa.sort((a, b) => (a.label > b.label) ? 1 : -1);
+    })
+
+
+    // console.log(filters)
+    res.send(filters)
+
+})
 module.exports = router;
