@@ -8,20 +8,8 @@ import {
 
 
 function Login(props) {
-    let history = useHistory();
-    return (
-        <div className='login'>
-            <h3>Welcome to Jiraph System</h3>
-            <form id="loginForm" onSubmit={handleLogin} >
-                <input id="userEmail-Inp" name="userEmailInp" placeholder="Enter your Emailadress"></input>
-                <input id="userPsw-Inp" name="userPswInp" placeholder="Enter your Password"></input>
-                <button type="submit">Login</button>
-            </form>
-            <Link to="/forgotPassword">Forgot Password?</Link>
-            <div className='res'></div>
-
-        </div>
-    )
+    const history = useHistory();
+    let error='';
 
     function handleLogin(e) {
         e.preventDefault();
@@ -30,7 +18,7 @@ function Login(props) {
         const email = userEmailInp.value;
         const password = userPswInp.value;
 
-        fetch("/api/users/login", {
+        fetch('/api/users/login', {
             method: "POST",
             body: JSON.stringify({ email, password }),
             headers: {
@@ -40,25 +28,42 @@ function Login(props) {
             .then((res) => res.json())
             .then((data) => {
                 const { success } = data;
-                if (success == true) {
+                const { error } = data;
+                if (success) {
                     const { info } = data;
-                    if (info.role === 'admin') {
-                        history.push("/userList")
+                    if (info.role === 'Admin') {
+                        history.push("/UserList")
                     }
-                    else {
-                        history.push("/omryPage")
+                    if (info.role === 'QA manager') {
+                        history.push("/status")
                     }
+                    if (info.role === 'TOP manager') {
+                        history.push("/analytics")
+                    }
+            
                 }
 
                 else {
-                    const { error } = data
-                    document.getElementById("res").innerText = "${error}";
+                    const { error } = data;
+                    alert(error)
+
                 }
 
             });
     }
+    return (
+        <div className='login'>
+            <h3>Welcome to Jiraph System</h3>
+            <form id="loginForm" onSubmit={handleLogin} >
+                <input id="userEmail-Inp" name="userEmailInp" placeholder="Enter your Emailadress"></input>
+                <input id="userPsw-Inp" type="password" name="userPswInp" placeholder="Enter your Password"></input>
+                <button type="submit">Login</button>
+            </form>
+            <Link to="/forgotPassword">Forgot Password?</Link>
+
+        </div>
+    )
 }
 
 export default Login;
 
-// test

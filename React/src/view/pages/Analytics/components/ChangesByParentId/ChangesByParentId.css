@@ -1,0 +1,73 @@
+
+.ChangesByParentIdWrapper{
+  display: grid;
+  grid-template-columns: 2vw 82vw 2vw;
+  grid-template-rows: 10vh 15vh 5vh auto;
+  grid-template-areas: 
+  "header header header "
+  ". filterButtons ."
+  ". . ."
+  ". Table . "
+  "chartColors chart .";
+  
+  background-color: #C8C9C7;
+  }
+
+  .ChangesByParentId__Title{
+    font-weight: 500;
+    grid-area: header;
+    text-align: center;
+    color: #00447C;
+    background-color: white;
+    height: 100%;
+    font-family: 'Roboto Slab', serif;
+    font-size: 26px;
+    padding-top: 3vh;
+  }
+  .ChangesByParentId__Filters{
+    
+    grid-area: filterButtons;
+  }
+ /* .ModificationByFieldTable{
+    grid-area: table;
+  }*/
+  .ChangesByParentId__Filters{
+    margin-top: 1rem;
+    /* padding-top: 2vh; */
+    grid-area: filterButtons;
+    display: flex;
+    justify-content: space-between;
+    background-color: #EEEEEE;
+    align-items: center;
+    text-align: center;
+    height: 5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-radius: 3px;
+    box-shadow: 0px 0.3px 0.3px rgba(0, 0, 0, 0.2);
+  }
+  .ChangesByParentId__Filter{
+    width: 10rem;
+    /* border: 0.1px solid black; */
+    box-sizing: border-box;
+    background-color:   #EEEEEE;
+    border-radius: 4px;
+    color: black;
+    box-shadow: 0px 0.1px 0.3px rgba(0, 0, 0, 0.8);
+    padding-top:0.5rem;
+    padding-bottom:0.5rem;
+  
+  }
+ 
+  
+  .ChangesByParentId__Chart{
+    
+      display: grid;
+    grid-area: PieChart;
+
+   justify-items: flex-end;
+  }
+
+  
+
+  

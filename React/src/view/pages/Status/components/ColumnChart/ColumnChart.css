@@ -1,0 +1,38 @@
+.columnchart {
+  height: 40vh;
+  background-color: white;
+  border-radius: 10px;
+  display: flex;
+
+  justify-content: space-between;
+  align-items: flex-end;
+  /* position: absolute; */
+  overflow-x: scroll;
+}
+
+.columnchart__column {
+  text-align: center;
+}
+
+.columnchart__innerColumn {
+  height: 100%;
+  width: 100%;
+  border-radius: 10px 10px 0px 0px;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.418);
+  background: rgb(157, 157, 157);
+  background: linear-gradient(
+    90deg,
+    rgba(157, 157, 157, 1) 0%,
+    rgba(236, 236, 236, 1) 51%,
+    rgba(162, 162, 162, 1) 100%
+  );
+}
+
+.columnchart__label {
+  padding: 4px;
+  background: wheat;
+  /* margin-top: 10px; */
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.418);
+  border-radius: 5px;
+  border: 4px solid rgb(218, 198, 161);
+}
