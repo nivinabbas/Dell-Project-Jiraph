@@ -1,8 +1,8 @@
 import React from 'react';
 import "./DeletedJiraTickets.css";
-import MainTable from "../MainTable/MainTable"
+import Chart from "../charts/Chart";
 
-import Select from 'react-select'
+import Select from 'react-select';
 
 import { useState, useEffect } from 'react';
 
@@ -12,7 +12,7 @@ const serverFilters = { priority: [], functionalTest: [], label: ["weekly"], qaR
 
 function DeletedJira() {
   // To set UiObj from the filtered Data we recieved from server 
-  // const [UiObjs, setUiObjs] = useState([]);
+  const [UiObjs, setUiObjs] = useState([]);
 
   // Options To Send == > Server 
 
@@ -26,7 +26,6 @@ function DeletedJira() {
   const functionalTestOptions = [
     { name: "functionalTest", value: "True", label: "True" },
     { name: "functionalTest", value: "False", label: "False" },
-
   ]
 
 
@@ -50,7 +49,7 @@ function DeletedJira() {
       }
     })
       .then((res) => res.json())
-      .then((data) => { console.log(data) })
+      .then((data) => {setUiObjs(data) })
 
   }
 
@@ -125,10 +124,7 @@ function DeletedJira() {
   return (
 
     <div className='DeletedJiraTicketsWrapper'>
-      <div className="DeletedJiraTickets__Table" >
-        <MainTable changes={true} />
-
-      </div>
+      <div className="DeletedJiraTickets__Chart"> {UiObjs.length > 0 && <Chart UiObjs={UiObjs} />}</div>
       <div className="DeletedJiraTickets__Title">Deleted Jira Tickets</div>
 
       {/* Select Filters */}
