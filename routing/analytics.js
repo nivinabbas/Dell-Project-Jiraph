@@ -104,7 +104,7 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
 
     const filterValue = req.body.values
     const filterStatus = req.body.status
-    const filterQaRep = req.body.qaRepresentative[0]
+    const filterQaRep = req.body.qaRepresentative
 
     console.log("nimer")
     console.log(filterValue, filterStatus, filterQaRep)
@@ -121,14 +121,14 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
 
     //default filters
 
-    let matchFilterValue ={ "$and": [] };
+    let matchFilterValue = { "$and": [] };
     filtersArray.push({ 'diffItem.type': 'Update' })
     filtersArray.push({ 'diffItem.updatedField.fieldName': 'status' })
     // matchFilterValue.push({ "$and": [] })
 
-    if (filterQaRep != undefined) {
-        filtersArray['jiraItem.qaRepresentative'] = filterQaRep
-    }
+    // if (filterQaRep != undefined) {
+    //     filtersArray['jiraItem.qaRepresentative'] = filterQaRep
+    // }
 
     //multiselect status
     if (filterStatus[0] != undefined && filterValue[0] != undefined) {
@@ -147,6 +147,17 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
         }
     }
 
+    // multiselect QA REP
+    if (filterQaRep[0] != undefined && filterValue[0] != undefined) {
+        if (filterQaRep.length != 0) {
+            let qaArray = []
+            filterQaRep.map(item => {
+                qaArray.push({ 'jiraItem.qaRepresentative': item })
+            })
+            // orArray.push(qaArray)
+            filtersArray.push({ "$or": qaArray })
+        }
+    }
 
 
     if (filtersArray.length == 0) {
@@ -156,14 +167,7 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
         matchFilterValue["$and"] = filtersArray
     }
 
-    //multiselect QA REP
-    // if(filterQaRep.length != 0){
-    //     let qaArray = []
-    //     filterQaRep.map(item => {
-    //         qaArray.push({'jiraItem.qaRepresentative':item})
-    //     })
-    //     orArray.push(qaArray)
-    // }
+
 
     // if(orArray.length != 0){
 
@@ -270,8 +274,8 @@ router.post('/changeOfJIRATicketsStatusFilters', async (req, res) => {
         {
             $group: {
                 _id: null,
-                status: { $addToSet: { "label": groupFilters, "value": groupFilters} },
-                qa: { $addToSet: { "label": "$jiraItem.qaRepresentative","value": "$jiraItem.qaRepresentative" } }
+                status: { $addToSet: { "label": groupFilters, "value": groupFilters } },
+                qa: { $addToSet: { "label": "$jiraItem.qaRepresentative", "value": "$jiraItem.qaRepresentative" } }
             },
         }
     ])
