@@ -67,7 +67,7 @@ function DeletedJira() {
 
     fetch('/api/analytics/deletedJiraTicketsFilters', {
       method: 'POST',
-      body: JSON.stringify({ startDate: serverFilters.startDate, endDate: serverFilters.endDate }),
+      body: JSON.stringify({ startDate: serverFilters.startDate, endDate: serverFilters.endDate,label:serverFilters.label }),
       headers: {
         "Content-Type": "application/json"
       }
