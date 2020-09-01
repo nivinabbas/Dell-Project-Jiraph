@@ -8,6 +8,27 @@ import StackedChart from "../Chart/StackedChart";
 import PieChart from "../Chart/PieChart";
 import DateFilter from "../DateFilter/DateFilter";
 
+const pieTypeDummyData = {
+  series: [44, 55],
+  options: {
+    chart: {
+      type: "donut",
+    },
+    // responsive: [
+    //   {
+    //     breakpoint: 480,
+    //     options: {
+    //       chart: {
+    //         width: 200,
+    //       },
+    //       legend: {
+    //         position: "bottom",
+    //       },
+    //     },
+    //   },
+    // ],
+  },
+};
 const dummyData = {
   series: [
     {
@@ -81,7 +102,7 @@ const optionFunctional = [
 
 const StatusPage = (props) => {
   // *********** pie chart 1 :
-  const [FunctionalPieContent, setFunctionalPieContent] = useState([]);
+
   const [cardsContent, setCardsContent] = useState([]);
   const [openTasks, setOpenTasks] = useState([]);
   const [isDone, setIsDone] = useState(false);
@@ -94,7 +115,9 @@ const StatusPage = (props) => {
   ]);
   const [modificationType, setModificationType] = useState({});
   const [barChart, setBarChart] = useState({});
-  const [stackedChart, setStackedChart] = useState(dummyData);
+  const [stackedChart, setStackedChart] = useState({});
+  const [typePieChart, setTypePieChart] = useState({});
+  // const [fieldPieChart, setFieldPieChart] = useState({});
 
   useEffect(() => {
     fetch("/api/status/dailyalerts")
@@ -136,19 +159,38 @@ const StatusPage = (props) => {
       });
   }, []);
 
+  useEffect(() => {
+    fetch("/api/status/TypePie")
+      .then((res) => res.json())
+      .then((data) => {
+        let { success, error, info } = data;
+        if (success) {
+          console.log("first", info);
+          setTypePieChart(info);
+          console.log("type", info);
+        } else {
+          alert(error);
+        }
+      });
+  }, []);
+
+  // setFieldPieChart(pieTypeDummyData);
   const handleDoneClick = async (jiraId) => {
-    const userId = null;
-    const result = openTasks.filter(
-      (openTask) => openTask.jiraItem.jiraId !== jiraId
-    );
-    setOpenTasks(result);
-    await fetch("/api/status/updateTasks", {
-      method: "POST",
-      body: JSON.stringify({ jiraId, userId }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    try {
+      const userId = null;
+      const result = openTasks.filter(
+        (openTask) => openTask.jiraItem.jiraId !== jiraId
+      );
+      setOpenTasks(result);
+      console.log(jiraId);
+      await fetch("/api/status/updateTasks", {
+        method: "POST",
+        body: JSON.stringify({ jiraId, userId }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (error) {}
   };
   const handlemodificationTypePieSelect = (filter, name) => {
     if (name === "pie1") setFilterTypePie(filter.value);
@@ -157,7 +199,7 @@ const StatusPage = (props) => {
   //date
   const handleDateClick = async (CurrentstartDate, CurrentEndtDate) => {
     //typechart
-    await fetch("/api/status/typePieChart", {
+    await fetch("/api/status/typePieChartFilter", {
       method: "POST",
       body: JSON.stringify({
         filterTypePie,
@@ -262,11 +304,13 @@ const StatusPage = (props) => {
 
         <div className="statuspage__chartpie">
           <PieChart
+            dataPieChart={typePieChart}
             selectOptions={optionSprint}
             name="pie1"
             onmodificationTypePieSelect={handlemodificationTypePieSelect}
           />
           <PieChart
+            dataPieChart={pieTypeDummyData}
             selectOptions={optionFunctional}
             name="pie2"
             onmodificationTypePieSelect={handlemodificationTypePieSelect}
