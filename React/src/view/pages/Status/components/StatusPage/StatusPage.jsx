@@ -8,84 +8,6 @@ import StackedChart from "../Chart/StackedChart";
 import PieChart from "../Chart/PieChart";
 import DateFilter from "../DateFilter/DateFilter";
 
-const pieTypeDummyData = {
-  series: [44, 55],
-  options: {
-    chart: {
-      type: "donut",
-    },
-    // responsive: [
-    //   {
-    //     breakpoint: 480,
-    //     options: {
-    //       chart: {
-    //         width: 200,
-    //       },
-    //       legend: {
-    //         position: "bottom",
-    //       },
-    //     },
-    //   },
-    // ],
-  },
-};
-const dummyData = {
-  series: [
-    {
-      name: "Done",
-      data: [44, 55, 41, 67, 22, 43, 44, 55, 41, 67, 22, 43],
-    },
-    {
-      name: "Not Done",
-      data: [13, 23, 20, 8, 13, 27, 44, 55, 41, 67, 22, 43],
-    },
-  ],
-  options: {
-    // chart: {
-    //   type: "bar",
-    //   height: 350,
-    //   stacked: true,
-    // },
-    // responsive: [
-    //   {
-    //     breakpoint: 480,
-    //     options: {
-    //       legend: {
-    //         position: "bottom",
-    //         offsetX: -10,
-    //         offsetY: 0,
-    //       },
-    //     },
-    //   },
-    // ],
-    // plotOptions: {
-    //   bar: {
-    //     horizontal: false,
-    //   },
-    // },
-    xaxis: {
-      type: "datetime",
-      categories: [
-        "01/01/2011 GMT",
-        "01/02/2011 GMT",
-        "01/03/2011 GMT",
-        "01/04/2011 GMT",
-        "01/05/2011 GMT",
-        "01/06/2011 GMT",
-        "01/07/2011 GMT",
-        "01/08/2011 GMT",
-      ],
-    },
-    // legend: {
-    //   position: "bottom",
-    //   offsetY: 40,
-    // },
-    // fill: {
-    //   opacity: 1,
-    // },
-  },
-};
-
 const optionSprint = [
   { value: "all", label: "All" },
   { value: "create", label: "Create" },
@@ -101,8 +23,6 @@ const optionFunctional = [
 ];
 
 const StatusPage = (props) => {
-  // *********** pie chart 1 :
-
   const [cardsContent, setCardsContent] = useState([]);
   const [openTasks, setOpenTasks] = useState([]);
   const [isDone, setIsDone] = useState(false);
@@ -151,7 +71,6 @@ const StatusPage = (props) => {
       .then((data) => {
         let { success, error, info } = data;
         if (success) {
-          console.log("first", info);
           setStackedChart(info);
         } else {
           alert(error);
@@ -165,9 +84,7 @@ const StatusPage = (props) => {
       .then((data) => {
         let { success, error, info } = data;
         if (success) {
-          console.log("first", info);
           setTypePieChart(info);
-          console.log("type", info);
         } else {
           alert(error);
         }
@@ -179,9 +96,7 @@ const StatusPage = (props) => {
       .then((data) => {
         let { success, error, info } = data;
         if (success) {
-          console.log("first", info);
           setFieldPieChart(info);
-          console.log("type", info);
         } else {
           alert(error);
         }
@@ -196,7 +111,7 @@ const StatusPage = (props) => {
         (openTask) => openTask.jiraItem.jiraId !== jiraId
       );
       setOpenTasks(result);
-      console.log(jiraId);
+
       await fetch("/api/status/updateTasks", {
         method: "POST",
         body: JSON.stringify({ jiraId, userId }),
