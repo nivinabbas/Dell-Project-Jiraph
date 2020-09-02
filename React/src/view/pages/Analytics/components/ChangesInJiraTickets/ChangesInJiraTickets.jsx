@@ -83,48 +83,51 @@ function ChangesInJiraTickets() {
   const [statusOptions, setStatusOptions] = useState([])
   const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([])
 
-  const [valueOptions, setValueOptions] = useState([
+  const valueOptions=[
     { value: "newValue", label: "New Value" },
     { value: "oldValue", label: "Old Value" }
-  ])
+  ]
 
-  const [labelOptions, setLabelOptions] = useState([
+  const labelOptions=[
     { name: "label", value: "daily", label: "Daily" },
     { name: "label", value: "weekly", label: "Weekly" },
     { name: "label", value: "monthly", label: "Monthly" },
     { name: "label", value: "yearly", label: "Yearly" }
-  ])
+  ]
 
 
-  // Default Date
-  const date = new Date()
-  const date1MonthAgo = new Date(new Date().setMonth(date.getMonth() - 1));
 
 
 
   // Filters onChange Functions 
 
-  const HandleValuesChange = (val => {
-    serverFilters.values = [val.value]
+  const HandleValuesChange = (change => {
+    serverFilters.values = [change.value]
     render(serverFilters);
   })
 
 
-  const HandleStatusChange = (status => {
+  const HandleStatusChange = (change => {
 
     serverFilters.status = []
-    status.map((item, index) => {
+    if(change!=null)(
+    change.map((item) => {
+      return(
       serverFilters.status.push(item.value)
-    })
+      )
+    }))
 
     render(serverFilters);
   })
 
-  const HandleqaRepresentativeChange = (Qa => {
+  const HandleqaRepresentativeChange = (change => {
     serverFilters.qaRepresentative = []
-    Qa.map((item, index) => {
+    if(change!=null)(
+      change.map((item) => {
+        return(
       serverFilters.qaRepresentative.push(item.value)
-    })
+        )
+    }))
 
     render(serverFilters);
   })
@@ -150,6 +153,7 @@ function ChangesInJiraTickets() {
   return (
 
     <div className='ChangeOfJiraTicketWrapper'>
+      <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
 
       <div className="ChangeOfJiraTicket__Chart">
         {UiObjs.length > 0 && <Chart UiObjs={UiObjs} />}
