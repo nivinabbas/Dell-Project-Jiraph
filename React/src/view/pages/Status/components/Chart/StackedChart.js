@@ -13,7 +13,7 @@ export default function StackedChart({ stackedChart }) {
     };
   }
 
-  console.log(stackedChart);
+
 
   return (
     <div id="daily_chart" style={{ width: "100%" }}>
