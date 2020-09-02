@@ -49,8 +49,11 @@ export default function TasksTable({
           <thead className="header__table">
             <tr>
               <th scope="col"> # </th> <th scope="col"> Id </th>
-              <th scope="col"> Jira Name </th> <th scope="col"> Field Name </th>
-              <th scope="col"> Old Val </th> <th scope="col"> New Val </th>
+              <th scope="col"> Jira Name </th>
+              <th scope="col"> Type </th>
+              <th scope="col"> Field Name </th>
+              <th scope="col"> Old Val </th>
+              <th scope="col"> New Val </th>
               <th scope="col"> Done </th>
             </tr>
           </thead>
@@ -60,6 +63,7 @@ export default function TasksTable({
                 <th scope="row"> {++index} </th>
                 <td> {task.jiraItem.jiraId} </td>
                 <td> {task.jiraItem.jiraName} </td>
+                <td> {task.diffItem.type} </td>
                 <td> {task.diffItem.updatedField.fieldName} </td>
                 <td> {task.diffItem.updatedField.oldValue} </td>
                 <td> {task.diffItem.updatedField.newValue} </td>

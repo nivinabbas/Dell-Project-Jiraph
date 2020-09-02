@@ -251,17 +251,22 @@ const StatusPage = (props) => {
         }
       });
 
-    // fetch("/api/status/openTasksSelected", {
-    //   method: "POST",
-    //   body: JSON.stringify({ filters }),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // })
-    //   .then((res) => res.json())
-    //   .then((res) => {
-    //   setOpenTasks(res);
-    //   });
+    fetch("/api/status/filltersAllSubmit", {
+      method: "POST",
+      body: JSON.stringify({ ...filters }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        let { success, error, info } = res;
+        if (success) {
+          setOpenTasks(info.doc);
+        } else {
+          alert(error);
+        }
+      });
 
     console.log(filters);
   };
