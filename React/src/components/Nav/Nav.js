@@ -60,7 +60,7 @@ export default props => {
                         </div>
 
                         <div className="analysis__item">
-                            <Link className={location === "/DeletedJiraTickets"?'menu__subLink menu-subLink--selected':"menu__subLink"} to="/DeletedJiraTickets">Deleted Jiras</Link>
+                            <Link className={location === "/DeletedJiraTickets"?'menu__subLink menu-subLink--selected':"menu__subLink"} to="/DeletedJiraTickets">Deleted Jira Tickets</Link>
                         </div>
                         <div className="analysis__item">
                             <Link className={location === "/ChangesInJiraTickets"?'menu__subLink menu-subLink--selected':"menu__subLink"} to="/ChangesInJiraTickets">Changes In Jira Tickets</Link>

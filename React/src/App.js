@@ -8,14 +8,14 @@ import Nav from './components/Nav/Nav';
 //admin
 import Login from "./view/pages/Admin/components/Login/Login"
 import ForgetPassword from "./view/pages/Admin/components/ForgetPassword/ForgetPassword";
+import MainPage from "./view/pages/Analytics/components/mainPage/MainPage";
 import ChangePassword from "./view/pages/Admin/components/ChangePassword/ChangePassword";
 import KeyPassword from "./view/pages/Admin/components/KeyPassword/KeyPassword";
 import UserList from "./view/pages/Admin/components/usersList/UserList";
 
 
-import MainPage from './view/pages/Analytics/components/MainPage/MainPage';
 import ModificationByField from "./view/pages/Analytics/components/ModificationByField/ModificationByField";
-import DeletedJira from "./view/pages/Analytics/components/DeletedJiraTickets/Deletedjira";
+import DeletedJiraTickets from "./view/pages/Analytics/components/DeletedJiraTickets/DeletedJiraTickets";
 import ChangesInJiraTickets from "./view/pages/Analytics/components/ChangesInJiraTickets/ChangesInJiraTickets";
 import ChangesByParentId from "./view/pages/Analytics/components/ChangesByParentId/ChangesByParentId";
 import DelaysInDelivery from "./view/pages/Analytics/components/DelaysInDelivery/DelaysInDelivery";
@@ -69,7 +69,7 @@ function App() {
               <ModificationByField />
             </Route>
             <Route path="/DeletedJiraTickets">
-              <DeletedJira />
+              <DeletedJiraTickets />
             </Route>
             <Route path="/ChangesInJiraTickets">
               <ChangesInJiraTickets />
