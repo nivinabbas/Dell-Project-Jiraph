@@ -76,14 +76,14 @@ function ChangesByParentId() {
         
         
         <input 
-        className="ChangesByParentId__Filter" 
+        className="ChangesByParentId__Filter__date" 
         type="date" 
         name="startDate" 
         onChange={HandleStartDateChange} 
         />
 
         <input 
-        className="ChangesByParentId__Filter" 
+        className="ChangesByParentId__Filter__date" 
         type="date" 
         name="endDate" 
         onChange={HandleEndDateChange} 
