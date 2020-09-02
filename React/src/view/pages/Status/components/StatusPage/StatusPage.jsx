@@ -6,6 +6,7 @@ import Table from "../Table/Table";
 import StackedChart from "../Chart/StackedChart";
 import PieChart from "../Chart/PieChart";
 import DateFilter from "../DateFilter/DateFilter";
+import Select from "react-select";
 
 const StatusPage = (props) => {
   const [cardsContent, setCardsContent] = useState([]);
@@ -13,21 +14,28 @@ const StatusPage = (props) => {
   const [isDone, setIsDone] = useState(false);
   const [filterTypePie, setFilterTypePie] = useState("all");
   const [filterFieldPie, setFilterFieldPie] = useState("all");
-  const [filters, setFilters] = useState([
-    { name: "modificationType", value: "" },
-    { name: "modificationField", value: "" },
-    { name: "modificationValue", value: "" },
-  ]);
   const [barChart, setBarChart] = useState({});
   const [stackedChart, setStackedChart] = useState({});
   const [typePieChart, setTypePieChart] = useState({});
   const [fieldPieChart, setFieldPieChart] = useState({});
   const [modificationTypeOptions, setModificationTypeOptions] = useState({});
   const [modificationFieldOptions, setModificationFieldOptions] = useState({});
+  const [modificationNamePieOptions, setModificationNamePieOptions] = useState(
+    {}
+  );
   const [
     modificationFieldValueOptions,
     setModificationFieldValueOptions,
   ] = useState({});
+  const [chartFilters, setChartFilters] = useState([]);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [timeLabel, setTimeLabel] = useState("");
+  const [tableFilters, setTableFilters] = useState([
+    { name: "modificationType", value: "" },
+    { name: "modificationField", value: "" },
+    { name: "modificationValue", value: "" },
+  ]);
 
   useEffect(() => {
     fetch("/api/status/dailyalerts")
@@ -109,12 +117,10 @@ const StatusPage = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log(filters[0].name);
     if (
-      filters[0].name === "modificationType" &&
-      filters[0].value === "Update"
+      tableFilters[0].name === "modificationType" &&
+      tableFilters[0].value === "Update"
     ) {
-      console.log("check");
       fetch("/api/status/modificationFieldOptions")
         .then((res) => res.json())
         .then((data) => {
@@ -126,7 +132,16 @@ const StatusPage = (props) => {
           }
         });
     }
-  }, [filters]);
+  }, [tableFilters]);
+
+  useEffect(() => {
+    fetch("/api/status/getFieldName")
+      .then((res) => res.json())
+      .then((data) => {
+        let { success, error, info } = data;
+        setModificationNamePieOptions(info.Data);
+      });
+  }, []);
 
   // setFieldPieChart(pieTypeDummyData);
   const handleDoneClick = async (jiraId) => {
@@ -218,7 +233,7 @@ const StatusPage = (props) => {
   };
 
   const handleSelect = (filter, name) => {
-    const newFilters = [...filters].map((f) => {
+    const newFilters = [...tableFilters].map((f) => {
       if (f.name === name) {
         f.value = filter.value;
       }
@@ -231,12 +246,10 @@ const StatusPage = (props) => {
       newFilters[1].value = null;
       newFilters[2].value = null;
     }
-    console.log("eheheheheh");
-    setFilters(newFilters);
-    console.log(...filters);
+    setTableFilters(newFilters);
     fetch("/api/status/modificationFieldValueOptions", {
       method: "POST",
-      body: JSON.stringify({ ...filters }),
+      body: JSON.stringify({ ...tableFilters }),
       headers: {
         "Content-Type": "application/json",
       },
@@ -253,7 +266,7 @@ const StatusPage = (props) => {
 
     fetch("/api/status/filltersAllSubmit", {
       method: "POST",
-      body: JSON.stringify({ ...filters }),
+      body: JSON.stringify({ ...tableFilters }),
       headers: {
         "Content-Type": "application/json",
       },
@@ -267,8 +280,6 @@ const StatusPage = (props) => {
           alert(error);
         }
       });
-
-    console.log(filters);
   };
 
   // const handelTableFilterClick = () => {
@@ -293,30 +304,43 @@ const StatusPage = (props) => {
           onDoneClick={handleDoneClick}
           onSelect={handleSelect}
           //onTableFilterClick={handelTableFilterClick}
-          filters={filters}
+          tableFilters={tableFilters}
         />
       </div>
       <div className="statuspage__filters">
         <DateFilter onDateFilterClick={handleDateClick} />
+        <Select
+          options={[
+            { value: "daily", label: "Daily" },
+            { value: "weekly", label: "Weekly" },
+            { value: "monthly", label: "Monthly" },
+          ]}
+          onChange={(filter) => setTimeLabel(filter)}
+          className="filterSelect"
+        />
       </div>
       <div className="statusPageContainerTableColumn">
         <div className="statuspage__chart">
           <StackedChart stackedChart={stackedChart} />
         </div>
 
-        <div className="statuspage__chartpie">
-          <PieChart
-            dataPieChart={typePieChart}
-            // selectOptions={}
-            name="pie1"
-            onmodificationTypePieSelect={handlemodificationTypePieSelect}
-          />
-          <PieChart
-            dataPieChart={fieldPieChart}
-            // selectOptions={optionFunctional}
-            name="pie2"
-            onmodificationTypePieSelect={handlemodificationTypePieSelect}
-          />
+        <div className="statuspage__chartpie__section">
+          <div className="statuspage__chartpie__selectInputs">
+            <Select
+              options={modificationTypeOptions}
+              onChange={(filter) => setChartFilters(filter)}
+              className="filterSelect"
+            />
+            <Select
+              options={modificationNamePieOptions}
+              onChange={(filter) => setChartFilters(filter)}
+              className="filterSelect"
+            />
+          </div>
+          <div className="statuspage__chartpie__pies">
+            <PieChart dataPieChart={typePieChart} name="pie1" />
+            <PieChart dataPieChart={fieldPieChart} name="pie2" />
+          </div>
         </div>
       </div>
     </div>

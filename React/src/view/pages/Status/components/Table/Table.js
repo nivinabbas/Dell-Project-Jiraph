@@ -11,12 +11,12 @@ export default function TasksTable({
   onDoneClick,
   onSelect,
   onTableFilterClick,
-  filters,
+  tableFilters,
 }) {
   const disableSelect = () => {
-    return filters[0].value !== "Update" ? true : false;
+    return tableFilters[0].value !== "Update" ? true : false;
   };
-  console.log("tffff", filters);
+  console.log("tffff", tableFilters);
 
   return (
     <div className="open-tasks">
