@@ -4,20 +4,24 @@ const mongoose = require('mongoose');
 const router = express.Router();
 const UserSchema = require('../schemas/UserSchema');
 const KeySchema = require('../schemas/KeySchema');
-const UserModel = mongoose.model("UserModel", UserSchema)
-const KeyModel = mongoose.model("KeyModel", KeySchema)
+const AuditSchema = require('../schemas/AuditSchema');
+const UserModel = mongoose.model("UserModel", UserSchema);
+const KeyModel = mongoose.model("KeyModel", KeySchema);
+const AuditModel = mongoose.model("AuditModel", AuditSchema);
 
 var nodemailer = require('nodemailer')
 var validator = require("email-validator");
 const { find } = require("../schemas/TaskSchema");
 
-// KeyModel.insert(
-//     {
-//         employeeEmail: "r",
-//         keyTime: "1",
-//         key: "123"
-//     }
-// )
+AuditModel.insertMany(
+    {
+        employeeName: 'rami',
+        employeeEmail: 'rami@gmail.com',
+        employeeRole: 'Admin',
+        change: 'Login',
+        timeChange: '1'
+    }
+)
 
 var keys = [];
 
@@ -191,8 +195,8 @@ router.post('/createUser', (req, res) => {
 router.post('/checkSendedPassword', (req, res) => {
     const { email, key } = req.body;
 
-    KeyModel.find({employeeEmail:email}).then(docs=>{
-        docs.map((item)=>{
+    KeyModel.find({ employeeEmail: email }).then(docs => {
+        docs.map((item) => {
             if (item.employeeEmail == email) {
                 if (item.key == key) {
                     if ((Date.now() - item.keyTime) <= 1800000) {
