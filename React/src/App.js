@@ -8,7 +8,7 @@ import Nav from './components/Nav/Nav';
 //admin
 import Login from "./view/pages/Admin/components/Login/Login"
 import ForgetPassword from "./view/pages/Admin/components/ForgetPassword/ForgetPassword";
-import MainPage from "./view/pages/Analytics/components/mainPage/MainPage";
+import MainPage from "./view/pages/Analytics/components/MainPage/MainPage";
 import ChangePassword from "./view/pages/Admin/components/ChangePassword/ChangePassword";
 import KeyPassword from "./view/pages/Admin/components/KeyPassword/KeyPassword";
 import UserList from "./view/pages/Admin/components/usersList/UserList";

@@ -13,6 +13,11 @@
   background-color: #C8C9C7;
   }
 
+
+  .ChangesByParentId__Chart{
+    grid-area: chart;
+  }
+
   .ChangesByParentId__Title{
     font-weight: 500;
     grid-area: header;
