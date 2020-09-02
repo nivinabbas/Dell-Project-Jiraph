@@ -60,7 +60,7 @@ function Login(props) {
             <form id="loginForm" onSubmit={handleLogin} >
                 <input id="userEmail-Inp" name="userEmailInp" placeholder="Enter your Email Adress"></input>
                 <input  id="userPsw-Inp" type="password" name="userPswInp" placeholder="Enter your Password"></input>
-                <button type="submit">Login</button>
+                <button type="submit">LOGIN</button>
             </form>
             <Link className="forgetPassword" to="/forgotPassword">Forgot Password?</Link>
             </div>

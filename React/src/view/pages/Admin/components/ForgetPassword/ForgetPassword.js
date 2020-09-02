@@ -50,7 +50,7 @@ function Forgotpassword(props) {
             <h3 className="header">Password Reset</h3>
             <form id="sendToMailForm" onSubmit={onSendToMail} >
                 <input className="sendToMailInput" name="sendToMailInput" placeholder="Enter your Email-adress"></input>
-                <button type="submit">Submit</button>
+                <button type="submit">SUBMIT</button>
             </form>
             </div>
         </div>

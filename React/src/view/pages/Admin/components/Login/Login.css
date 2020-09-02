@@ -63,6 +63,8 @@
 }
 
 .forgetPassword{
+    box-shadow:none;
+    border:none;
     font-size: 14px;
     color: black;
 }
