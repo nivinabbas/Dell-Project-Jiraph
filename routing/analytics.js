@@ -253,47 +253,78 @@ router.post('/deletedJiraTickets', async (req, res) => {
 })
 
 
-router.post('/deletedJiraTicketsFilters', async (req, res) => {
-    let tasks = []
-    const { startDate, endDate, label } = req.body
-    //if (fieldName.length == 0) { // runs to bring all the fieldNames and QA when reloading
-    tasks = await TaskModel.aggregate([
-        {
-            $match: { "diffItem.type": "Delete" }
-        },
-        {
-            $group: {
-                _id: null,
-                priorities: { $addToSet: { "label": "$jiraItem.priority", "value": "$jiraItem.priority" } },
-                QA: { $addToSet: { "label": "$jiraItem.qaRepresentative", "value": "$jiraItem.qaRepresentative" } }
-            },
-        }
-    ])
-    tasks.map((item, index) => {
-        item.priorities.sort((a, b) => (a.label > b.label) ? 1 : -1);
-        item.QA.sort((a, b) => (a.label > b.label) ? 1 : -1);
-    })
-    //  }
-    // else { // bring all the QA and Values
-    //     const name = fieldName[0];
-    //     tasks = await TaskModel.aggregate([
-    //         {
-    //             $match: { "diffItem.updatedField.fieldName": name, "diffItem.type": "Update" }
-    //         },
-    //         {
-    //             $group: {
-    //                 _id: null,
-    //                 // QA: { $addToSet: { "label": "$jiraItem.qaRepresentative", "value": "$jiraItem.qaRepresentative" } },
-    //                 Values: { $addToSet: { "label": "$diffItem.updatedField.newValue", "value": "$diffItem.updatedField.newValue" } },
-    //             }
-    //         },
-    //     ])
-    //     tasks.map((item, index) => {
-    //         item.Values.sort((a, b) => (a.label > b.label) ? 1 : -1);
-    //     })
-    // }
+router.post('/deletedJiraTicketsFilters', async (req, res) => {
+    let tasks = []
+    const { startDate, endDate, label } = req.body
+    //if (fieldName.length == 0) { // runs to bring all the fieldNames and QA when reloading
+    tasks = await TaskModel.aggregate([
+        {
+            $match: { "diffItem.type": "Delete" }
+        },
+        {
+            $group: {
+                _id: null,
+                priorities: { $addToSet: { "label": "$jiraItem.priority", "value": "$jiraItem.priority" } },
+                QA: { $addToSet: { "label": "$jiraItem.qaRepresentative", "value": "$jiraItem.qaRepresentative" } }
+            },
+        }
+    ])
+    tasks.map((item, index) => {
+        item.priorities.sort((a, b) => (a.label > b.label) ? 1 : -1);
+        item.QA.sort((a, b) => (a.label > b.label) ? 1 : -1);
+    })
+    res.send(tasks)
 
-    res.send(tasks)
+})
+
+router.post('/changesByParentIdFilters', async (req, res) => {
+    let tasks = []
+    const { serverFilters } = req.body
+    const { fixVersion,startDate, endDate} = serverFilters;
+    if (fixVersion.length == 0) { // runs to bring all the fixVersions
+        tasks = await TaskModel.aggregate([
+            {
+                $group: {
+                    _id: null,
+                    fixVersions: { $addToSet: { "label": "$jiraItem.fixVersion", "value": "$jiraItem.fixVersion" } },
+                    // QA: { $addToSet: { "label": "$jiraItem.qaRepresentative", "value": "$jiraItem.qaRepresentative" } }
+                },
+            }
+        ])
+        tasks.map((item, index) => {
+            item.fixVersions.sort((a, b) => (a.label > b.label) ? 1 : -1);
+            //item.QA.sort((a, b) => (a.label > b.label) ? 1 : -1);
+        })
+    }
+    else { 
+        const version = fixedVersion[0];
+        tasks = await TaskModel.aggregate([
+            {
+                $match: { "jiraItem.fixVersion": version}
+            },
+            // {
+            //     $group: {
+            //         _id: {
+            //             date: { $dateToString: { format: "%Y-%m-%d", date: "$diffItem.updatedTime" } },
+            //             priority: "$jiraItem.priority"
+
+            //         },
+            //         tasks: { $push: "$$ROOT" },
+            //     }
+            // },
+            // {
+            //     $group: {
+            //         _id: "$_id.date",
+            //         //_id: { $dateFromString: { dateString: "$_id.date" , format: "%Y-%m-%d" } },
+            //         arr: { $push: { priority: "$_id.priority", tasks: "$tasks", size: { $size: "$tasks" } } },
+
+            //     }
+
+            // }
+        ])
+    }
+
+    res.send(tasks)
 
 })
 
@@ -399,7 +430,7 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
 
 })
 
-router.post('/changeOfJIRATicketsStatusFilters', async (req, res) => {
+router.post('/changeOfJIRATicketsStatusFilters', async (req, res) => {
 
     let tasks = []
     let matchFilters = ''

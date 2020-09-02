@@ -1,11 +1,21 @@
 import React from "react";
 
+
+
 //components
 import Nav from './components/Nav/Nav';
+
+//admin
+import Login from "./view/pages/Admin/components/Login/Login"
 import ForgetPassword from "./view/pages/Admin/components/ForgetPassword/ForgetPassword";
+import ChangePassword from "./view/pages/Admin/components/ChangePassword/ChangePassword";
+import KeyPassword from "./view/pages/Admin/components/KeyPassword/KeyPassword";
+import UserList from "./view/pages/Admin/components/usersList/UserList";
+
+
 import MainPage from "./view/pages/Analytics/components/mainPage/MainPage";
 import ModificationByField from "./view/pages/Analytics/components/ModificationByField/ModificationByField";
-import DeletedJira from "./view/pages/Analytics/components/DeletedJiraTickets/Deletedjira";
+import DeletedJiraTickets from "./view/pages/Analytics/components/DeletedJiraTickets/DeletedJiraTickets";
 import ChangesInJiraTickets from "./view/pages/Analytics/components/ChangesInJiraTickets/ChangesInJiraTickets";
 import ChangesByParentId from "./view/pages/Analytics/components/ChangesByParentId/ChangesByParentId";
 import DelaysInDelivery from "./view/pages/Analytics/components/DelaysInDelivery/DelaysInDelivery";
@@ -17,10 +27,10 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  useLocation,
-  Link
 
 } from "react-router-dom";
+
+
 
 
 
@@ -37,17 +47,19 @@ function App() {
         <div className='mainPage'>
           <Switch>
             <Route exact={true} path="/">
-              <h1>login</h1>
+              <Login />
             </Route>
-            <Route path="/register">
-
+            <Route path="/changePassword">
+              <ChangePassword />
             </Route>
             <Route path="/forgotPassword">
-              <ForgetPassword></ForgetPassword>
+              <ForgetPassword />
+            </Route>
+            <Route path="/keyPassword">
+              <KeyPassword />
             </Route>
             <Route path="/Admin">
-              <h1>Admin</h1>
-
+              <UserList />
             </Route>
             <Route path="/analysis">
               <MainPage />
@@ -57,7 +69,7 @@ function App() {
               <ModificationByField />
             </Route>
             <Route path="/DeletedJiraTickets">
-              <DeletedJira />
+              <DeletedJiraTickets />
             </Route>
             <Route path="/ChangesInJiraTickets">
               <ChangesInJiraTickets />
@@ -75,5 +87,6 @@ function App() {
     </Router >
   );
 }
+
 
 export default App;
