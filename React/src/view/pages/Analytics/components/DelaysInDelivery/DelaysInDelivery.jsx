@@ -1,7 +1,7 @@
 import React from 'react';
 import "./DelaysInDelivery.css";
 import Select from 'react-select'
-import { useState, useEffect } from 'react';
+import { useState, useEffect,useRef } from 'react';
 
 const serverFilters = {
   fixVersion: [],
@@ -87,6 +87,7 @@ function DelaysInDelivery() {
 
 
     const HandlefixVersionChange = (version => {
+      
       serverFilters.fixVersion=[version.value];
        
         render(serverFilters)

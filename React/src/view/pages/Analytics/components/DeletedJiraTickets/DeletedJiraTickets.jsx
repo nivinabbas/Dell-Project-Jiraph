@@ -89,6 +89,8 @@ function DeletedJiraTickets() {
 
   ///change priority:
   const HandlePriorityChange = (change => {
+    serverFilters.functionalTest=[]
+    serverFilters.qaRepresentative=[]
     serverFilters.priority = []
     
     if(change!=null)(
@@ -147,6 +149,8 @@ function DeletedJiraTickets() {
     serverFilters.label = [label.value];
     render(serverFilters);
   })
+
+ 
 
   return (
 
