@@ -1078,14 +1078,22 @@ function openTasksWithFilter(type, fieldName) {
 // openTasksWithFilter("Update", "qaRepresentative1");
 //fieldName start
 router.get("/getFieldName", async function (req, res) {
+  let Data = [];
   TaskModel.distinct("diffItem.updatedField.fieldName", function (err, doc) {
     // success:T/F,error:string,info{TaskItem[Task]
-
+    doc.forEach((element) => {
+      console.log(element);
+      obj = {
+        value: element,
+        label: element
+      };
+      Data.push(obj);
+    });
     res.send({
       success: true,
       error: null,
       info: {
-        doc
+        Data
       }
     });
   }).then((err) => console.log(err));
