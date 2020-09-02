@@ -702,7 +702,7 @@ router.post("/fillterFieldPie", async function (req, res) {
 
 //end pie field
 
-// start
+// modificationTypeOptions start
 router.get("/modificationTypeOptions", async function (req, res) {
   let Data = [{ value: "all", label: "All" }];
   let obj = {};
@@ -716,7 +716,7 @@ router.get("/modificationTypeOptions", async function (req, res) {
     res.send({ success: true, error: null, info: { Data } });
   }).then((err) => console.log(err));
 });
-// end
+// modificationTypeOptions end
 
 //modificationFieldOptions start
 router.get("/modificationFieldOptions", async function (req, res) {
@@ -740,7 +740,6 @@ router.get("/modificationFieldOptions", async function (req, res) {
 router.post("/modificationFieldValueOptions", async function (req, res) {
   let data = req.body;
   let returnData = [];
-  console.log(data[0].value, "aaa", data[1].value);
   TaskModel.find({
     "diffItem.type": data[0].value,
     "diffItem.updatedField.fieldName": data[1].value,
@@ -760,6 +759,56 @@ router.post("/modificationFieldValueOptions", async function (req, res) {
   // end
 });
 // modificationFieldOptions end
+
+
+//  start
+router.post("/modificationFieldValueOptions123", async function (req, res) {
+  let data = req.body;
+  let returnData = [];
+  console.log(data[0].value, "123", data[1].value);
+if(data[0].value==="Update"){
+  TaskModel.find(
+    {
+      "diffItem.type": data[0].value,
+      "diffItem.updatedField.fieldName":data[1].value,
+      "diffItem.updatedField.newValue": data[2].value,
+    },
+    function (err, doc) {
+      res.send({ success: true, error: null, info: { doc } });
+    }
+  ).then((err) => console.log(err));
+}else if (data[0].value==="All"){
+  TaskModel.find({},function (err, doc) {
+      res.send({ success: true, error: null, info: { doc } });
+    }
+  ).then((err) => console.log(err));
+} else{
+  {
+    TaskModel.find(
+      {
+        "diffItem.type": data[0].value,
+      },
+      function (err, doc) {
+        res.send({ success: true, error: null, info: { doc } });
+      }
+    ).then((err) => console.log(err));
+  }
+} 
+});
+//  end
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //////////test function for open task with filter
 function openTasksWithFilter(type, fieldName) {
