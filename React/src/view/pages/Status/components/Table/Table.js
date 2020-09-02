@@ -2,23 +2,6 @@ import React from "react";
 import "./style.css";
 import Select from "react-select";
 
-// const optionSprint = [
-//   { value: "all", label: "All" },
-//   { value: "create", label: "Create" },
-//   { value: "update", label: "Update" },
-//   { value: "delete", label: "Delete" },
-// ];
-
-const optionFunctional = [
-  { value: "status", label: "Status" },
-  { value: "priority", label: "Priority" },
-  { value: "qaRepresentitive", label: "QA representitive" },
-];
-
-const optionValue = [
-  { value: "true", label: "True" },
-  { value: "false", label: "False" },
-];
 
 export default function TasksTable({
   openTasks,

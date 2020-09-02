@@ -8,20 +8,6 @@ import StackedChart from "../Chart/StackedChart";
 import PieChart from "../Chart/PieChart";
 import DateFilter from "../DateFilter/DateFilter";
 
-const optionSprint = [
-  { value: "all", label: "All" },
-  { value: "create", label: "Create" },
-  { value: "update", label: "Update" },
-  { value: "delete", label: "Delete" },
-];
-
-const optionFunctional = [
-  { value: "all", label: "All" },
-  { value: "status", label: "Status" },
-  { value: "priority", label: "Priority" },
-  { value: "qaRepresentitive", label: "QA representitive" },
-];
-
 const StatusPage = (props) => {
   const [cardsContent, setCardsContent] = useState([]);
   const [openTasks, setOpenTasks] = useState([]);
@@ -249,8 +235,12 @@ const StatusPage = (props) => {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log("res", res);
-        setModificationFieldValueOptions(res.info);
+        let { success, error, info } = res;
+        if (success) {
+          setModificationFieldValueOptions(info);
+        } else {
+          alert(error);
+        }
       });
 
     // fetch("/api/status/openTasksSelected", {
@@ -304,13 +294,13 @@ const StatusPage = (props) => {
         <div className="statuspage__chartpie">
           <PieChart
             dataPieChart={typePieChart}
-            selectOptions={optionSprint}
+            // selectOptions={}
             name="pie1"
             onmodificationTypePieSelect={handlemodificationTypePieSelect}
           />
           <PieChart
             dataPieChart={fieldPieChart}
-            selectOptions={optionFunctional}
+            // selectOptions={optionFunctional}
             name="pie2"
             onmodificationTypePieSelect={handlemodificationTypePieSelect}
           />
