@@ -32,6 +32,7 @@ nav {
    font-family: 'Anton', sans-serif;
    letter-spacing: 2.5px;
    font-size: 16px;
+   text-shadow:0 0.7px 0.7px rgba(255, 255, 255, 0.219);
 
   }
 .menu__link {
@@ -79,44 +80,37 @@ nav {
 
  .register__logo {
     margin-right: 15px;
-    width: 23px;
-    height: 23px;
+    width: 20px;
+    height: 20px;
     opacity: 0.6;
   }
 
 
   .admin__logo{
     margin-right: 15px;
-    width: 23px;
-    height: 23px;
+    width: 20px;
+    height: 20px;
     opacity: 0.6;
   }
 
   .status__logo{
     margin-right: 15px;
-    width: 23px;
-    height: 27px;
+    width: 20px;
+    height: 20px;
     opacity: 0.6;
-    padding-top: 3px;
   }
 
   .trademark__logo{
     margin-right: 15px;
     width: 23px;
-    height: 23px;
+    height: 25px;
     opacity: 0.6;
   }
   .analysis__logo{
     margin-right: 15px;
-    width: 23px;
-    height: 23px;
+    width: 20px;
+    height: 20px;
     opacity: 0.6;
-  }
-
-  .register__logo:hover {
-    width: 23px;
-    height: 23px;
-    opacity: 1;
   }
 
   .analysis-options{

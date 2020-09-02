@@ -205,14 +205,14 @@ function ChangesInJiraTickets() {
         />
 
         <input
-          className="ChangeOfJiraTicket__Filter"
+          className="ChangeOfJiraTicket__Filter__date"
           type="date"
           name="startDate"
           onChange={HandleStartDateChange}
         />
 
         <input
-          className="ChangeOfJiraTicket__Filter"
+          className="ChangeOfJiraTicket__Filter__date"
           type="date"
           name="endDate"
           onChange={HandleEndDateChange}

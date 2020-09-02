@@ -183,7 +183,7 @@ function ModificationByField(props) {
           options={qaRepresentativeOptions} />
 
         <input
-          className="ModificationByField__Filter"
+          className="ModificationByField__Filter__date"
           type="date"
           name="startDate"
           onChange={handleChangeStartDate}
@@ -191,7 +191,7 @@ function ModificationByField(props) {
 
 
         <input
-          className="ModificationByField__Filter"
+          className="ModificationByField__Filter__date"
           type="date"
           name="endDate"
           onChange={handleChangeEndDate}
