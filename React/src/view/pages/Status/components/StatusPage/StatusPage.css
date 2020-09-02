@@ -1,46 +1,51 @@
 .statusPageContainer {
   display: flex;
   flex-direction: column;
-  width: 90%;
-  margin: auto;
+  padding: 1rem;
+  min-height: 100vh;
 }
 
-.statuspage__dashboard {
+.statusPage__dashboard {
   /* display: flex; */
 }
 
-.statusPageContainerTableColumn {
-  display: flex;
-}
-
-.statuspage__table {
-  width: 100%;
-  height: 500px;
-  overflow: scroll;
-  margin: auto;
-}
-
-.statuspage__chartpie__section {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-
-}
-
-.statuspage__chart {
-  width: 50%;
-  margin-top: 5%;
-}
-
-.statuspage__filters {
-  margin-top: 2%;
-}
-
-.statuspage__chartpie__selectInputs {
+.statusPage__charts {
   display: flex;
   justify-content: center;
 }
 
-.statuspage__chartpie__pies {
+.statusPage__barChart {
+  flex: 1;
+}
+
+.statusPage__barChart__filters {
   display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.statusPage__pieCharts {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.statusPage__pieChart {
+  display: flex;
+  flex-direction: column;
+}
+
+.statusPage__pieChart:first-child {
+  margin-right: 4rem;
+}
+
+.filterSelect-pie {
+  margin-bottom: 3rem;
+}
+
+.statusPage__table {
+  width: 100%;
+  height: 500px;
+  margin: auto;
 }

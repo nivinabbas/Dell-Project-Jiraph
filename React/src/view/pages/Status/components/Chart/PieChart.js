@@ -15,7 +15,7 @@ const PieChart = ({ name, dataPieChart }) => {
           style={{
             marginLeft: -30,
           }}
-          width="380"
+          width="350"
         />
       )}
     </div>
