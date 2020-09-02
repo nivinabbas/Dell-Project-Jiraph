@@ -2,7 +2,6 @@ import React from "react";
 import "./StatusPage.css";
 import { useState, useEffect } from "react";
 import DashBoard from "../DashBoard/DashBoard";
-
 import Table from "../Table/Table";
 import StackedChart from "../Chart/StackedChart";
 import PieChart from "../Chart/PieChart";
@@ -220,9 +219,18 @@ const StatusPage = (props) => {
 
   const handleSelect = (filter, name) => {
     const newFilters = [...filters].map((f) => {
-      if (f.name === name) f.value = filter.value;
+      if (f.name === name) {
+        f.value = filter.value;
+      }
       return f;
     });
+    if (name === "modificationField") {
+      newFilters[2].value = null;
+    }
+    if (name === "modificationType") {
+      newFilters[1].value = null;
+      newFilters[2].value = null;
+    }
     console.log("eheheheheh");
     setFilters(newFilters);
     console.log(...filters);
