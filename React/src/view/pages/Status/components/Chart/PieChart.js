@@ -7,6 +7,7 @@ const PieChart = ({ name, dataPieChart }) => {
 
   return (
     <div id="chart">
+      {" "}
       {!isEmpty(dataPieChart) && (
         <Chart
           options={dataPieChart.options}
@@ -17,7 +18,7 @@ const PieChart = ({ name, dataPieChart }) => {
           }}
           width="350"
         />
-      )}
+      )}{" "}
     </div>
   );
 };
