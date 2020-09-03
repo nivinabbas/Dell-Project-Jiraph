@@ -999,7 +999,7 @@ router.post("/filltersAllSubmit", async function (req, res) {
         res.send({ success: true, error: null, info: { doc } });
       }
     ).then((err) => console.log(err));
-  } else if (data[0].value === "All") {
+  } else if (data[0].value === "All"||data[0].value === "all") {
     TaskModel.find({}, function (err, doc) {
       res.send({ success: true, error: null, info: { doc } });
     }
@@ -1031,7 +1031,7 @@ router.post("/filltersAllSubmit", async function (req, res) {
 
 
 
-//////////test function for open task with filter
+//test function for open task with filter
 function openTasksWithFilter(type, fieldName) {
   if (type === "Update" && fieldName != "") {
     TaskModel.find({
