@@ -3,9 +3,13 @@ import { useState, useEffect } from "react";
 import DashBoard from "../DashBoard/DashBoard";
 import Table from "../Table/Table.jsx";
 import StackedChart from "../Chart/StackedChart";
-import PieChart from "../Chart/PieChart";
+import PieChart from "../Chart/PieChart.js";
 import DatePicker from "../DatePicker/DatePicker";
 import Select from "react-select";
+import {
+  initialTableFilters,
+  initialPieChartsFilters,
+} from "../../../../../service/statusService";
 import "./StatusPage.css";
 
 const timeLabelOptions = [
@@ -16,9 +20,6 @@ const timeLabelOptions = [
 const StatusPage = (props) => {
   const [cardsContent, setCardsContent] = useState([]);
   const [openTasks, setOpenTasks] = useState([]);
-  const [isDone, setIsDone] = useState(false);
-  const [filterTypePie, setFilterTypePie] = useState("all");
-  const [filterFieldPie, setFilterFieldPie] = useState("all");
   const [barChart, setBarChart] = useState({});
   const [stackedChart, setStackedChart] = useState({});
   const [typePieChart, setTypePieChart] = useState({});
@@ -32,14 +33,32 @@ const StatusPage = (props) => {
     modificationFieldValueOptions,
     setModificationFieldValueOptions,
   ] = useState({});
-  const [chartFilters, setChartFilters] = useState([]);
-  const [startDate, setStartDate] = useState("");
+  const [startDate, setStartDate] = useState(""); // choose the default value, with marshood
   const [endDate, setEndDate] = useState("");
   const [timeLabel, setTimeLabel] = useState("");
+  const [pieChartsFilters, setPieChartsFilters] = useState([
+    {
+      name: "pieChartModificationType",
+      value: "",
+    },
+    {
+      name: "pieChartModificationField",
+      value: "",
+    },
+  ]);
   const [tableFilters, setTableFilters] = useState([
-    { name: "modificationType", value: "" },
-    { name: "modificationField", value: "" },
-    { name: "modificationValue", value: "" },
+    {
+      name: "modificationType",
+      value: "",
+    },
+    {
+      name: "modificationField",
+      value: "",
+    },
+    {
+      name: "modificationValue",
+      value: "",
+    },
   ]);
 
   useEffect(() => {
@@ -67,7 +86,8 @@ const StatusPage = (props) => {
         }
       });
   }, []);
-  //firstchart
+  //main bar chart convert to post method and pass in the body startDate, timeLabel
+  // add conditions to the array startDate, endDate, timeLabel
   useEffect(() => {
     fetch("/api/status/stackedChart")
       .then((res) => res.json())
@@ -80,7 +100,8 @@ const StatusPage = (props) => {
         }
       });
   }, []);
-
+  //left pie ==> convert to post method and pass in the body startDate, endDate,pieChartsFilters[0]
+  // add conditions to the array startDate, endDate, pieChartsFilters[0]
   useEffect(() => {
     fetch("/api/status/TypePie")
       .then((res) => res.json())
@@ -93,6 +114,9 @@ const StatusPage = (props) => {
         }
       });
   }, []);
+
+  //right pie ==> convert to post method and pass in the body startDate, endDate,pieChartsFilters[1]
+  // add conditions to the array startDate, endDate, pieChartsFilters[1]
   useEffect(() => {
     fetch("/api/status/fieldPie")
       .then((res) => res.json())
@@ -106,6 +130,7 @@ const StatusPage = (props) => {
       });
   }, []);
 
+  // table select option ==> based on "update" select
   useEffect(() => {
     // const newFilters =
     //   filters[0].value === "Update" ? [...filters] : [{ ...filters[0] }];
@@ -121,6 +146,7 @@ const StatusPage = (props) => {
       });
   }, []);
 
+  //pie option filters
   useEffect(() => {
     if (
       tableFilters[0].name === "modificationType" &&
@@ -137,7 +163,7 @@ const StatusPage = (props) => {
           }
         });
     }
-  }, [tableFilters]);
+  }, []);
 
   useEffect(() => {
     fetch("/api/status/getFieldName")
@@ -166,14 +192,25 @@ const StatusPage = (props) => {
       });
     } catch (error) {}
   };
-  const handlemodificationTypePieSelect = (filter, name) => {
-    if (name === "pie1") setFilterTypePie(filter.value);
-    if (name === "pie2") setFilterFieldPie(filter.value);
+  const handlePieChartsFilters = (filter, name) => {
+    console.log("jet:", filter);
+    console.log(name);
+    const newPieFilters = [...pieChartsFilters].map((f) => {
+      if (f.name === name) {
+        f.value = filter.value;
+      }
+      return f;
+    });
+    setPieChartsFilters(newPieFilters);
   };
   //date
+  console.log("piechartFilters", pieChartsFilters);
+  console.log("tableFilters", tableFilters);
   const handleDateClick = (date) => {
     const { name, value } = date;
     name === "startDate" ? setStartDate(value) : setEndDate(value);
+    console.log("label", timeLabel);
+    // console.log("label",tableFilters);
     //typechart ---> RAWAD
     // await fetch("/api/status/typePieChartFilter", {
     //   method: "POST",
@@ -313,13 +350,11 @@ const StatusPage = (props) => {
               onDateClick={handleDateClick}
               name="startDate"
               label="From:"
-              placeholder="Select End Date"
             />
             <DatePicker
               onDateClick={handleDateClick}
               name="endDate"
               label="To:"
-              placeholder="Select End Date"
             />
           </div>
           <StackedChart stackedChart={stackedChart} />
@@ -329,7 +364,9 @@ const StatusPage = (props) => {
           <div className="statusPage__pieChart">
             <Select
               options={modificationTypeOptions}
-              onChange={(filter) => setChartFilters(filter)}
+              onChange={(filter, name) =>
+                handlePieChartsFilters(filter, "pieChartModificationType")
+              }
               className="filterSelect filterSelect-pie"
             />
             <PieChart dataPieChart={typePieChart} name="pie1" />
@@ -337,7 +374,9 @@ const StatusPage = (props) => {
           <div className="statusPage__pieChart">
             <Select
               options={modificationNamePieOptions}
-              onChange={(filter) => setChartFilters(filter)}
+              onChange={(filter, name) =>
+                handlePieChartsFilters(filter, "pieChartModificationField")
+              }
               className="filterSelect filterSelect-pie"
             />
             <PieChart dataPieChart={fieldPieChart} name="pie2" />
