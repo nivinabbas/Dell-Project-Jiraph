@@ -1,16 +1,18 @@
 import React, { useEffect } from 'react';
 import "./ModificationByField.css";
-import { useState } from 'react';
-
+import { useState , useRef} from 'react';
+//import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
 import Select from "react-select"
 import Chart from "../charts/Chart"
-// import ApexChart from "../ApexChart/ApexChart"
+
+
+
+const serverFilters = { fieldName: [], values: [], qaRepresentative: [], startDate: [], endDate: [], label: ["weekly"] };
 
 
 
 
 function ModificationByField(props) {
-  const serverFilters = { fieldName: [], values: [], qaRepresentative: [], startDate: [], endDate: [], label: ["weekly"] };
 
 
   useEffect(() => {
@@ -24,22 +26,39 @@ function ModificationByField(props) {
     })
       .then(res => res.json())
       .then(data => {
-
         setFieldNameOptions(data[0].labels)
-        console.log(data);
+        setQaRepresentativeOptions(data[0].QA);
       })
-  },[])
+
+      fetch('/api/analytics/modificationByField', {
+        method: 'POST',
+        body: JSON.stringify({ serverFilters }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+        .then(res => res.json())
+        .then(data => {
+          console.log(data)
+          setUiObjs(data)
+        })
+
+  }, [])
+
+
 
   const render = (serverFilters) => {
     fetch('/api/analytics/modificationByField', {
       method: 'POST',
-      body: JSON.stringify(serverFilters),
+      body: JSON.stringify({serverFilters}),
       headers: {
         "Content-Type": "application/json"
       }
     })
       .then((res) => res.json())
-      .then((data) => { setUiObjs(data) })
+      .then((data) => {
+        setUiObjs(data)
+      })
   }
 
 
@@ -53,10 +72,15 @@ function ModificationByField(props) {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.length > 0) {
-          console.log(data)
-          setQaRepresentativeOptions(data[0].QA);
-          setValueOptions(data[0].Values);
+        console.log(data)
+        if (data!=null) {
+          if(data.length>0)
+            setValueOptions(data[0].Values);
+          
+          else{
+            setValueOptions(data);
+
+          }
         }
 
       })
@@ -76,29 +100,42 @@ function ModificationByField(props) {
 
 
   const handleChangeLabel = (change => {
-    serverFilters.label = [change.value]
+    serverFilters.label=[change.value];
     render(serverFilters);
   })
 
   const handleChangeFieldName = (change => {
-    serverFilters.fieldName = [change.label];
+    serverFilters.values=[]
+    serverFilters.qaRepresentative=[]
+   serverFilters.fieldName=[change.value];
+   
+    render(serverFilters)
     renderFilters(serverFilters);
   })
 
   const handleChangeValues = (change => {
-    console.log(change)
-    if (change!=null)
-    serverFilters.values = [change.label];
-    else 
-    serverFilters.values = [];
+    serverFilters.values = []
+    if (change != null) {
+      change.map((item)=>{
+        return(
+        serverFilters.values.push(item.value)
+        )
+      })
+    }
+    else {
+      serverFilters.values = [];
+    }
     render(serverFilters);
   })
 
   const handleChangeQaRepresentative = (change => {
-    serverFilters.qaRepresentative = [change.label];
+
+    serverFilters.qaRepresentative=[change.value];
     render(serverFilters);
   })
+
   const handleChangeStartDate = (change => {
+    console.log(new Date(change.target.value))
     serverFilters.startDate = [change.target.value];
     render(serverFilters);
   })
@@ -107,6 +144,9 @@ function ModificationByField(props) {
     serverFilters.endDate = [change.target.value];
     render(serverFilters);
   })
+
+  const valueInput=useRef("")
+  const qaInput=useRef("")
 
   return (
     <div className='ModificationByField__Wrapper'>
@@ -119,6 +159,7 @@ function ModificationByField(props) {
 
         <Select
           name="fieldName"
+          onInputChange={()=> {valueInput.current.state.value="";qaInput.current.state.value=""}}
           onChange={handleChangeFieldName}
           placeholder="fieldName"
           className="ModificationByField__Filter"
@@ -127,6 +168,7 @@ function ModificationByField(props) {
         <Select
           name="value"
           onChange={handleChangeValues}
+          ref={valueInput}
           isMulti
           placeholder="Value"
           className="ModificationByField__Filter"
@@ -134,6 +176,7 @@ function ModificationByField(props) {
 
         <Select
           name="qaRepresentative"
+          ref={qaInput}
           onChange={handleChangeQaRepresentative}
           placeholder="Qa Rep"
           className="ModificationByField__Filter"

@@ -8,6 +8,8 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
 const port=process.env.PORT ||4000;
 //const TaskModel = require('./schemas/TaskSchema');
 
+const TaskModel = require('./schemas/TaskSchema');
+
 
 
 app.use(express.static('public'))
@@ -24,6 +26,7 @@ mongoose.connect(url, {
 // const data = []
 
 // TaskModel.insertMany(data).then(console.log('Done!'))
+
 
 
 const userRouter = require('./routing/users');
