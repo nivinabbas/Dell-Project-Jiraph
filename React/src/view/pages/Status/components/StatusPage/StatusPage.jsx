@@ -1,13 +1,18 @@
 import React from "react";
-import "./StatusPage.css";
 import { useState, useEffect } from "react";
 import DashBoard from "../DashBoard/DashBoard";
-import Table from "../Table/Table";
+import Table from "../Table/Table.jsx";
 import StackedChart from "../Chart/StackedChart";
 import PieChart from "../Chart/PieChart";
-import DateFilter from "../DateFilter/DateFilter";
+import DatePicker from "../DatePicker/DatePicker";
 import Select from "react-select";
+import "./StatusPage.css";
 
+const timeLabelOptions = [
+  { value: "daily", label: "Daily" },
+  { value: "weekly", label: "Weekly" },
+  { value: "monthly", label: "Monthly" },
+];
 const StatusPage = (props) => {
   const [cardsContent, setCardsContent] = useState([]);
   const [openTasks, setOpenTasks] = useState([]);
@@ -166,70 +171,72 @@ const StatusPage = (props) => {
     if (name === "pie2") setFilterFieldPie(filter.value);
   };
   //date
-  const handleDateClick = async (CurrentstartDate, CurrentEndtDate) => {
-    //typechart
-    await fetch("/api/status/typePieChartFilter", {
-      method: "POST",
-      body: JSON.stringify({
-        filterTypePie,
-        CurrentstartDate,
-        CurrentEndtDate,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        let { success, error, info } = data;
-        if (success) {
-          setBarChart(info);
-        } else {
-          alert(error);
-        }
-      });
-    // fieldpiechart
-    await fetch("/api/status/fieldPieChart", {
-      method: "POST",
-      body: JSON.stringify({
-        filterFieldPie,
-        CurrentstartDate,
-        CurrentEndtDate,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        let { success, error, info } = data;
-        if (success) {
-          setBarChart(info);
-        } else {
-          alert(error);
-        }
-      });
-    //first barchart
-    await fetch("/api/status/filterStackedChart", {
-      method: "POST",
-      body: JSON.stringify({
-        label: "daily",
-        datefrom: CurrentstartDate,
-        dateTo: CurrentEndtDate,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        let { success, error, info } = data;
-        if (success) {
-          // setStackedChart(info);
-        } else {
-          alert(error);
-        }
-      });
+  const handleDateClick = (date) => {
+    const { name, value } = date;
+    name === "startDate" ? setStartDate(value) : setEndDate(value);
+    //typechart ---> RAWAD
+    // await fetch("/api/status/typePieChartFilter", {
+    //   method: "POST",
+    //   body: JSON.stringify({
+    //     filterTypePie,
+    //     CurrentstartDate,
+    //     CurrentEndtDate,
+    //   }),
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // })
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     let { success, error, info } = data;
+    //     if (success) {
+    //       setBarChart(info);
+    //     } else {
+    //       alert(error);
+    //     }
+    //   });
+    // // fieldpiechart
+    // await fetch("/api/status/fieldPieChart", {
+    //   method: "POST",
+    //   body: JSON.stringify({
+    //     filterFieldPie,
+    //     CurrentstartDate,
+    //     CurrentEndtDate,
+    //   }),
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // })
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     let { success, error, info } = data;
+    //     if (success) {
+    //       setBarChart(info);
+    //     } else {
+    //       alert(error);
+    //     }
+    //   });
+    // //first barchart
+    // await fetch("/api/status/filterStackedChart", {
+    //   method: "POST",
+    //   body: JSON.stringify({
+    //     label: "daily",
+    //     datefrom: CurrentstartDate,
+    //     dateTo: CurrentEndtDate,
+    //   }),
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // })
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     let { success, error, info } = data;
+    //     if (success) {
+    //       // setStackedChart(info);
+    //     } else {
+    //       alert(error);
+    //     }
+    //   });
   };
 
   const handleSelect = (filter, name) => {
@@ -291,11 +298,53 @@ const StatusPage = (props) => {
 
   return (
     <div className="statusPageContainer">
-      <div className="statuspage__dashboard">
+      <div className="statusPage__dashboard">
         <DashBoard cardsContent={cardsContent} />
       </div>
+      <div className="statusPage__charts">
+        <div className="statusPage__barChart">
+          <div className="statusPage__barChart__filters">
+            <Select
+              options={timeLabelOptions}
+              onChange={(filter) => setTimeLabel(filter)}
+              className="filterSelect"
+            />
+            <DatePicker
+              onDateClick={handleDateClick}
+              name="startDate"
+              label="From:"
+              placeholder="Select End Date"
+            />
+            <DatePicker
+              onDateClick={handleDateClick}
+              name="endDate"
+              label="To:"
+              placeholder="Select End Date"
+            />
+          </div>
+          <StackedChart stackedChart={stackedChart} />
+        </div>
 
-      <div className="statuspage__table">
+        <div className="statusPage__pieCharts">
+          <div className="statusPage__pieChart">
+            <Select
+              options={modificationTypeOptions}
+              onChange={(filter) => setChartFilters(filter)}
+              className="filterSelect filterSelect-pie"
+            />
+            <PieChart dataPieChart={typePieChart} name="pie1" />
+          </div>
+          <div className="statusPage__pieChart">
+            <Select
+              options={modificationNamePieOptions}
+              onChange={(filter) => setChartFilters(filter)}
+              className="filterSelect filterSelect-pie"
+            />
+            <PieChart dataPieChart={fieldPieChart} name="pie2" />
+          </div>
+        </div>
+      </div>
+      <div className="statusPage__table">
         <Table
           modificationFieldValueOptions={modificationFieldValueOptions}
           modificationFieldOptions={modificationFieldOptions}
@@ -303,45 +352,8 @@ const StatusPage = (props) => {
           openTasks={openTasks}
           onDoneClick={handleDoneClick}
           onSelect={handleSelect}
-          //onTableFilterClick={handelTableFilterClick}
           tableFilters={tableFilters}
         />
-      </div>
-      <div className="statuspage__filters">
-        <DateFilter onDateFilterClick={handleDateClick} />
-        <Select
-          options={[
-            { value: "daily", label: "Daily" },
-            { value: "weekly", label: "Weekly" },
-            { value: "monthly", label: "Monthly" },
-          ]}
-          onChange={(filter) => setTimeLabel(filter)}
-          className="filterSelect"
-        />
-      </div>
-      <div className="statusPageContainerTableColumn">
-        <div className="statuspage__chart">
-          <StackedChart stackedChart={stackedChart} />
-        </div>
-
-        <div className="statuspage__chartpie__section">
-          <div className="statuspage__chartpie__selectInputs">
-            <Select
-              options={modificationTypeOptions}
-              onChange={(filter) => setChartFilters(filter)}
-              className="filterSelect"
-            />
-            <Select
-              options={modificationNamePieOptions}
-              onChange={(filter) => setChartFilters(filter)}
-              className="filterSelect"
-            />
-          </div>
-          <div className="statuspage__chartpie__pies">
-            <PieChart dataPieChart={typePieChart} name="pie1" />
-            <PieChart dataPieChart={fieldPieChart} name="pie2" />
-          </div>
-        </div>
       </div>
     </div>
   );

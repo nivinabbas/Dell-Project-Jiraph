@@ -1,0 +1,10 @@
+.datePicker {
+  display: flex;
+
+}
+
+.datePicker__label {
+  margin-right: .5rem;
+}
+
+.datePicker__input {}

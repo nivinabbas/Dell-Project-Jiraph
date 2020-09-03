@@ -16,8 +16,6 @@ export default function TasksTable({
   const disableSelect = () => {
     return tableFilters[0].value !== "Update" ? true : false;
   };
-  console.log("tffff", tableFilters);
-
   return (
     <div className="open-tasks">
       <div className="open-tasks-title">
@@ -49,12 +47,9 @@ export default function TasksTable({
           <thead className="header__table">
             <tr>
               <th scope="col"> # </th> <th scope="col"> Id </th>
-              <th scope="col"> Jira Name </th>
-              <th scope="col"> Type </th>
-              <th scope="col"> Field Name </th>
-              <th scope="col"> Old Val </th>
-              <th scope="col"> New Val </th>
-              <th scope="col"> Done </th>
+              <th scope="col"> Jira Name </th> <th scope="col"> Type </th>
+              <th scope="col"> Field Name </th> <th scope="col"> Old Val </th>
+              <th scope="col"> New Val </th> <th scope="col"> Done </th>
             </tr>
           </thead>
           <tbody>
