@@ -5,7 +5,7 @@ app.use(bodyParser.json()); // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
     extended: true
 }));
-
+const port=process.env.PORT ||4000;
 //const TaskModel = require('./schemas/TaskSchema');
 
 
@@ -38,6 +38,6 @@ app.use("/api/analytics", analyticsRouter);
 const bellaRouting = require('./routing/bellaRouting');
 app.use("/api/PostBellaData", bellaRouting);
 
-app.listen(4000, () => {
-    console.log("App is Listening to 4000")
+app.listen(port, () => {
+    console.log("App is Listening to port:",port)
 })
