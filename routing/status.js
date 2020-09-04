@@ -280,7 +280,7 @@ router.post("/stackedChart", async function (req, res) {
   console.log(startDate);
   let DailyAlerts;
   let formatLabel;
-  if (label == "daily"||label=="") {
+  if (label == "daily" || label == "") {
     formatLabel = "%Y-%m-%d";
   } else if (label == "monthly") {
     formatLabel = "%Y-%m";
@@ -361,7 +361,7 @@ router.post("/stackedChart", async function (req, res) {
       data: tempCountNotDone,
     });
     series.options.xaxis.categories = tempDate;
-    
+
     res.send({
       success: true,
       error: null,
@@ -615,115 +615,111 @@ router.get("/TypePie", async function (req, res) {
 });
 
 router.post("/TypePie", async function (req, res) {
-  let TypePieOb;  
+  let TypePieOb;
   let {
     modificationType,
     startDate,
     endDate,
   } = req.body;
   let formatLabel = "%Y-%m-%d";
-   if(startDate===''&&endDate==='')
-  {
+  if (startDate === '' && endDate === '') {
     startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
     endDate = new Date();
-  }
-  else if(startDate!=''&&endDate!=''){
-  startDate = new Date(startDate + "T00:00:00.00Z");
-  endDate = new Date(endDate + "T23:59:59.0099Z");
-  }
-  else if(startDate!=''&&endDate==='')
-  {
+  } else if (startDate != '' && endDate != '') {
+    startDate = new Date(startDate + "T00:00:00.00Z");
+    endDate = new Date(endDate + "T23:59:59.0099Z");
+  } else if (startDate != '' && endDate === '') {
     startDate = new Date(startDate + "T00:00:00.00Z");
     endDate = new Date();
   }
 
-  if(modificationType!='' &&modificationType!="All"){
-   TypePieOb = await TaskModel.aggregate([{
-      $match: {
-        "taskItem.updatedTime": {
-          $gte: startDate,
-          $lte: endDate
+  if (modificationType != '' && modificationType != "All") {
+    TypePieOb = await TaskModel.aggregate([{
+        $match: {
+          "taskItem.updatedTime": {
+            $gte: startDate,
+            $lte: endDate
+          },
+          "diffItem.type": modificationType,
         },
-        "diffItem.type": modificationType,
       },
-    },
-    {
-      $group: {
-        _id: {
-          $dateToString: {
-            date: "$taskItem.updatedTime",
-            format: formatLabel, //"%Y-%m-%d",
+      {
+        $group: {
+          _id: {
+            $dateToString: {
+              date: "$taskItem.updatedTime",
+              format: formatLabel, //"%Y-%m-%d",
+            },
+          },
+          count: {
+            $sum: 1
+          },
+          done: {
+            $sum: {
+              $cond: [{
+                $eq: ["$taskItem.isDone", true]
+              }, 1, 0],
+            },
+          },
+          notDone: {
+            $sum: {
+              $cond: [{
+                $eq: ["$taskItem.isDone", false]
+              }, 1, 0],
+            },
           },
         },
-        count: {
-          $sum: 1
+      },
+      {
+        $sort: {
+          _id: 1
+        }
+      },
+    ]);
+  } else {
+    TypePieOb = await TaskModel.aggregate([{
+        $match: {
+          "taskItem.updatedTime": {
+            $gte: startDate,
+            $lte: endDate
+          },
+          // "diffItem.type": modificationType,
         },
-        done: {
-          $sum: {
-            $cond: [{
-              $eq: ["$taskItem.isDone", true]
-            }, 1, 0],
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: {
+              date: "$taskItem.updatedTime",
+              format: formatLabel, //"%Y-%m-%d",
+            },
+          },
+          count: {
+            $sum: 1
+          },
+          done: {
+            $sum: {
+              $cond: [{
+                $eq: ["$taskItem.isDone", true]
+              }, 1, 0],
+            },
+          },
+          notDone: {
+            $sum: {
+              $cond: [{
+                $eq: ["$taskItem.isDone", false]
+              }, 1, 0],
+            },
           },
         },
-        notDone: {
-          $sum: {
-            $cond: [{
-              $eq: ["$taskItem.isDone", false]
-            }, 1, 0],
-          },
-        },
       },
-    },
-    {
-      $sort: {
-        _id: 1
-      }
-    },
-  ]);
-}else{
-  TypePieOb = await TaskModel.aggregate([{
-    $match: {
-      "taskItem.updatedTime": {
-        $gte: startDate,
-        $lte: endDate
+      {
+        $sort: {
+          _id: 1
+        }
       },
-      // "diffItem.type": modificationType,
-    },
-  },
-  {
-    $group: {
-      _id: {
-        $dateToString: {
-          date: "$taskItem.updatedTime",
-          format: formatLabel, //"%Y-%m-%d",
-        },
-      },
-      count: {
-        $sum: 1
-      },
-      done: {
-        $sum: {
-          $cond: [{
-            $eq: ["$taskItem.isDone", true]
-          }, 1, 0],
-        },
-      },
-      notDone: {
-        $sum: {
-          $cond: [{
-            $eq: ["$taskItem.isDone", false]
-          }, 1, 0],
-        },
-      },
-    },
-  },
-  {
-    $sort: {
-      _id: 1
-    }
-  },
-]);
-}
+    ]);
+  }
   // adding to Done Array
   let tempDate = [];
   let tempCountDone = [],
@@ -841,28 +837,21 @@ router.get("/fieldPie", async function (req, res) {
   });
 });
 
-router.post("/fillterFieldPie", async function (req, res) {
+router.post("/fieldPie", async function (req, res) {
   let {
     modificationField,
-    datefrom,
-    dateTo,
-    label
+    startDate,
+    endDate,
   } = req.body;
-  let formatLabel;
-  if (label == "daily") {
-    formatLabel = "%Y-%m-%d";
-  } else if (label == "month") {
-    formatLabel = "%Y-%m";
-  } else {
-    formatLabel = "%Y";
-  }
-  datefrom = new Date(datefrom + "T00:00:00.00Z");
-  dateTo = new Date(dateTo + "T23:59:59.0099Z");
+  let formatLabel = "%Y-%m-%d";
+
+  startDate = new Date(startDate + "T00:00:00.00Z");
+  endDate = new Date(endDate + "T23:59:59.0099Z");
   let TypePieOb = await TaskModel.aggregate([{
       $match: {
         "taskItem.updatedTime": {
-          $gte: datefrom,
-          $lte: dateTo
+          $gte: startDate,
+          $lte: endDate
         },
         "diffItem.updatedField.fieldName": modificationField,
       },
