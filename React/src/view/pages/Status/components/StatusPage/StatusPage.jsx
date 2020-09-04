@@ -125,7 +125,7 @@ const StatusPage = (props) => {
     const filters = {
       startDate,
       endDate,
-      modificationType: pieChartsFilters[1].value,
+      modificationField: pieChartsFilters[1].value,
     };
     fetch("/api/status/fieldPie", {
       method: "POST",
