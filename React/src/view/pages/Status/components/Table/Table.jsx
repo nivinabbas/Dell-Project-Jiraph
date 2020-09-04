@@ -59,9 +59,18 @@ export default function TasksTable({
                 <td> {task.jiraItem.jiraId} </td>
                 <td> {task.jiraItem.jiraName} </td>
                 <td> {task.diffItem.type} </td>
-                <td> {task.diffItem.updatedField.fieldName} </td>
-                <td> {task.diffItem.updatedField.oldValue} </td>
-                <td> {task.diffItem.updatedField.newValue} </td>
+                <td>
+                  {task.diffItem.updatedField &&
+                    task.diffItem.updatedField.fieldName}
+                </td>
+                <td>
+                  {task.diffItem.updatedField &&
+                    task.diffItem.updatedField.oldValue}
+                </td>
+                <td>
+                  {task.diffItem.updatedField &&
+                    task.diffItem.updatedField.newValue}
+                </td>
                 <td>
                   <input
                     type="checkbox"
