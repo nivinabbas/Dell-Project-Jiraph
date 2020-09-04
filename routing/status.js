@@ -280,7 +280,7 @@ router.post("/stackedChart", async function (req, res) {
   console.log(startDate);
   let DailyAlerts;
   let formatLabel;
-  if (label == "daily") {
+  if (label == "daily"||label=="") {
     formatLabel = "%Y-%m-%d";
   } else if (label == "monthly") {
     formatLabel = "%Y-%m";
@@ -304,7 +304,7 @@ router.post("/stackedChart", async function (req, res) {
           _id: {
             $dateToString: {
               date: "$taskItem.updatedTime",
-              format: "%Y-%m-%d",
+              format: formatLabel,
             },
           },
           count: {
@@ -361,7 +361,7 @@ router.post("/stackedChart", async function (req, res) {
       data: tempCountNotDone,
     });
     series.options.xaxis.categories = tempDate;
-
+    
     res.send({
       success: true,
       error: null,
@@ -378,7 +378,6 @@ router.post("/stackedChart", async function (req, res) {
           },
         },
       },
-
       {
         $group: {
           _id: {
@@ -434,7 +433,7 @@ router.post("/stackedChart", async function (req, res) {
     });
     series.series.push({
       name: "done",
-      square: tempCountDone,
+      data: tempCountDone,
     });
     series.series.push({
       name: "notDone",
