@@ -271,30 +271,31 @@ router.post("/PieChart", (req, res) => {
 });
 // end update task
 //stackedChart start
-router.post("/fillterStackedChart", async function (req, res) {
+router.post("/stackedChart", async function (req, res) {
   let {
     label,
-    datefrom,
-    dateTo
+    startDate,
+    endDate
   } = req.body;
+  console.log(startDate);
   let DailyAlerts;
   let formatLabel;
   if (label == "daily") {
     formatLabel = "%Y-%m-%d";
-  } else if (label == "month") {
+  } else if (label == "monthly") {
     formatLabel = "%Y-%m";
   } else {
     formatLabel = "%Y";
   }
-  if (datefrom == null && dateTo == null) {
+  if (startDate == "" && endDate == "") {
     //default, label daily
-    datefrom = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
-    dateTo = new Date();
+    startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
+    endDate = new Date();
     let stackedChartDone = await TaskModel.aggregate([{
         $match: {
           "taskItem.updatedTime": {
-            $gte: datefrom,
-            $lte: dateTo
+            $gte: startDate,
+            $lte: endDate
           },
         },
       },
@@ -367,13 +368,13 @@ router.post("/fillterStackedChart", async function (req, res) {
       info: series
     });
   } else {
-    datefrom = new Date(datefrom + "T00:00:00.00Z");
-    dateTo = new Date(dateTo + "T23:59:59.0099Z");
+    startDate = new Date(startDate + "T00:00:00.00Z");
+    endDate = new Date(endDate + "T23:59:59.0099Z");
     let stackedChartDone = await TaskModel.aggregate([{
         $match: {
           "taskItem.updatedTime": {
-            $gte: datefrom,
-            $lte: dateTo
+            $gte: startDate,
+            $lte: endDate
           },
         },
       },
@@ -614,28 +615,22 @@ router.get("/TypePie", async function (req, res) {
   });
 });
 
-router.post("/fillterTypePie", async function (req, res) {
+router.post("/TypePie", async function (req, res) {
   let {
     modificationType,
-    datefrom,
-    dateTo,
-    label
+    startDate,
+    endDate,
   } = req.body;
-  let formatLabel;
-  if (label == "daily") {
-    formatLabel = "%Y-%m-%d";
-  } else if (label == "month") {
-    formatLabel = "%Y-%m";
-  } else {
-    formatLabel = "%Y";
-  }
-  datefrom = new Date(datefrom + "T00:00:00.00Z");
-  dateTo = new Date(dateTo + "T23:59:59.0099Z");
+
+  let formatLabel = "%Y-%m-%d";
+
+  startDate = new Date(startDate + "T00:00:00.00Z");
+  endDate = new Date(endDate + "T23:59:59.0099Z");
   let TypePieOb = await TaskModel.aggregate([{
       $match: {
         "taskItem.updatedTime": {
-          $gte: datefrom,
-          $lte: dateTo
+          $gte: startDate,
+          $lte: endDate
         },
         "diffItem.type": modificationType,
       },
