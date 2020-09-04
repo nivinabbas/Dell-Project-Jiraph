@@ -918,6 +918,7 @@ router.get("/modificationTypeOptions", async function (req, res) {
 router.get("/modificationFieldOptions", async function (req, res) {
   let Data = [];
   let obj = {};
+  console.log("modificationFieldOptions")
   TaskModel.find({
       "diffItem.type": "Update"
     })
