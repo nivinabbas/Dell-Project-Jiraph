@@ -616,17 +616,30 @@ router.get("/TypePie", async function (req, res) {
 });
 
 router.post("/TypePie", async function (req, res) {
+  let TypePieOb;  
   let {
     modificationType,
     startDate,
     endDate,
   } = req.body;
-
   let formatLabel = "%Y-%m-%d";
-
+   if(startDate===''&&endDate==='')
+  {
+    startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
+    endDate = new Date();
+  }
+  else if(startDate!=''&&endDate!=''){
   startDate = new Date(startDate + "T00:00:00.00Z");
   endDate = new Date(endDate + "T23:59:59.0099Z");
-  let TypePieOb = await TaskModel.aggregate([{
+  }
+  else if(startDate!=''&&endDate==='')
+  {
+    startDate = new Date(startDate + "T00:00:00.00Z");
+    endDate = new Date();
+  }
+
+  if(modificationType!='' &&modificationType!="All"){
+   TypePieOb = await TaskModel.aggregate([{
       $match: {
         "taskItem.updatedTime": {
           $gte: startDate,
@@ -668,6 +681,50 @@ router.post("/TypePie", async function (req, res) {
       }
     },
   ]);
+}else{
+  TypePieOb = await TaskModel.aggregate([{
+    $match: {
+      "taskItem.updatedTime": {
+        $gte: startDate,
+        $lte: endDate
+      },
+      // "diffItem.type": modificationType,
+    },
+  },
+  {
+    $group: {
+      _id: {
+        $dateToString: {
+          date: "$taskItem.updatedTime",
+          format: formatLabel, //"%Y-%m-%d",
+        },
+      },
+      count: {
+        $sum: 1
+      },
+      done: {
+        $sum: {
+          $cond: [{
+            $eq: ["$taskItem.isDone", true]
+          }, 1, 0],
+        },
+      },
+      notDone: {
+        $sum: {
+          $cond: [{
+            $eq: ["$taskItem.isDone", false]
+          }, 1, 0],
+        },
+      },
+    },
+  },
+  {
+    $sort: {
+      _id: 1
+    }
+  },
+]);
+}
   // adding to Done Array
   let tempDate = [];
   let tempCountDone = [],
