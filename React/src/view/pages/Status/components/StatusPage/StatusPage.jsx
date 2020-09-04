@@ -80,6 +80,7 @@ const StatusPage = (props) => {
       .then((data) => {
         let { success, error, info } = data;
         if (success) {
+          console.log("open: ", info.doc);
           setOpenTasks(info.doc);
         } else {
           alert(error);
