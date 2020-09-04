@@ -36,30 +36,10 @@ const StatusPage = (props) => {
   const [startDate, setStartDate] = useState(""); // choose the default value, with marshood
   const [endDate, setEndDate] = useState("");
   const [timeLabel, setTimeLabel] = useState("");
-  const [pieChartsFilters, setPieChartsFilters] = useState([
-    {
-      name: "pieChartModificationType",
-      value: "",
-    },
-    {
-      name: "pieChartModificationField",
-      value: "",
-    },
-  ]);
-  const [tableFilters, setTableFilters] = useState([
-    {
-      name: "modificationType",
-      value: "",
-    },
-    {
-      name: "modificationField",
-      value: "",
-    },
-    {
-      name: "modificationValue",
-      value: "",
-    },
-  ]);
+  const [pieChartsFilters, setPieChartsFilters] = useState(
+    initialPieChartsFilters
+  );
+  const [tableFilters, setTableFilters] = useState(initialTableFilters);
 
   useEffect(() => {
     fetch("/api/status/dailyalerts")
@@ -86,10 +66,21 @@ const StatusPage = (props) => {
         }
       });
   }, []);
+
   //main bar chart convert to post method and pass in the body startDate, timeLabel
-  // add conditions to the array startDate, endDate, timeLabel
   useEffect(() => {
-    fetch("/api/status/stackedChart")
+    const filters = {
+      startDate,
+      endDate,
+      label: timeLabel.value,
+    };
+    fetch("/api/status/stackedChart", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(filters),
+    })
       .then((res) => res.json())
       .then((data) => {
         let { success, error, info } = data;
@@ -99,21 +90,33 @@ const StatusPage = (props) => {
           alert(error);
         }
       });
-  }, []);
+  }, [startDate, endDate, timeLabel]);
   //left pie ==> convert to post method and pass in the body startDate, endDate,pieChartsFilters[0]
   // add conditions to the array startDate, endDate, pieChartsFilters[0]
   useEffect(() => {
-    fetch("/api/status/TypePie")
+    const filters = {
+      startDate,
+      endDate,
+      modificationType: pieChartsFilters[0].value,
+    };
+    fetch("/api/status/TypePie", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(filters),
+    })
       .then((res) => res.json())
       .then((data) => {
         let { success, error, info } = data;
         if (success) {
+          console.log("ss", info);
           setTypePieChart(info);
         } else {
           alert(error);
         }
       });
-  }, []);
+  }, [startDate, endDate, pieChartsFilters[0]]);
 
   //right pie ==> convert to post method and pass in the body startDate, endDate,pieChartsFilters[1]
   // add conditions to the array startDate, endDate, pieChartsFilters[1]
@@ -163,7 +166,7 @@ const StatusPage = (props) => {
           }
         });
     }
-  }, []);
+  }, [tableFilters]);
 
   useEffect(() => {
     fetch("/api/status/getFieldName")
@@ -193,8 +196,6 @@ const StatusPage = (props) => {
     } catch (error) {}
   };
   const handlePieChartsFilters = (filter, name) => {
-    console.log("jet:", filter);
-    console.log(name);
     const newPieFilters = [...pieChartsFilters].map((f) => {
       if (f.name === name) {
         f.value = filter.value;
@@ -204,12 +205,9 @@ const StatusPage = (props) => {
     setPieChartsFilters(newPieFilters);
   };
   //date
-  console.log("piechartFilters", pieChartsFilters);
-  console.log("tableFilters", tableFilters);
   const handleDateClick = (date) => {
     const { name, value } = date;
     name === "startDate" ? setStartDate(value) : setEndDate(value);
-    console.log("label", timeLabel);
     // console.log("label",tableFilters);
     //typechart ---> RAWAD
     // await fetch("/api/status/typePieChartFilter", {
