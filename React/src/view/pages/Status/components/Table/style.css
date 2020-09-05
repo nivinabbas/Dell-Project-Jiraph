@@ -53,9 +53,11 @@
 
 .filterSelect {
   width: 12.5rem;
+  margin-right: 1rem;
 }
 
 .container__filterSelect {
   display: flex;
   justify-items: center;
+  margin: 1rem 0;
 }
