@@ -10,6 +10,21 @@ export default function StackedChart({ stackedChart }) {
       type: "bar",
       height: 350,
       stacked: true,
+      responsive: [{
+        breakpoint: 480,
+        options: {
+          legend: {
+            position: 'bottom',
+            offsetX: -10,
+            offsetY: 0
+          }
+        }
+      }],
+      plotOptions: {
+        bar: {
+          horizontal: false,
+        },
+      }
     };
   }
 

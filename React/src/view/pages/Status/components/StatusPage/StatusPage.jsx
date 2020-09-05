@@ -85,6 +85,7 @@ const StatusPage = (props) => {
       .then((data) => {
         let { success, error, info } = data;
         if (success) {
+          console.log("info", info);
           setStackedChart(info);
         } else {
           alert(error);
@@ -116,12 +117,23 @@ const StatusPage = (props) => {
           alert(error);
         }
       });
-  }, [startDate, endDate, pieChartsFilters[0]]);
+  }, [startDate, endDate, pieChartsFilters]);
 
   //right pie ==> convert to post method and pass in the body startDate, endDate,pieChartsFilters[1]
   // add conditions to the array startDate, endDate, pieChartsFilters[1]
   useEffect(() => {
-    fetch("/api/status/fieldPie")
+    const filters = {
+      startDate,
+      endDate,
+      modificationField: pieChartsFilters[1].value,
+    };
+    fetch("/api/status/fieldPie", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(filters),
+    })
       .then((res) => res.json())
       .then((data) => {
         let { success, error, info } = data;
@@ -131,7 +143,7 @@ const StatusPage = (props) => {
           alert(error);
         }
       });
-  }, []);
+  }, [startDate, endDate, pieChartsFilters]);
 
   // table select option ==> based on "update" select
   useEffect(() => {
