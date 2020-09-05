@@ -7,4 +7,8 @@
   margin-right: .5rem;
 }
 
-.datePicker__input {}
+.datePicker__input {
+  font-size: 1rem;
+  display: block;
+  padding: 0.3rem 1rem;
+}

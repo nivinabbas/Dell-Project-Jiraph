@@ -6,10 +6,12 @@ import StackedChart from "../Chart/StackedChart";
 import PieChart from "../Chart/PieChart.js";
 import DatePicker from "../DatePicker/DatePicker";
 import Select from "react-select";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import {
   initialTableFilters,
   initialPieChartsFilters,
 } from "../../../../../service/statusService";
+import { isEmpty } from "../../../../../service/utils";
 import "./StatusPage.css";
 
 const timeLabelOptions = [
@@ -40,7 +42,7 @@ const StatusPage = (props) => {
     initialPieChartsFilters
   );
   const [tableFilters, setTableFilters] = useState(initialTableFilters);
-
+  console.log(cardsContent);
   useEffect(() => {
     fetch("/api/status/dailyalerts")
       .then((res) => res.json())
@@ -85,7 +87,7 @@ const StatusPage = (props) => {
       .then((data) => {
         let { success, error, info } = data;
         if (success) {
-          console.log("info", info);
+          console.log("bar chart", info);
           setStackedChart(info);
         } else {
           alert(error);
@@ -351,11 +353,6 @@ const StatusPage = (props) => {
       <div className="statusPage__charts">
         <div className="statusPage__barChart">
           <div className="statusPage__barChart__filters">
-            <Select
-              options={timeLabelOptions}
-              onChange={(filter) => setTimeLabel(filter)}
-              className="filterSelect"
-            />
             <DatePicker
               onDateClick={handleDateClick}
               name="startDate"
@@ -366,7 +363,17 @@ const StatusPage = (props) => {
               name="endDate"
               label="To:"
             />
+            <Select
+              options={timeLabelOptions}
+              onChange={(filter) => setTimeLabel(filter)}
+              className="filterSelect"
+            />
           </div>
+          {isEmpty(stackedChart) && (
+            <div className="statupPage__circularProgress">
+              <CircularProgress disableShrink color="primary" />
+            </div>
+          )}
           <StackedChart stackedChart={stackedChart} />
         </div>
 
