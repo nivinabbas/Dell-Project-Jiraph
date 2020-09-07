@@ -106,7 +106,7 @@ router.post('/modificationByField', async (req, res) => {
 
 router.post('/modificationByFieldFilters', async (req, res) => {
     let tasks = []
-    let { fieldName } = req.body
+    let { fieldName,startDate,endDate } = req.body
     startDate = new Date(startDate)
     endDate = new Date(endDate)
     if (fieldName.length == 0) { // runs to bring all the fieldNames and QA when reloading
