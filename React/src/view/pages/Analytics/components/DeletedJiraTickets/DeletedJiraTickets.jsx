@@ -89,6 +89,8 @@ function DeletedJiraTickets() {
 
   ///change priority:
   const HandlePriorityChange = (change => {
+    serverFilters.functionalTest=[]
+    serverFilters.qaRepresentative=[]
     serverFilters.priority = []
     
     if(change!=null)(
@@ -148,6 +150,8 @@ function DeletedJiraTickets() {
     render(serverFilters);
   })
 
+ 
+
   return (
 
     <div className='DeletedJiraTicketsWrapper'>
@@ -180,13 +184,13 @@ function DeletedJiraTickets() {
           name="qaRepresentative"
           isMulti
           options={qaRepresentativeOptions}
-          placeholder="Qa Representative "
+          placeholder="Qa Representative"
           className="DeletedJiraTickets__Filter"
           onChange={HandleqaRepresentativeChange}
         />
 
         <input
-          className="DeletedJiraTickets__Filter"
+          className="DeletedJiraTickets__Filter__date"
           type="date"
           name="startDate"
           onChange={HandleStartDateChange}
@@ -194,7 +198,7 @@ function DeletedJiraTickets() {
 
 
         <input
-          className="DeletedJiraTickets__Filter"
+          className="DeletedJiraTickets__Filter__date"
           type="date"
           name="endDate"
           onChange={HandleEndDateChange}
