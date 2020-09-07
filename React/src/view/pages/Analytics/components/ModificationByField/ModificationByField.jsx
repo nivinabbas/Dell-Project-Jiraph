@@ -65,7 +65,7 @@ function ModificationByField(props) {
   const renderFilters = (serverFilters) => {
     fetch('/api/analytics/modificationByFieldFilters', {
       method: 'POST',
-      body: JSON.stringify({ fieldName: serverFilters.fieldName }),
+      body: JSON.stringify({ fieldName: serverFilters.fieldName, startDate:serverFilters.startDate, endDate:serverFilters.endDate }),
       headers: {
         "Content-Type": "application/json"
       }
