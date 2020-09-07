@@ -8,6 +8,7 @@ export default function StackedChart({ stackedChart }) {
       type: "bar",
       height: 350,
       stacked: true,
+      stackType: "100%",
       responsive: [
         {
           breakpoint: 480,
