@@ -17,21 +17,20 @@ router.post('/modificationByField', async (req, res) => {
     console.log(fieldName, values, label, qaRepresentative)
     startDate = new Date(startDate)
     endDate = new Date(endDate)
-    // let dateFormat = '';
-    // if (label[0] == 'daily') {
-    //     dateFormat = "%Y-%m-%d"
-    // }
-    // else if (label[0] == 'yearly') {
-    //     dateFormat = "%Y"
-    // }
-    // else {
-    //     dateFormat = "%Y-%m"
-    // }
+    let dateFormat = '';
+    if (label[0] == 'daily') {
+        dateFormat = "%Y-%m-%d"
+    }
+    else if (label[0] == 'yearly') {
+        dateFormat = "%Y"
+    }
+    else {
+        dateFormat = "%Y-%m"
+    }
 
 
     //here we build the match expression according to the user's filters.
 
-    //, { "diffItem.updatedTime": { $gte: startDate } }, { "diffItem.updatedTime": { $lte: endDate } }
     let filtersArray = [{ "diffItem.type": "Update" }, { "diffItem.updatedTime": { $gte: startDate } }, { "diffItem.updatedTime": { $lte: endDate } }] // add the startdate and enddate and label here
     let matchFilterValue = {
         "$and": []
@@ -49,19 +48,12 @@ router.post('/modificationByField', async (req, res) => {
         })
         filtersArray.push({ "$or": valuesArray })
     }
-    // if (filtersArray.length == 0) { // we should remove this condition after we add the time
-    //     delete matchFilterValue.$and;
-    // }
-    // else {
+
     matchFilterValue["$and"] = filtersArray
-    //  }
-    console.log(matchFilterValue)
-    console.log(typeof(startDate))
-    console.log(endDate)
+
     tasks = await TaskModel.aggregate([
         {
             $match: matchFilterValue
-            //$match:{ "diffItem.updatedTime": { $gte: startDate } }
         },
         {
             $group: {
@@ -82,7 +74,7 @@ router.post('/modificationByField', async (req, res) => {
             }
 
         },
-        { $sort: {_id: 1 } }
+        { $sort: { _id: 1 } }
     ])
 
     let maxLength = 0;
@@ -114,9 +106,16 @@ router.post('/modificationByField', async (req, res) => {
 
 router.post('/modificationByFieldFilters', async (req, res) => {
     let tasks = []
-    const { fieldName } = req.body
+    let { fieldName } = req.body
+    startDate = new Date(startDate)
+    endDate = new Date(endDate)
     if (fieldName.length == 0) { // runs to bring all the fieldNames and QA when reloading
         tasks = await TaskModel.aggregate([
+            {
+                $match: {
+                    "diffItem.updatedTime": { $gte: startDate, $lte: endDate },
+                  }
+            },
             {
                 $group: {
                     _id: null,
@@ -139,7 +138,6 @@ router.post('/modificationByFieldFilters', async (req, res) => {
             {
                 $group: {
                     _id: null,
-                    // QA: { $addToSet: { "label": "$jiraItem.qaRepresentative", "value": "$jiraItem.qaRepresentative" } },
                     Values: { $addToSet: { "label": "$diffItem.updatedField.newValue", "value": "$diffItem.updatedField.newValue" } },
                 }
             },
@@ -148,7 +146,6 @@ router.post('/modificationByFieldFilters', async (req, res) => {
             item.Values.sort((a, b) => (a.label > b.label) ? 1 : -1);
         })
     }
-
     res.send(tasks)
 })
 
@@ -156,23 +153,25 @@ router.post('/modificationByFieldFilters', async (req, res) => {
 router.post('/deletedJiraTickets', async (req, res) => {
     let tasks = []
     const { serverFilters } = req.body
-    const { priority, qaRepresentative, functionalTest, startDate, endDate, label } = serverFilters;
+    let { priority, qaRepresentative, functionalTest, startDate, endDate, label } = serverFilters;
+    startDate = new Date(startDate)
+    endDate = new Date(endDate)
     console.log(priority, qaRepresentative, functionalTest, startDate, endDate, label)
-    // let dateFormat = '';
-    // if (label[0] == 'daily') {
-    //     dateFormat = "%Y-%m-%d"
-    // }
-    // else if (label[0] == 'yearly') {
-    //     dateFormat = "%Y"
-    // }
-    // else {
-    //     dateFormat = "%Y-%m"
-    // }
+     let dateFormat = '';
+     if (label[0] == 'daily') {
+         dateFormat = "%Y-%m-%d"
+     }
+     else if (label[0] == 'yearly') {
+         dateFormat = "%Y"
+     }
+     else {
+         dateFormat = "%Y-%m"
+     }
 
 
     //here we build the match expression according to the user's filters.
 
-    let filtersArray = [{ "diffItem.type": "Delete" }] // add the startdate and enddate and label here
+    let filtersArray = [{ "diffItem.type": "Delete" }, { "diffItem.updatedTime": { $gte: startDate } }, { "diffItem.updatedTime": { $lte: endDate } }]  // add the startdate and enddate and label here
     let matchFilterValue = {
         "$and": []
     }
@@ -221,7 +220,6 @@ router.post('/deletedJiraTickets', async (req, res) => {
         {
             $group: {
                 _id: "$_id.date",
-                //_id: { $dateFromString: { dateString: "$_id.date" , format: "%Y-%m-%d" } },
                 arr: { $push: { priority: "$_id.priority", tasks: "$tasks", size: { $size: "$tasks" } } },
 
             }
