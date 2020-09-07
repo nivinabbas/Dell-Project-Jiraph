@@ -485,7 +485,7 @@ router.post('/changeOfJIRATicketsStatusFilters', async (req, res) => {
 
 
 
-// --------------------------------------------------------------- delays in delivery
+// --------------------------------------------------------------- delays in delivery ---------------------------------------------------------------------
 
 router.post('/delaysInDelivery', (req, res) => {
 
