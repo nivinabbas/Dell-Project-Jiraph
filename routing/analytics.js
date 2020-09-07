@@ -58,7 +58,7 @@ router.post('/modificationByField', async (req, res) => {
         {
             $group: {
                 _id: {
-                    date: { $dateToString: { format: "%Y-%m-%d", date: "$diffItem.updatedTime" } },
+                    date: { $dateToString: { format: dateFormat, date: "$diffItem.updatedTime" } },
                     fieldName: "$diffItem.updatedField.fieldName"
 
                 },
@@ -113,7 +113,7 @@ router.post('/modificationByFieldFilters', async (req, res) => {
         tasks = await TaskModel.aggregate([
             {
                 $match: {
-                    "diffItem.updatedTime": { $gte: startDate, $lte: endDate },
+                    "diffItem.updatedTime": { $gte: startDate, $lte: endDate },"diffItem.type": "Update"
                   }
             },
             {
@@ -206,7 +206,7 @@ router.post('/deletedJiraTickets', async (req, res) => {
         {
             $group: {
                 _id: {
-                    date: { $dateToString: { format: "%Y-%m-%d", date: "$diffItem.updatedTime" } },
+                    date: { $dateToString: { format: dateFormat, date: "$diffItem.updatedTime" } },
                     priority: "$jiraItem.priority"
 
                 },
@@ -220,7 +220,8 @@ router.post('/deletedJiraTickets', async (req, res) => {
 
             }
 
-        }
+        },
+        { $sort: { _id: 1 } }
     ])
     // let d1 = new Date(tasks[0]._id)
     // console.log(d1)
@@ -254,11 +255,13 @@ router.post('/deletedJiraTickets', async (req, res) => {
 
 router.post('/deletedJiraTicketsFilters', async (req, res) => {
     let tasks = []
-    const { startDate, endDate, label } = req.body
+    let { startDate, endDate} = req.body
+    startDate = new Date(startDate)
+    endDate = new Date(endDate)
     //if (fieldName.length == 0) { // runs to bring all the fieldNames and QA when reloading
     tasks = await TaskModel.aggregate([
         {
-            $match: { "diffItem.type": "Delete" }
+            $match: { "diffItem.updatedTime": { $gte: startDate, $lte: endDate },"diffItem.type": "Delete" }
         },
         {
             $group: {
@@ -350,9 +353,24 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
     const filterValue = req.body.values
     const filterStatus = req.body.status
     const filterQaRep = req.body.qaRepresentative
+    const label = req.body
+    let {startDate,endDate} = req.body
+    startDate = new Date(startDate)
+    endDate = new Date(endDate)
+    let dateFormat = '';
+    if (label[0] == 'daily') {
+        dateFormat = "%Y-%m-%d"
+    }
+    else if (label[0] == 'yearly') {
+        dateFormat = "%Y"
+    }
+    else {
+        dateFormat = "%Y-%m"
+    }
+    
 
     //here we build the match expression according to the user's filters.
-    console.log(filterValue, filterStatus, filterQaRep)
+    console.log(filterValue, filterStatus, filterQaRep,endDate,startDate)
 
     let matchFilterValue = { "$and": [] };
     let ValToAgg = filterValue.length == 0 ? "$diffItem.updatedField.newValue" : `$diffItem.updatedField.${filterValue}`
@@ -406,7 +424,7 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
         {
             $group: {
                 _id: {
-                    date: { $dateToString: { format: "%Y-%m-%d", date: "$diffItem.updatedTime" } },
+                    date: { $dateToString: { format: dateFormat, date: "$diffItem.updatedTime" } },
                     Val: ValToAgg
                     // Val: `$diffItem.updatedField.${filterValue}`
 
