@@ -196,12 +196,8 @@ router.post('/deletedJiraTickets', async (req, res) => {
         })
         filtersArray.push({ "$or": valuesArray })
     }
-    // if (filtersArray.length == 0) { // we should remove this condition after we add the time
-    //     delete matchFilterValue.$and;
-    // }
-    //else {
+
     matchFilterValue["$and"] = filtersArray
-    //}
 
     tasks = await TaskModel.aggregate([
         {
