@@ -36,7 +36,6 @@ router.post("/GetBellaData", async function (req, res) {
         console.log("befor")
          addTaskItem(newDwata);
         console.log("after")
-        insertToDB();
         try{
         TaskModel.insertMany(newDwata).then(console.log("Adding Success..!"));
         }catch{

@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/static/css/main.413e19ac.chunk.css",
+    "main.js": "/static/js/main.5665a89b.chunk.js",
+    "main.js.map": "/static/js/main.5665a89b.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.c9c43c88.js",
+    "runtime-main.js.map": "/static/js/runtime-main.c9c43c88.js.map",
+    "static/js/2.9126e3ef.chunk.js": "/static/js/2.9126e3ef.chunk.js",
+    "static/js/2.9126e3ef.chunk.js.map": "/static/js/2.9126e3ef.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.0a4e491814d521fd0ead90ce74b163c1.js": "/precache-manifest.0a4e491814d521fd0ead90ce74b163c1.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/main.413e19ac.chunk.css.map": "/static/css/main.413e19ac.chunk.css.map",
+    "static/js/2.9126e3ef.chunk.js.LICENSE.txt": "/static/js/2.9126e3ef.chunk.js.LICENSE.txt",
+    "static/media/JiraphLogo.jpg": "/static/media/JiraphLogo.4ddabadb.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.c9c43c88.js",
+    "static/js/2.9126e3ef.chunk.js",
+    "static/css/main.413e19ac.chunk.css",
+    "static/js/main.5665a89b.chunk.js"
+  ]
+}

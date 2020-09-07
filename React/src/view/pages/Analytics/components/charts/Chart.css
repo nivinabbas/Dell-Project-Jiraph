@@ -1,13 +1,17 @@
 .chart__Wrapper{
   display: grid;
-  grid-template-columns:  90vw;
-  grid-template-rows: 50vh auto;
+  grid-template-columns:1vw 99% 1vw;
+  grid-template-rows: 40vh auto;
   grid-template-areas: 
-  " chart "
-  " table "
-  ;
-  
-  background-color: whitesmoke;
+  ".chart ."
+  ".table ."
+  ; 
+  padding-top: 2rem;
+  justify-content: space-around  ;
+  text-align: center;
+  background-color: #EEEEEE;
+  box-shadow: 0px 0.1px 0.3px rgba(0, 0, 0, 0.8);
+  border-radius: 3px;
 }
 .chart{
   grid-area: chart;
@@ -32,18 +36,20 @@
   align-items: flex-end;
   width: 100%;
  height: 100%;
+ 
 }
 .chart__column{
-  text-align: center; 
+  height: 90%;
  
-  transition: height 1s ease-in;
+  text-align: center; 
+  
   cursor: pointer;
 }
 .chart__column .chart__column__Text{
   visibility: hidden;
   width: 120px;
-  background-color: gray;
-  color: #fff;
+  background-color:#EEEEEE;
+  color: #EEEEEE;
   text-align: center;
   border-radius: 6px;
   padding: 5px 0;
@@ -53,12 +59,15 @@
   margin: auto;
 }
 .chart__innerColumn{
+  transition: height .7s ease-in;
   /* height: 100%; */
-  width: 30%;
+  width: 30px;
+  justify-content: space-around;
   margin-bottom: 10px;
   border-radius: 10px 10px 0px 0px;
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.418);
-  background:#1C4E80; 
+  background: #41B6E6; 
+  font-family: 'Roboto Slab', serif;
   color: white;
   
   /* background: rgb(157,157,157); */
@@ -66,15 +75,18 @@
 }
 .chart__label{
   padding: 4px;
-  background: gold;
+  background: #808080;
   margin-top: 10px;
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.418);
   border-radius: 5px;
-  border:4px solid rgb(252, 231, 113);
+  border:4px solid #808080;
   font-size: 20px;
+  color: white;
 }
 .ModificationByFieldTable{
   grid-area: table;
-  position: relative;
-  margin-top: 100px;
+  margin-top: 8rem;
+ width: 100%;
+  
+  /* padding-right: 10rem; */
 }

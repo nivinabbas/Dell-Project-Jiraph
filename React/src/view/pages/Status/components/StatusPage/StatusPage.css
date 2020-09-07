@@ -1,30 +1,66 @@
 .statusPageContainer {
   display: flex;
   flex-direction: column;
-  width: 90%;
-  margin: auto;
-}
-.statuspage__dashboard {
-  /* display: flex; */
-}
-.statusPageContainerTableColumn {
-  display: flex;
-}
-.statuspage__table {
-  width: 100%;
-  height: 500px;
-  overflow: scroll;
-  margin: auto;
-}
-.statuspage__chartpie {
-  display: flex;
-  margin: auto;
-}
-.statuspage__chart {
-  width: 50%;
-  margin-top: 5%;
+  padding: 2rem;
+  min-height: 100vh;
 }
 
-.statuspage__filters {
-  margin-top: 2%;
+.statusPage__dashboard {
+  /* display: flex; */
+}
+
+.statusPage__charts {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.statusPage__barChart {
+  flex: 1;
+  background-color: #fff;
+  padding: 1rem;
+  margin-right: 1rem;
+  border-radius: 5px;
+}
+
+.statusPage__barChart__filters {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.statusPage__pieCharts {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 5px;
+}
+
+.statusPage__pieChart {
+  display: flex;
+  flex-direction: column;
+}
+
+.statusPage__pieChart:first-child {
+  margin-right: 4rem;
+}
+
+.filterSelect-pie {
+  margin-bottom: 3rem;
+}
+
+.statusPage__table {
+  width: 100%;
+  height: 500px;
+  margin: auto;
+}
+
+.statupPage__circularProgress {
+  height: 50%;
+  text-align: center;
+  margin-top: 2rem;
 }

@@ -1,44 +1,24 @@
 import React from "react";
 import Chart from "react-apexcharts";
-import Select from "react-select";
+import { isEmpty } from "../../../../../service/utils";
 
-const dummyData = {
-  series: [44, 55],
-  options: {
-    chart: {
-      type: "donut",
-    },
-    responsive: [
-      {
-        breakpoint: 480,
-        options: {
-          chart: {
-            width: 200,
-          },
-          legend: {
-            position: "bottom",
-          },
-        },
-      },
-    ],
-  },
-};
+const PieChart = ({ name, dataPieChart }) => {
+  let selectName = name;
 
-const optionDone = [
-  { value: "Done", label: "Done" },
-  { value: "Not Done", label: "Not Done" },
-];
-const PieChart = (props) => {
   return (
     <div id="chart">
-      <Select options={optionDone} />
-      <Chart
-        options={dummyData.options}
-        series={dummyData.series}
-        type="donut"
-        style={{ marginLeft: -30 }}
-        width="380"
-      />
+      {" "}
+      {!isEmpty(dataPieChart) && (
+        <Chart
+          options={dataPieChart.options}
+          series={dataPieChart.series}
+          type="donut"
+          style={{
+            marginLeft: -30,
+          }}
+          width="350"
+        />
+      )}{" "}
     </div>
   );
 };

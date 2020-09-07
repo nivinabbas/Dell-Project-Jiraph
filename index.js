@@ -1,27 +1,32 @@
 const express = require('express');
-const cors = require('cors')
 const app = express();
 var bodyParser = require('body-parser')
-app.use(bodyParser.json());       // to support JSON-encoded bodies
-app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+app.use(bodyParser.json()); // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
     extended: true
 }));
-
+const port=process.env.PORT ||4000;
 //const TaskModel = require('./schemas/TaskSchema');
+
+const TaskModel = require('./schemas/TaskSchema');
 
 
 
 app.use(express.static('public'))
 
-//const url = "mongodb+srv://nimer:N1N1N1N1@cluster0.tejcy.mongodb.net/servertest";
+ //const url = "mongodb+srv://nimer:N1N1N1N1@cluster0.tejcy.mongodb.net/server";
 const url = "mongodb+srv://Marshood:raMHdQuDOBxwrcss@cluster0.ifcjp.mongodb.net/jira";
 
 const mongoose = require('mongoose');
-mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+});
 
 // const data = []
 
 // TaskModel.insertMany(data).then(console.log('Done!'))
+
 
 
 const userRouter = require('./routing/users');
@@ -36,4 +41,6 @@ app.use("/api/analytics", analyticsRouter);
 const bellaRouting = require('./routing/bellaRouting');
 app.use("/api/PostBellaData", bellaRouting);
 
-app.listen(4000, () => { console.log("App is Listening to 4000") })
+app.listen(port, () => {
+    console.log("App is Listening to port:",port)
+})

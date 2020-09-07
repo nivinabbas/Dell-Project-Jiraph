@@ -1,81 +1,65 @@
 import React from 'react';
 import "./ChangesByParentId.css";
 import Select from 'react-select'
-
 import { useState , useEffect } from 'react';
 
-
+const serverFilters={fixVersion:[],startDate:[],endDate:[]};
 
 function ChangesByParentId() {
 
-  // To set UiObj from the filtered Data we recieved from server 
-  const [UiObjs, setUiObjs] = useState([]);
-
-  // Options To Send == > Server 
-  const [ fixVersion , setfixVersion ]=useState([])
-  const [ startDate,setStartDate ]=useState([])
-  const [ endDate,setEndDate ]=useState([] )
-
   
-
+  // const [UiObjs, setUiObjs] = useState([]);
+  
    // Options To get From Server 
    const [fixVersionOptions,setfixVersionOptions]=useState([])
 
-  
- 
   // Functions ==> Fetch :
-  const render = ()=> {
-    fetch('/api/analytics/ChangesByParentId/---', {
-        method: 'POST',
-        body: JSON.stringify({}),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-        .then((res) => res.json())
-        .then((data) => { setUiObjs(data) })
-  
-      } 
+  // const render = (serverFilters)=> {
+  //   fetch('/api/analytics/ChangesByParentId', {
+  //       method: 'POST',
+  //       body: JSON.stringify(serverFilters),
+  //       headers: {
+  //         "Content-Type": "application/json"
+  //       }
+  //     })
+  //       .then((res) => res.json())
+  //       .then((data) => { console.log(data) })
+  //     } 
       
   useEffect(() => {
-   
-    fetch('/api/analytics/---')
-      .then(res => res.json())
-      .then(data => {
-        console.log(data)
-        
-        //set state (fix Versions => get all the options )
-        setfixVersionOptions(data);
-      })
- 
+    fetch('/api/analytics/ChangesByParentIdFilters', {
+      method: 'POST',
+      body: JSON.stringify({serverFilters}),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then((res) => res.json())
+      .then((data) => { console.log(data)
+      setfixVersionOptions(data[0].fixVersions) })
+    } , [])
 
-}, [])
+
 
   const HandlefixVersionChange=(version=>{
-    console.log(version.value)
-    setfixVersion([version.value])
-    
-
-    render ();
+    serverFilters.fixVersion=[version.label];
+    // render (serverFilters);
 })
 
     const HandleStartDateChange=(date=>{
-        console.log(date.value)
-        setStartDate(date.target.value)
-        render ();
+      serverFilters.startDate=[date.target.value];
+        // render (serverFilters);
     })
     
       const HandleEndDateChange=(date=>{
-        console.log(date.value)
-        setEndDate(date.target.value)
-     
-    
-        render ();
+        serverFilters.endDate=[date.target.value];
+        // render (serverFilters);
     })
   
   return (
 
     <div className='ChangesByParentIdWrapper'>
+      <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
       <div className="ChangesByParentId__Title">Changes By Parent Id</div>
      
       {/* Select Filters */}
@@ -88,7 +72,6 @@ function ChangesByParentId() {
         placeholder="fix Version " 
         className="ChangesByParentId__Filter" 
         onChange={HandlefixVersionChange}
-        
         />
         
         
