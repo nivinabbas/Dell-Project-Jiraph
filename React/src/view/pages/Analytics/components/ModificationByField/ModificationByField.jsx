@@ -7,7 +7,7 @@ import Chart from "../charts/Chart"
 
 
 
-const serverFilters = { fieldName: [], values: [], qaRepresentative: [], startDate: [], endDate: [], label: ["weekly"] };
+const serverFilters = { fieldName: [], values: [], qaRepresentative: [], startDate: (new Date("2020-08-1")), endDate: new Date("2020-09-1"), label: ["weekly"] };
 
 
 
@@ -135,13 +135,13 @@ function ModificationByField(props) {
   })
 
   const handleChangeStartDate = (change => {
-    console.log(new Date(change.target.value))
-    serverFilters.startDate = [change.target.value];
+    console.log(change.target.value)
+    serverFilters.startDate = new Date(change.target.value);
     render(serverFilters);
   })
 
   const handleChangeEndDate = (change => {
-    serverFilters.endDate = [change.target.value];
+    serverFilters.endDate = new Date(change.target.value);
     render(serverFilters);
   })
 
