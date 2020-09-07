@@ -42,7 +42,7 @@ const StatusPage = (props) => {
     initialPieChartsFilters
   );
   const [tableFilters, setTableFilters] = useState(initialTableFilters);
-  console.log(cardsContent);
+
   useEffect(() => {
     fetch("/api/status/dailyalerts")
       .then((res) => res.json())
@@ -193,21 +193,20 @@ const StatusPage = (props) => {
 
   // setFieldPieChart(pieTypeDummyData);
   const handleDoneClick = async (jiraId) => {
-    try {
-      const userId = null;
-      const result = openTasks.filter(
-        (openTask) => openTask.jiraItem.jiraId !== jiraId
-      );
-      setOpenTasks(result);
-
-      await fetch("/api/status/updateTasks", {
-        method: "POST",
-        body: JSON.stringify({ jiraId, userId }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-    } catch (error) {}
+    // try {
+    //   const userId = null;
+    //   const result = openTasks.filter(
+    //     (openTask) => openTask.jiraItem.jiraId !== jiraId
+    //   );
+    //   setOpenTasks(result);
+    //   await fetch("/api/status/updateTasks", {
+    //     method: "POST",
+    //     body: JSON.stringify({ jiraId, userId }),
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //   });
+    // } catch (error) {}
   };
   const handlePieChartsFilters = (filter, name) => {
     const newPieFilters = [...pieChartsFilters].map((f) => {
@@ -367,6 +366,8 @@ const StatusPage = (props) => {
               options={timeLabelOptions}
               onChange={(filter) => setTimeLabel(filter)}
               className="filterSelect"
+              placeholder="Time Label"
+              isDisabled={!startDate || !endDate}
             />
           </div>
           {isEmpty(stackedChart) && (
@@ -385,6 +386,7 @@ const StatusPage = (props) => {
                 handlePieChartsFilters(filter, "pieChartModificationType")
               }
               className="filterSelect filterSelect-pie"
+              placeholder="Type"
             />
             <PieChart dataPieChart={typePieChart} name="pie1" />
           </div>
@@ -395,6 +397,7 @@ const StatusPage = (props) => {
                 handlePieChartsFilters(filter, "pieChartModificationField")
               }
               className="filterSelect filterSelect-pie"
+              placeholder="Field"
             />
             <PieChart dataPieChart={fieldPieChart} name="pie2" />
           </div>
