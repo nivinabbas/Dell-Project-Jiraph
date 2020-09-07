@@ -13,24 +13,26 @@ const TaskModel = require('../schemas/TaskSchema');
 router.post('/modificationByField', async (req, res) => {
     let tasks = []
     const { serverFilters } = req.body
-    const { fieldName, values, qaRepresentative, startDate, endDate, label } = serverFilters;
+    let { fieldName, values, qaRepresentative, startDate, endDate, label } = serverFilters;
     console.log(fieldName, values, label, qaRepresentative)
-    let dateFormat = '';
-    if (label[0] == 'daily') {
-        dateFormat = "%Y-%m-%d"
-    }
-    else if (label[0] == 'yearly') {
-        dateFormat = "%Y"
-    }
-    else {
-        dateFormat = "%Y-%m"
-    }
+    startDate = new Date(startDate)
+    endDate = new Date(endDate)
+    // let dateFormat = '';
+    // if (label[0] == 'daily') {
+    //     dateFormat = "%Y-%m-%d"
+    // }
+    // else if (label[0] == 'yearly') {
+    //     dateFormat = "%Y"
+    // }
+    // else {
+    //     dateFormat = "%Y-%m"
+    // }
 
 
     //here we build the match expression according to the user's filters.
 
     //, { "diffItem.updatedTime": { $gte: startDate } }, { "diffItem.updatedTime": { $lte: endDate } }
-    let filtersArray = [{ "diffItem.type": "Update" }] // add the startdate and enddate and label here
+    let filtersArray = [{ "diffItem.type": "Update" }, { "diffItem.updatedTime": { $gte: startDate } }, { "diffItem.updatedTime": { $lte: endDate } }] // add the startdate and enddate and label here
     let matchFilterValue = {
         "$and": []
     }
@@ -54,10 +56,12 @@ router.post('/modificationByField', async (req, res) => {
     matchFilterValue["$and"] = filtersArray
     //  }
     console.log(matchFilterValue)
-    console.log(startDate)
+    console.log(typeof(startDate))
+    console.log(endDate)
     tasks = await TaskModel.aggregate([
         {
             $match: matchFilterValue
+            //$match:{ "diffItem.updatedTime": { $gte: startDate } }
         },
         {
             $group: {
@@ -80,9 +84,7 @@ router.post('/modificationByField', async (req, res) => {
         },
         { $sort: {_id: 1 } }
     ])
-    // let d1 = new Date(tasks[0]._id)
-    // console.log(d1)
-    // console.log(new Date(d1.setDate(d1.getDate() + 5)))
+
     let maxLength = 0;
     let sumLength = 0;
     if (tasks.length > 0) {
