@@ -100,7 +100,8 @@ function ModificationByField(props) {
 
 
   const handleChangeLabel = (change => {
-    serverFilters.label=[change.value];
+    
+    serverFilters.label=[change.label];
     render(serverFilters);
   })
 
