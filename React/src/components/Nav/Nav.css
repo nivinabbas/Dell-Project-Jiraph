@@ -2,49 +2,38 @@ nav {
   font-family: "Roboto Slab", serif;
 }
 
-.sidebar {
-  background-color: #eeeeee;
-  height: 100vh;
-  width: 13vw;
-  display: grid;
-  grid-template-columns: 1.1vw 11.2vw 0.7vw;
-  grid-template-rows: 10vh 85vh 5vh;
-  grid-template-areas:
-    "header header header"
-    ". menu ."
-    " footer footer footer ";
-}
+.sidebar__header-wrapper{
+    /* background-color:#405c0b; */
+    height: 10vh;
+    grid-area: header;
+    background-color:white;
+    text-align: center;
+    padding-top: 3vh;
+    color: #00447C;
+    font-weight: 800;
+    font-size: 29px;
+    font-family: 'Roboto Slab', serif;
+  }
+  .menu__wrapper{
+    margin-top: 1vh;
+    /* background-color:#5c0b0b; */
+    padding-top: 1rem;
+    height: 80vh;
+    grid-area: menu;
+    background-color: #EEEEEE;
+  }
+  
+  .sidebar__footer{
+   height: 5vh;
+   background-color: #00447C;
+   grid-area: footer;
+   color:black;
+   text-align: center;
+   font-family: 'Anton', sans-serif;
+   letter-spacing: 2.5px;
+   font-size: 16px;
 
-.sidebar__header-wrapper {
-  /* background-color:#405c0b; */
-  height: 10vh;
-  grid-area: header;
-  background-color: white;
-  text-align: center;
-  padding-top: 2.2vh;
-  color: #00447c;
-  font-weight: 800;
-  font-size: 29px;
-  font-family: "Roboto Slab", serif;
-}
-.menu__wrapper {
-  margin-top: 8vh;
-  /* background-color:#5c0b0b; */
-  padding-top: 1rem;
-  height: 80vh;
-  grid-area: menu;
-  background-color: #eeeeee;
-}
-
-.sidebar__footer {
-  height: 5vh;
-  background-color: #00447c;
-  grid-area: footer;
-  color: white;
-  text-align: center;
-  margin-top: 0.5rem;
-}
-
+  }
 .menu__link {
   /* background-color:#b98d13; */
   font-size: 25px;
@@ -86,4 +75,66 @@ nav {
 .menu-subLink--selected {
   font-size: 14px;
   color: #0076ce;
+}
+
+ .register__logo {
+    margin-right: 15px;
+    width: 23px;
+    height: 23px;
+    opacity: 0.6;
+  }
+
+
+  .admin__logo{
+    margin-right: 15px;
+    width: 23px;
+    height: 23px;
+    opacity: 0.6;
+  }
+
+  .status__logo{
+    margin-right: 15px;
+    width: 23px;
+    height: 27px;
+    opacity: 0.6;
+    padding-top: 3px;
+  }
+
+  .trademark__logo{
+    margin-right: 15px;
+    width: 23px;
+    height: 23px;
+    opacity: 0.6;
+  }
+  .analysis__logo{
+    margin-right: 15px;
+    width: 23px;
+    height: 23px;
+    opacity: 0.6;
+  }
+
+  .register__logo:hover {
+    width: 23px;
+    height: 23px;
+    opacity: 1;
+  }
+
+  .analysis-options{
+      transform: scaleY(0.5) translateY(-50%);
+      opacity: 0;
+      position: relative;
+      top:-20px;
+      transition: 0.6s all;
+  }
+
+  .analysis-options:hover, .analysis-options:active, .analysis-options--show{
+    transform: scaleY(1) translateY(0%);
+    top:0px;
+    opacity: 1;
+}
+
+.analysis-options--select{
+    transform: scaleY(1) translateY(0%);
+    top:0px;
+    opacity: 1;
 }

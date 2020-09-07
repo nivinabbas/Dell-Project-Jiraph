@@ -26,6 +26,14 @@
   grid-template-columns: 13vw auto;
 }
 
+.mainPage{
+  overflow-y: scroll;
+  height: 100vh;
+}
+
+
+
+
 /*
 .social-media {
   position: absolute;

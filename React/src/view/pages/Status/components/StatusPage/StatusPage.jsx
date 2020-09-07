@@ -1,123 +1,47 @@
 import React from "react";
-import "./StatusPage.css";
 import { useState, useEffect } from "react";
 import DashBoard from "../DashBoard/DashBoard";
-
-import Table from "../Table/Table";
+import Table from "../Table/Table.jsx";
 import StackedChart from "../Chart/StackedChart";
-import PieChart from "../Chart/PieChart";
-import DateFilter from "../DateFilter/DateFilter";
+import PieChart from "../Chart/PieChart.js";
+import DatePicker from "../DatePicker/DatePicker";
+import Select from "react-select";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import {
+  initialTableFilters,
+  initialPieChartsFilters,
+} from "../../../../../service/statusService";
+import { isEmpty } from "../../../../../service/utils";
+import "./StatusPage.css";
 
-const pieTypeDummyData = {
-  series: [44, 55],
-  options: {
-    chart: {
-      type: "donut",
-    },
-    // responsive: [
-    //   {
-    //     breakpoint: 480,
-    //     options: {
-    //       chart: {
-    //         width: 200,
-    //       },
-    //       legend: {
-    //         position: "bottom",
-    //       },
-    //     },
-    //   },
-    // ],
-  },
-};
-const dummyData = {
-  series: [
-    {
-      name: "Done",
-      data: [44, 55, 41, 67, 22, 43, 44, 55, 41, 67, 22, 43],
-    },
-    {
-      name: "Not Done",
-      data: [13, 23, 20, 8, 13, 27, 44, 55, 41, 67, 22, 43],
-    },
-  ],
-  options: {
-    // chart: {
-    //   type: "bar",
-    //   height: 350,
-    //   stacked: true,
-    // },
-    // responsive: [
-    //   {
-    //     breakpoint: 480,
-    //     options: {
-    //       legend: {
-    //         position: "bottom",
-    //         offsetX: -10,
-    //         offsetY: 0,
-    //       },
-    //     },
-    //   },
-    // ],
-    // plotOptions: {
-    //   bar: {
-    //     horizontal: false,
-    //   },
-    // },
-    xaxis: {
-      type: "datetime",
-      categories: [
-        "01/01/2011 GMT",
-        "01/02/2011 GMT",
-        "01/03/2011 GMT",
-        "01/04/2011 GMT",
-        "01/05/2011 GMT",
-        "01/06/2011 GMT",
-        "01/07/2011 GMT",
-        "01/08/2011 GMT",
-      ],
-    },
-    // legend: {
-    //   position: "bottom",
-    //   offsetY: 40,
-    // },
-    // fill: {
-    //   opacity: 1,
-    // },
-  },
-};
-
-const optionSprint = [
-  { value: "all", label: "All" },
-  { value: "create", label: "Create" },
-  { value: "update", label: "Update" },
-  { value: "delete", label: "Delete" },
+const timeLabelOptions = [
+  { value: "daily", label: "Daily" },
+  { value: "weekly", label: "Weekly" },
+  { value: "monthly", label: "Monthly" },
 ];
-
-const optionFunctional = [
-  { value: "all", label: "All" },
-  { value: "status", label: "Status" },
-  { value: "priority", label: "Priority" },
-  { value: "qaRepresentitive", label: "QA representitive" },
-];
-
 const StatusPage = (props) => {
-  // *********** pie chart 1 :
-
   const [cardsContent, setCardsContent] = useState([]);
   const [openTasks, setOpenTasks] = useState([]);
-  const [isDone, setIsDone] = useState(false);
-  const [filterTypePie, setFilterTypePie] = useState("all");
-  const [filterFieldPie, setFilterFieldPie] = useState("all");
-  const [filters, setFilters] = useState([
-    { name: "modificationType", value: "" },
-    { name: "modificationField", value: "" },
-    { name: "modificationValue", value: "" },
-  ]);
-  const [modificationType, setModificationType] = useState({});
   const [barChart, setBarChart] = useState({});
   const [stackedChart, setStackedChart] = useState({});
   const [typePieChart, setTypePieChart] = useState({});
   const [fieldPieChart, setFieldPieChart] = useState({});
+  const [modificationTypeOptions, setModificationTypeOptions] = useState({});
+  const [modificationFieldOptions, setModificationFieldOptions] = useState({});
+  const [modificationNamePieOptions, setModificationNamePieOptions] = useState(
+    {}
+  );
+  const [
+    modificationFieldValueOptions,
+    setModificationFieldValueOptions,
+  ] = useState({});
+  const [startDate, setStartDate] = useState(""); // choose the default value, with marshood
+  const [endDate, setEndDate] = useState("");
+  const [timeLabel, setTimeLabel] = useState("");
+  const [pieChartsFilters, setPieChartsFilters] = useState(
+    initialPieChartsFilters
+  );
+  const [tableFilters, setTableFilters] = useState(initialTableFilters);
 
   useEffect(() => {
     fetch("/api/status/dailyalerts")
@@ -144,192 +68,351 @@ const StatusPage = (props) => {
         }
       });
   }, []);
-  //firstchart
+
+  //main bar chart convert to post method and pass in the body startDate, timeLabel
   useEffect(() => {
-    fetch("/api/status/stackedChart")
+    const filters = {
+      startDate,
+      endDate,
+      label: timeLabel.value,
+    };
+    fetch("/api/status/stackedChart", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(filters),
+    })
       .then((res) => res.json())
       .then((data) => {
         let { success, error, info } = data;
         if (success) {
-          console.log("first", info);
+          console.log("bar chart", info);
           setStackedChart(info);
         } else {
           alert(error);
         }
       });
-  }, []);
-
+  }, [startDate, endDate, timeLabel]);
+  //left pie ==> convert to post method and pass in the body startDate, endDate,pieChartsFilters[0]
+  // add conditions to the array startDate, endDate, pieChartsFilters[0]
   useEffect(() => {
-    fetch("/api/status/TypePie")
+    const filters = {
+      startDate,
+      endDate,
+      modificationType: pieChartsFilters[0].value,
+    };
+    fetch("/api/status/TypePie", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(filters),
+    })
       .then((res) => res.json())
       .then((data) => {
         let { success, error, info } = data;
         if (success) {
-          console.log("first", info);
+          console.log("ss", info);
           setTypePieChart(info);
-          console.log("type", info);
+        } else {
+          alert(error);
+        }
+      });
+  }, [startDate, endDate, pieChartsFilters]);
+
+  //right pie ==> convert to post method and pass in the body startDate, endDate,pieChartsFilters[1]
+  // add conditions to the array startDate, endDate, pieChartsFilters[1]
+  useEffect(() => {
+    const filters = {
+      startDate,
+      endDate,
+      modificationField: pieChartsFilters[1].value,
+    };
+    fetch("/api/status/fieldPie", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(filters),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        let { success, error, info } = data;
+        if (success) {
+          setFieldPieChart(info);
+        } else {
+          alert(error);
+        }
+      });
+  }, [startDate, endDate, pieChartsFilters]);
+
+  // table select option ==> based on "update" select
+  useEffect(() => {
+    // const newFilters =
+    //   filters[0].value === "Update" ? [...filters] : [{ ...filters[0] }];
+    fetch("/api/status/modificationTypeOptions")
+      .then((res) => res.json())
+      .then((data) => {
+        let { success, error, info } = data;
+        if (success) {
+          setModificationTypeOptions(info.Data);
         } else {
           alert(error);
         }
       });
   }, []);
+
+  //pie option filters
   useEffect(() => {
-    fetch("/api/status/fieldPie")
+    if (
+      tableFilters[0].name === "modificationType" &&
+      tableFilters[0].value === "Update"
+    ) {
+      fetch("/api/status/modificationFieldOptions")
+        .then((res) => res.json())
+        .then((data) => {
+          let { success, error, info } = data;
+          if (success) {
+            setModificationFieldOptions(info.Data);
+          } else {
+            alert(error);
+          }
+        });
+    }
+  }, [tableFilters]);
+
+  useEffect(() => {
+    fetch("/api/status/getFieldName")
       .then((res) => res.json())
       .then((data) => {
         let { success, error, info } = data;
-        if (success) {
-          console.log("first", info);
-          setFieldPieChart(info);
-          console.log("type", info);
-        } else {
-          alert(error);
-        }
+        setModificationNamePieOptions(info.Data);
       });
   }, []);
 
   // setFieldPieChart(pieTypeDummyData);
   const handleDoneClick = async (jiraId) => {
-    try {
-      const userId = null;
-      const result = openTasks.filter(
-        (openTask) => openTask.jiraItem.jiraId !== jiraId
-      );
-      setOpenTasks(result);
-      console.log(jiraId);
-      await fetch("/api/status/updateTasks", {
-        method: "POST",
-        body: JSON.stringify({ jiraId, userId }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-    } catch (error) {}
+    // try {
+    //   const userId = null;
+    //   const result = openTasks.filter(
+    //     (openTask) => openTask.jiraItem.jiraId !== jiraId
+    //   );
+    //   setOpenTasks(result);
+    //   await fetch("/api/status/updateTasks", {
+    //     method: "POST",
+    //     body: JSON.stringify({ jiraId, userId }),
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //   });
+    // } catch (error) {}
   };
-  const handlemodificationTypePieSelect = (filter, name) => {
-    if (name === "pie1") setFilterTypePie(filter.value);
-    if (name === "pie2") setFilterFieldPie(filter.value);
+  const handlePieChartsFilters = (filter, name) => {
+    const newPieFilters = [...pieChartsFilters].map((f) => {
+      if (f.name === name) {
+        f.value = filter.value;
+      }
+      return f;
+    });
+    setPieChartsFilters(newPieFilters);
   };
   //date
-  const handleDateClick = async (CurrentstartDate, CurrentEndtDate) => {
-    //typechart
-    await fetch("/api/status/typePieChartFilter", {
-      method: "POST",
-      body: JSON.stringify({
-        filterTypePie,
-        CurrentstartDate,
-        CurrentEndtDate,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        let { success, error, info } = data;
-        if (success) {
-          setBarChart(info);
-        } else {
-          alert(error);
-        }
-      });
-    // fieldpiechart
-    await fetch("/api/status/fieldPieChart", {
-      method: "POST",
-      body: JSON.stringify({
-        filterFieldPie,
-        CurrentstartDate,
-        CurrentEndtDate,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        let { success, error, info } = data;
-        if (success) {
-          setBarChart(info);
-        } else {
-          alert(error);
-        }
-      });
-    //first barchart
-    await fetch("/api/status/filterStackedChart", {
-      method: "POST",
-      body: JSON.stringify({
-        label: "daily",
-        datefrom: CurrentstartDate,
-        dateTo: CurrentEndtDate,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        let { success, error, info } = data;
-        if (success) {
-          // setStackedChart(info);
-        } else {
-          alert(error);
-        }
-      });
+  const handleDateClick = (date) => {
+    const { name, value } = date;
+    name === "startDate" ? setStartDate(value) : setEndDate(value);
+    // console.log("label",tableFilters);
+    //typechart ---> RAWAD
+    // await fetch("/api/status/typePieChartFilter", {
+    //   method: "POST",
+    //   body: JSON.stringify({
+    //     filterTypePie,
+    //     CurrentstartDate,
+    //     CurrentEndtDate,
+    //   }),
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // })
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     let { success, error, info } = data;
+    //     if (success) {
+    //       setBarChart(info);
+    //     } else {
+    //       alert(error);
+    //     }
+    //   });
+    // // fieldpiechart
+    // await fetch("/api/status/fieldPieChart", {
+    //   method: "POST",
+    //   body: JSON.stringify({
+    //     filterFieldPie,
+    //     CurrentstartDate,
+    //     CurrentEndtDate,
+    //   }),
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // })
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     let { success, error, info } = data;
+    //     if (success) {
+    //       setBarChart(info);
+    //     } else {
+    //       alert(error);
+    //     }
+    //   });
+    // //first barchart
+    // await fetch("/api/status/filterStackedChart", {
+    //   method: "POST",
+    //   body: JSON.stringify({
+    //     label: "daily",
+    //     datefrom: CurrentstartDate,
+    //     dateTo: CurrentEndtDate,
+    //   }),
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // })
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     let { success, error, info } = data;
+    //     if (success) {
+    //       // setStackedChart(info);
+    //     } else {
+    //       alert(error);
+    //     }
+    //   });
   };
 
   const handleSelect = (filter, name) => {
-    const newFilters = [...filters].map((f) => {
-      if (f.name === name) f.value = filter.value;
+    const newFilters = [...tableFilters].map((f) => {
+      if (f.name === name) {
+        f.value = filter.value;
+      }
       return f;
     });
-    setFilters(newFilters);
+    if (name === "modificationField") {
+      newFilters[2].value = null;
+    }
+    if (name === "modificationType") {
+      newFilters[1].value = null;
+      newFilters[2].value = null;
+    }
+    setTableFilters(newFilters);
+    fetch("/api/status/modificationFieldValueOptions", {
+      method: "POST",
+      body: JSON.stringify({ ...tableFilters }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        let { success, error, info } = res;
+        if (success) {
+          setModificationFieldValueOptions(info);
+        } else {
+          alert(error);
+        }
+      });
+
+    fetch("/api/status/filltersAllSubmit", {
+      method: "POST",
+      body: JSON.stringify({ ...tableFilters }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        let { success, error, info } = res;
+        if (success) {
+          setOpenTasks(info.doc);
+        } else {
+          alert(error);
+        }
+      });
   };
 
-  const handelTableFilterClick = () => {
-    const newFilters =
-      filters[0].value === "update" ? [...filters] : [{ ...filters[0] }];
+  // const handelTableFilterClick = () => {
+  //   const newFilters =
+  //     filters[0].value === "Update" ? [...filters] : [{ ...filters[0] }];
 
-    //fetch
-  };
+  //   //fetch
+  // };
 
   return (
     <div className="statusPageContainer">
-      <div className="statuspage__dashboard">
+      <div className="statusPage__dashboard">
         <DashBoard cardsContent={cardsContent} />
       </div>
-
-      <div className="statuspage__table">
-        <Table
-          openTasks={openTasks}
-          onDoneClick={handleDoneClick}
-          onSelect={handleSelect}
-          onChange={setModificationType}
-          onTableFilterClick={handelTableFilterClick}
-          filters={filters}
-        />
-      </div>
-      <div className="statuspage__filters">
-        <DateFilter onDateFilterClick={handleDateClick} />
-      </div>
-      <div className="statusPageContainerTableColumn">
-        <div className="statuspage__chart">
+      <div className="statusPage__charts">
+        <div className="statusPage__barChart">
+          <div className="statusPage__barChart__filters">
+            <DatePicker
+              onDateClick={handleDateClick}
+              name="startDate"
+              label="From:"
+            />
+            <DatePicker
+              onDateClick={handleDateClick}
+              name="endDate"
+              label="To:"
+            />
+            <Select
+              options={timeLabelOptions}
+              onChange={(filter) => setTimeLabel(filter)}
+              className="filterSelect"
+              placeholder="Time Label"
+              isDisabled={!startDate || !endDate}
+            />
+          </div>
+          {isEmpty(stackedChart) && (
+            <div className="statupPage__circularProgress">
+              <CircularProgress disableShrink color="primary" />
+            </div>
+          )}
           <StackedChart stackedChart={stackedChart} />
         </div>
 
-        <div className="statuspage__chartpie">
-          <PieChart
-            dataPieChart={typePieChart}
-            selectOptions={optionSprint}
-            name="pie1"
-            onmodificationTypePieSelect={handlemodificationTypePieSelect}
-          />
-          <PieChart
-            dataPieChart={fieldPieChart}
-            selectOptions={optionFunctional}
-            name="pie2"
-            onmodificationTypePieSelect={handlemodificationTypePieSelect}
-          />
+        <div className="statusPage__pieCharts">
+          <div className="statusPage__pieChart">
+            <Select
+              options={modificationTypeOptions}
+              onChange={(filter, name) =>
+                handlePieChartsFilters(filter, "pieChartModificationType")
+              }
+              className="filterSelect filterSelect-pie"
+              placeholder="Type"
+            />
+            <PieChart dataPieChart={typePieChart} name="pie1" />
+          </div>
+          <div className="statusPage__pieChart">
+            <Select
+              options={modificationNamePieOptions}
+              onChange={(filter, name) =>
+                handlePieChartsFilters(filter, "pieChartModificationField")
+              }
+              className="filterSelect filterSelect-pie"
+              placeholder="Field"
+            />
+            <PieChart dataPieChart={fieldPieChart} name="pie2" />
+          </div>
         </div>
+      </div>
+      <div className="statusPage__table">
+        <Table
+          modificationFieldValueOptions={modificationFieldValueOptions}
+          modificationFieldOptions={modificationFieldOptions}
+          modificationTypeOptions={modificationTypeOptions}
+          openTasks={openTasks}
+          onDoneClick={handleDoneClick}
+          onSelect={handleSelect}
+          tableFilters={tableFilters}
+        />
       </div>
     </div>
   );

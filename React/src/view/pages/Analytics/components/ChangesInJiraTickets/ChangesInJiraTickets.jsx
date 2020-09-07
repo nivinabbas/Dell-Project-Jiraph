@@ -1,51 +1,64 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect,useRef } from 'react';
 import "./ChangesInJiraTickets.css";
 
 //Components 
 import Select from 'react-select'
 import Chart from "../charts/Chart"
+//import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
+
+// Options To Send == > Server 
+const serverFilters = {
+  values: [],
+  status: [],
+  qaRepresentative: [],
+  startDate: "",
+  endDate: "",
+  label: ["weekly"]
+};
+
+function ChangesInJiraTickets() {
 
 
-
-function ChangesInJiraTickets() { 
-
-   // Options To Send == > Server 
-  const serverFilters = {
-    values: [],
-    status: [],
-    qaRepresentative: [],
-    startDate: [], // date1MonthAgo
-    endDate: [], // date
-    label: ["weekly"]
-  };
-  
   // Functions ==> Fetch : 
 
   useEffect(() => {
 
-    fetch('/api/analytics/changeOfJIRATicketsStatusFilters')
-      .then(res => res.json())
-      .then(data => {
-
-        
-        setStatusOptions(data[0].labels);
-        // setQaRepresentativeOptions(data[0].qa);
+    fetch('/api/analytics/changeOfJIRATicketsStatusFilters', {
+      method: 'POST',
+      body: JSON.stringify(serverFilters),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data)
+        setStatusOptions(data[0].status)
+        setQaRepresentativeOptions(data[0].qa)
 
       })
 
-      /*fetch('/api/analytics/changeOfJIRATicketsStatus')
+    fetch('/api/analytics/changeOfJIRATicketsStatus', {
+      method: 'POST',
+      body: JSON.stringify(serverFilters),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
       .then(res => res.json())
       .then(data => {
 
-        //set state (UiObj)
-        setUiObjs(data);
-      })*/
+        console.log(data)
+        setUiObjs(data)
+
+      })
 
   }, [])
 
 
   const render = (serverFilters) => {
+    console.log(serverFilters)
     fetch('/api/analytics/changeOfJIRATicketsStatus', {
       method: 'POST',
       body: JSON.stringify(serverFilters),
@@ -54,94 +67,105 @@ function ChangesInJiraTickets() {
       }
     })
       .then((res) => res.json())
-      .then((data) => { console.log(data) } )
+      .then((data) => {
+        console.log(data)
+
+        setUiObjs(data)
+      })
 
   }
 
-  // const renderFilters = (serverFilters) => {
-  //   fetch('/api/analytics/modificationByFieldFilters', {
-  //     method: 'POST',
-  //     body: JSON.stringify({ status:serverFilters.status }),
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     }
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => { 
-  //       if(data.length>0){
-  //         console.log(data)
-  //               setQaRepresentativeOptions(data[0].QA);
-                
-  //       }
-                 
-  //     })
-  // }
+  // To set UiObj from the filtered Data we recieved from server 
+  const [UiObjs, setUiObjs] = useState([]);
 
-   // To set UiObj from the filtered Data we recieved from server 
-   const [UiObjs, setUiObjs] = useState([]);
+  // Options To get From Server 
 
-   // Options To get From Server 
- 
-   const [statusOptions, setStatusOptions] = useState([])
-   const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([])
- 
-   const [valueOptions, setValueOptions] = useState([
-     { value: "newValue", label: "New Value" },
-     { value: "oldValue", label: "Old Value" }
-   ])
- 
-   const [labelOptions, setLabelOptions] = useState([
-     { name: "label", value: "daily", label: "Daily" },
-     { name: "label", value: "weekly", label: "Weekly" },
-     { name: "label", value: "monthly", label: "Monthly" },
-     { name: "label", value: "yearly", label: "Yearly" }
-   ])
- 
+  const [statusOptions, setStatusOptions] = useState([])
+  const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([])
 
-  // Default Date
-  const date = new Date()
-  const date1MonthAgo = new Date(new Date().setMonth(date.getMonth() - 1));
+  const valueOptions=[
+    { value: "newValue", label: "New Value" },
+    { value: "oldValue", label: "Old Value" }
+  ]
+
+  const labelOptions=[
+    { name: "label", value: "daily", label: "Daily" },
+    { name: "label", value: "weekly", label: "Weekly" },
+    { name: "label", value: "monthly", label: "Monthly" },
+    { name: "label", value: "yearly", label: "Yearly" }
+  ]
 
 
 
+  
   // Filters onChange Functions 
 
-  const HandleValuesChange = (val => {
-    serverFilters.values = [val.value]
+  const HandleValuesChange = (change => {
+    serverFilters.qaRepresentative=[]
+    serverFilters.status=[]
+    if(change!=null){
+    serverFilters.values = [change.value]
+    }
+    else {
+      serverFilters.values=[]
+    }
     render(serverFilters);
   })
 
 
-  const HandleStatusChange = (status => {
-    serverFilters.status = [status.label]
+  const HandleStatusChange = (change => {
+
+    serverFilters.status = []
+    if(change!=null)(
+    change.map((item) => {
+      return(
+      serverFilters.status.push(item.value)
+      )
+    }))
+
     render(serverFilters);
   })
 
-  const HandleqaRepresentativeChange = (Qa => {
-    serverFilters.qaRepresentative = [Qa.label]
+  const HandleqaRepresentativeChange = (change => {
+    serverFilters.qaRepresentative = []
+    if(change!=null)(
+      change.map((item) => {
+        return(
+      serverFilters.qaRepresentative.push(item.value)
+        )
+    }))
+
     render(serverFilters);
   })
 
   const HandleStartDateChange = (date => {
-    serverFilters.startDate = [date.target.value]
+    serverFilters.startDate = (date.target.value)
     render(serverFilters);
   })
 
   const HandleEndDateChange = (date => {
-    serverFilters.endDate = [date.target.value]
+    serverFilters.endDate = (date.target.value)
     render(serverFilters);
   })
 
   const HandleLabelChange = (label => {
     serverFilters.label = [label.value]
+
     render(serverFilters);
   })
+
+  
+  const statusInput=useRef("")
+  const qaInput=useRef("")
+
 
   return (
 
     <div className='ChangeOfJiraTicketWrapper'>
-      <div className="ChangeOfJiraTicket__Chart"> 
-      { UiObjs.length > 0 && <Chart UiObjs={UiObjs} />  } 
+      <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
+
+      <div className="ChangeOfJiraTicket__Chart">
+        {UiObjs.length > 0 && <Chart UiObjs={UiObjs} />}
       </div>
 
       <div className="ChangeOfJiraTicket__Title">Changes Of Jira Tickets</div>
@@ -150,16 +174,19 @@ function ChangesInJiraTickets() {
 
       <form className="ChangeOfJiraTicket__Filters">
 
-        <Select
+        <Select 
+          onInputChange={()=> {statusInput.current.state.value="";qaInput.current.state.value=""}}
           name="oldNew"
           options={valueOptions}
           placeholder="old/new "
           className="ChangeOfJiraTicket__Filter"
           onChange={HandleValuesChange}
+          isClearable={true}
         />
 
-        <Select
+        <Select 
           name="status"
+          ref={statusInput}
           isMulti
           options={statusOptions}
           placeholder="Status "
@@ -170,6 +197,7 @@ function ChangesInJiraTickets() {
         <Select
           name="qaRepresentative"
           isMulti
+          ref={qaInput}
           options={qaRepresentativeOptions}
           placeholder="Qa Representative "
           className="DelaysInDelivery__Filter"
@@ -197,7 +225,7 @@ function ChangesInJiraTickets() {
           className="ChangeOfJiraTicket__Filter"
           onChange={HandleLabelChange}
         />
-
+          
       </form>
     </div>
   )
