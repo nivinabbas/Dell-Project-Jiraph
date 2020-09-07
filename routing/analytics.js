@@ -280,7 +280,7 @@ router.post('/deletedJiraTicketsFilters', async (req, res) => {
 router.post('/changesByParentIdFilters', async (req, res) => {
     let tasks = []
     const { serverFilters } = req.body
-    const { fixVersion,startDate, endDate} = serverFilters;
+    const { fixVersion, startDate, endDate } = serverFilters;
     if (fixVersion.length == 0) { // runs to bring all the fixVersions
         tasks = await TaskModel.aggregate([
             {
@@ -296,22 +296,40 @@ router.post('/changesByParentIdFilters', async (req, res) => {
             //item.QA.sort((a, b) => (a.label > b.label) ? 1 : -1);
         })
     }
-    else { 
-        const version = fixedVersion[0];
+    else {
+        const version = fixVersion[0];
+        console.log(version)
         tasks = await TaskModel.aggregate([
             {
-                $match: { "jiraItem.fixVersion": version}
-            },
+                $facet: {
+                    "epicGroup": [
+                        { $match: { "jiraItem.fixVersion": version, "jiraItem.jiraType": "Epic" } },
+                    ],
+                    "featureGroup": [
+                        // Filter out documents without a price e.g., _id: 7
+                        { $match: { "jiraItem.fixVersion": version, "jiraItem.jiraType": "Feature" } },
+                    ]
+                }
+            }
+
+            // {
+            //     // "jiraItem.jiraType":"Feature","jiraItem.jiraType":"Epic"
+            //    // $match: { "jiraItem.fixVersion": version ,}
+            //     $match:{ $and: [ { "jiraItem.fixVersion": version }, { $or: [ { "jiraItem.jiraType":"Feature"}, {"jiraItem.jiraType":"Epic"} ] } ] }
+            // },
             // {
             //     $group: {
             //         _id: {
-            //             date: { $dateToString: { format: "%Y-%m-%d", date: "$diffItem.updatedTime" } },
-            //             priority: "$jiraItem.priority"
+            //             //fieldName: "$diffItem.updatedField.fieldName"
+            //             //date: { $dateToString: { format: "%Y-%m-%d", date: "$diffItem.updatedTime" } },
+            //             jiraId: "$jiraItem.jiraId"
+            //            // jiraType:{"jiraItem.jiraType":"Feature"} 
 
             //         },
             //         tasks: { $push: "$$ROOT" },
             //     }
             // },
+
             // {
             //     $group: {
             //         _id: "$_id.date",

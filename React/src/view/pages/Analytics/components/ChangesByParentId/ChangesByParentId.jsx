@@ -43,14 +43,14 @@ function ChangesByParentId() {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        setUiObjs(data);
+        //setUiObjs(data);
       })
   }
 
 
   const HandlefixVersionChange = (version => {
     serverFilters.fixVersion = [version.label];
-    // render (serverFilters);
+    render (serverFilters);
   })
 
   const HandleStartDateChange = (date => {
