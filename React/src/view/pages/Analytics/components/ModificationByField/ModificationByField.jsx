@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react';
 import "./ModificationByField.css";
 import { useState } from 'react';
-import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
+//import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
 import Select from "react-select"
 import Chart from "../charts/Chart"
-// import ApexChart from "../ApexChart/ApexChart"
-
 
 
 const serverFilters = { fieldName: [], values: [], qaRepresentative: [], startDate: [], endDate: [], label: ["weekly"] };
+
+
+
 
 function ModificationByField(props) {
 
@@ -43,6 +44,8 @@ function ModificationByField(props) {
 
   }, [])
 
+
+
   const render = (serverFilters) => {
     fetch('/api/analytics/modificationByField', {
       method: 'POST',
@@ -53,7 +56,6 @@ function ModificationByField(props) {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
         setUiObjs(data)
       })
   }
@@ -70,9 +72,14 @@ function ModificationByField(props) {
       .then((res) => res.json())
       .then((data) => {
         console.log(data)
-        if (data.length > 0) {
+        if (data!=null) {
+          if(data.length>0)
+            setValueOptions(data[0].Values);
           
-          setValueOptions(data[0].Values);
+          else{
+            setValueOptions(data);
+
+          }
         }
 
       })
@@ -106,8 +113,10 @@ function ModificationByField(props) {
   const handleChangeValues = (change => {
     serverFilters.values = []
     if (change != null) {
-      change.map((item,index)=>{
+      change.map((item)=>{
+        return(
         serverFilters.values.push(item.value)
+        )
       })
     }
     else {
@@ -165,7 +174,7 @@ function ModificationByField(props) {
           options={qaRepresentativeOptions} />
 
         <input
-          className="ModificationByField__Filter"
+          className="ModificationByField__Filter__date"
           type="date"
           name="startDate"
           onChange={handleChangeStartDate}
@@ -173,7 +182,7 @@ function ModificationByField(props) {
 
 
         <input
-          className="ModificationByField__Filter"
+          className="ModificationByField__Filter__date"
           type="date"
           name="endDate"
           onChange={handleChangeEndDate}
