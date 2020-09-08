@@ -278,7 +278,7 @@ router.post("/stackedChart", async function (req, res) {
     endDate
   } = req.body;
   console.log(startDate);
-  let DailyAlerts;
+  let dataFromServer = [];
   let formatLabel;
   if (label == "daily" || label == "") {
     formatLabel = "%Y-%m-%d";
@@ -333,39 +333,20 @@ router.post("/stackedChart", async function (req, res) {
     },
     ]);
     // adding to Done Array
-    // adding to Done Array
-    let tempDate = [];
-    let tempCountDone = [],
-      tempCountNotDone = [];
-    let series = {
-      series: [],
-      options: {
-        xaxis: {
-          type: "datetime",
-          categories: [],
-        },
-      },
-    };
     stackedChartDone.forEach((element) => {
       //load data
-      tempCountDone.push(element.done);
-      tempCountNotDone.push(element.notDone);
-      tempDate.push(element._id);
-    });
-    series.series.push({
-      name: "done",
-      data: tempCountDone,
-    });
-    series.series.push({
-      name: "notDone",
-      data: tempCountNotDone,
-    });
-    series.options.xaxis.categories = tempDate;
+      dataFromServer.push({
+       done: element.done, notDone: element.notDone, date: element._id,
+     })
 
+    });
+ 
+  
+    
     res.send({
       success: true,
       error: null,
-      info: series
+      info: dataFromServer
     });
   } else {
     startDate = new Date(startDate + "T00:00:00.00Z");
@@ -413,37 +394,17 @@ router.post("/stackedChart", async function (req, res) {
     ]);
 
     // adding to Done Array
-    let tempDate = [];
-    let tempCountDone = [],
-      tempCountNotDone = [];
-    let series = {
-      series: [],
-      options: {
-        xaxis: {
-          type: "datetime",
-          categories: [],
-        },
-      },
-    };
+    let dataFromServer = [];
+ 
     stackedChartDone.forEach((element) => {
-      //load data
-      tempCountDone.push(element.done);
-      tempCountNotDone.push(element.notDone);
-      tempDate.push(element._id);
+      dataFromServer.push({
+        done: element.done, notDone: element.notDone, date: element._id,
+      });
     });
-    series.series.push({
-      name: "done",
-      data: tempCountDone,
-    });
-    series.series.push({
-      name: "notDone",
-      data: tempCountNotDone,
-    });
-    series.options.xaxis.categories = tempDate;
-    res.send({
+     res.send({
       success: true,
       error: null,
-      info: series
+      info: dataFromServer
     });
   }
   // res.send({ success: false, error: null, info: null });
