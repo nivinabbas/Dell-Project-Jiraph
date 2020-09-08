@@ -45,24 +45,38 @@
   box-shadow: 0px 0.3px 0.3px rgba(0, 0, 0, 0.2);
 }
 
-.ModificationByField__Filter {
-  width: 10rem;
-  /* border: 0.1px solid black; */
-  box-sizing: border-box;
-  background-color: #eeeeee;
-  border-radius: 4px;
-  color: black;
-  box-shadow: 0px 0.1px 0.3px rgba(0, 0, 0, 0.8);
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+
+.ModificationByField__Filter{
+ width: 13rem;
+ /* border: 0.1px solid black; */
+ box-sizing: border-box;
+ background-color:   #EEEEEE;
+
+ color: black;
+ box-shadow: 0px 0.1px 0.3px rgba(0, 0, 0, 0.8);
+ padding-top:0.5rem;
+ padding-bottom:0.5rem;
 }
 .Select {
   background-color: #0076ce;
 }
 
-.ModificationByField__Submit {
+.ModificationByField__Filter__date{
+  box-shadow: 0px 0.1px 0.3px rgba(0, 0, 0, 0.8);
+  border: .1px solid rgba(0, 0, 0, 0.2);
+  height:2.25rem;
+  width: 13rem;
+  border-radius: 3px;
+  color: rgba(0, 0, 0, 0.7);
+  text-align: center;
+  font-size: 15px;
+}
+
+
+.ModificationByField__Submit{
   width: 15%;
   border-radius: 15px;
+  /* box-shadow: 0px 0.1px 0.3px rgba(0, 0, 0, 0.2); */
   border: rgba(0, 0, 0, 0.1);
   background-color: #eeeeee;
 }

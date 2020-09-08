@@ -43,12 +43,16 @@ function Forgotpassword(props) {
 
 
     return (
-        <div className='forgotpassword'>
-            <h2>Password Reset</h2>
+        <div className='forgetPassword-wrapper'>
+             <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
+            <div className="block"></div>
+            <div className="forgetPassword">
+            <h3 className="header">Password Reset</h3>
             <form id="sendToMailForm" onSubmit={onSendToMail} >
-                <input className="sendToMailInput" name="sendToMailInput" placeholder="1. enter your login Emailadress"></input>
-                <button type="submit">Submit</button>
+                <input className="sendToMailInput" name="sendToMailInput" placeholder="Enter your Email-adress"></input>
+                <button type="submit">SUBMIT</button>
             </form>
+            </div>
         </div>
     );
     

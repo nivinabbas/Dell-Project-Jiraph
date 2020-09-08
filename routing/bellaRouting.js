@@ -11,14 +11,15 @@ const mongoose = require('mongoose');
 let newDwata = [];
 const UserModel = mongoose.model("UserModel", UserSchema)
 
- function addTaskItem(lst) {
-    lst.map((item, index) => {
-        item.diffItem.updatedTime = new Date(item.diffItem.updatedTime)
+
+async function addTaskItem(lst) {
+    await lst.map((item, index) => {
+        item.diffItem.updateTime = new Date(item.diffItem.updateTime)
         item.taskItem =
         {
             user: null,
             isDone: false,
-            updatedTime: new Date(),
+            updatedTime: null,
             createdTime: new Date()
         }
     })
@@ -32,16 +33,9 @@ router.post("/GetBellaData", async function (req, res) {
     const { user_id, user_pass, Data } = req.body;
     if (req.body.key == "QYZNRVlzTAzJjWJLxobY24hGYcoclsaf4ZX5BLhGSi0Xa4cMC1APBoN") {
         newDwata = Data;
-        console.log("data length",Data.length)
-        console.log("befor")
-         addTaskItem(newDwata);
-        console.log("after")
-        try{
-        TaskModel.insertMany(newDwata).then(console.log("Adding Success..!"));
-        }catch{
-            console.error("error: ",e)
-        }
-        res.send({ "success": "ture"});
+        addTaskItem(newDwata);
+        TaskModel.insertMany(newDwata).then(console.log("Adding Success.!"));
+        res.send({ "success": "true" });
     } else {
         res.send({ "success": "false" });
     };
