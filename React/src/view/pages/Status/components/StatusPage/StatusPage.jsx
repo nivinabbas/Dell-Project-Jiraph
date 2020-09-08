@@ -87,29 +87,30 @@ const StatusPage = (props) => {
         let { success, error, info } = data;
         if (success) {
           console.log("bar chart", info);
-          const dataFromServer = [
-            {
-              done: 5,
-              notDone: 9,
-              date: "01/09/2020",
-            },
-            {
-              done: 5,
-              notDone: 9,
-              date: "02/09/2020",
-            },
-            {
-              done: 7,
-              notDone: 0,
-              date: "03/09/2020",
-            },
-            {
-              done: 7,
-              notDone: 89,
-              date: "04/09/2020",
-            },
-          ];
-          setStackedChart(dataFromServer);
+          // const dataFromServer = [
+          //   {
+          //     done: 5,
+          //     notDone: 9,
+          //     date: "01/09/2020",
+          //   },
+          //   {
+          //     done: 5,
+          //     notDone: 9,
+          //     date: "02/09/2020",
+          //   },
+          //   {
+          //     done: 7,
+          //     notDone: 0,
+          //     date: "03/09/2020",
+          //   },
+          //   {
+          //     done: 7,
+          //     notDone: 89,
+          //     date: "04/09/2020",
+          //   },
+          // ];
+          console.log(info);
+          setStackedChart(info);
         } else {
           alert(error);
         }
@@ -140,7 +141,6 @@ const StatusPage = (props) => {
       .then((data) => {
         let { success, error, info } = data;
         if (success) {
-          console.log("ss", info);
           setTypePieChart(info);
         } else {
           alert(error);
@@ -332,7 +332,7 @@ const StatusPage = (props) => {
           )}
           <StackedChart
             data={stackedChart}
-            onDataSelected={onStachChartDataSelect}
+            //onDataSelected={onStachChartDataSelect}
           />
         </div>
 
