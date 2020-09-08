@@ -1,5 +1,5 @@
 nav {
-    font-family: 'Roboto Slab', serif;
+  font-family: "Roboto Slab", serif;
 }
 
 .sidebar__header-wrapper{
@@ -36,46 +36,46 @@ nav {
 
   }
 .menu__link {
-    /* background-color:#b98d13; */
-    font-size: 25px;
-    color: #808080;
-    position: relative;
-    line-height: 3rem;
-    transition: all 0.4s
+  /* background-color:#b98d13; */
+  font-size: 25px;
+  color: #808080;
+  position: relative;
+  line-height: 3rem;
+  transition: all 0.4s;
 }
 
 .menu__link:hover {
-    /* background-color:#b98d13; */
-    font-size: 26px;
-    color: #444444;
+  /* background-color:#b98d13; */
+  font-size: 26px;
+  color: #444444;
 }
 
 .menu__link--selected {
-    font-size: 26px !important;
-    color: #444444;
+  font-size: 26px !important;
+  color: #444444;
 }
 
 .jiraph__logo {
-    height: 33px;
+  height: 33px;
 }
 
 .menu__subLink {
-    /* background-color:#7713b9; */
-    font-size: 13px;
-    font-weight: 500;
-    font-family: 'Roboto Slab', serif;
-    color: #444444;
-    line-height: 2rem;
-    transition: all 0.4s;
+  /* background-color:#7713b9; */
+  font-size: 13px;
+  font-weight: 500;
+  font-family: "Roboto Slab", serif;
+  color: #444444;
+  line-height: 2rem;
+  transition: all 0.4s;
 }
 .menu__subLink:hover {
-    font-size: 14px;
-    color: #0076CE;
+  font-size: 14px;
+  color: #0076ce;
 }
 
 .menu-subLink--selected {
-    font-size: 14px;
-    color: #0076CE;
+  font-size: 14px;
+  color: #0076ce;
 }
 
  .register__logo {
