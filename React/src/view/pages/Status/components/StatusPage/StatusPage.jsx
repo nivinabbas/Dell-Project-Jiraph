@@ -1,10 +1,10 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import DashBoard from "../DashBoard/DashBoard";
 import Table from "../Table/Table.jsx";
 import StackedChart from "../Chart/StackedChart";
 import PieChart from "../Chart/PieChart.js";
 import DatePicker from "../DatePicker/DatePicker";
+import DailyAlerts from "../DailyAlerts/index";
 import Select from "react-select";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {
@@ -23,7 +23,7 @@ const StatusPage = (props) => {
   const [cardsContent, setCardsContent] = useState([]);
   const [openTasks, setOpenTasks] = useState([]);
   const [barChart, setBarChart] = useState({});
-  const [stackedChart, setStackedChart] = useState({});
+  const [stackedChart, setStackedChart] = useState([]);
   const [typePieChart, setTypePieChart] = useState({});
   const [fieldPieChart, setFieldPieChart] = useState({});
   const [modificationTypeOptions, setModificationTypeOptions] = useState({});
@@ -88,7 +88,29 @@ const StatusPage = (props) => {
         let { success, error, info } = data;
         if (success) {
           console.log("bar chart", info);
-          setStackedChart(info);
+          const dataFromServer = [
+            {
+              done: 5,
+              notDone: 9,
+              date: "01/09/2020",
+            },
+            {
+              done: 5,
+              notDone: 9,
+              date: "02/09/2020",
+            },
+            {
+              done: 7,
+              notDone: 0,
+              date: "03/09/2020",
+            },
+            {
+              done: 7,
+              notDone: 89,
+              date: "04/09/2020",
+            },
+          ];
+          setStackedChart(dataFromServer);
         } else {
           alert(error);
         }
@@ -96,6 +118,12 @@ const StatusPage = (props) => {
   }, [startDate, endDate, timeLabel]);
   //left pie ==> convert to post method and pass in the body startDate, endDate,pieChartsFilters[0]
   // add conditions to the array startDate, endDate, pieChartsFilters[0]
+  const onStachChartDataSelect = (date, status) => {
+    console.log(date, status);
+    // send date and status to server
+    // get the tickets
+    // set the table data with the received tickets.
+  };
   useEffect(() => {
     const filters = {
       startDate,
@@ -347,7 +375,7 @@ const StatusPage = (props) => {
   return (
     <div className="statusPageContainer">
       <div className="statusPage__dashboard">
-        <DashBoard cardsContent={cardsContent} />
+        <DailyAlerts cardsContent={cardsContent} />
       </div>
       <div className="statusPage__charts">
         <div className="statusPage__barChart">
@@ -375,7 +403,10 @@ const StatusPage = (props) => {
               <CircularProgress disableShrink color="primary" />
             </div>
           )}
-          <StackedChart stackedChart={stackedChart} />
+          <StackedChart
+            data={stackedChart}
+            onDataSelected={onStachChartDataSelect}
+          />
         </div>
 
         <div className="statusPage__pieCharts">
