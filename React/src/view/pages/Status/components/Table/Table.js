@@ -4,13 +4,15 @@ import "./style.css";
 /////////////Presenting Data Table/////////////
 
 const dummyData = [
-  { a: "a", b: "b" },
+  { a: "a", b: "b", c: "", d: "" },
   { a: "a2", b: "b2" },
+  { a: "a2", b: "b2" },
+  { a: "a2" },
 ];
 const getTableData = (data) => {
   return data.map((d) => {
     return (
-      <tr >
+      <tr>
         {Object.keys(d).map((key, index) => {
           return <td key={index}>{d[key]}</td>;
         })}

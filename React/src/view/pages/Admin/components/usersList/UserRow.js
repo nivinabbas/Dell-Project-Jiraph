@@ -10,6 +10,8 @@ export default props => {
     
     
     return (
+        
+
         <form id={user.id} className="TableBody" onSubmit={(e=>onSave(e, user.id))} >
 
             <input name="name" disabled={!edit} type="text" defaultValue={user.name} ></input>
@@ -29,7 +31,11 @@ export default props => {
             <button  onClick={e => { deleteUser(e, user.id) }}>Delete</button>
             
         </form>
+        
+    
+    
     )
+
 
     function onSave(e, id) {
         e.preventDefault()
@@ -41,6 +47,8 @@ export default props => {
         email = email.value;
         role = role.value;
         password = password.value;
+
+        e.target.elements.password.value = '';
         
         
         fetch('/api/users/editUser', {
