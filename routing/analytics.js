@@ -506,6 +506,7 @@ router.post('/changeOfJIRATicketsStatusFilters', async (req, res) => {
         item.qa.sort((a, b) => (a.label > b.label) ? 1 : -1);
     })
 
+
     let filterVal = 'newValue'
     filterStatus = ''
     if (filterVal == 'oldValue') {
@@ -517,7 +518,7 @@ router.post('/changeOfJIRATicketsStatusFilters', async (req, res) => {
     const today = new Date();
     const startDate = today;
     const endDate = new Date(today - 30);
-    console.log(startDate,"  =>  ", endDate)
+    console.log(startDate, "  =>  ", endDate)
     if (filterStatus.length != 0) {
         matchFilters = {
             'diffItem.type': 'Update',
@@ -531,9 +532,8 @@ router.post('/changeOfJIRATicketsStatusFilters', async (req, res) => {
             'diffItem.updatedField.fieldName': 'status',
             // 'diffItem.updatedTime': { $gte: startDate, $lte: endDate }
 
-    // console.log(tasks)
-    res.send(tasks)
-
+        }
+    }
     tasks = await TaskModel.aggregate([
         {
             $match: matchFilters
