@@ -13,6 +13,7 @@ import MainPage from "./view/pages/Analytics/components/MainPage/MainPage";
 import ChangePassword from "./view/pages/Admin/components/ChangePassword/ChangePassword";
 import KeyPassword from "./view/pages/Admin/components/KeyPassword/KeyPassword";
 import UserList from "./view/pages/Admin/components/usersList/UserList";
+import Audit from "./view/pages/Admin/components/Audit/Audit"
 
 import ModificationByField from "./view/pages/Analytics/components/ModificationByField/ModificationByField";
 import DeletedJiraTickets from "./view/pages/Analytics/components/DeletedJiraTickets/DeletedJiraTickets";
@@ -67,6 +68,9 @@ function App() {
             <Route path="/Admin">
               <h1>Admin</h1>
               <UserList />
+            </Route>
+            <Route path="/Audit">
+              <Audit />
             </Route>
             <Route path="/status">
               <StatusPage />
