@@ -41,13 +41,10 @@ app.use("/api/analytics", analyticsRouter);
 const bellaRouting = require('./routing/bellaRouting');
 app.use("/api/PostBellaData", bellaRouting);
 
-app.listen(port, () => {
-    console.log("App is Listening to port:",port)
-})
+ 
 
 
-
-updateSaleh()
+//updateSaleh()
 //updating the time in diffitem
 function updateSaleh() {
     let tasks = TaskModel.find({}).then(
@@ -77,9 +74,11 @@ function randomDate(start, end /*, startHour, endHour*/) {
 }
 
 
-app.listen(port, () => { console.log("App is Listening to 4000") })
+ 
 
 
-
+app.listen(port, () => {
+    console.log("App is Listening to port:",port)
+})
 
 
