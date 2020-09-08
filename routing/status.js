@@ -278,16 +278,17 @@ router.post("/stackedChart", async function (req, res) {
     endDate
   } = req.body;
   console.log(startDate);
+  console.log("label",label); 
   let dataFromServer = [];
   let formatLabel;
-  if (label == "daily" || label == "") {
+  if (label == "daily" || label == "" ||label == undefined) {
     formatLabel = "%Y-%m-%d";
   } else if (label == "monthly") {
     formatLabel = "%Y-%m";
   } else {
     formatLabel = "%Y";
   }
-  if (startDate == "" && endDate == "") {
+  if (startDate == "" && endDate == '') {
     //default, label daily
     startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
     endDate = new Date();
@@ -401,6 +402,7 @@ router.post("/stackedChart", async function (req, res) {
         done: element.done, notDone: element.notDone, date: element._id,
       });
     });
+
      res.send({
       success: true,
       error: null,
