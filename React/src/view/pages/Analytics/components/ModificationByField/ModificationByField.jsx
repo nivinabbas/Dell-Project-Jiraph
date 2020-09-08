@@ -7,7 +7,7 @@ import Chart from "../charts/Chart"
 
 
 
-const serverFilters = { fieldName: [], values: [], qaRepresentative: [], startDate: [], endDate: [], label: ["weekly"] };
+const serverFilters = { fieldName: [], values: [], qaRepresentative: [], startDate: (new Date("2020-08-1")), endDate: new Date("2020-09-1"), label: ["weekly"] };
 
 
 
@@ -19,13 +19,14 @@ function ModificationByField(props) {
 
     fetch('/api/analytics/modificationByFieldFilters', {
       method: 'POST',
-      body: JSON.stringify({ fieldName: serverFilters.fieldName }),
+      body: JSON.stringify({ fieldName: serverFilters.fieldName, startDate:serverFilters.startDate, endDate:serverFilters.endDate  }),
       headers: {
         "Content-Type": "application/json"
       }
     })
       .then(res => res.json())
       .then(data => {
+        console.log(data)
         setFieldNameOptions(data[0].labels)
         setQaRepresentativeOptions(data[0].QA);
       })
@@ -65,7 +66,7 @@ function ModificationByField(props) {
   const renderFilters = (serverFilters) => {
     fetch('/api/analytics/modificationByFieldFilters', {
       method: 'POST',
-      body: JSON.stringify({ fieldName: serverFilters.fieldName }),
+      body: JSON.stringify({ fieldName: serverFilters.fieldName}),
       headers: {
         "Content-Type": "application/json"
       }
@@ -100,7 +101,8 @@ function ModificationByField(props) {
 
 
   const handleChangeLabel = (change => {
-    serverFilters.label=[change.value];
+    
+    serverFilters.label=[change.label];
     render(serverFilters);
   })
 
@@ -135,13 +137,13 @@ function ModificationByField(props) {
   })
 
   const handleChangeStartDate = (change => {
-    console.log(new Date(change.target.value))
-    serverFilters.startDate = [change.target.value];
+    console.log(change.target.value)
+    serverFilters.startDate = new Date(change.target.value);
     render(serverFilters);
   })
 
   const handleChangeEndDate = (change => {
-    serverFilters.endDate = [change.target.value];
+    serverFilters.endDate = new Date(change.target.value);
     render(serverFilters);
   })
 

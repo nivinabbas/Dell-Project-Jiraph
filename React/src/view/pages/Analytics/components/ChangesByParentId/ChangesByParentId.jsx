@@ -3,7 +3,7 @@ import "./ChangesByParentId.css";
 import Select from 'react-select'
 import { useState, useEffect } from 'react';
 import Chart from "../charts/Chart"
-const serverFilters = { fixVersion: [], startDate: [], endDate: [] };
+const serverFilters = { fixVersion: [], startDate: (new Date("2020-08-1")), endDate: new Date("2020-09-1")};
 
 function ChangesByParentId() {
 
@@ -16,7 +16,7 @@ function ChangesByParentId() {
   
 
   useEffect(() => {
-    fetch('/api/analytics/ChangesByParentIdFilters', {
+    fetch('/api/analytics/changesByParentIdFilters', {
       method: 'POST',
       body: JSON.stringify({ serverFilters }),
       headers: {
@@ -43,24 +43,24 @@ function ChangesByParentId() {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        setUiObjs(data);
+        
       })
   }
 
 
-  const HandlefixVersionChange = (version => {
-    serverFilters.fixVersion = [version.label];
-    // render (serverFilters);
+  const HandlefixVersionChange = (change => {
+    serverFilters.fixVersion = [change.label];
+    render (serverFilters);
   })
 
-  const HandleStartDateChange = (date => {
-    serverFilters.startDate = [date.target.value];
-    // render (serverFilters);
+  const HandleStartDateChange = (change => {
+    serverFilters.startDate = change.target.value;
+    render (serverFilters);
   })
 
-  const HandleEndDateChange = (date => {
-    serverFilters.endDate = [date.target.value];
-    // render (serverFilters);
+  const HandleEndDateChange = (change => {
+    serverFilters.endDate = change.target.value;
+    render (serverFilters);
   })
 
   return (
