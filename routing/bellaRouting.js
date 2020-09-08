@@ -42,6 +42,34 @@ async function addTaskItem(lst) {
     })
 }
 
+//updatedfields[] => field.
+function convertUpdatedFields(data) {
+    let newData = [];
+    data.forEach(ticket => {
+        let jiraItem = ticket.jiraItem;
+        let qcItem = ticket.qcItem;
+        let updatedFields = ticket.diffItem.updatedFields;
+        let diffItem = ticket.diffItem;
+        updatedFields.forEach(field => {
+            newData.push({
+                jiraItem,
+                qcItem,
+                diffItem: {
+                    updatedField: {
+                        fieldName: field.fieldName,
+                        newValue: field.newValue,
+                        oldValue: field.oldValue
+                    },
+                    updatedTime: diffItem.updateTime,
+                    type: diffItem.type
+                }
+            })
+        })
+    });
+    return newData;
+}
+
+
 // TaskModel.insertMany(Data1);
 
 
@@ -68,10 +96,10 @@ async function insertToDB() {
 
 //date * 1000---------------------------------------------------------------
 //task item-----------------------------------------------------------------
-//check for nulls
-//updatedfields[] => field
 // functional test yes/no => true/false-------------------------------------
 // type updated => type update ---------------------------------------------
+//updatedfields[] => field -------------------------------------------------
+//check for nulls
 //updateTime => updatedTime
 // remove "jira" prefix
 
