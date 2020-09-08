@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './UserList.css'
-// import FontAwesome from 'react-fontawesome';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faCoffee, faSave, faAddressBook, faPencilAlt, faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { useHistory } from "react-router-dom";
 
-
-
-
+import {
+    Link
+} from "react-router-dom";
 
 
 
@@ -16,6 +14,9 @@ import UserRow from './UserRow';
 
 function UserList() {
     const [users, setUsers] = useState([]);
+    const history = useHistory();
+
+
     //-------------------------------------
 
 
@@ -33,10 +34,6 @@ function UserList() {
             })
     }, []);
 
-    // useEffect(()=>{
-    //     console.log('users changed')
-    //     console.dir(users)
-    // },[users])
 
 
     return (
@@ -44,9 +41,11 @@ function UserList() {
 
 
         <div className='adminpage'>
+            <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
             <div id="header">
             </div>
             <div className='AdminTable'>
+                <button onClick={goToAudit}>Audit</button>
                 <div className="TableColHeeader">
                     <h4>Username</h4>
                     <h4>E-Mail</h4>
@@ -55,24 +54,45 @@ function UserList() {
                 </div>
                 <form name='create' onSubmit={createUser} className='TableCreateRow' >
 
-                    <input name="inputName" type="text" placeholder='Enter Name' required ></input>
-                    <input name="inputEmail" type="email" placeholder='Enter Email' required ></input>
-                    <select name="inputRole" required  >
-                        <option value="Admin">Admin</option>
-                        <option value="QA manager">QA manager</option>
-                        <option value="TOP manager">TOP manager</option>
-                    </select>
-                    <input name="inputPassword" type="password" placeholder='Enter pass' required ></input>
-                    <button id="createBtn" type='submit' > Create</button>
+                    <div className='AdminTable'>
+                        <div className="TableColHeeader">
+                            <div className="TableColHeeaderi">Email</div>
+                            <div className="TableColHeeaderi">Business Role</div>
+                            <div className="TableColHeeaderi">Password</div>
+                        </div>
+                        <div name='create' onSubmit={createUser} className='TableCreateRow' >
+                            <div>
+                                <input name="inputEmail" type="email" placeholder='Enter Email' required ></input>
+                            </div>
+                            <div>
+                                <select className="opt-wrapper" name="inputRole" required  >
+                                    <option className="opt" value="Admin">Admin</option>
+                                    <option className="opt" value="QA manager">QA Manager</option>
+                                    <option className="opt" value="TOP manager">TOP Manager</option>
+                                </select>
+                            </div>
+                            <div>
+                                <input name="inputPassword" type="password" placeholder='Enter password' required ></input>
+                            </div>
+                        </div>
+                        <div>
+                            <button id="createBtn" type='submit' > Create</button>
+                        </div>
+                    </div>
+
+                    {users.map(user => <UserRow setUsers={setUsers} key={user.id} user={user} />)}
+
                 </form>
-
-
-                {users.map(user => <UserRow setUsers={setUsers} key={user.id} user={user} />)}
-
 
             </div>
         </div>
     )
+
+
+    function goToAudit(e) {
+        history.push("/Audit");
+
+    }
 
 
     function createUser(e) {
@@ -107,6 +127,8 @@ function UserList() {
 
             })
     }
+
+
 
 }
 
