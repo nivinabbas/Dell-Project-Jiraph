@@ -26,6 +26,7 @@ function ModificationByField(props) {
     })
       .then(res => res.json())
       .then(data => {
+        console.log(data)
         setFieldNameOptions(data[0].labels)
         setQaRepresentativeOptions(data[0].QA);
       })
