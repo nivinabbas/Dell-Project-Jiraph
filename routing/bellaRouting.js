@@ -101,6 +101,6 @@ async function insertToDB() {
 //updatedfields[] => field -------------------------------------------------
 //check for nulls
 //updateTime => updatedTime
-// remove "jira" prefix
+// remove "jira" prefix|||||||||||||||||||||||||||||||||||||||||||||||||||||
 
 module.exports = router;
