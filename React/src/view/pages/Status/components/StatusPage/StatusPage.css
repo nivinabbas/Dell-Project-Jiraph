@@ -1,0 +1,22 @@
+.statusPageContainer {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  margin: auto;
+}
+.statuspage__dashboard {
+  /* display: flex; */
+}
+.statusPageContainerTableColumn {
+  display: flex;
+}
+.statuspage__table {
+  width: 50%;
+  margin: auto;
+}
+.statuspage__chart {
+  width: 50%;
+}
+
+.statuspage__pie {
+}
