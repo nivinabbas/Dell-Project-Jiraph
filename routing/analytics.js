@@ -507,51 +507,6 @@ router.post('/changeOfJIRATicketsStatusFilters', async (req, res) => {
     })
 
 
-    let filterVal = 'newValue'
-    filterStatus = ''
-    if (filterVal == 'oldValue') {
-        groupFilters = "$diffItem.updatedField.oldValue"
-    }
-    else {
-        groupFilters = "$diffItem.updatedField.newValue"
-    }
-    const today = new Date();
-    const startDate = today;
-    const endDate = new Date(today - 30);
-    console.log(startDate, "  =>  ", endDate)
-    if (filterStatus.length != 0) {
-        matchFilters = {
-            'diffItem.type': 'Update',
-            'diffItem.updatedField.fieldName': 'status',
-            // 'diffItem.updatedTime': { $gte: startDate, $lte: endDate }
-        }
-    }
-    else {
-        matchFilters = {
-            'diffItem.type': 'Update',
-            'diffItem.updatedField.fieldName': 'status',
-            // 'diffItem.updatedTime': { $gte: startDate, $lte: endDate }
-
-        }
-    }
-    tasks = await TaskModel.aggregate([
-        {
-            $match: matchFilters
-        },
-        {
-            $group: {
-                _id: null,
-                status: { $addToSet: { "label": groupFilters, "value": groupFilters } },
-                qa: { $addToSet: { "label": "$jiraItem.qaRepresentative", "value": "$jiraItem.qaRepresentative" } }
-            },
-        }
-    ])
-    tasks.map((item, index) => {
-        item.status.sort((a, b) => (a.label > b.label) ? 1 : -1);
-        item.qa.sort((a, b) => (a.label > b.label) ? 1 : -1);
-    })
-
-
     // console.log(tasks)
     res.send(tasks)
 
