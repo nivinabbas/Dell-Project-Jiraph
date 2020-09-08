@@ -47,7 +47,7 @@ app.listen(port, () => {
 
 
 
-updateSaleh()
+// updateSaleh()
 //updating the time in diffitem
 function updateSaleh() {
     let tasks = TaskModel.find({}).then(
