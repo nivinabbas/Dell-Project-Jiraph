@@ -1,10 +1,10 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import DashBoard from "../DashBoard/DashBoard";
 import Table from "../Table/Table.jsx";
 import StackedChart from "../Chart/StackedChart";
 import PieChart from "../Chart/PieChart.js";
 import DatePicker from "../DatePicker/DatePicker";
+import DailyAlerts from "../DailyAlerts/index";
 import Select from "react-select";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {
@@ -347,7 +347,7 @@ const StatusPage = (props) => {
   return (
     <div className="statusPageContainer">
       <div className="statusPage__dashboard">
-        <DashBoard cardsContent={cardsContent} />
+        <DailyAlerts cardsContent={cardsContent} />
       </div>
       <div className="statusPage__charts">
         <div className="statusPage__barChart">
