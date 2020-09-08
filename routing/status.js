@@ -633,7 +633,7 @@ router.post("/TypePie", async function (req, res) {
     endDate = new Date();
   }
 
-  if (modificationType != '' && modificationType != "All") {
+  if (modificationType != '' && modificationType != "all") {
     TypePieOb = await TaskModel.aggregate([{
       $match: {
         "taskItem.updatedTime": {
