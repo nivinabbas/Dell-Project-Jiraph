@@ -6,10 +6,12 @@ import StackedChart from "../Chart/StackedChart";
 import PieChart from "../Chart/PieChart.js";
 import DatePicker from "../DatePicker/DatePicker";
 import Select from "react-select";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import {
   initialTableFilters,
   initialPieChartsFilters,
 } from "../../../../../service/statusService";
+import { isEmpty } from "../../../../../service/utils";
 import "./StatusPage.css";
 
 const timeLabelOptions = [
@@ -85,7 +87,7 @@ const StatusPage = (props) => {
       .then((data) => {
         let { success, error, info } = data;
         if (success) {
-          console.log("info", info);
+          console.log("bar chart", info);
           setStackedChart(info);
         } else {
           alert(error);
@@ -191,21 +193,20 @@ const StatusPage = (props) => {
 
   // setFieldPieChart(pieTypeDummyData);
   const handleDoneClick = async (jiraId) => {
-    try {
-      const userId = null;
-      const result = openTasks.filter(
-        (openTask) => openTask.jiraItem.jiraId !== jiraId
-      );
-      setOpenTasks(result);
-
-      await fetch("/api/status/updateTasks", {
-        method: "POST",
-        body: JSON.stringify({ jiraId, userId }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-    } catch (error) {}
+    // try {
+    //   const userId = null;
+    //   const result = openTasks.filter(
+    //     (openTask) => openTask.jiraItem.jiraId !== jiraId
+    //   );
+    //   setOpenTasks(result);
+    //   await fetch("/api/status/updateTasks", {
+    //     method: "POST",
+    //     body: JSON.stringify({ jiraId, userId }),
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //   });
+    // } catch (error) {}
   };
   const handlePieChartsFilters = (filter, name) => {
     const newPieFilters = [...pieChartsFilters].map((f) => {
@@ -351,11 +352,6 @@ const StatusPage = (props) => {
       <div className="statusPage__charts">
         <div className="statusPage__barChart">
           <div className="statusPage__barChart__filters">
-            <Select
-              options={timeLabelOptions}
-              onChange={(filter) => setTimeLabel(filter)}
-              className="filterSelect"
-            />
             <DatePicker
               onDateClick={handleDateClick}
               name="startDate"
@@ -366,7 +362,19 @@ const StatusPage = (props) => {
               name="endDate"
               label="To:"
             />
+            <Select
+              options={timeLabelOptions}
+              onChange={(filter) => setTimeLabel(filter)}
+              className="filterSelect"
+              placeholder="Time Label"
+              isDisabled={!startDate || !endDate}
+            />
           </div>
+          {isEmpty(stackedChart) && (
+            <div className="statupPage__circularProgress">
+              <CircularProgress disableShrink color="primary" />
+            </div>
+          )}
           <StackedChart stackedChart={stackedChart} />
         </div>
 
@@ -378,6 +386,7 @@ const StatusPage = (props) => {
                 handlePieChartsFilters(filter, "pieChartModificationType")
               }
               className="filterSelect filterSelect-pie"
+              placeholder="Type"
             />
             <PieChart dataPieChart={typePieChart} name="pie1" />
           </div>
@@ -388,6 +397,7 @@ const StatusPage = (props) => {
                 handlePieChartsFilters(filter, "pieChartModificationField")
               }
               className="filterSelect filterSelect-pie"
+              placeholder="Field"
             />
             <PieChart dataPieChart={fieldPieChart} name="pie2" />
           </div>

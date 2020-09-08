@@ -26,6 +26,7 @@ export default function TasksTable({
           options={modificationTypeOptions}
           className="filterSelect"
           onChange={(filter, name) => onSelect(filter, "modificationType")}
+          placeholder="Type"
         />
         <Select
           options={modificationFieldOptions}
@@ -34,12 +35,14 @@ export default function TasksTable({
             onSelect(filterObj, "modificationField")
           }
           isDisabled={disableSelect()}
+          placeholder="Field"
         />
         <Select
           options={modificationFieldValueOptions}
           className="filterSelect"
           onChange={(filter, name) => onSelect(filter, "modificationValue")}
           isDisabled={disableSelect()}
+          placeholder="Value"
         />
       </div>
       <div className="open-tasks-table">

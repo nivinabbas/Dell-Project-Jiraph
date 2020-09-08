@@ -2,33 +2,32 @@ import React from "react";
 import Chart from "react-apexcharts";
 import { isEmpty } from "../../../../../service/utils";
 
-
-
 export default function StackedChart({ stackedChart }) {
   if (!isEmpty(stackedChart)) {
     stackedChart.options.chart = {
       type: "bar",
       height: 350,
       stacked: true,
-      responsive: [{
-        breakpoint: 480,
-        options: {
-          legend: {
-            position: 'bottom',
-            offsetX: -10,
-            offsetY: 0
-          }
-        }
-      }],
+      stackType: "100%",
+      responsive: [
+        {
+          breakpoint: 480,
+          options: {
+            legend: {
+              position: "bottom",
+              offsetX: -10,
+              offsetY: 0,
+            },
+          },
+        },
+      ],
       plotOptions: {
         bar: {
           horizontal: false,
         },
-      }
+      },
     };
   }
-
-
 
   return (
     <div id="daily_chart" style={{ width: "100%" }}>
