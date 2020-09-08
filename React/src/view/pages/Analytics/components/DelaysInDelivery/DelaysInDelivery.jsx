@@ -164,14 +164,14 @@ function DelaysInDelivery() {
         />
 
         <input
-          className="DelaysInDelivery__Filter"
+          className="DelaysInDelivery__Filter__date"
           type="date"
           name="startDate"
           onChange={HandleStartDateChange}
         />
 
         <input
-          className="DelaysInDelivery__Filter"
+          className="DelaysInDelivery__Filter__date"
           type="date"
           name="endDate"
           onChange={HandleEndDateChange}

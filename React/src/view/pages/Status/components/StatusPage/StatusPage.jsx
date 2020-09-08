@@ -22,7 +22,6 @@ const timeLabelOptions = [
 const StatusPage = (props) => {
   const [cardsContent, setCardsContent] = useState([]);
   const [openTasks, setOpenTasks] = useState([]);
-  const [barChart, setBarChart] = useState({});
   const [stackedChart, setStackedChart] = useState([]);
   const [typePieChart, setTypePieChart] = useState({});
   const [fieldPieChart, setFieldPieChart] = useState({});
@@ -219,7 +218,6 @@ const StatusPage = (props) => {
       });
   }, []);
 
-  // setFieldPieChart(pieTypeDummyData);
   const handleDoneClick = async (jiraId) => {
     // try {
     //   const userId = null;
@@ -249,70 +247,6 @@ const StatusPage = (props) => {
   const handleDateClick = (date) => {
     const { name, value } = date;
     name === "startDate" ? setStartDate(value) : setEndDate(value);
-    // console.log("label",tableFilters);
-    //typechart ---> RAWAD
-    // await fetch("/api/status/typePieChartFilter", {
-    //   method: "POST",
-    //   body: JSON.stringify({
-    //     filterTypePie,
-    //     CurrentstartDate,
-    //     CurrentEndtDate,
-    //   }),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     let { success, error, info } = data;
-    //     if (success) {
-    //       setBarChart(info);
-    //     } else {
-    //       alert(error);
-    //     }
-    //   });
-    // // fieldpiechart
-    // await fetch("/api/status/fieldPieChart", {
-    //   method: "POST",
-    //   body: JSON.stringify({
-    //     filterFieldPie,
-    //     CurrentstartDate,
-    //     CurrentEndtDate,
-    //   }),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     let { success, error, info } = data;
-    //     if (success) {
-    //       setBarChart(info);
-    //     } else {
-    //       alert(error);
-    //     }
-    //   });
-    // //first barchart
-    // await fetch("/api/status/filterStackedChart", {
-    //   method: "POST",
-    //   body: JSON.stringify({
-    //     label: "daily",
-    //     datefrom: CurrentstartDate,
-    //     dateTo: CurrentEndtDate,
-    //   }),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     let { success, error, info } = data;
-    //     if (success) {
-    //       // setStackedChart(info);
-    //     } else {
-    //       alert(error);
-    //     }
-    //   });
   };
 
   const handleSelect = (filter, name) => {
@@ -365,13 +299,6 @@ const StatusPage = (props) => {
       });
   };
 
-  // const handelTableFilterClick = () => {
-  //   const newFilters =
-  //     filters[0].value === "Update" ? [...filters] : [{ ...filters[0] }];
-
-  //   //fetch
-  // };
-
   return (
     <div className="statusPageContainer">
       <div className="statusPage__dashboard">
@@ -400,7 +327,7 @@ const StatusPage = (props) => {
           </div>
           {isEmpty(stackedChart) && (
             <div className="statupPage__circularProgress">
-              <CircularProgress disableShrink color="primary" />
+              <CircularProgress disableShrink />
             </div>
           )}
           <StackedChart

@@ -26,10 +26,16 @@
   grid-area: filterButtons;
 }
 
-/* .ModificationByFieldTable{
-    grid-area: table;
-  }*/
-
+.DeletedJiraTickets__Filter__date{
+  box-shadow: 0px 0.1px 0.3px rgba(0, 0, 0, 0.8);
+  border: .1px solid rgba(0, 0, 0, 0.2);
+  height:2.25rem;
+  width: 13rem;
+  border-radius: 3px;
+  color: rgba(0, 0, 0, 0.7);
+  text-align: center;
+  font-size: 15px;
+}
 .DeletedJiraTickets__Filters {
   margin-top: 1rem;
   /* padding-top: 2vh; */
@@ -47,11 +53,11 @@
 }
 
 .DeletedJiraTickets__Filter {
-  width: 10rem;
+  width: 13rem;
   /* border: 0.1px solid black; */
   box-sizing: border-box;
   background-color: #EEEEEE;
-  border-radius: 4px;
+
   color: black;
   box-shadow: 0px 0.1px 0.3px rgba(0, 0, 0, 0.8);
   padding-top: 0.5rem;
