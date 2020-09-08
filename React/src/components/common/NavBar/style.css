@@ -1,0 +1,235 @@
+* {
+  margin: 0;
+  padding: 0;
+  outline: none;
+  box-sizing: border-box;
+  list-style: none;
+  text-decoration: none;
+}
+
+.hamburger-menu {
+  height: 3rem;
+  width: 3rem;
+  position: fixed;
+  top: 5rem;
+  left: 5rem;
+  z-index: 200; /*it was a bit shadowed because it inherted this from the background, this way it's not*/
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  cursor: pointer;
+  transform: left 0.7s;
+}
+
+.change .hamburger-menu {
+  left: 33rem;
+}
+
+/*this is the style of the menu icon that is created from three lines, so this is the style of a single line*/
+
+.line {
+  width: 100%;
+  height: 0.2rem;
+  background-color: white;
+  box-shadow: 0 0.1rem 0.2 rgba(0, 0, 0, 0.2);
+}
+
+/*we added change before the lines name to change the menu icon to x icon when we wanna open the sidebar*/
+
+/*the menu icon is created from three lines, so we change the degree on the first to 45, we make the secound transparent and change the degree of the third to -45, this way we change the logo from menu logo to x, also and because both of the menu icon and the background color were white, we change the logo color to black when open the sidebar*/
+
+.change .line {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.change .line-1 {
+  /*using line-1 and line-3 we draw the x sign*/
+  transform: rotate(45deg) translate(0.3rem, 0.8rem);
+}
+
+.change .line-2 {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.change .line-3 {
+  transform: rotate(-45deg) translate(0.3rem, -0.8rem);
+}
+
+.hamburger-menu span {
+  position: absolute;
+  right: 5rem;
+  width: 10rem;
+  height: 4rem;
+  background-color: rgb(78, 59, 68);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Baloo Da 2", serif;
+  font-size: 1.6rem;
+  letter-spacing: 0.1rem;
+  /*we add the opacity and visibility because at first we wanna make the close box dissapered only appear it if we hover over x icon*/
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s;
+}
+
+/*here if we hover over the x icon the close box must be appeared,
+we added .change before .hambur.. because we wanna hover over the icon after it changed to x icon not when it is menu icon (with three lines)*/
+.change .hamburger-menu:hover span {
+  opacity: 1;
+  visibility: visible;
+}
+
+/*all of this just to chape the close square and to add to it a little triangle on the left!*/
+.hamburger-menu span::before {
+  content: "";
+  position: absolute;
+  border-left: 1rem solid transparent;
+  border-right: 1rem solid rgb(78, 59, 68);
+  border-bottom: 1rem solid transparent;
+  border-top: 1rem solid transparent;
+  top: 50%;
+  right: -2rem;
+  transform: translateY(-50%);
+}
+
+.header {
+  width: 100%; /*full page width*/
+  height: 100vh; /*full height, when the picture itself is heiger than the page then this way we avoid scrolling down! */
+  position: relative;
+  perspective: 100rem; /*after doing animation to the banner text we added this to create a 3D enviroment*/
+  overflow: hidden;
+  /*as before because we added an animation to the header therefore we add this because without it the text will change his posiotion*/
+}
+
+.img-wrapper {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  overflow: hidden; /*because we added scale animation on the background photo, the photo changed her place, to avoid that we use this!*/
+}
+.img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.5; /* transparent 50%*/
+  animation-name: scale;
+  animation-duration: 25s; /*other way to write the animation name and duration is =>>  animation:scale 25s;*/
+}
+
+@keyframes scale {
+  0% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.banner {
+  /* here we positioned the banner*/
+  position: absolute;
+  top: 30%;
+  left: 15%;
+}
+
+.banner h1 {
+  font-family: "Baloo Da 2", serif;
+  font-size: 8rem;
+  font-weight: 300;
+  color: white;
+  width: 50%;
+  line-height: 9rem; /*there was large space between the first line and the secound line in the header h1, this way we decreased it*/
+  letter-spacing: 2rem;
+  text-shadow: 0 0.3rem 0.5rem rgba(0, 0, 0, 0.4);
+  opacity: 0; /*we added this because we made an animation for the banner, then it is invisable in the start*/
+  animation: moveBanner 1s 0.5s forwards;
+}
+.banner p {
+  font-family: "Josefin Slab", serif;
+  font-size: 4rem;
+  color: white;
+  width: 70%;
+  letter-spacing: 0.1rem;
+  margin-bottom: 3rem;
+  text-shadow: 0 0.3rem 0.5rem rgba(0, 0, 0, 0.4);
+  opacity: 0; /*we added this because we made an animation for the banner, then it is invisable in the start*/
+  animation: moveBanner 1s 0.7s forwards; /*animation name is moveBanner, duration time is 1 sec and delay time is 0.7 sec then we added forward bacaue without it the text will disapper after the animation*/
+}
+
+.banner button {
+  width: 25rem;
+  height: 7rem;
+  background-color: rgb(78, 59, 68);
+  font-family: "Mulish", serif;
+  font-size: 2rem;
+  text-transform: uppercase;
+  color: white;
+  text-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0.3rem 0.5rem rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  opacity: 0; /*we added this because we made an animation for the banner, then it is invisable in the start*/
+  animation: moveBanner 1s 0.9s forwards;
+}
+/*keyframs is for animations*/
+@keyframes moveBanner {
+  0% {
+    transform: translateY(40rem) rotateY(-20deg);
+  }
+  100% {
+    transform: translateY(0) rotateY(0);
+    opacity: 1;
+  }
+}
+/* 
+.sidebar{
+  width: 40rem;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  right: -40rem; 
+  the width of the sidebar is 40rem therefore and because we wanna hide the sidebar we write -40rem
+  background-color: white;
+  transition: right 0.5s;
+  z-index: 100;
+} */
+
+.change .sidebar {
+  right: 0;
+}
+
+.menu {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.menu-item {
+  text-align: center;
+}
+
+.menu-link {
+  font-family: "Baloo Da 2", serif;
+  font-size: 2rem;
+  color: rgb(148, 114, 130);
+  position: relative;
+}
+
+.menu-link::before {
+  content: attr(data-content);
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: rgb(223, 166, 192);
+  width: 0;
+  overflow: hidden; /*when we set the width to 0, i had an issue with the text, one line on top of the other, so we use overflow: hidden in this case*/
+  white-space: nowrap;
+  transition: width 0.3s ease-in-out; /* we used tranition function called ease-in-out and it transition the color of the sidebar text in 0.3sec*/
+}
+
+.menu-link:hover::before {
+  width: 100%;
+}

@@ -1,18 +1,22 @@
 .chart__Wrapper{
   display: grid;
-  grid-template-columns:  90vw;
-  grid-template-rows: 50vh auto;
+  grid-template-columns:1vw 99% 1vw;
+  grid-template-rows: 45vh auto;
   grid-template-areas: 
-  " chart "
-  " table "
-  ;
-  
-  background-color: whitesmoke;
+  ".chart ."
+  ".table ."
+  ; 
+  text-align: center;
+  background-color: #EEEEEE;
+  box-shadow: 0px 0.1px 0.3px rgba(0, 0, 0, 0.8);
+  border-radius: 3px;
 }
+
 .chart{
   grid-area: chart;
-  /* overflow-x: auto; */
+  overflow-x: scroll;
   
+  height:100%;
   width: 99%;
   /* height:auto; */
  
@@ -21,8 +25,7 @@
   
   
   display: flex;
-  justify-content: space-around  ;
-  align-items: flex-end;
+  
   
 }
 
@@ -30,51 +33,51 @@
   display: flex;
   justify-content: space-around  ;
   align-items: flex-end;
-  width: 100%;
+  /* width: 100%; */
  height: 100%;
+ 
 }
 .chart__column{
+  height: 75%;
   text-align: center; 
- 
-  transition: height 1s ease-in;
+  margin-left: 3%;
   cursor: pointer;
+  margin-top: 50px;
 }
-.chart__column .chart__column__Text{
+.chart__column__Text{
   visibility: hidden;
-  width: 120px;
-  background-color: gray;
-  color: #fff;
+  background-color:#EEEEEE;
+  color: #EEEEEE;
   text-align: center;
   border-radius: 6px;
-  padding: 5px 0;
 }
 .chart__column:hover .chart__column__Text{
   visibility: visible;
-  margin: auto;
+  /* margin: auto; */
 }
 .chart__innerColumn{
-  /* height: 100%; */
-  width: 30%;
-  margin-bottom: 10px;
+  transition: height .7s ease-in;
+  width: 100px;
+  margin-right: 1px;
   border-radius: 10px 10px 0px 0px;
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.418);
-  background:#1C4E80; 
+  background: #41B6E6; 
+  font-family: 'Roboto Slab', serif;
   color: white;
-  
-  /* background: rgb(157,157,157); */
-  /* background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(155,215,227,1) 0%, rgba(94,94,218,1) 96%); */
 }
 .chart__label{
-  padding: 4px;
-  background: gold;
-  margin-top: 10px;
+  background: #808080;
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.418);
   border-radius: 5px;
-  border:4px solid rgb(252, 231, 113);
-  font-size: 20px;
+  border:4px solid #808080;
+  color: white;
+
+  width: 100%;
 }
 .ModificationByFieldTable{
   grid-area: table;
-  position: relative;
-  margin-top: 100px;
+  margin-top: 2rem;
+ width: 100%;
+  
+  /* padding-right: 10rem; */
 }
