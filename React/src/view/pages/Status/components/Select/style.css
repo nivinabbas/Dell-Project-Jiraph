@@ -1,0 +1,25 @@
+.filterSelect {
+  width: 200px;
+  margin: 4px;
+}
+
+.dateRangeContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 45px;
+  z-index: 1;
+}
+
+.dateRangeTrigger {
+  width: 200px;
+  height: 39px;
+  min-height: 39px;
+  background-color: white;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  outline: none;
+  cursor: pointer;
+}
