@@ -47,6 +47,7 @@ function KeyPassword(props) {
 
     return (
         <div className='forgotpassword'>
+                        <h2>Confirmation Key</h2>
             <form id="confirmCodeForm" onSubmit={onConfirmCode} >
                 <input id="confCodeInp" name="confCodeInp" placeholder="Enter your confirmation code"></input>
                 <button type="submit">Confirm</button> 
