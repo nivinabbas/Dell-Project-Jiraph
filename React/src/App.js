@@ -11,7 +11,7 @@ import ForgetPassword from "./view/pages/Admin/components/ForgetPassword/ForgetP
 import ChangePassword from "./view/pages/Admin/components/ChangePassword/ChangePassword";
 import KeyPassword from "./view/pages/Admin/components/KeyPassword/KeyPassword";
 import UserList from "./view/pages/Admin/components/usersList/UserList";
-
+import Audit from "./view/pages/Admin/components/Audit/Audit"
 
 import MainPage from './view/pages/Analytics/components/mainPage/MainPage';
 import ModificationByField from "./view/pages/Analytics/components/ModificationByField/ModificationByField";
@@ -60,6 +60,9 @@ function App() {
             </Route>
             <Route path="/Admin">
               <UserList />
+            </Route>
+            <Route path="/Audit">
+              <Audit />
             </Route>
             <Route path="/analysis">
               <MainPage />

@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './UserList.css'
-// import FontAwesome from 'react-fontawesome';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faCoffee, faSave, faAddressBook, faPencilAlt, faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { useHistory } from "react-router-dom";
 
-
-
-
+import {
+    Link
+} from "react-router-dom";
 
 
 
@@ -16,6 +14,9 @@ import UserRow from './UserRow';
 
 function UserList() {
     const [users, setUsers] = useState([]);
+    const history = useHistory();
+
+
     //-------------------------------------
 
 
@@ -33,20 +34,17 @@ function UserList() {
             })
     }, []);
 
-    // useEffect(()=>{
-    //     console.log('users changed')
-    //     console.dir(users)
-    // },[users])
-
+  
 
     return (
 
-
+        
 
         <div className='adminpage'>
             <div id="header">
             </div>
             <div className='AdminTable'>
+            <button onClick={goToAudit}>Audit</button>
                 <div className="TableColHeeader">
                     <h4>Username</h4>
                     <h4>E-Mail</h4>
@@ -73,6 +71,12 @@ function UserList() {
             </div>
         </div>
     )
+
+
+    function goToAudit(e){
+        history.push("/Audit");
+
+    }
 
 
     function createUser(e) {
@@ -107,6 +111,8 @@ function UserList() {
 
             })
     }
+
+   
 
 }
 
