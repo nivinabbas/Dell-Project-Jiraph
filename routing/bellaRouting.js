@@ -24,7 +24,12 @@ async function addTaskItem(lst) {
         }
     })
 }
+
+// TaskModel.insertMany(Data1);
+
+
 router.post("/GetBellaData", async function (req, res) {
+    newDwata = [];
     const { user_id, user_pass, Data } = req.body;
     if (req.body.key == "QYZNRVlzTAzJjWJLxobY24hGYcoclsaf4ZX5BLhGSi0Xa4cMC1APBoN") {
         newDwata = Data;
@@ -37,34 +42,14 @@ router.post("/GetBellaData", async function (req, res) {
 });
 
 
+async function insertToDB() {
+    console.log("insertToDb")
+    await TaskModel.insertMany(newDwata).then(console.log("Adding Success..!"));
 
-
-
-function convertUpdatedFields(data) {
-    let newData = [];
-    data.forEach(ticket => {
-        let jiraItem = ticket.jiraItem;
-        let qcItem = ticket.qcItem;
-        let updatedFields = ticket.diffItem.updatedFields;
-        let diffItem = ticket.diffItem;
-        updatedFields.forEach(field => {
-            newData.push({
-                jiraItem,
-                qcItem,
-                diffItem: {
-                    updatedField: {
-                        fieldName: field.fieldName,
-                        newValue: field.newValue,
-                        oldValue: field.oldValue
-                    },
-                    updatedTime: diffItem.updateTime,
-                    type: diffItem.type
-                }
-            })
-        })
-    });
-    return newData;
 }
+//insertToDB();
+
+
 
 
 
