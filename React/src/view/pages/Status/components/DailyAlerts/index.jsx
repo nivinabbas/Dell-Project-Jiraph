@@ -3,7 +3,6 @@ import "./style.css";
 import { isEmpty } from "../../../../../service/utils";
 
 const DailyAlerts = ({ cardsContent }) => {
-  console.log(cardsContent);
   return (
     <div className="daily-alerts">
       {/* <div className="daily-alerts-title">
