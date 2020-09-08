@@ -14,7 +14,11 @@ const UserModel = mongoose.model("UserModel", UserSchema)
 
 async function addTaskItem(lst) {
     await lst.map((item, index) => {
-        item.diffItem.updateTime = new Date(item.diffItem.updateTime)
+
+        // adding 3 zeros to the end of the timestamp
+        item.diffItem.updateTime = item.diffItem.updateTime * 1000
+
+        // add task Item
         item.taskItem =
         {
             user: null,
@@ -22,6 +26,19 @@ async function addTaskItem(lst) {
             updatedTime: null,
             createdTime: new Date()
         }
+
+        // functional test yes/no => true/false
+        item.jiraItem.functionalTest == "Yes" ? item.jiraItem.functionalTest = true : item.jiraItem.functionalTest = false
+
+        //type updated => update
+        if (item.diffItem.type == "Updated") {
+            item.diffItem.type = "Update"
+        }
+
+
+
+
+
     })
 }
 
@@ -49,9 +66,13 @@ async function insertToDB() {
 }
 //insertToDB();
 
-
-
-
-
+//date * 1000---------------------------------------------------------------
+//task item-----------------------------------------------------------------
+//check for nulls
+//updatedfields[] => field
+// functional test yes/no => true/false-------------------------------------
+// type updated => type update ---------------------------------------------
+//updateTime => updatedTime
+// remove "jira" prefix
 
 module.exports = router;
