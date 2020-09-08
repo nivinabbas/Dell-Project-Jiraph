@@ -1,44 +1,81 @@
 import React from "react";
 import Chart from "react-apexcharts";
-import { isEmpty } from "../../../../../service/utils";
 
-export default function StackedChart({ stackedChart }) {
-  if (!isEmpty(stackedChart)) {
-    stackedChart.options.chart = {
-      type: "bar",
-      height: 350,
-      stacked: true,
-      stackType: "100%",
-      responsive: [
-        {
-          breakpoint: 480,
-          options: {
-            legend: {
-              position: "bottom",
-              offsetX: -10,
-              offsetY: 0,
-            },
+const options = {
+  chart: {
+    type: "bar",
+    height: 350,
+    stacked: true,
+    stackType: "100%",
+
+    toolbar: {
+      show: true,
+    },
+    zoom: {
+      enabled: true,
+    },
+
+    responsive: [
+      {
+        breakpoint: 480,
+        options: {
+          legend: {
+            position: "bottom",
+            offsetX: -10,
+            offsetY: 0,
           },
         },
-      ],
-      plotOptions: {
-        bar: {
-          horizontal: false,
-        },
       },
-    };
-  }
+    ],
+    plotOptions: {
+      bar: {
+        horizontal: false,
+      },
+    },
+
+    legend: {
+      position: "right",
+      offsetY: 40,
+    },
+    fill: {
+      opacity: 1,
+    },
+  },
+};
+
+export default function StackedChart({ data = [], onDataSelected }) {
+  const series = [
+    { name: "Done", data: data.map((d) => d.done) },
+    { name: "NotDone", data: data.map((d) => d.notDone) },
+  ];
+
+  const categories = data.map((d) => d.date);
+
+  const xaxis = {
+    type: "datetime",
+    categories: categories,
+  };
+
+  options.chart.events = {
+    dataPointSelection: function (
+      event,
+      chartContext,
+      { dataPointIndex, seriesIndex }
+    ) {
+      let status = series[seriesIndex].name;
+      let date = categories[dataPointIndex];
+      return onDataSelected(date, status);
+    },
+  };
 
   return (
     <div id="daily_chart" style={{ width: "100%" }}>
-      {!isEmpty(stackedChart) && (
-        <Chart
-          options={stackedChart.options}
-          height="450"
-          series={stackedChart.series}
-          type="bar"
-        />
-      )}
+      <Chart
+        options={{ ...options, xaxis }}
+        height="450"
+        series={series}
+        type="bar"
+      />
     </div>
   );
 }
