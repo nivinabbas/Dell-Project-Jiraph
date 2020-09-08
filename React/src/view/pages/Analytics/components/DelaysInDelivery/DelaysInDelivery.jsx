@@ -1,7 +1,7 @@
 import React from 'react';
 import "./DelaysInDelivery.css";
 import Select from 'react-select'
-import { useState, useEffect } from 'react';
+import { useState, useEffect,useRef } from 'react';
 
 const serverFilters = {
   fixVersion: [],
@@ -87,6 +87,7 @@ function DelaysInDelivery() {
 
 
     const HandlefixVersionChange = (version => {
+      
       serverFilters.fixVersion=[version.value];
        
         render(serverFilters)
@@ -128,6 +129,7 @@ function DelaysInDelivery() {
   return (
 
     <div className='DelaysInDeliveryWrapper'>
+       <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
       <div className="DelaysInDelivery__Title">Delays in Delivery</div>
 
       {/* Select Filters */}
@@ -162,14 +164,14 @@ function DelaysInDelivery() {
         />
 
         <input
-          className="DelaysInDelivery__Filter"
+          className="DelaysInDelivery__Filter__date"
           type="date"
           name="startDate"
           onChange={HandleStartDateChange}
         />
 
         <input
-          className="DelaysInDelivery__Filter"
+          className="DelaysInDelivery__Filter__date"
           type="date"
           name="endDate"
           onChange={HandleEndDateChange}
