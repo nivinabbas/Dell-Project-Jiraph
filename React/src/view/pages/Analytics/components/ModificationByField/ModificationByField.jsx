@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
 import "./ModificationByField.css";
-import { useState } from 'react';
+import { useState , useRef} from 'react';
 //import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
 import Select from "react-select"
 import Chart from "../charts/Chart"
 
 
-const serverFilters = { fieldName: [], values: [], qaRepresentative: [], startDate: [], endDate: [], label: ["weekly"] };
+
+const serverFilters = { fieldName: [], values: [], qaRepresentative: [], startDate: (new Date("2020-08-1")), endDate: new Date("2020-09-1"), label: ["weekly"] };
 
 
 
@@ -18,13 +19,14 @@ function ModificationByField(props) {
 
     fetch('/api/analytics/modificationByFieldFilters', {
       method: 'POST',
-      body: JSON.stringify({ fieldName: serverFilters.fieldName }),
+      body: JSON.stringify({ fieldName: serverFilters.fieldName, startDate:serverFilters.startDate, endDate:serverFilters.endDate  }),
       headers: {
         "Content-Type": "application/json"
       }
     })
       .then(res => res.json())
       .then(data => {
+        console.log(data)
         setFieldNameOptions(data[0].labels)
         setQaRepresentativeOptions(data[0].QA);
       })
@@ -64,7 +66,7 @@ function ModificationByField(props) {
   const renderFilters = (serverFilters) => {
     fetch('/api/analytics/modificationByFieldFilters', {
       method: 'POST',
-      body: JSON.stringify({ fieldName: serverFilters.fieldName }),
+      body: JSON.stringify({ fieldName: serverFilters.fieldName}),
       headers: {
         "Content-Type": "application/json"
       }
@@ -99,12 +101,15 @@ function ModificationByField(props) {
 
 
   const handleChangeLabel = (change => {
-    serverFilters.label=[change.value];
+    
+    serverFilters.label=[change.label];
     render(serverFilters);
   })
 
   const handleChangeFieldName = (change => {
-  serverFilters.fieldName=[change.value];
+    serverFilters.values=[]
+    serverFilters.qaRepresentative=[]
+   serverFilters.fieldName=[change.value];
    
     render(serverFilters)
     renderFilters(serverFilters);
@@ -132,15 +137,18 @@ function ModificationByField(props) {
   })
 
   const handleChangeStartDate = (change => {
-    console.log(new Date(change.target.value))
-    serverFilters.startDate = [change.target.value];
+    console.log(change.target.value)
+    serverFilters.startDate = new Date(change.target.value);
     render(serverFilters);
   })
 
   const handleChangeEndDate = (change => {
-    serverFilters.endDate = [change.target.value];
+    serverFilters.endDate = new Date(change.target.value);
     render(serverFilters);
   })
+
+  const valueInput=useRef("")
+  const qaInput=useRef("")
 
   return (
     <div className='ModificationByField__Wrapper'>
@@ -153,6 +161,7 @@ function ModificationByField(props) {
 
         <Select
           name="fieldName"
+          onInputChange={()=> {valueInput.current.state.value="";qaInput.current.state.value=""}}
           onChange={handleChangeFieldName}
           placeholder="fieldName"
           className="ModificationByField__Filter"
@@ -161,6 +170,7 @@ function ModificationByField(props) {
         <Select
           name="value"
           onChange={handleChangeValues}
+          ref={valueInput}
           isMulti
           placeholder="Value"
           className="ModificationByField__Filter"
@@ -168,6 +178,7 @@ function ModificationByField(props) {
 
         <Select
           name="qaRepresentative"
+          ref={qaInput}
           onChange={handleChangeQaRepresentative}
           placeholder="Qa Rep"
           className="ModificationByField__Filter"
