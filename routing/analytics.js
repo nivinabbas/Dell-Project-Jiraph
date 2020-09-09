@@ -31,7 +31,7 @@ router.post('/modificationByField', async (req, res) => {
 
     //here we build the match expression according to the user's filters.
 
-    let filtersArray = [{ "diffItem.type": "Update" }, { "diffItem.updatedTime": { $gte: startDate } }, { "diffItem.updatedTime": { $lte: endDate } }] // add the startdate and enddate and label here
+    let filtersArray = [{ "diffItem.type": "Update" }, { "diffItem.updatedTime": { $gte: startDate } }, { "diffItem.updatedTime": { $lte: endDate } }]
     let matchFilterValue = {
         "$and": []
     }
@@ -68,7 +68,6 @@ router.post('/modificationByField', async (req, res) => {
         {
             $group: {
                 _id: "$_id.date",
-                //_id: { $dateFromString: { dateString: "$_id.date" , format: "%Y-%m-%d" } },
                 arr: { $push: { value: "$_id.fieldName", tasks: "$tasks", size: { $size: "$tasks" } } },
 
             }

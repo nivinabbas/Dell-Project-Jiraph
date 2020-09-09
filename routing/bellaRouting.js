@@ -8,7 +8,7 @@ const UserSchema = require('../schemas/UserSchema')
 const TaskModel = require('../schemas/TaskSchema');
 const mongoose = require('mongoose');
 
-let newDwata = [];
+let newData = [];
 const UserModel = mongoose.model("UserModel", UserSchema)
 
 
@@ -29,12 +29,12 @@ async function addTaskItem(lst) {
 
 
 router.post("/GetBellaData", async function (req, res) {
-    newDwata = [];
+    newData = [];
     const { user_id, user_pass, Data } = req.body;
     if (req.body.key == "QYZNRVlzTAzJjWJLxobY24hGYcoclsaf4ZX5BLhGSi0Xa4cMC1APBoN") {
-        newDwata = Data;
-        addTaskItem(newDwata);
-        TaskModel.insertMany(newDwata).then(console.log("Adding Success.!"));
+        newData = Data;
+        addTaskItem(newData);
+        TaskModel.insertMany(newData).then(console.log("Adding Success.!"));
         res.send({ "success": "true" });
     } else {
         res.send({ "success": "false" });
@@ -44,7 +44,7 @@ router.post("/GetBellaData", async function (req, res) {
 
 async function insertToDB() {
     console.log("insertToDb")
-    await TaskModel.insertMany(newDwata).then(console.log("Adding Success..!"));
+    await TaskModel.insertMany(newData).then(console.log("Adding Success..!"));
 
 }
 //insertToDB();
