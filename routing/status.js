@@ -32,7 +32,6 @@ function dateFormat() {
 // Start daily status alert !
 router.get("/dailyalerts", async function (req, res) {
   let Today = dateFormat();
-  console.log("***************&&&&&&&&&*****");
   let DailyAlerts = await TaskModel.aggregate([
     {
       $match: {
@@ -369,6 +368,7 @@ router.post("/stackedChart", async function (req, res) {
   } else {
     startDate = new Date(startDate + "T00:00:00.00Z");
     endDate = new Date(endDate + "T23:59:59.0099Z");
+
     let stackedChartDone = await TaskModel.aggregate([
       {
         $match: {
@@ -1256,14 +1256,40 @@ router.post("/filltersAllSubmit", async function (req, res) {
 //  end
 
 
-//start
-  router.post("/segmentData", async function (req,res){
+//start segmentData
+router.post("/segmentData", async function (req, res) {
+  let { date, status } = req.body;
+  console.log(date, status);
+   startDate = new Date(date + "T00:00:00.00Z");
+  endDate = new Date(date + "T23:59:59.0099Z");
 
-    console.log("1152 ",req.body)
+  if (status === "Done") { status = true }
+  else if (status === "NotDone") { status = false }
+  let stackedChartDone = await TaskModel.aggregate([
+    {
+      $match: {
+        "taskItem.updatedTime": {
+          $gte: startDate,
+          $lte: endDate,
+        },
+        "taskItem.isDone": status,
 
-  })
+      },
+    },
 
-//end
+
+  ]);
+  console.log(stackedChartDone.length);
+  res.send({
+    success: true,
+    error: null,
+    info: {
+      stackedChartDone,
+    },
+  });
+})
+
+//end segmentData
 
 
 
