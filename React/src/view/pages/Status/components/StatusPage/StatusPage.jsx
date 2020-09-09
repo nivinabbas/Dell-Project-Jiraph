@@ -117,12 +117,29 @@ const StatusPage = (props) => {
   }, [startDate, endDate, timeLabel]);
   //left pie ==> convert to post method and pass in the body startDate, endDate,pieChartsFilters[0]
   // add conditions to the array startDate, endDate, pieChartsFilters[0]
-  const onStachChartDataSelect = (date, status) => {
+  const handleSegmentClick = (date, status) => {
     console.log(date, status);
     // send date and status to server
-    // get the tickets
-    // set the table data with the received tickets.
+    fetch("/api/status/segmentData", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ date, status }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        let { success, error, info } = data;
+        if (success) {
+          setOpenTasks(info);
+        } else {
+          alert(error);
+        }
+      });
   };
+  // get the tickets
+  // set the table data with the received tickets.
+
   useEffect(() => {
     const filters = {
       startDate,
@@ -333,7 +350,7 @@ const StatusPage = (props) => {
           {stackedChart.length != 0 && (
             <StackedChart
               data={stackedChart}
-              //onDataSelected={onStachChartDataSelect}
+              onDataSelected={handleSegmentClick}
             />
           )}
         </div>
