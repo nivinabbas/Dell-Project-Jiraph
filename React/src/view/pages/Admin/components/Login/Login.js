@@ -32,13 +32,13 @@ function Login(props) {
                 if (success) {
                     const { info } = data;
                     if (info.role === 'Admin') {
-                        history.push("/UserList")
+                        history.push("/Admin")
                     }
                     if (info.role === 'QA manager') {
                         history.push("/status")
                     }
                     if (info.role === 'TOP manager') {
-                        history.push("/analytics")
+                        history.push("/analysis")
                     }
             
                 }

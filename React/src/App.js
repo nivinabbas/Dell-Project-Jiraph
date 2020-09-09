@@ -30,6 +30,7 @@ import {
   Redirect,
   Link,
   useLocation,
+  useParams
 } from "react-router-dom";
 
 
@@ -55,18 +56,19 @@ function App() {
             <Route exact={true} path="/">
               <Login />
             </Route>
-            <Route path="/changePassword">
-              <ChangePassword />
-            </Route>
+          
             <Route path="/register"></Route>
             <Route path="/forgotPassword">
               <ForgetPassword />
             </Route>
-            <Route path="/keyPassword">
-              <KeyPassword />
-            </Route>
+           
+
+            <Route path="/KeyPassword/:email" children={<KeyPassword  />} />
+
+              <Route path="/ChangePassword/:email" children={<ChangePassword  />} />
+
+
             <Route path="/Admin">
-              <h1>Admin</h1>
               <UserList />
             </Route>
             <Route path="/Audit">
