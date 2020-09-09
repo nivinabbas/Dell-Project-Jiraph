@@ -217,10 +217,7 @@ function DeletedJiraTickets() {
   )
 }
 
-      </form>
-    </div>
-  )
-}
+      
 
 
 

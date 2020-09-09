@@ -512,12 +512,6 @@ router.post('/changeOfJIRATicketsStatusFilters', async (req, res) => {
 })
 
 
-router.post('/changeOfJIRATicketsStatusFilters', async (req, res) => {
-
-router.post('/delaysInDelivery', (req, res) => {
-
-})
-
 router.post('/delaysInDeliveryFilters', async (req, res) => {
     let filters = await TaskModel.aggregate([
         {

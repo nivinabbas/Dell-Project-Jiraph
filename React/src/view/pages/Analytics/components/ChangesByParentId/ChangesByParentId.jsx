@@ -5,7 +5,6 @@ import { useState, useEffect } from 'react';
 import Chart from "../charts/Chart"
 const serverFilters = { fixVersion: [], startDate: (new Date("2020-08-1")), endDate: new Date("2020-09-1")};
 
-function ChangesByParentId() {
 
 function ChangesByParentId() {
 
