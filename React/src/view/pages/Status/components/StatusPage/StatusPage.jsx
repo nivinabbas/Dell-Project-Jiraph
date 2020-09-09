@@ -1,5 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 import Table from "../Table/Table.jsx";
 import StackedChart from "../Chart/StackedChart";
 import PieChart from "../Chart/PieChart.js";
@@ -114,7 +116,7 @@ const StatusPage = (props) => {
           alert(error);
         }
       });
-  }, [startDate, endDate, timeLabel]);
+  }, [startDate, endDate, timeLabel, openTasks]);
   //left pie ==> convert to post method and pass in the body startDate, endDate,pieChartsFilters[0]
   // add conditions to the array startDate, endDate, pieChartsFilters[0]
   const onStachChartDataSelect = (date, status) => {
@@ -145,7 +147,7 @@ const StatusPage = (props) => {
           alert(error);
         }
       });
-  }, [startDate, endDate, pieChartsFilters]);
+  }, [startDate, endDate, pieChartsFilters, openTasks]);
 
   //right pie ==> convert to post method and pass in the body startDate, endDate,pieChartsFilters[1]
   // add conditions to the array startDate, endDate, pieChartsFilters[1]
@@ -171,7 +173,7 @@ const StatusPage = (props) => {
           alert(error);
         }
       });
-  }, [startDate, endDate, pieChartsFilters]);
+  }, [startDate, endDate, pieChartsFilters, openTasks]);
 
   // table select option ==> based on "update" select
   useEffect(() => {
@@ -218,20 +220,36 @@ const StatusPage = (props) => {
   }, []);
 
   const handleDoneClick = async (jiraId) => {
-    // try {
-    //   const userId = null;
-    //   const result = openTasks.filter(
-    //     (openTask) => openTask.jiraItem.jiraId !== jiraId
-    //   );
-    //   setOpenTasks(result);
-    //   await fetch("/api/status/updateTasks", {
-    //     method: "POST",
-    //     body: JSON.stringify({ jiraId, userId }),
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //   });
-    // } catch (error) {}
+    confirmAlert({
+      title: "Confirm to submit",
+      message: "Are you sure to do this.",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => {
+            console.log("yes");
+            try {
+              const userId = null;
+              const result = openTasks.filter(
+                (openTask) => openTask.jiraItem.jiraId !== jiraId
+              );
+              setOpenTasks(result);
+              fetch("/api/status/updateTasks", {
+                method: "POST",
+                body: JSON.stringify({ jiraId, userId }),
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              });
+            } catch (error) {}
+          },
+        },
+        {
+          label: "No",
+          onClick: () => {},
+        },
+      ],
+    });
   };
   const handlePieChartsFilters = (filter, name) => {
     const newPieFilters = [...pieChartsFilters].map((f) => {
