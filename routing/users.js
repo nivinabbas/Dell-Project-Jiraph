@@ -114,7 +114,10 @@ router.post('/forgotPassword', (req, res) => {
                     from: 'servicetest468@gmail.com',
                     to: email,
                     subject: 'Reset Password',
-                    text: 'You requested to reset your password. Please copy the code below to continue the password reset process: ' + key
+                    text: `You requested to reset your password. 
+Please copy the code below to continue the password reset process:  
+                    
+${key}`
                 };
 
                 transporter.sendMail(mailOptions, function (err, info) {
@@ -180,13 +183,13 @@ router.post('/createUser', (req, res) => {
                         for (let index = 0; index < users.length; index++) {
                             table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id })
                         }
-                        
-        
+
+
                         var mailOptions = {
                             from: 'servicetest468@gmail.com',
                             to: email,
                             subject: 'Reset Password',
-                            text: `Hello ${name},Welcome to your new Jiraph Account. 
+                            text: `Hello ${name.charAt(0).toUpperCase() + name.slice(1)},Welcome to your new Jiraph Account. 
 
                             Sign in to your Jiraph Account to access Jira tasks and Analysis. 
                             
@@ -194,7 +197,7 @@ router.post('/createUser', (req, res) => {
                             
                             The Jiraph Team`
                         };
-        
+
                         transporter.sendMail(mailOptions, function (err, info) {
                             if (err) {
                                 console.log(err);
@@ -216,11 +219,11 @@ router.post('/createUser', (req, res) => {
 
 router.post('/checkSendedPassword', (req, res) => {
     const { email, key } = req.body;
-    console.log(key,email)
-    KeyModel.find({ employeeEmail: email ,key:key}).then(docs => {
+    console.log(key, email)
+    KeyModel.find({ employeeEmail: email, key: key }).then(docs => {
         console.log(docs)
-        docs.map((item,index) => {
-            console.log("this is item :"+item)
+        docs.map((item, index) => {
+            console.log("this is item :" + item)
             if (item.employeeEmail == email) {
                 console.log("email is good")
                 if (item.key == key) {
@@ -235,8 +238,8 @@ router.post('/checkSendedPassword', (req, res) => {
                     console.log("incorrect")
                     res.send({ success: false, error: 'key is incorrect', info: null })
                 }
-            }else{
-               console.log('ss')
+            } else {
+                console.log('ss')
             }
         })
     })
@@ -267,15 +270,11 @@ router.put('/updatePassword', (req, res) => {
 
 router.put('/editUser', (req, res) => {
     const { id, name, email, role, password } = req.body;
-
     if (validator.validate(email)) {
-
-
         UserModel.find({ "userInfo.employeeEmail": email }).then(checkEmail => {
             if (checkEmail.length > 0) {
                 UserModel.find({ "userInfo.employeeEmail": email }).then(checkUserEmail => {
                     if (checkUserEmail.length > 0) {
-
                         UserModel.updateOne({ _id: id },
                             {
                                 $set:
@@ -309,7 +308,6 @@ router.put('/editUser', (req, res) => {
                     }
                 })
                     .then(res.send({ success: true, error: null, info: null }))
-
             }
         })
     } else {
@@ -322,6 +320,7 @@ function makeid(length) {
     var result = '';
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     var charactersLength = characters.length;
+
     for (var i = 0; i < length; i++) {
         result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
