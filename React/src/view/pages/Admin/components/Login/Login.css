@@ -1,28 +1,34 @@
+*{
+    padding: 0;
+    margin: 0;
+}
 .login-wrapper {
-    background-color: #C8C9C7;
+    /* background-color: #C8C9C7; */
     display: grid;
-    grid-template-columns: 13vw 50vw 13vw;
-    grid-template-rows: 20vh 50vh 10vh;
+    grid-template-columns: 13.5vw 60vw 13.5vw;
+    grid-template-rows: 10vh 70vh 20vh;
     grid-template-areas: 
-    ". . ."
-    
+    "header header header"
     ". box ."
     ". . .";
 }
+.header{
+    grid-area: header;
+    font-size: 30px;
+    background-color: #0f7932;
+}
+
+
 
 .login {
     grid-area: box;
     font-family: 'Roboto Slab', serif;
-    background-color: #EEEEEE;
+    /* background-color: #EEEEEE; */
+    /* background-color: #790f0f; */
     align-items: center;
     text-align: center;
     justify-content: space-around;
     box-shadow:0 0.1rem 0.3rem rgba(0, 0, 0, 0.3);
-}
-
-.header{
-    margin-top: 3rem;
-    font-size: 30px;
 }
 
 

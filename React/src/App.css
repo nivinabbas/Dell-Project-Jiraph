@@ -31,33 +31,3 @@
   height: 100vh;
 }
 
-
-
-
-/*
-.social-media {
-  position: absolute;
-  bottom: 3rem;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-
-} */
-/* 
-.social-media i{
-  font-size: 2.2rem;
-  margin: 3rem;
-  width: 4.5rem;
-  height: 4.5rem;
-  background-color:rgb(148, 114, 130);
-  color:white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  transition: background-color 0.3s;
-} */
-
-/* .social-media i:hover{
-  background-color:  rgb(223, 166, 192);
-}  */
