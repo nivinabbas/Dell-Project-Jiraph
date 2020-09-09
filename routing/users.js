@@ -23,7 +23,6 @@ AuditModel.insertMany(
     }
 )
 
-var keys = [];
 
 const u = new UserModel({
     userInfo: {
@@ -114,7 +113,7 @@ router.post('/forgotPassword', (req, res) => {
                     from: 'servicetest468@gmail.com',
                     to: email,
                     subject: 'Reset Password',
-                    text: 'Your Key Is: ' + key
+                    text: 'You requested to reset your password. Please copy the code below to continue the password reset process: ' + key
                 };
 
                 transporter.sendMail(mailOptions, function (err, info) {
@@ -180,6 +179,34 @@ router.post('/createUser', (req, res) => {
                         for (let index = 0; index < users.length; index++) {
                             table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id })
                         }
+                        var transporter = nodemailer.createTransport({
+                            service: 'gmail',
+                            auth: {
+                                user: 'servicetest468@gmail.com',
+                                pass: 'mxzmxz123'
+                            }
+                        });
+        
+                        var mailOptions = {
+                            from: 'servicetest468@gmail.com',
+                            to: email,
+                            subject: 'Reset Password',
+                            text: `Hello ${name},Welcome to your new Jiraph Account. 
+
+                            Sign in to your Jiraph Account to access Jira tasks and Analysis. 
+                            
+                            Your username: ${email}
+                            
+                            The Jiraph Team`
+                        };
+        
+                        transporter.sendMail(mailOptions, function (err, info) {
+                            if (err) {
+                                console.log(err);
+                            } else {
+                                console.log('Email sent: ' + info.response);
+                            }
+                        });
                         res.send({ success: true, error: null, info: { table } })
                     }
                 })
@@ -194,14 +221,17 @@ router.post('/createUser', (req, res) => {
 
 router.post('/checkSendedPassword', (req, res) => {
     const { email, key } = req.body;
-    console.log("inside")
-    KeyModel.find({ employeeEmail: email }).then(docs => {
-        docs.map((item) => {
+    console.log(key,email)
+    KeyModel.find({ employeeEmail: email ,key:key}).then(docs => {
+        console.log(docs)
+        docs.map((item,index) => {
+            console.log("this is item :"+item)
             if (item.employeeEmail == email) {
+                console.log("email is good")
                 if (item.key == key) {
                     if ((Date.now() - item.keyTime) <= 1800000) {
                         console.log("okay")
-                        res.send({ success: true, error: null, info: null })
+                        return res.send({ success: true, error: null, info: null })
                     } else {
                         console.log("true")
                         res.send({ success: false, error: 'time expired', info: null })
@@ -210,6 +240,8 @@ router.post('/checkSendedPassword', (req, res) => {
                     console.log("incorrect")
                     res.send({ success: false, error: 'key is incorrect', info: null })
                 }
+            }else{
+               console.log('ss')
             }
         })
     })
