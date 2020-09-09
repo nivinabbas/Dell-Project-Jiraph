@@ -5,14 +5,14 @@
 .login-wrapper {
     /* background-color: #C8C9C7; */
     display: grid;
-    grid-template-columns: 13.5vw 60vw 13.5vw;
-    grid-template-rows: 10vh 70vh 20vh;
+    grid-template-columns: 23vw 41vw auto;
+    grid-template-rows: 10vh 70vh auto;
     grid-template-areas: 
     "header header header"
     ". box ."
     ". . .";
 }
-.header{
+.header_login{
     grid-area: header;
     font-size: 30px;
     background-color: #0f7932;
@@ -23,8 +23,8 @@
 .login {
     grid-area: box;
     font-family: 'Roboto Slab', serif;
-    /* background-color: #EEEEEE; */
-    /* background-color: #790f0f; */
+    margin-top: 17vh;
+    background-color: #EEEEEE;
     align-items: center;
     text-align: center;
     justify-content: space-around;
@@ -37,8 +37,8 @@
     align-items: center;
     text-align: center;
     margin: auto;
-    width: 300px;
-    padding-top: 4rem;
+    width: 550px;
+    padding-top: 6rem;
 
 }
 
@@ -47,7 +47,7 @@
     text-align: center;
     position: inherit;
     width: 98%;
-    height:2rem;
+    height:3rem;
     font-size: 18px;
     font-family: 'Roboto Slab', serif;
     margin-bottom: 1.5rem;
@@ -56,12 +56,12 @@
 }
 
 #loginForm button {
-    width:100%;
+    width:98%;
     height:2.5rem;
     font-size: 24px;
     font-family: 'Roboto Slab', serif;
     letter-spacing: 3px;
-    margin-bottom: 0.5vh;
+    margin-bottom: 1.5rem;
     background-color: #808080;
     border: none;
     color:#FFFFFF;
@@ -69,9 +69,9 @@
 }
 
 .forgetPassword{
-    box-shadow:none;
-    border:none;
-    font-size: 14px;
+    padding: 5px;
+    font-size: 16px;
+    box-shadow:0 0.1rem 0.3rem rgba(0, 0, 0, 0.1);
     color: black;
 }
 
