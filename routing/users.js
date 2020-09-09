@@ -194,7 +194,7 @@ router.post('/createUser', (req, res) => {
 
 router.post('/checkSendedPassword', (req, res) => {
     const { email, key } = req.body;
-
+    console.log("inside")
     KeyModel.find({ employeeEmail: email }).then(docs => {
         docs.map((item) => {
             if (item.employeeEmail == email) {
