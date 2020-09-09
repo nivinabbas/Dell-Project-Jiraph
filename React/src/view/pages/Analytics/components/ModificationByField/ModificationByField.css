@@ -1,6 +1,6 @@
 .ModificationByField__Wrapper {
   display: grid;
-  grid-template-columns: 2vw 82vw 4vw;
+  grid-template-columns: 2vw 82vw 2vw;
   grid-template-rows: 10vh 15vh 5vh auto;
   grid-template-areas:
     "header header header "
