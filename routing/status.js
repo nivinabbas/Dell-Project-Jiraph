@@ -299,8 +299,8 @@ router.post("/stackedChart", async function (req, res) {
   if (startDate == "" && endDate == "") {
     //default, label daily
     startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
-    endDate = new Date();
-    let stackedChartDone = await TaskModel.aggregate([
+    endDate = new Date(dateFormat() + "T23:59:59.59Z");
+     let stackedChartDone = await TaskModel.aggregate([
       {
         $match: {
           "taskItem.updatedTime": {
@@ -350,6 +350,7 @@ router.post("/stackedChart", async function (req, res) {
         },
       },
     ]);
+    console.log(stackedChartDone)
     // adding to Done Array
     stackedChartDone.forEach((element) => {
       //load data
