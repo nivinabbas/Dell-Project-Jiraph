@@ -45,20 +45,19 @@
   margin-top: 50px;
 }
 .chart__column__Text{
-  visibility: visible;
-  /* background-color:#EEEEEE;
-  color: #EEEEEE; */
-  color: black;
+  visibility: hidden;
+  background-color:#EEEEEE;
+  color: #EEEEEE;
   text-align: center;
   border-radius: 6px;
 }
-.chart__innerColumn:hover .chart__column__Text{
+.chart__column:hover .chart__column__Text{
   visibility: visible;
   /* margin: auto; */
 }
 .chart__innerColumn{
   transition: height .7s ease-in;
-  width: 150px;
+  width: 100px;
   margin-right: 1px;
   border-radius: 10px 10px 0px 0px;
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.418);

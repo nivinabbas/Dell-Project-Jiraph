@@ -7,7 +7,6 @@ import Select from 'react-select'
 import Chart from "../charts/Chart"
 //import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
 
-<<<<<<< HEAD
 
 // Options To Send == > Server 
 const serverFilters = {
@@ -21,20 +20,6 @@ const serverFilters = {
 
 function ChangesInJiraTickets() {
 
-=======
-// Options To Send == > Server 
-const serverFilters = {
-  values: [],
-  status: [],
-  qaRepresentative: [],
-  startDate: [],
-  endDate: [],
-  label: ["weekly"]
-};
-
-function ChangesInJiraTickets() {
-
->>>>>>> Rami
 
   // Functions ==> Fetch : 
 
@@ -103,18 +88,6 @@ function ChangesInJiraTickets() {
     { value: "newValue", label: "New Value" },
     { value: "oldValue", label: "Old Value" }
   ]
-<<<<<<< HEAD
-=======
-
-  const labelOptions=[
-    { name: "label", value: "daily", label: "Daily" },
-    { name: "label", value: "weekly", label: "Weekly" },
-    { name: "label", value: "monthly", label: "Monthly" },
-    { name: "label", value: "yearly", label: "Yearly" }
-  ]
-
-
->>>>>>> Rami
 
   const labelOptions=[
     { name: "label", value: "daily", label: "Daily" },
@@ -129,7 +102,6 @@ function ChangesInJiraTickets() {
   // Filters onChange Functions 
 
   const HandleValuesChange = (change => {
-<<<<<<< HEAD
     serverFilters.qaRepresentative=[]
     serverFilters.status=[]
     if(change!=null){
@@ -138,9 +110,6 @@ function ChangesInJiraTickets() {
     else {
       serverFilters.values=[]
     }
-=======
-    serverFilters.values = [change.value]
->>>>>>> Rami
     render(serverFilters);
   })
 
@@ -186,12 +155,9 @@ function ChangesInJiraTickets() {
     render(serverFilters);
   })
 
-<<<<<<< HEAD
   
   const statusInput=useRef("")
   const qaInput=useRef("")
-=======
->>>>>>> Rami
 
 
   return (
@@ -219,11 +185,7 @@ function ChangesInJiraTickets() {
           isClearable={true}
         />
 
-<<<<<<< HEAD
         <Select 
-=======
-        <Select
->>>>>>> Rami
           name="status"
           ref={statusInput}
           isMulti

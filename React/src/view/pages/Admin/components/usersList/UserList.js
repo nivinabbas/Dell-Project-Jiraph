@@ -41,7 +41,6 @@ function UserList() {
 
 
         <div className='adminpage'>
-<<<<<<< HEAD
             <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
             <div id="header">
             </div>
@@ -82,39 +81,6 @@ function UserList() {
                     </div>
 
                     {users.map(user => <UserRow setUsers={setUsers} key={user.id} user={user} />)}
-=======
-             <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
-            <div className="first-wrapper">
-                <div className="header"></div>
-
-                <div className='AdminTable'>
-                    <div className="TableColHeeader">
-                        <div className="TableColHeeaderi">Email</div>
-                        <div className="TableColHeeaderi">Business Role</div>
-                        <div className="TableColHeeaderi">Password</div>
-                    </div>
-                <div name='create' onSubmit={createUser} className='TableCreateRow' >
-                    <div>
-                        <input name="inputEmail" type="email" placeholder='Enter Email' required ></input>
-                    </div>
-                <div>
-                    <select className="opt-wrapper" name="inputRole" required  >
-                        <option className="opt" value="Admin">Admin</option>
-                        <option className="opt" value="QA manager">QA Manager</option>
-                        <option className="opt" value="TOP manager">TOP Manager</option>
-                    </select>
-                </div>
-                    <div>
-                        <input name="inputPassword" type="password" placeholder='Enter password' required ></input>
-                    </div>
-                </div>
-                <div>    
-                        <button id="createBtn" type='submit' > Create</button>
-                </div>
-            </div>
-
-                {users.map(user => <UserRow setUsers={setUsers} key={user.id} user={user} />)}
->>>>>>> Rami
 
                 </form>
 

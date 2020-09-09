@@ -1,23 +1,13 @@
 import React, { useEffect } from 'react';
 import "./ModificationByField.css";
-<<<<<<< HEAD
 import { useState , useRef} from 'react';
 //import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
 import Select from "react-select"
 import Chart from "../charts/Chart"
 
-=======
-import { useState } from 'react';
-//import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
-import Select from "react-select"
-import Chart from "../charts/Chart"
->>>>>>> Rami
 
 
 const serverFilters = { fieldName: [], values: [], qaRepresentative: [], startDate: (new Date("2020-08-1")), endDate: new Date("2020-09-1"), label: ["weekly"] };
-
-
-
 
 
 
@@ -68,7 +58,6 @@ function ModificationByField(props) {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
         setUiObjs(data)
       })
   }

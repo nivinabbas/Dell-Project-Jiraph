@@ -27,22 +27,13 @@ function Chart(props) {
                   return (
                     <div key={index} style={{ height: `${(column.size / columns.maxLength) * 100}%` }} onClick={() => handleClick(column.tasks)} className="chart__innerColumn">
                       {column.size}
-                      <div><div className='chart__column__Text'>
-                        {column.value}
-
-
-                      </div></div>
                     </div>
-
-
                   )
                 })}
               </div>
               <div className='chart__label'>
                 {columns._id}
               </div>
-
-
 
 
             </div>
