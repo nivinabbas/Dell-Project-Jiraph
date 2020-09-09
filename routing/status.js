@@ -1257,10 +1257,23 @@ router.post("/filltersAllSubmit", async function (req, res) {
 
 //start segmentData
 router.post("/segmentData", async function (req, res) {
-  let { date, status } = req.body;
-  console.log(date, status);
-  startDate = new Date(date + "T00:00:00.00Z");
-  endDate = new Date(date + "T23:59:59.0099Z");
+  let { date, status } = req.body; // 4 , 7,10 
+  let formatLabel;
+      let startNewDate=date,endNewDate=date;
+  if(date.length==4){
+    formatLabel = "%Y"
+    startNewDate=date+"-01-01"
+     endNewDate=date+"-12-31"
+    
+  }else  if(date.length==7){
+    formatLabel = "%Y-%m"
+    startNewDate=date+"-01"
+    endNewDate=date+"-31"
+  }
+  
+  console.log(date.length, status);
+   startDate = new Date(startNewDate + "T00:00:00.00Z");
+  endDate = new Date(endNewDate + "T23:59:59.0099Z");
 
   if (status === "Done") {
     status = true;
@@ -1270,6 +1283,7 @@ router.post("/segmentData", async function (req, res) {
   let stackedChartDone = await TaskModel.aggregate([
     {
       $match: {
+        
         "taskItem.updatedTime": {
           $gte: startDate,
           $lte: endDate,
@@ -1282,7 +1296,8 @@ router.post("/segmentData", async function (req, res) {
   res.send({
     success: true,
     error: null,
-    info: stackedChartDone,
+    info: 
+      stackedChartDone,
   });
 });
 
