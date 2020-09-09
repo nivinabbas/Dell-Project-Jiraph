@@ -71,6 +71,7 @@ export default function StackedChart({ data = [], onDataSelected }) {
     ) {
       let status = series[seriesIndex].name;
       let date = categories[dataPointIndex];
+      console.log(status, date);
       return onDataSelected(date, status);
     },
   };
