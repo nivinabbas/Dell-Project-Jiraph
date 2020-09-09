@@ -163,7 +163,8 @@ router.post("/openTasksWithFilter", async function (req, res) {
   const {
     filter
   } = req.body;
-  if (filter.type === "Update" && filter.fieldName != "") {
+  console.log("*********************", filter)
+  if (filter.type === "Update" && filter.fieldName != "" && filter.fieldName != "All") {
     TaskModel.find({
       "diffItem.type": filter.type,
       "diffItem.updatedField.fieldName": filter.fieldName,
@@ -278,10 +279,10 @@ router.post("/stackedChart", async function (req, res) {
     endDate
   } = req.body;
   console.log(startDate);
-  console.log("label",label); 
+  console.log("label", label);
   let dataFromServer = [];
   let formatLabel;
-  if (label == "daily" || label == "" ||label == undefined) {
+  if (label == "daily" || label == "" || label == undefined) {
     formatLabel = "%Y-%m-%d";
   } else if (label == "monthly") {
     formatLabel = "%Y-%m";
@@ -337,13 +338,13 @@ router.post("/stackedChart", async function (req, res) {
     stackedChartDone.forEach((element) => {
       //load data
       dataFromServer.push({
-       done: element.done, notDone: element.notDone, date: element._id,
-     })
+        done: element.done, notDone: element.notDone, date: element._id,
+      })
 
     });
- 
-  
-    
+
+
+
     res.send({
       success: true,
       error: null,
@@ -396,14 +397,14 @@ router.post("/stackedChart", async function (req, res) {
 
     // adding to Done Array
     let dataFromServer = [];
- 
+
     stackedChartDone.forEach((element) => {
       dataFromServer.push({
         done: element.done, notDone: element.notDone, date: element._id,
       });
     });
 
-     res.send({
+    res.send({
       success: true,
       error: null,
       info: dataFromServer
@@ -596,7 +597,7 @@ router.post("/TypePie", async function (req, res) {
     endDate = new Date();
   }
 
-  if (modificationType != '' && modificationType != "all") {
+  if (modificationType != '' && modificationType != "All") {
     TypePieOb = await TaskModel.aggregate([{
       $match: {
         "taskItem.updatedTime": {
@@ -821,9 +822,8 @@ router.post("/fieldPie", async function (req, res) {
     startDate = new Date(0);
     endDate = new Date();
   }
-  if (modificationField != '') {
-    console.log("` ` 863", modificationField)
-    TypePieOb = await TaskModel.aggregate([{
+  if (modificationField != '' && modificationField!="All") {
+     TypePieOb = await TaskModel.aggregate([{
       $match: {
         "taskItem.updatedTime": {
           $gte: startDate,
@@ -866,7 +866,6 @@ router.post("/fieldPie", async function (req, res) {
     },
     ]);
   } else {
-    console.log("else 906")
     TypePieOb = await TaskModel.aggregate([{
       $match: {
         "taskItem.updatedTime": {
@@ -921,7 +920,6 @@ router.post("/fieldPie", async function (req, res) {
     },
   };
   TypePieOb.forEach((element) => {
-    //load data
     tempCountDone.push(element.done);
     tempCountNotDone.push(element.notDone);
     tempDate.push(element._id);
@@ -949,7 +947,7 @@ router.post("/fieldPie", async function (req, res) {
 // modificationTypeOptions start
 router.get("/modificationTypeOptions", async function (req, res) {
   let Data = [{
-    value: "all",
+    value: "All",
     label: "All"
   }];
   let obj = {};
@@ -976,7 +974,10 @@ router.get("/modificationTypeOptions", async function (req, res) {
 
 //modificationFieldOptions start
 router.get("/modificationFieldOptions", async function (req, res) {
-  let Data = [];
+  let Data = [{
+    value: "All",
+    label: "All"
+  }];
   let obj = {};
   console.log("modificationFieldOptions")
   TaskModel.find({
@@ -1007,7 +1008,11 @@ router.get("/modificationFieldOptions", async function (req, res) {
 // modificationFieldOptions start
 router.post("/modificationFieldValueOptions", async function (req, res) {
   let data = req.body;
-  let returnData = [];
+  let returnData = [{
+    value: "All",
+    label: "All"
+  }];
+
   TaskModel.find({
     "diffItem.type": data[0].value,
     "diffItem.updatedField.fieldName": data[1].value,
@@ -1023,8 +1028,7 @@ router.post("/modificationFieldValueOptions", async function (req, res) {
         returnData.push(obj);
       }
     });
-    console.log("doc", doc);
-    console.log("returnData", returnData);
+
     res.send({
       success: true,
       error: null,
@@ -1039,7 +1043,9 @@ router.post("/modificationFieldValueOptions", async function (req, res) {
 //  start
 router.post("/filltersAllSubmit", async function (req, res) {
   let data = req.body;
-  if (data[0].value === "Update" && data[1].value != null && data[2].value != null) {
+  console.log("12312313123213131321", data)
+
+  if (data[0].value === "Update" && data[1].value != null && data[2].value != null && data[2].value != "All" && data[1].value != "All") {
     TaskModel.find({
       "diffItem.type": data[0].value,
       "diffItem.updatedField.fieldName": data[1].value,
@@ -1055,7 +1061,7 @@ router.post("/filltersAllSubmit", async function (req, res) {
         });
       }
     ).then((err) => console.log(err));
-  } else if (data[0].value === "Update" && data[1].value != null && data[2].value == null) {
+  } else if (data[0].value === "Update" && data[1].value != null && data[2].value == null && data[1].value != "All") {
     TaskModel.find({
       "diffItem.type": data[0].value,
       "diffItem.updatedField.fieldName": data[1].value,
@@ -1070,7 +1076,46 @@ router.post("/filltersAllSubmit", async function (req, res) {
         });
       }
     ).then((err) => console.log(err));
-  } else if (data[0].value === "All" || data[0].value === "all") {
+  } else if (data[0].value === "Update" && data[1].value != null && data[2].value === "All"&& data[1].value != "All") {
+    //************************ */
+    TaskModel.find({
+      "diffItem.type": data[0].value,
+      "diffItem.updatedField.fieldName": data[1].value,
+    },
+      function (err, doc) {
+        res.send({
+          success: true,
+          error: null,
+          info: {
+            doc
+          }
+        });
+      }
+    ).then((err) => console.log(err));
+
+    //*&********
+
+  }
+  else if (data[0].value === "Update" && data[1].value === "All" ||data[0].value === "Update" && data[1].value === "All"&& data[2].value==="All" ) {
+    //************************ */
+    TaskModel.find({
+      "diffItem.type": data[0].value,
+     },
+      function (err, doc) {
+        res.send({
+          success: true,
+          error: null,
+          info: {
+            doc
+          }
+        });
+      }
+    ).then((err) => console.log(err));
+
+    //*&********
+
+  }
+  else if (data[0].value === "All" || data[0].value === "all") {
     TaskModel.find({}, function (err, doc) {
       res.send({
         success: true,
@@ -1139,7 +1184,11 @@ function openTasksWithFilter(type, fieldName) {
 // openTasksWithFilter("Update", "qaRepresentative1");
 //fieldName start
 router.get("/getFieldName", async function (req, res) {
-  let Data = [];
+  let Data = [{
+    value: "All",
+    label: "All"
+  }
+  ];
   TaskModel.distinct("diffItem.updatedField.fieldName", function (err, doc) {
     // success:T/F,error:string,info{TaskItem[Task]
     doc.forEach((element) => {
@@ -1163,6 +1212,7 @@ router.get("/getFieldName", async function (req, res) {
 
 //getType start
 router.get("/getType", async function (req, res) {
+
   TaskModel.distinct("diffItem.type", function (err, doc) {
     // success:T/F,error:string,info{TaskItem[Task]
     res.send({
