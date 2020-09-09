@@ -13,6 +13,14 @@ var nodemailer = require('nodemailer')
 var validator = require("email-validator");
 const { find } = require("../schemas/TaskSchema");
 
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'servicetest468@gmail.com',
+        pass: 'mxzmxz123'
+    }
+});
+
 AuditModel.insertMany(
     {
         employeeName: 'rami',
@@ -101,13 +109,6 @@ router.post('/forgotPassword', (req, res) => {
         UserModel.find({ "userInfo.employeeEmail": email }).then(checkEmail => {
             if (checkEmail.length > 0) {
                 const key = makeid(10)
-                var transporter = nodemailer.createTransport({
-                    service: 'gmail',
-                    auth: {
-                        user: 'servicetest468@gmail.com',
-                        pass: 'mxzmxz123'
-                    }
-                });
 
                 var mailOptions = {
                     from: 'servicetest468@gmail.com',
@@ -179,13 +180,7 @@ router.post('/createUser', (req, res) => {
                         for (let index = 0; index < users.length; index++) {
                             table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id })
                         }
-                        var transporter = nodemailer.createTransport({
-                            service: 'gmail',
-                            auth: {
-                                user: 'servicetest468@gmail.com',
-                                pass: 'mxzmxz123'
-                            }
-                        });
+                        
         
                         var mailOptions = {
                             from: 'servicetest468@gmail.com',
