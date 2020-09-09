@@ -51,10 +51,32 @@
   color: black;
   text-align: center;
   border-radius: 6px;
+  position: relative;
+  top: -50px;
+  max-width: 150px;
+  max-height: 30px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
 }
-.chart__innerColumn:hover .chart__column__Text{
+.chart__innerColumn:hover {
   visibility: visible;
+  background: #0377a5; 
+
   /* margin: auto; */
+}
+
+.chart__innerColumn__active{
+  background: #0377a5; 
+  transition: height .7s ease-in;
+  width: 150px;
+  margin-right: 1px;
+  border-radius: 10px 10px 0px 0px;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.418);
+  
+  font-family: 'Roboto Slab', serif;
+  color: white;
 }
 .chart__innerColumn{
   transition: height .7s ease-in;
@@ -75,7 +97,7 @@
 
   width: 100%;
 }
-.ModificationByFieldTable{
+.Chart__Table{
   grid-area: table;
   margin-top: 2rem;
  width: 100%;

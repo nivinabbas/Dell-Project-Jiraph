@@ -110,8 +110,12 @@ function ModificationByField(props) {
   const handleChangeFieldName = (change => {
     serverFilters.values=[]
     serverFilters.qaRepresentative=[]
+    if(change!=null){
    serverFilters.fieldName=[change.value];
-   
+    }
+    else {
+      serverFilters.fieldName=[];
+    }
     render(serverFilters)
     renderFilters(serverFilters);
   })
@@ -166,7 +170,8 @@ function ModificationByField(props) {
           onChange={handleChangeFieldName}
           placeholder="fieldName"
           className="ModificationByField__Filter"
-          options={fieldNameOptions} />
+          options={fieldNameOptions}
+          isClearable={true} />
 
         <Select
           name="value"
