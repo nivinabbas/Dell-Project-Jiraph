@@ -6,7 +6,11 @@ import Select from 'react-select';
 
 import { useState, useEffect } from 'react';
 
+<<<<<<< HEAD
 const serverFilters = { priority: [], functionalTest: [], label: ["weekly"], qaRepresentative: [], startDate: (new Date("2020-08-1")), endDate: new Date("2020-09-1")};
+=======
+const serverFilters = { priority: [], functionalTest: [], label: ["weekly"], qaRepresentative: [], startDate: "", endDate: "" };
+>>>>>>> Rami
 
 
 
@@ -89,8 +93,11 @@ function DeletedJiraTickets() {
 
   ///change priority:
   const HandlePriorityChange = (change => {
+<<<<<<< HEAD
     serverFilters.functionalTest=[]
     serverFilters.qaRepresentative=[]
+=======
+>>>>>>> Rami
     serverFilters.priority = []
     
     if(change!=null)(
@@ -130,16 +137,28 @@ function DeletedJiraTickets() {
   })
 
   ///change StartDate:
+<<<<<<< HEAD
   const HandleStartDateChange = (change => {
    
     serverFilters.startDate = new Date(change.target.value);
+=======
+  const HandleStartDateChange = (date => {
+    console.log(date)
+    serverFilters.date = (date.target.value);
+>>>>>>> Rami
     render(serverFilters);
   })
 
   ///change EndDate:
+<<<<<<< HEAD
   const HandleEndDateChange = (change => {
     
     serverFilters.endDate =  new Date(change.target.value);
+=======
+  const HandleEndDateChange = (date => {
+    console.log(date.value)
+    serverFilters.date = (date.target.value);
+>>>>>>> Rami
     render(serverFilters);
   })
 
@@ -150,8 +169,11 @@ function DeletedJiraTickets() {
     render(serverFilters);
   })
 
+<<<<<<< HEAD
  
 
+=======
+>>>>>>> Rami
   return (
 
     <div className='DeletedJiraTicketsWrapper'>
