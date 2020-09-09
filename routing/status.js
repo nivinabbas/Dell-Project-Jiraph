@@ -1146,6 +1146,15 @@ router.post("/filltersAllSubmit", async function (req, res) {
 //  end
 
 
+//start
+  router.post("/segmentData", async function (req,res){
+
+    console.log("1152 ",req.body)
+
+  })
+
+//end
+
 
 
 
