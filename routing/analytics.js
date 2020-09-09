@@ -343,6 +343,7 @@ router.post('/changesByParentIdFilters', async (req, res) => {
 
 })
 
+// ---------------------------------------------------------- changes in jira tickets
 
 router.post('/changeOfJIRATicketsStatus', async (req, res) => {
     const filterValue = req.body.values
@@ -512,6 +513,15 @@ router.post('/changeOfJIRATicketsStatusFilters', async (req, res) => {
 })
 
 
+
+
+
+// --------------------------------------------------------------- delays in delivery ---------------------------------------------------------------------
+
+router.post('/delaysInDelivery', (req, res) => {
+
+})
+
 router.post('/delaysInDeliveryFilters', async (req, res) => {
     let filters = await TaskModel.aggregate([
         {
@@ -537,4 +547,8 @@ router.post('/delaysInDeliveryFilters', async (req, res) => {
     res.send(filters)
 
 })
+
+
+
+
 module.exports = router;
