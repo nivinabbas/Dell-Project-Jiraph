@@ -6,88 +6,60 @@ const UserSchema = require('../schemas/UserSchema');
 const UserModel = mongoose.model("UserModel", UserSchema);
 const TaskModel = require('../schemas/TaskSchema');
 
-//app.get/post/put/delete => router.get/post/put/delete
+//app.get/post/put/delete => router.get/post/put/delete
 
 
 
 router.post('/modificationByField', async (req, res) => {
     let tasks = []
-    const { fieldName, values, label, qaRepresentative } = req.body;
-    if (fieldName.length == 0) {
-        tasks = await TaskModel.aggregate([
-            {
-                $group: {
-                    _id: {
-                        date: { $dateToString: { format: "%Y-%m-%d", date: "$diffItem.updatedTime" } },
-                        fieldName: "$diffItem.updatedField.fieldName"
-
-                    },
-                    tasks: { $push: "$$ROOT" },
-                }
-            },
-            {
-                $group: {
-                    _id: "$_id.date",
-                    arr: { $push: { fieldName: "$_id.fieldName", tasks: "$tasks", size: { $size: "$tasks" } } },
-
-                }
-
-            }
-
-        ])
+    const { serverFilters } = req.body
+    let { fieldName, values, qaRepresentative, startDate, endDate, label } = serverFilters;
+    console.log(fieldName, values, label, qaRepresentative)
+    startDate = new Date(startDate)
+    endDate = new Date(endDate)
+    let dateFormat = '';
+    if (label[0] == 'daily') {
+        dateFormat = "%Y-%m-%d"
     }
-    let maxLength = -1;
-    let sumLength = 0;
-    let myArray = tasks[0].arr;
-    myArray.forEach(element => {
-        if (element.size > maxLength) {
-            maxLength = element.size
-        }
-        sumLength += element.size
-    })
-    tasks[0].maxLength = maxLength
-
-    tasks[0].sumLength = sumLength
-    res.send(tasks)
-})
-
-
-
-router.post('/modificationByFieldFilters', async (req, res) => {
-    let tasks = []
-    const { fieldName, values, label, qaRepresentative } = req.body;
-    if (fieldName.length == 0) {
-        tasks = await TaskModel.aggregate([
-            {
-                $group: {
-                    _id: {
-                        fieldName: "$diffItem.updatedField.fieldName"
-
-                    },
-                }
-            }
-        ])
+    else if (label[0] == 'yearly') {
+        dateFormat = "%Y"
+    }
+    else {
+        dateFormat = "%Y-%m"
     }
 
-    res.send(tasks)
-})
 
+    //here we build the match expression according to the user's filters.
 
-router.get('/changeOfJIRATicketsStatus', async (req, res) => {
+    let filtersArray = [{ "diffItem.type": "Update" }, { "diffItem.updatedTime": { $gte: startDate } }, { "diffItem.updatedTime": { $lte: endDate } }] // add the startdate and enddate and label here
+    let matchFilterValue = {
+        "$and": []
+    }
+    if (fieldName.length != 0) {
+        filtersArray.push({ "diffItem.updatedField.fieldName": fieldName[0] })
+    }
+    if (qaRepresentative.length != 0) {
+        filtersArray.push({ "jiraItem.qaRepresentative": qaRepresentative[0] })
+    }
+    if (values.length != 0) {
+        let valuesArray = []
+        values.map((item, index) => {
+            valuesArray.push({ "diffItem.updatedField.newValue": item })
+        })
+        filtersArray.push({ "$or": valuesArray })
+    }
 
-    /*
-    const tasks = await TaskModel.aggregate([
+    matchFilterValue["$and"] = filtersArray
+
+    tasks = await TaskModel.aggregate([
         {
-            $match: {
-                'diffItem.type': 'Update',
-                'diffItem.updatedField.fieldName': 'status'
-            }
+            $match: matchFilterValue
         },
         {
             $group: {
                 _id: {
-
-                    newVal: "$diffItem.updatedField.newValue"
+                    date: { $dateToString: { format: dateFormat, date: "$diffItem.updatedTime" } },
+                    fieldName: "$diffItem.updatedField.fieldName"
 
                 },
                 tasks: { $push: "$$ROOT" },
@@ -95,114 +67,351 @@ router.get('/changeOfJIRATicketsStatus', async (req, res) => {
         },
         {
             $group: {
-                _id: "$_id.newVal",
-                arr: { $push: { tasks: "$tasks" , size: { $size: "$tasks" }} },
+                _id: "$_id.date",
+                //_id: { $dateFromString: { dateString: "$_id.date" , format: "%Y-%m-%d" } },
+                arr: { $push: { fieldName: "$_id.fieldName", tasks: "$tasks", size: { $size: "$tasks" } } },
 
             }
 
-        }
-
+        },
+        { $sort: { _id: 1 } }
     ])
 
-
-    let total = 0;
-    tasks.forEach(element => {
-        total += element.arr[0].size
-    })
-    tasks.total = total
-    console.log(tasks)
-    */
-    //-------------------------------------- end of priority 1 --------------------------------------//
-
-
-
-    // //NOTE : ask nimer to set his default value on load.
-    // const filterValue = 'oldValue' //old or new value
-    // const filterStatus = 'Backlog'     // Done , in progress , Backlog ,In Integration ...
-
-    // //here we build the match expression according to the user's filters.
-    // let matchFilterValue = {}
-
-    // if (filterValue == 'newValue') {
-    //     matchFilterValue = {
-    //         'diffItem.type': 'Update',
-    //         'diffItem.updatedField.fieldName': 'status',
-    //         'diffItem.updatedField.newValue': filterStatus
-    //     }
-    // }else{
-    //     matchFilterValue = {
-    //         'diffItem.type': 'Update',
-    //         'diffItem.updatedField.fieldName': 'status',
-    //         'diffItem.updatedField.oldValue': filterStatus
-    //     }
-    // }
+    let maxLength = 0;
+    let sumLength = 0;
+    if (tasks.length > 0) {
+        tasks.map((item, index) => {
+            let myArray = item.arr;
+            myArray.forEach(element => {
+                if (element.size > maxLength) {
+                    maxLength = element.size
+                }
+                sumLength += element.size
+            })
+            item.maxLength = maxLength
+            item.sumLength = sumLength
+            //maxLength=0;
+            sumLength = 0;
+        })
+        tasks.map((item, index) => {
+            item.arr.sort((a, b) => (a.fieldName > b.fieldName) ? 1 : -1);
+            if (item.maxLength < maxLength) {
+                item.maxLength = maxLength
+            }
+        })
+    }
+    res.send(tasks)
+})
 
 
-    // const tasks = await TaskModel.aggregate([
-    //     {
-    //         $match: matchFilterValue
-    //     },
-    //     {
-    //         $group: {
-    //             _id: {
+router.post('/modificationByFieldFilters', async (req, res) => {
+    let tasks = []
+    let { fieldName, startDate, endDate } = req.body
+    startDate = new Date(startDate)
+    endDate = new Date(endDate)
+    if (fieldName.length == 0) { // runs to bring all the fieldNames and QA when reloading
+        tasks = await TaskModel.aggregate([
+            {
+                $match: {
+                    "diffItem.updatedTime": { $gte: startDate, $lte: endDate }, "diffItem.type": "Update"
+                }
+            },
+            {
+                $group: {
+                    _id: null,
+                    labels: { $addToSet: { "label": "$diffItem.updatedField.fieldName", "value": "$diffItem.updatedField.fieldName" } },
+                    QA: { $addToSet: { "label": "$jiraItem.qaRepresentative", "value": "$jiraItem.qaRepresentative" } }
+                },
+            }
+        ])
+        tasks.map((item, index) => {
+            item.labels.sort((a, b) => (a.label > b.label) ? 1 : -1);
+            item.QA.sort((a, b) => (a.label > b.label) ? 1 : -1);
+        })
+    }
+    else { // bring all the Values for the fieldName
+        const name = fieldName[0];
+        tasks = await TaskModel.aggregate([
+            {
+                $match: { "diffItem.updatedField.fieldName": name, "diffItem.type": "Update" }
+            },
+            {
+                $group: {
+                    _id: null,
+                    Values: { $addToSet: { "label": "$diffItem.updatedField.newValue", "value": "$diffItem.updatedField.newValue" } },
+                }
+            },
+        ])
+        tasks.map((item, index) => {
+            item.Values.sort((a, b) => (a.label > b.label) ? 1 : -1);
+        })
+    }
+    res.send(tasks)
+})
 
-    //                 Val: `$diffItem.updatedField.${filterValue}`
 
-    //             },
-    //             tasks: { $push: "$$ROOT" },
-    //         }
-    //     },
-    //     {
-    //         $group: {
-    //             _id: "$_id.Val",
-    //             arr: { $push: { tasks: "$tasks", size: { $size: "$tasks" } } },
-
-    //         }
-
-    //     }
-
-    // ])
-
-
-    // let total = 0;
-    // tasks.forEach(element => {
-    //     total += element.arr[0].size
-    // })
-    // tasks.total = total
-    // console.log(tasks)
-
-    // tasks.forEach(element => {
-    //     console.log(element.arr[0].size)
-    // })
-
-    //-------------------------------------- end of priority 2 --------------------------------------//
-
-
-    //NOTE : ask nimer to set his default value on load.
-    const filterValue = 'oldValue' //old or new value
-    const filterStatus = 'Backlog'     // Done , in progress , Backlog ,In Integration ...
-    const filterQaRep = 'Sally'
-    //here we build the match expression according to the user's filters.
-    let matchFilterValue = {}
-
-    if (filterValue == 'newValue') {
-        matchFilterValue = {
-            'diffItem.type': 'Update',
-            'diffItem.updatedField.fieldName': 'status',
-            'diffItem.updatedField.newValue': filterStatus,
-            'jiraItem.qaRepresentative': filterQaRep
-        }
-    } else {
-        matchFilterValue = {
-            'diffItem.type': 'Update',
-            'diffItem.updatedField.fieldName': 'status',
-            'diffItem.updatedField.oldValue': filterStatus,
-            'jiraItem.qaRepresentative': filterQaRep
-
-        }
+router.post('/deletedJiraTickets', async (req, res) => {
+    let tasks = []
+    const { serverFilters } = req.body
+    let { priority, qaRepresentative, functionalTest, startDate, endDate, label } = serverFilters;
+    startDate = new Date(startDate)
+    endDate = new Date(endDate)
+    console.log(priority, qaRepresentative, functionalTest, startDate, endDate, label)
+    let dateFormat = '';
+    if (label[0] == 'daily') {
+        dateFormat = "%Y-%m-%d"
+    }
+    else if (label[0] == 'yearly') {
+        dateFormat = "%Y"
+    }
+    else {
+        dateFormat = "%Y-%m"
     }
 
 
+    //here we build the match expression according to the user's filters.
+
+    let filtersArray = [{ "diffItem.type": "Delete" }, { "diffItem.updatedTime": { $gte: startDate } }, { "diffItem.updatedTime": { $lte: endDate } }]  // add the startdate and enddate and label here
+    let matchFilterValue = {
+        "$and": []
+    }
+    if (priority.length != 0) {
+        let valuesArray = []
+        priority.map((item, index) => {
+            valuesArray.push({ "jiraItem.priority": item })
+        })
+        filtersArray.push({ "$or": valuesArray })
+    }
+    if (qaRepresentative.length != 0) {
+        let valuesArray = []
+        qaRepresentative.map((item, index) => {
+            valuesArray.push({ "jiraItem.qaRepresentative": item })
+        })
+        filtersArray.push({ "$or": valuesArray })
+    }
+    if (functionalTest.length != 0) {
+        let valuesArray = []
+        functionalTest.map((item, index) => {
+            valuesArray.push({ "jiraItem.functionalTest": item })
+        })
+        filtersArray.push({ "$or": valuesArray })
+    }
+
+    matchFilterValue["$and"] = filtersArray
+
+    tasks = await TaskModel.aggregate([
+        {
+            $match: matchFilterValue
+        },
+        {
+            $group: {
+                _id: {
+                    date: { $dateToString: { format: dateFormat, date: "$diffItem.updatedTime" } },
+                    priority: "$jiraItem.priority"
+
+                },
+                tasks: { $push: "$$ROOT" },
+            }
+        },
+        {
+            $group: {
+                _id: "$_id.date",
+                arr: { $push: { priority: "$_id.priority", tasks: "$tasks", size: { $size: "$tasks" } } },
+
+            }
+
+        },
+        { $sort: { _id: 1 } }
+    ])
+    // let d1 = new Date(tasks[0]._id)
+    // console.log(d1)
+    // console.log(new Date(d1.setDate(d1.getDate() + 5)))
+    let maxLength = 0;
+    let sumLength = 0;
+    if (tasks.length > 0) {
+        tasks.map((item, index) => {
+            let myArray = item.arr;
+            myArray.forEach(element => {
+                if (element.size > maxLength) {
+                    maxLength = element.size
+                }
+                sumLength += element.size
+            })
+            item.maxLength = maxLength
+            item.sumLength = sumLength
+            //maxLength=0;
+            sumLength = 0;
+        })
+        tasks.map((item, index) => {
+            item.arr.sort((a, b) => (a.priority > b.priority) ? 1 : -1);
+            if (item.maxLength < maxLength) {
+                item.maxLength = maxLength
+            }
+        })
+    }
+    res.send(tasks)
+})
+
+
+router.post('/deletedJiraTicketsFilters', async (req, res) => {
+    let tasks = []
+    let { startDate, endDate } = req.body
+    startDate = new Date(startDate)
+    endDate = new Date(endDate)
+    //if (fieldName.length == 0) { // runs to bring all the fieldNames and QA when reloading
+    tasks = await TaskModel.aggregate([
+        {
+            $match: { "diffItem.updatedTime": { $gte: startDate, $lte: endDate }, "diffItem.type": "Delete" }
+        },
+        {
+            $group: {
+                _id: null,
+                priorities: { $addToSet: { "label": "$jiraItem.priority", "value": "$jiraItem.priority" } },
+                QA: { $addToSet: { "label": "$jiraItem.qaRepresentative", "value": "$jiraItem.qaRepresentative" } }
+            },
+        }
+    ])
+    tasks.map((item, index) => {
+        item.priorities.sort((a, b) => (a.label > b.label) ? 1 : -1);
+        item.QA.sort((a, b) => (a.label > b.label) ? 1 : -1);
+    })
+    res.send(tasks)
+
+})
+
+router.post('/changesByParentIdFilters', async (req, res) => {
+    let tasks = []
+    const { serverFilters } = req.body
+    let { fixVersion, startDate, endDate } = serverFilters;
+    startDate = new Date(startDate)
+    endDate = new Date(endDate)
+    if (fixVersion.length == 0) { // runs to bring all the fixVersions
+        tasks = await TaskModel.aggregate([
+            {
+                $group: {
+                    _id: null,
+                    fixVersions: { $addToSet: { "label": "$jiraItem.fixVersion", "value": "$jiraItem.fixVersion" } },
+                    // QA: { $addToSet: { "label": "$jiraItem.qaRepresentative", "value": "$jiraItem.qaRepresentative" } }
+                },
+            }
+        ])
+        tasks.map((item, index) => {
+            item.fixVersions.sort((a, b) => (a.label > b.label) ? 1 : -1);
+            //item.QA.sort((a, b) => (a.label > b.label) ? 1 : -1);
+        })
+    }
+    else {
+        const version = fixVersion[0];
+        console.log(version)
+        tasks = await TaskModel.aggregate([
+            {
+                $match: { "jiraItem.fixVersion": version, "jiraItem.jiraType": "Epic" }
+            },
+
+            // {
+            //     // "jiraItem.jiraType":"Feature","jiraItem.jiraType":"Epic"
+            //    // $match: { "jiraItem.fixVersion": version ,}
+            //     $match:{ $and: [ { "jiraItem.fixVersion": version }, { $or: [ { "jiraItem.jiraType":"Feature"}, {"jiraItem.jiraType":"Epic"} ] } ] }
+            // },
+            {
+                $group: {
+                    _id: "$jiraItem.jiraParentId",
+                    tasks: { $push: "$$ROOT" },
+                    size: {
+                        $sum: 1
+                    }
+                }
+            },
+            // {
+            //     $group: {
+            //         _id: "$size",
+            //         // color:
+            //         // {
+            //         //   $addToSet : {$cond: [ { $lte: [ "$size" , 10 ] }, 'Green', 'Yellow' ]}
+            //         // },
+            //         tasks: { $push: "$$ROOT" }
+            //         //_id: { $dateFromString: { dateString: "$_id.date" , format: "%Y-%m-%d" } },
+            //         //arr: { $push: { priority: "$_id.priority", tasks: "$tasks", size: { $size: "$tasks" } } },
+
+            //     }
+
+            // }
+        ])
+    }
+
+    res.send(tasks)
+
+})
+
+
+router.post('/changeOfJIRATicketsStatus', async (req, res) => {
+    const filterValue = req.body.values
+    const filterStatus = req.body.status
+    const filterQaRep = req.body.qaRepresentative
+    const label = req.body
+    let { startDate, endDate } = req.body
+    startDate = new Date(startDate)
+    endDate = new Date(endDate)
+    let dateFormat = '';
+    if (label[0] == 'daily') {
+        dateFormat = "%Y-%m-%d"
+    }
+    else if (label[0] == 'yearly') {
+        dateFormat = "%Y"
+    }
+    else {
+        dateFormat = "%Y-%m"
+    }
+
+
+    //here we build the match expression according to the user's filters.
+    console.log(filterValue, filterStatus, filterQaRep, endDate, startDate)
+
+    let matchFilterValue = { "$and": [] };
+    let ValToAgg = filterValue.length == 0 ? "$diffItem.updatedField.newValue" : `$diffItem.updatedField.${filterValue}`
+
+    let filtersArray = [];
+
+    //default filters
+
+    filtersArray.push({ 'diffItem.type': 'Update' })
+    filtersArray.push({ 'diffItem.updatedField.fieldName': 'status' })
+    //multiselect status
+    if (filterStatus[0] != undefined && filterValue[0] != undefined) {
+        if (filterStatus.length != 0) {
+            let statusArray = []
+            filterStatus.map(item => {
+                if (filterValue == "newValue") {
+                    statusArray.push({ "diffItem.updatedField.newValue": item })
+                }
+                else {
+                    statusArray.push({ "diffItem.updatedField.oldValue": item })
+                }
+            })
+            // orArray.push(statusArray);
+            filtersArray.push({ "$or": statusArray })
+        }
+    }
+    // multiselect QA REP
+    if (filterQaRep[0] != undefined && filterValue[0] != undefined) {
+        if (filterQaRep.length != 0) {
+            let qaArray = []
+            filterQaRep.map(item => {
+                qaArray.push({ 'jiraItem.qaRepresentative': item })
+            })
+            // orArray.push(qaArray)
+            filtersArray.push({ "$or": qaArray })
+        }
+    }
+    if (filtersArray.length == 0) {
+        delete matchFilterValue.$and;
+    }
+    else {
+        matchFilterValue["$and"] = filtersArray
+    }
+    if (filterValue.length == 0) {
+        matchFilterValue = {}
+    }
     const tasks = await TaskModel.aggregate([
         {
             $match: matchFilterValue
@@ -210,8 +419,9 @@ router.get('/changeOfJIRATicketsStatus', async (req, res) => {
         {
             $group: {
                 _id: {
-
-                    Val: `$diffItem.updatedField.${filterValue}`
+                    date: { $dateToString: { format: dateFormat, date: "$diffItem.updatedTime" } },
+                    Val: ValToAgg
+                    // Val: `$diffItem.updatedField.${filterValue}`
 
                 },
                 tasks: { $push: "$$ROOT" },
@@ -219,39 +429,45 @@ router.get('/changeOfJIRATicketsStatus', async (req, res) => {
         },
         {
             $group: {
-                _id: "$_id.Val",
-                arr: { $push: { tasks: "$tasks", size: { $size: "$tasks" } } },
 
+                _id: "$_id.date",
+                arr: { $push: { value: "$_id.Val", tasks: "$tasks", size: { $size: "$tasks" } } },
             }
-
         }
-
     ])
+    if (tasks.length != 0) {
+        tasks.map((item, index) => {
+            item.arr.sort((a, b) => (a.value > b.value) ? 1 : -1);
+        })
+        tasks.sort((a, b) => (a._id > b._id) ? 1 : -1);
+        let maxLength = -1;
+        tasks.map((task, index) => {
+            let sum = 0;
+            task.arr.forEach(element => {
+                sum += element.size
+                if (element.size > maxLength)
+                    maxLength = element.size
+            })
+            tasks[index].sum = sum
+        })
 
+        tasks.map((task, index) => {
+            tasks[index].maxLength = maxLength
+        })
 
-    let total = 0;
-    tasks.forEach(element => {
-        total += element.arr[0].size
-    })
-    tasks.total = total
-    console.log(tasks)
-
-    tasks.forEach(element => {
-        console.log(element.arr[0].tasks[0].jiraItem)
-    })
-
-
+    }
     res.send(tasks);
 
 })
 
+router.post('/changeOfJIRATicketsStatusFilters', async (req, res) => {
 
-router.get('/changeOfJIRATicketsStatusFilters', async (req, res) => {
     let tasks = []
     let matchFilters = ''
     let groupFilters = ''
-    const { filterQa } = req.body;
-    let filterVal = 'oldValue'
+    const { serverFilters } = req.body;
+
+    let filterVal = 'newValue'
     filterStatus = ''
     if (filterVal == 'oldValue') {
         groupFilters = "$diffItem.updatedField.oldValue"
@@ -263,8 +479,6 @@ router.get('/changeOfJIRATicketsStatusFilters', async (req, res) => {
         matchFilters = {
             'diffItem.type': 'Update',
             'diffItem.updatedField.fieldName': 'status',
-            'diffItem.updatedField.oldValue': filterStatus,
-            //'jiraItem.qaRepresentative': filterQaRep
         }
     }
     else {
@@ -280,26 +494,52 @@ router.get('/changeOfJIRATicketsStatusFilters', async (req, res) => {
         },
         {
             $group: {
-                _id: {
-
-                    filterStatus: groupFilters,
-                    qarep: '$jiraItem.qaRepresentative'
-
-                }
-
-
-            }
-        },
-        {
-            $group: {
-                _id: "$_id.filterStatus",
-                arr: { $push: { qaRepresentatives: "$_id.qarep" } },
-
-            }
+                _id: null,
+                status: { $addToSet: { "label": groupFilters, "value": groupFilters } },
+                qa: { $addToSet: { "label": "$jiraItem.qaRepresentative", "value": "$jiraItem.qaRepresentative" } }
+            },
         }
     ])
+    tasks.map((item, index) => {
+        item.status.sort((a, b) => (a.label > b.label) ? 1 : -1);
+        item.qa.sort((a, b) => (a.label > b.label) ? 1 : -1);
+    })
+
+
+    // console.log(tasks)
     res.send(tasks)
 
 })
 
+
+
+router.post('/delaysInDelivery', (req, res) => {
+
+})
+
+router.post('/delaysInDeliveryFilters', async (req, res) => {
+    let filters = await TaskModel.aggregate([
+        {
+            $match: {}
+        },
+        {
+            $group: {
+                _id: null,
+                fixVersion: { $addToSet: { "label": "$jiraItem.fixVersion", "value": "$jiraItem.fixVersion" } },
+                jiraType: { $addToSet: { "label": "$jiraItem.jiraType", "value": "$jiraItem.jiraType" } },
+                qa: { $addToSet: { "label": "$jiraItem.qaRepresentative", "value": "$jiraItem.qaRepresentative" } }
+            }
+        }
+    ])
+    filters.map((item, index) => {
+        item.fixVersion.sort((a, b) => (a.label > b.label) ? 1 : -1);
+        item.jiraType.sort((a, b) => (a.label > b.label) ? 1 : -1);
+        item.qa.sort((a, b) => (a.label > b.label) ? 1 : -1);
+    })
+
+
+    // console.log(filters)
+    res.send(filters)
+
+})
 module.exports = router;

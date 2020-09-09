@@ -1,199 +1,190 @@
 import React from 'react';
 import "./DelaysInDelivery.css";
-import MainTable from "../MainTable/MainTable"
-
 import Select from 'react-select'
+import { useState, useEffect,useRef } from 'react';
 
-import { useState , useEffect } from 'react';
-
+const serverFilters = {
+  fixVersion: [],
+  jiraType: [],
+  qaRepresentative: [],
+  startDate: "",
+  endDate: "",
+  label: ["weekly"]
+};
 
 function DelaysInDelivery() {
 
-  // To set UiObj from the filtered Data we recieved from server 
-  const [UiObjs, setUiObjs] = useState([]);
 
-  // Options To Send == > Server 
-  const [ fixVersion , setfixVersion ]=useState([])
-  const [ jiraType , setJiraType ]=useState([])
-  const [ label  , setLabel ]=useState([])
-  const [ qaRepresentative  , setQaRepresentative]=useState([])
-  const [ startDate,setStartDate ]=useState([])
-  const [ endDate,setEndDate ]=useState([] )
+  // const [UiObjs, setUiObjs] = useState([]);
 
-  
+  // Options To get From Server 
+  const [fixVersionOptions, setfixVersionOptions] = useState([])
+  const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([])
 
-   // Options To get From Server 
-   const [fixVersionOptions,setfixVersionOptions]=useState([])
-   const [jiraTypeOptions,setJiraTypeOptions]=useState([])
-   const [qaRepresentativeOptions,setQaRepresentativeOptions]=useState([])
-
-
-
-
-   const [labelOptions, setLabelOptions] = useState([
-   {name:"label" , value: "Daily"  ,   label: "Daily" },
-   {name:"label" , value: "Weekly" ,   label: "Weekly" },
-   {name:"label" , value: "Monthly",   label: "Monthly" },
-   {name:"label" , value: "Yearly" ,   label: "Yearly" } 
-  ])
-  
- 
-  // Functions ==> Fetch : 
-  const render = ()=> {
-    fetch('/api/analytics/DelaysInDelivery/---', {
-        method: 'POST',
-        body: JSON.stringify({}),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-        .then((res) => res.json())
-        .then((data) => { setUiObjs(data) })
-  
-      }
-
-  useEffect(() => {
-   
-    fetch('/api/analytics/---')
-      .then(res => res.json())
-      .then(data => {
-        console.log(data)
-        
-        //set state (fix Versions => get all the options )
-        setfixVersionOptions(data);
-      })
- 
-
-}, [])
-
-  const HandlefixVersionChange=(version=>{
-    console.log(version.value)
-    setfixVersion(version.value)
+  const [jiraTypeOptions, setJiraTypeOptions] = useState([
+    {  value: "epic", label: "Epic" },
+    {  value: "feature", label: "Feature" },
+    {  value: "initiative", label: "Initiative" },
+    {  value: "version", label: "Version" }
     
+    
+  ])
 
-    fetch('/api/analytics/ChangesInJiraTickets/---', {
+
+  const [labelOptions, setLabelOptions] = useState([
+    { name: "label", value: "daily", label: "Daily" },
+    { name: "label", value: "weekly", label: "Weekly" },
+    { name: "label", value: "monthly", label: "Monthly" },
+    { name: "label", value: "yearly", label: "Yearly" }
+  ])
+
+  // Functions ==> Fetch : 
+  const render = (serverFilters) => {
+    fetch('api/analytics/filters/delaysInDelivery', {
       method: 'POST',
-      body: JSON.stringify({ fixVersion }),
+      body: JSON.stringify(serverFilters),
       headers: {
         "Content-Type": "application/json"
       }
     })
       .then((res) => res.json())
-      .then((data) => { 
-          data.map(array =>{
-              if(array.name=="jiraType"){
-                  setJiraTypeOptions(array)
-              }
-              if(array.name=="qaRepresentative"){
-                  setQaRepresentativeOptions(array)
-              }
-          })
+      .then((data) => { console.log(data) })
+
+  }
+
+  useEffect(() => {
+    fetch('api/analytics/delaysInDeliveryFilters', {
+      method: 'POST',
+      body: JSON.stringify(serverFilters),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data)
+        setfixVersionOptions(data[0].fixVersion)
+
+      })
+    },[])
+
+    const renderFilters = (serverFilters) => {
+      fetch('api/analytics/delaysInDeliveryFilters', {
+        method: 'POST',
+        body: JSON.stringify(serverFilters),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+        .then((res) => res.json())
+        .then((data) => { 
           
-            })
+          setQaRepresentativeOptions(data[0].qa); 
+        })
+  
+    }
 
-    })
-  
-  
-  const HandlejiraTypeChange=(type=>{
+
+
+    const HandlefixVersionChange = (version => {
       
-           setJiraType(type.value)
+      serverFilters.fixVersion=[version.value];
+       
+        render(serverFilters)
+        renderFilters(serverFilters);
+      })
 
-
-      render ();
-    })
-
-  const HandleqaRepresentativeChange=(Qa=>{
-        setQaRepresentative([Qa.value])
-  
-
-   render ();
+  const HandlejiraTypeChange = (type => {
+    serverFilters.jiraType=[type.value]
+    render(serverFilters);
   })
 
-  const HandleStartDateChange=(date=>{
-    console.log(date.target.value)
+  const HandleqaRepresentativeChange = (Qa => {
+    serverFilters.qaRepresentative = []
+    if(Qa!=null){
+    Qa.map((item, index) => {
+      return serverFilters.qaRepresentative.push(item.value)
+    })}
+    else {
+      serverFilters.qaRepresentative=[]
+    }
 
-    /*setStartDate(new Date(date.value))*/
-    render ();
+    render(serverFilters);
   })
 
-  const HandleEndDateChange=(date=>{
-    console.log(date.value)
-    setEndDate(date.target.value)
- 
 
-    render ();
+  const HandleStartDateChange = (date => {
+    serverFilters.startDate = (date.target.value);
+    render(serverFilters);
+  })
+  const HandleEndDateChange = (date => {
+    serverFilters.endDate = (date.target.value);
+    render(serverFilters);
+  })
+  const HandleLabelChange = (label => {
+    serverFilters.label = [label.label];
+    render(serverFilters);
   })
 
-  const HandleLabelChange=(label=>{
-      console.log(label.value)
-      setLabel([label.value])
-
-
-      render ();
-    })
-  
   return (
 
     <div className='DelaysInDeliveryWrapper'>
-       <div className="DelaysInDelivery__Table" >
-                <MainTable changes={true}  />
-              
-          </div>
+       <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
       <div className="DelaysInDelivery__Title">Delays in Delivery</div>
-     
+
       {/* Select Filters */}
 
       <form className="DelaysInDelivery__Filters">
 
-        <Select 
-        name="fixVersion"
-        options={fixVersionOptions} 
-        placeholder="fix Version " 
-        className="DelaysInDelivery__Filter" 
-        onChange={HandlefixVersionChange}
-        
-        />
-        
-        <Select 
-        name="jiraType"
-        isMulti
-        options={jiraTypeOptions} 
-        placeholder="jira Type  " 
-        className="DelaysInDelivery__Filter"
-        onChange={HandlejiraTypeChange}
+        <Select
+          name="fixVersion"
+          options={fixVersionOptions}
+          placeholder="fix Version "
+          className="DelaysInDelivery__Filter"
+          onChange={HandlefixVersionChange}
+
         />
 
-        <Select 
-        name="qaRepresentative"
-        isMulti
-        options={qaRepresentativeOptions} 
-        placeholder="Qa Representative " 
-        className="DelaysInDelivery__Filter"
-        onChange={HandleqaRepresentativeChange}
+        <Select
+          name="jiraType"
+          isMulti
+          options={jiraTypeOptions}
+          placeholder="jira Type  "
+          className="DelaysInDelivery__Filter"
+          onChange={HandlejiraTypeChange}
         />
 
-        <input 
-        className="DelaysInDelivery__Filter" 
-        type="date" 
-        name="startDate" 
-        onChange={HandleStartDateChange} 
+        <Select
+          name="qaRepresentative"
+          isMulti
+          options={qaRepresentativeOptions}
+          placeholder="Qa Representative "
+          className="DelaysInDelivery__Filter"
+          onChange={HandleqaRepresentativeChange}
         />
 
-        <input 
-        className="DelaysInDelivery__Filter" 
-        type="date" 
-        name="endDate" 
-        onChange={HandleEndDateChange} 
+        <input
+          className="DelaysInDelivery__Filter__date"
+          type="date"
+          name="startDate"
+          onChange={HandleStartDateChange}
         />
 
-        <Select 
-        name="labels"
-        options={labelOptions} 
-        placeholder="Label" 
-        className="DelaysInDelivery__Filter" 
-        onChange={HandleLabelChange} 
+        <input
+          className="DelaysInDelivery__Filter__date"
+          type="date"
+          name="endDate"
+          onChange={HandleEndDateChange}
         />
-    
+
+        <Select
+          name="labels"
+          options={labelOptions}
+          placeholder="Label"
+          className="DelaysInDelivery__Filter"
+          onChange={HandleLabelChange}
+        />
+
       </form>
     </div>
   )

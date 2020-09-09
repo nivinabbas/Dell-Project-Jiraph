@@ -1,29 +1,66 @@
-.statuspage {
+.statusPageContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  min-height: 100vh;
+}
+
+.statusPage__dashboard {
+  /* display: flex; */
+}
+
+.statusPage__charts {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.statusPage__barChart {
+  flex: 1;
+  background-color: #fff;
+  padding: 1rem;
+  margin-right: 1rem;
+  border-radius: 5px;
+}
+
+.statusPage__barChart__filters {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.statusPage__pieCharts {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 5px;
+}
+
+.statusPage__pieChart {
+  display: flex;
+  flex-direction: column;
+}
+
+.statusPage__pieChart:first-child {
+  margin-right: 4rem;
+}
+
+.filterSelect-pie {
+  margin-bottom: 3rem;
+}
+
+.statusPage__table {
   width: 100%;
-  background-color: #f9f9f9;
-  display: grid;
-  grid-template-columns: 5vw 46vw 22vw 22vw 5vw;
-  grid-template-rows: auto auto auto auto auto;
-  grid-template-areas:
-    ". dashboard dashboard dashboard ."
-    ". tabl chart chart ."
-    ". tabl pie pie .";
-}
-.statuspage__dashboard {
-  grid-area: dashboard;
-  margin: auto;
-  width: 100%;
-  border: 1px solid red;
-}
-.statuspage__table {
-  grid-area: tabl;
+  height: 500px;
   margin: auto;
 }
-.statuspage__chart {
-  grid-area: chart;
-  background-color: brown;
-}
-.statuspage__pie {
-  grid-area: pie;
-  background-color: cadetblue;
+
+.statupPage__circularProgress {
+  height: 50%;
+  text-align: center;
+  margin-top: 2rem;
 }
