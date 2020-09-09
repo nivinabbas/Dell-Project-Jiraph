@@ -6,7 +6,7 @@ import Select from 'react-select';
 
 import { useState, useEffect } from 'react';
 
-const serverFilters = { priority: [], functionalTest: [], label: ["weekly"], qaRepresentative: [], startDate: "", endDate: "" };
+const serverFilters = { priority: [], functionalTest: [], label: ["weekly"], qaRepresentative: [], startDate: (new Date("2020-08-1")), endDate: new Date("2020-09-1")};
 
 
 
@@ -130,16 +130,16 @@ function DeletedJiraTickets() {
   })
 
   ///change StartDate:
-  const HandleStartDateChange = (date => {
-    console.log(date)
-    serverFilters.date = (date.target.value);
+  const HandleStartDateChange = (change => {
+   
+    serverFilters.startDate = new Date(change.target.value);
     render(serverFilters);
   })
 
   ///change EndDate:
-  const HandleEndDateChange = (date => {
-    console.log(date.value)
-    serverFilters.date = (date.target.value);
+  const HandleEndDateChange = (change => {
+    
+    serverFilters.endDate =  new Date(change.target.value);
     render(serverFilters);
   })
 
@@ -184,13 +184,13 @@ function DeletedJiraTickets() {
           name="qaRepresentative"
           isMulti
           options={qaRepresentativeOptions}
-          placeholder="Qa Representative "
+          placeholder="Qa Representative"
           className="DeletedJiraTickets__Filter"
           onChange={HandleqaRepresentativeChange}
         />
 
         <input
-          className="DeletedJiraTickets__Filter"
+          className="DeletedJiraTickets__Filter__date"
           type="date"
           name="startDate"
           onChange={HandleStartDateChange}
@@ -198,7 +198,7 @@ function DeletedJiraTickets() {
 
 
         <input
-          className="DeletedJiraTickets__Filter"
+          className="DeletedJiraTickets__Filter__date"
           type="date"
           name="endDate"
           onChange={HandleEndDateChange}

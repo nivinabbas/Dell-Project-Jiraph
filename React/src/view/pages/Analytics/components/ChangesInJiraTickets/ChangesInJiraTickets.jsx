@@ -7,6 +7,7 @@ import Select from 'react-select'
 import Chart from "../charts/Chart"
 //import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
 
+
 // Options To Send == > Server 
 const serverFilters = {
   values: [],
@@ -205,14 +206,14 @@ function ChangesInJiraTickets() {
         />
 
         <input
-          className="ChangeOfJiraTicket__Filter"
+          className="ChangeOfJiraTicket__Filter__date"
           type="date"
           name="startDate"
           onChange={HandleStartDateChange}
         />
 
         <input
-          className="ChangeOfJiraTicket__Filter"
+          className="ChangeOfJiraTicket__Filter__date"
           type="date"
           name="endDate"
           onChange={HandleEndDateChange}

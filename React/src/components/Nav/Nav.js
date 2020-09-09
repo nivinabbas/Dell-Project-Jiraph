@@ -9,10 +9,10 @@ import {
 
 //icons
 import logo from "../../img/JiraphLogo.jpg"
-import regIcon from "../../img/edit.png"
-import adminIcon from "../../img/admin.png"
-import statusIcon from "../../img/status2.png"
-import analysisIcon from "../../img/analysis.png"
+import regIcon from "../../img/loginB2.png"
+import adminIcon from "../../img/adminB2.png"
+import statusIcon from "../../img/statusB.png"
+import analysisIcon from "../../img/analyticsB.png"
 import trademarkIcon from "../../img/trademark.png"
 export default props => {
 

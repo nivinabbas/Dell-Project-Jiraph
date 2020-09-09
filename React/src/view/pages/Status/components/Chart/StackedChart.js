@@ -7,7 +7,6 @@ const options = {
     height: 350,
     stacked: true,
     stackType: "100%",
-
     toolbar: {
       show: true,
     },
@@ -52,8 +51,16 @@ export default function StackedChart({ data = [], onDataSelected }) {
   const categories = data.map((d) => d.date);
 
   const xaxis = {
-    type: "datetime",
+    //type: "datetime",
     categories: categories,
+    labels: {
+      datetimeFormatter: {
+        year: "yyyy",
+        month: "MMM 'yy",
+        day: "dd MMM",
+        hour: "HH:mm",
+      },
+    },
   };
 
   options.chart.events = {
@@ -64,6 +71,7 @@ export default function StackedChart({ data = [], onDataSelected }) {
     ) {
       let status = series[seriesIndex].name;
       let date = categories[dataPointIndex];
+      console.log(status, date);
       return onDataSelected(date, status);
     },
   };
