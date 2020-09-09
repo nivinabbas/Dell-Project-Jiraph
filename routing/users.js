@@ -250,16 +250,18 @@ router.put('/updatePassword', (req, res) => {
     const { email, password } = req.body;
     UserModel.findOne({ "userInfo.employeeEmail": email }).then(docs => {
         if (docs) {
-            const name = docs.userInfo.employeeName
-            const role = docs.userInfo.employeeRole
-            const id = docs._id
-            UserModel.updateOne({ _id: id }, { $set: { userInfo: { employeeName: name, employeeEmail: email, employeeRole: role, password: password } } }).then(doc => {
-                if (doc.n > 0) {
-                    res.send({ success: true, error: null, info: null })
-                } else {
-                    res.send({ success: false, error: null, info: null })
-                }
-            })
+            // const name = docs.userInfo.employeeName
+            // const role = docs.userInfo.employeeRole
+            // const id = docs._id
+            docs.userInfo.password = password
+            docs.save();
+            // UserModel.updateOne({ _id: id }, { $set: { userInfo: { employeeName: name, employeeEmail: email, employeeRole: role, password: password } } }).then(doc => {
+            //     if (doc.n > 0) {
+            //         res.send({ success: true, error: null, info: null })
+            //     } else {
+            //         res.send({ success: false, error: null, info: null })
+            //     }
+            // })
         } else {
             res.send({ success: false, error: "email not valid", info: null })
         }
@@ -298,6 +300,7 @@ router.put('/editUser', (req, res) => {
                 })
             } else {
                 UserModel.find({ _id: id }).then(checkUserId => {
+                    if(checkUserId.length>0){
                 if(password.length>0){
                     checkUserId[0].userInfo.employeeEmail = email
                     checkUserId[0].userInfo.employeeName = name
@@ -315,6 +318,10 @@ router.put('/editUser', (req, res) => {
                     checkUserId[0].save();
                     res.send({ success: true, error: null, info: null })
                 }
+            }
+            else{
+                res.send({ success: false, error: 'User Not Found', info: null })
+            }
                 })
             }
         
