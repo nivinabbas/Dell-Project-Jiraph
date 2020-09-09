@@ -275,40 +275,49 @@ router.put('/editUser', (req, res) => {
             if (checkEmail.length > 0) {
                 UserModel.find({ "userInfo.employeeEmail": email }).then(checkUserEmail => {
                     if (checkUserEmail.length > 0) {
-                        UserModel.updateOne({ _id: id },
-                            {
-                                $set:
-                                {
-                                    userInfo:
-                                    {
-                                        employeeName: name,
-                                        employeeEmail: email,
-                                        employeeRole: role,
-                                        password: password
-                                    }
-                                }
-                            })
-                            .then(res.send({ success: true, error: null, info: null }))
+                        if(password.length>0){
+                            checkUserEmail[0].userInfo.employeeEmail = email
+                            checkUserEmail[0].userInfo.employeeName = name
+                            checkUserEmail[0].userInfo.employeeRole = role
+                            checkUserEmail[0].userInfo.password = password
+
+                            checkUserEmail[0].save();
+                            res.send({ success: true, error: null, info: null })
+                        }
+                        else{
+                            checkUserEmail[0].userInfo.employeeEmail = email
+                            checkUserEmail[0].userInfo.employeeName = name
+                            checkUserEmail[0].userInfo.employeeRole = role
+
+                            checkUserEmail[0].save();
+                            res.send({ success: true, error: null, info: null })
+                        }
                     } else {
                         res.send({ success: false, error: "Email is already in use", info: null })
                     }
                 })
             } else {
-                UserModel.updateOne(
-                    { _id: id }, {
-                    $set:
-                    {
-                        userInfo:
-                        {
-                            employeeName: name,
-                            employeeEmail: email,
-                            employeeRole: role,
-                            password: password
-                        }
-                    }
+                UserModel.find({ _id: id }).then(checkUserId => {
+                if(password.length>0){
+                    checkUserId[0].userInfo.employeeEmail = email
+                    checkUserId[0].userInfo.employeeName = name
+                    checkUserId[0].userInfo.employeeRole = role
+                    checkUserId[0].userInfo.password = password
+
+                    checkUserId[0].save();
+                    res.send({ success: true, error: null, info: null })
+                }
+                else{
+                    checkUserId[0].userInfo.employeeEmail = email
+                    checkUserId[0].userInfo.employeeName = name
+                    checkUserId[0].userInfo.employeeRole = role
+
+                    checkUserId[0].save();
+                    res.send({ success: true, error: null, info: null })
+                }
                 })
-                    .then(res.send({ success: true, error: null, info: null }))
             }
+        
         })
     } else {
         res.send({ success: false, error: "Email not valid", info: null })
