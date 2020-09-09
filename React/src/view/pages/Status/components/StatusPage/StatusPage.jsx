@@ -238,8 +238,8 @@ const StatusPage = (props) => {
 
   const handleDoneClick = async (jiraId) => {
     confirmAlert({
-      title: "Confirm to submit",
-      message: "Are you sure to do this.",
+      title: "Confirm to done",
+      message: "Are you sure to go this task to done?",
       buttons: [
         {
           label: "Yes",
