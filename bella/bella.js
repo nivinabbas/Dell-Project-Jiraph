@@ -37,7 +37,7 @@ const Data=[
     {
         "diffItem": {
             "updatedTime": 1598489421, 
-            "type": "Update", 
+            "type": "Delete", 
             "updatedField": 
                 {
                     "fieldName": "qaRepresentative", 
