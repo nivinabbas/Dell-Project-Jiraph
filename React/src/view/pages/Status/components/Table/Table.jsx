@@ -1,6 +1,7 @@
 import React from "react";
 import "./style.css";
 import Select from "react-select";
+import { isEmpty } from "../../../../../service/utils";
 
 export default function TasksTable({
   openTasks,
@@ -16,6 +17,7 @@ export default function TasksTable({
   const disableSelect = () => {
     return tableFilters[0].value !== "Update" ? true : false;
   };
+
   return (
     <div className="open-tasks">
       <div className="open-tasks-title">
@@ -79,6 +81,7 @@ export default function TasksTable({
                     type="checkbox"
                     onClick={() => onDoneClick(task.jiraItem.jiraId)}
                     key={task._id}
+                    checked={task.taskItem.isDone}
                   />
                 </td>
               </tr>
