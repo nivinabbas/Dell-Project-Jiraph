@@ -1255,16 +1255,18 @@ router.post("/filltersAllSubmit", async function (req, res) {
 });
 //  end
 
-
 //start segmentData
 router.post("/segmentData", async function (req, res) {
   let { date, status } = req.body;
   console.log(date, status);
-   startDate = new Date(date + "T00:00:00.00Z");
+  startDate = new Date(date + "T00:00:00.00Z");
   endDate = new Date(date + "T23:59:59.0099Z");
 
-  if (status === "Done") { status = true }
-  else if (status === "NotDone") { status = false }
+  if (status === "Done") {
+    status = true;
+  } else if (status === "NotDone") {
+    status = false;
+  }
   let stackedChartDone = await TaskModel.aggregate([
     {
       $match: {
@@ -1273,35 +1275,18 @@ router.post("/segmentData", async function (req, res) {
           $lte: endDate,
         },
         "taskItem.isDone": status,
-
       },
     },
-
-
   ]);
   console.log(stackedChartDone.length);
   res.send({
     success: true,
     error: null,
-    info: {
-      stackedChartDone,
-    },
+    info: stackedChartDone,
   });
-})
+});
 
 //end segmentData
-
-
-
-
-
-
-
-
-
-
-
-
 
 //test function for open task with filter
 function openTasksWithFilter(type, fieldName) {
