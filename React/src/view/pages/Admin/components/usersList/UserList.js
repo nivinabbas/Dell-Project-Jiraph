@@ -42,9 +42,9 @@ function UserList() {
 
         <div className='adminpage'>
             <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
-            <div id="header">
+            <div className="header">Admin
             </div>
-            <div className='AdminTable'>
+            <div className='AdminTable1'>
                 <button onClick={goToAudit}>Audit</button>
                 <div className="TableColHeeader">
                     <h4>Username</h4>
@@ -54,14 +54,14 @@ function UserList() {
                 </div>
                 <form name='create' onSubmit={createUser} className='TableCreateRow' >
 
-                    <div className='AdminTable'>
+                    <div className='AdminTable2'>
                         <div className="TableColHeeader">
                             <div className="TableColHeeaderi">Email</div>
                             <div className="TableColHeeaderi">Business Role</div>
                             <div className="TableColHeeaderi">Password</div>
                         </div>
                         <div name='create' onSubmit={createUser} className='TableCreateRow' >
-                            <div>
+                            <div> 
                                 <input name="inputEmail" type="email" placeholder='Enter Email' required ></input>
                             </div>
                             <div>
