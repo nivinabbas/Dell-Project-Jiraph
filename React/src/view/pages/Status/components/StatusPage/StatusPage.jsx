@@ -11,7 +11,6 @@ import {
   initialTableFilters,
   initialPieChartsFilters,
 } from "../../../../../service/statusService";
-import { isEmpty } from "../../../../../service/utils";
 import "./StatusPage.css";
 
 const timeLabelOptions = [
@@ -302,6 +301,7 @@ const StatusPage = (props) => {
   return (
     <div className="statusPageContainer">
       <div className="statusPage__dashboard">
+        {console.log(cardsContent)}
         <DailyAlerts cardsContent={cardsContent} />
       </div>
       <div className="statusPage__charts">
@@ -325,15 +325,17 @@ const StatusPage = (props) => {
               isDisabled={!startDate || !endDate}
             />
           </div>
-          {isEmpty(stackedChart) && (
+          {stackedChart.length === 0 && (
             <div className="statupPage__circularProgress">
               <CircularProgress disableShrink />
             </div>
           )}
-          <StackedChart
-            data={stackedChart}
-            //onDataSelected={onStachChartDataSelect}
-          />
+          {stackedChart.length != 0 && (
+            <StackedChart
+              data={stackedChart}
+              //onDataSelected={onStachChartDataSelect}
+            />
+          )}
         </div>
 
         <div className="statusPage__pieCharts">

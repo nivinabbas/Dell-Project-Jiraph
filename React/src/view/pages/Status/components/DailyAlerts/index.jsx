@@ -7,7 +7,7 @@ const DailyAlerts = ({ cardsContent }) => {
     <div className="daily-alerts">
       {/* <div className="daily-alerts-title">
         <h1>Daily Alerts</h1>
-      </div> */}{" "}
+      </div> */}
       {!isEmpty(cardsContent) && (
         <div className="daily-alerts-items">
           <div
