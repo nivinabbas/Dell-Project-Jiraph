@@ -13,6 +13,11 @@
   background-color: #C8C9C7;
   }
 
+
+  .ChangesByParentId__Chart{
+    grid-area: chart;
+  }
+
   .ChangesByParentId__Title{
     font-weight: 500;
     grid-area: header;
@@ -61,7 +66,7 @@
     width: 18rem;
     box-sizing: border-box;
     background-color:   #EEEEEE;
-    border-radius: 3spx;
+
     text-align: center;
     color: black;
     box-shadow: 0px 0.1px 0.3px rgba(0, 0, 0, 0.8);
