@@ -15,13 +15,13 @@ let Today;
 function dateFormat() {
   const d = new Date();
   const ye = new Intl.DateTimeFormat("en", {
-    year: "numeric"
+    year: "numeric",
   }).format(d);
   const mo = new Intl.DateTimeFormat("en", {
-    month: "2-digit"
+    month: "2-digit",
   }).format(d);
   const da = new Intl.DateTimeFormat("en", {
-    day: "2-digit"
+    day: "2-digit",
   }).format(d);
 
   return `${ye}-${mo}-${da}`;
@@ -33,165 +33,179 @@ function dateFormat() {
 router.get("/dailyalerts", async function (req, res) {
   let Today = dateFormat();
   console.log("***************&&&&&&&&&*****");
-  let DailyAlerts = await TaskModel.aggregate([{
-    $match: {
-      $expr: {
-        $eq: [
-          Today,
-          {
-            $dateToString: {
-              date: "$diffItem.updatedTime",
-              format: "%Y-%m-%d",
+  let DailyAlerts = await TaskModel.aggregate([
+    {
+      $match: {
+        $expr: {
+          $eq: [
+            Today,
+            {
+              $dateToString: {
+                date: "$diffItem.updatedTime",
+                format: "%Y-%m-%d",
+              },
             },
-          },
-        ],
+          ],
+        },
       },
     },
-  },
-  {
-    $group: {
-      _id: "DailyAlerts",
-      functionalTest: {
-        $sum: {
-          $cond: [{
-            $eq: ["$jiraItem.functionalTest", true],
+    {
+      $group: {
+        _id: "DailyAlerts",
+        functionalTest: {
+          $sum: {
+            $cond: [
+              {
+                $eq: ["$jiraItem.functionalTest", true],
+              },
+              1,
+              0,
+            ],
           },
-            1,
-            0,
-          ],
         },
-      },
-      deletedTicktes: {
-        $sum: {
-          $cond: [{
-            $eq: ["$diffItem.type", "Delete"],
+        deletedTicktes: {
+          $sum: {
+            $cond: [
+              {
+                $eq: ["$diffItem.type", "Delete"],
+              },
+              1,
+              0,
+            ],
           },
-            1,
-            0,
-          ],
         },
-      },
-      fixVersionTicktes: {
-        $sum: {
-          $cond: [{
-            $eq: ["$diffItem.updatedField.fieldName", "fixVersion"],
+        fixVersionTicktes: {
+          $sum: {
+            $cond: [
+              {
+                $eq: ["$diffItem.updatedField.fieldName", "fixVersion"],
+              },
+              1,
+              0,
+            ],
           },
-            1,
-            0,
-          ],
         },
-      },
-      NotDone: {
-        $sum: {
-          $cond: [{
-            $eq: ["$taskItem.isDone", false],
+        NotDone: {
+          $sum: {
+            $cond: [
+              {
+                $eq: ["$taskItem.isDone", false],
+              },
+              1,
+              0,
+            ],
           },
-            1,
-            0,
-          ],
         },
-      },
-      totalTasks: {
-        $sum: 1,
+        totalTasks: {
+          $sum: 1,
+        },
       },
     },
-  },
   ]);
   if (DailyAlerts.length == 0 || DailyAlerts == []) {
-    DailyAlerts = [{
-      name: "functionalTest",
-      number: 0,
-    },
-    {
-      name: "deletedTicktes",
-      number: 0,
-    },
-    {
-      name: "fixVersionTicktes",
-      number: 0,
-    },
-    {
-      name: "totalTasks/NotDone",
-      number: 0 + "/" + 0,
-    },
+    DailyAlerts = [
+      {
+        name: "functionalTest",
+        number: 0,
+      },
+      {
+        name: "deletedTicktes",
+        number: 0,
+      },
+      {
+        name: "fixVersionTicktes",
+        number: 0,
+      },
+      {
+        name: "totalTasks/NotDone",
+        number: 0 + "/" + 0,
+      },
     ];
   } else {
-    DailyAlerts = [{
-      name: "functionalTest",
-      number: DailyAlerts[0].functionalTest,
-    },
-    {
-      name: "deletedTicktes",
-      number: DailyAlerts[0].deletedTicktes,
-    },
-    {
-      name: "fixVersionTicktes",
-      number: DailyAlerts[0].fixVersionTicktes,
-    },
-    {
-      name: "totalTasks/NotDone",
-      number: DailyAlerts[0].totalTasks + "/" + DailyAlerts[0].NotDone,
-    },
+    DailyAlerts = [
+      {
+        name: "functionalTest",
+        number: DailyAlerts[0].functionalTest,
+      },
+      {
+        name: "deletedTicktes",
+        number: DailyAlerts[0].deletedTicktes,
+      },
+      {
+        name: "fixVersionTicktes",
+        number: DailyAlerts[0].fixVersionTicktes,
+      },
+      {
+        name: "totalTasks/NotDone",
+        number: DailyAlerts[0].totalTasks + "/" + DailyAlerts[0].NotDone,
+      },
     ];
   }
   res.send({
     success: true,
     error: null,
-    info: DailyAlerts
+    info: DailyAlerts,
   });
 });
 // End daily status alert !
 
 // start open tasks
 router.get("/openTasks", async function (req, res) {
-  TaskModel.find({
-    "taskItem.isDone": false
-  }, function (err, doc) {
-    res.send({
-      success: true,
-      error: null,
-      info: {
-        doc
-      }
-    });
-  }).then((err) => console.log(err));
+  TaskModel.find(
+    {
+      "taskItem.isDone": false,
+    },
+    function (err, doc) {
+      res.send({
+        success: true,
+        error: null,
+        info: {
+          doc,
+        },
+      });
+    }
+  ).then((err) => console.log(err));
 });
 // end open tasks
 
 // start openTasksWithFilter
 router.post("/openTasksWithFilter", async function (req, res) {
-  const {
-    filter
-  } = req.body;
-  console.log("*********************", filter)
-  if (filter.type === "Update" && filter.fieldName != "" && filter.fieldName != "All") {
-    TaskModel.find({
-      "diffItem.type": filter.type,
-      "diffItem.updatedField.fieldName": filter.fieldName,
-      "taskItem.isDone": false,
-    },
+  const { filter } = req.body;
+  console.log("*********************", filter);
+  if (
+    filter.type === "Update" &&
+    filter.fieldName != "" &&
+    filter.fieldName != "All"
+  ) {
+    TaskModel.find(
+      {
+        "diffItem.type": filter.type,
+        "diffItem.updatedField.fieldName": filter.fieldName,
+        "taskItem.isDone": false,
+      },
       function (err, doc) {
         res.send({
           success: true,
           error: null,
           info: {
-            doc
-          }
+            doc,
+          },
         });
       }
     ).then((err) => console.log(err));
   } else {
-    TaskModel.find({
-      "diffItem.type": filter.type,
-      "taskItem.isDone": false
-    },
+    TaskModel.find(
+      {
+        "diffItem.type": filter.type,
+        "taskItem.isDone": false,
+      },
       function (err, doc) {
         res.send({
           success: true,
           error: null,
           info: {
-            doc
-          }
+            doc,
+          },
         });
       }
     ).then((err) => console.log(err));
@@ -202,34 +216,33 @@ router.post("/openTasksWithFilter", async function (req, res) {
 // start update task
 router.post("/updateTasks", (req, res) => {
   console.log(req.body.jiraId);
-  const {
-    jiraId,
-    userId
-  } = req.body;
+  const { jiraId, userId } = req.body;
 
-  TaskModel.updateOne({
-    "jiraItem.jiraId": jiraId,
-    "taskItem.user._id": userId
-  }, {
-    $set: {
-      "taskItem.isDone": true
-    }
-  },
+  TaskModel.updateOne(
+    {
+      "jiraItem.jiraId": jiraId,
+      "taskItem.user._id": userId,
+    },
+    {
+      $set: {
+        "taskItem.isDone": true,
+      },
+    },
     function (err, doc) {
       if (err)
         res.send({
           success: false,
           error: "This task has already been completed",
           info: {
-            doc
+            doc,
           },
         });
       res.send({
         success: true,
         error: null,
         info: {
-          doc
-        }
+          doc,
+        },
       });
     }
   );
@@ -238,34 +251,33 @@ router.post("/updateTasks", (req, res) => {
 
 // start PieChart
 router.post("/PieChart", (req, res) => {
-  const {
-    jiraId,
-    userId
-  } = req.body;
+  const { jiraId, userId } = req.body;
 
-  TaskModel.updateOne({
-    "jiraItem.jiraId": jiraId,
-    "taskItem.user._id": userId
-  }, {
-    $set: {
-      "taskItem.isDone": true
-    }
-  },
+  TaskModel.updateOne(
+    {
+      "jiraItem.jiraId": jiraId,
+      "taskItem.user._id": userId,
+    },
+    {
+      $set: {
+        "taskItem.isDone": true,
+      },
+    },
     function (err, doc) {
       if (err)
         res.send({
           success: false,
           error: "This task has already been completed",
           info: {
-            doc
+            doc,
           },
         });
       res.send({
         success: true,
         error: null,
         info: {
-          doc
-        }
+          doc,
+        },
       });
     }
   );
@@ -273,11 +285,7 @@ router.post("/PieChart", (req, res) => {
 // end update task
 //stackedChart start
 router.post("/stackedChart", async function (req, res) {
-  let {
-    label,
-    startDate,
-    endDate
-  } = req.body;
+  let { label, startDate, endDate } = req.body;
   console.log(startDate);
   console.log("label", label);
   let dataFromServer = [];
@@ -289,110 +297,127 @@ router.post("/stackedChart", async function (req, res) {
   } else {
     formatLabel = "%Y";
   }
-  if (startDate == "" && endDate == '') {
+  if (startDate == "" && endDate == "") {
     //default, label daily
     startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
     endDate = new Date();
-    let stackedChartDone = await TaskModel.aggregate([{
-      $match: {
-        "taskItem.updatedTime": {
-          $gte: startDate,
-          $lte: endDate
-        },
-      },
-    },
-    {
-      $group: {
-        _id: {
-          $dateToString: {
-            date: "$taskItem.updatedTime",
-            format: formatLabel,
-          },
-        },
-        count: {
-          $sum: 1
-        },
-        done: {
-          $sum: {
-            $cond: [{
-              $eq: ["$taskItem.isDone", true]
-            }, 1, 0],
-          },
-        },
-        notDone: {
-          $sum: {
-            $cond: [{
-              $eq: ["$taskItem.isDone", false]
-            }, 1, 0],
+    let stackedChartDone = await TaskModel.aggregate([
+      {
+        $match: {
+          "taskItem.updatedTime": {
+            $gte: startDate,
+            $lte: endDate,
           },
         },
       },
-    },
-    {
-      $sort: {
-        _id: 1
-      }
-    },
+      {
+        $group: {
+          _id: {
+            $dateToString: {
+              date: "$taskItem.updatedTime",
+              format: formatLabel,
+            },
+          },
+          count: {
+            $sum: 1,
+          },
+          done: {
+            $sum: {
+              $cond: [
+                {
+                  $eq: ["$taskItem.isDone", true],
+                },
+                1,
+                0,
+              ],
+            },
+          },
+          notDone: {
+            $sum: {
+              $cond: [
+                {
+                  $eq: ["$taskItem.isDone", false],
+                },
+                1,
+                0,
+              ],
+            },
+          },
+        },
+      },
+      {
+        $sort: {
+          _id: 1,
+        },
+      },
     ]);
     // adding to Done Array
     stackedChartDone.forEach((element) => {
       //load data
       dataFromServer.push({
-        done: element.done, notDone: element.notDone, date: element._id,
-      })
-
+        done: element.done,
+        notDone: element.notDone,
+        date: element._id,
+      });
     });
-
-
 
     res.send({
       success: true,
       error: null,
-      info: dataFromServer
+      info: dataFromServer,
     });
   } else {
     startDate = new Date(startDate + "T00:00:00.00Z");
     endDate = new Date(endDate + "T23:59:59.0099Z");
-    let stackedChartDone = await TaskModel.aggregate([{
-      $match: {
-        "taskItem.updatedTime": {
-          $gte: startDate,
-          $lte: endDate
-        },
-      },
-    },
-    {
-      $group: {
-        _id: {
-          $dateToString: {
-            date: "$taskItem.updatedTime",
-            format: formatLabel, //"%Y-%m-%d",
-          },
-        },
-        count: {
-          $sum: 1
-        },
-        done: {
-          $sum: {
-            $cond: [{
-              $eq: ["$taskItem.isDone", true]
-            }, 1, 0],
-          },
-        },
-        notDone: {
-          $sum: {
-            $cond: [{
-              $eq: ["$taskItem.isDone", false]
-            }, 1, 0],
+    let stackedChartDone = await TaskModel.aggregate([
+      {
+        $match: {
+          "taskItem.updatedTime": {
+            $gte: startDate,
+            $lte: endDate,
           },
         },
       },
-    },
-    {
-      $sort: {
-        _id: 1
-      }
-    },
+      {
+        $group: {
+          _id: {
+            $dateToString: {
+              date: "$taskItem.updatedTime",
+              format: formatLabel, //"%Y-%m-%d",
+            },
+          },
+          count: {
+            $sum: 1,
+          },
+          done: {
+            $sum: {
+              $cond: [
+                {
+                  $eq: ["$taskItem.isDone", true],
+                },
+                1,
+                0,
+              ],
+            },
+          },
+          notDone: {
+            $sum: {
+              $cond: [
+                {
+                  $eq: ["$taskItem.isDone", false],
+                },
+                1,
+                0,
+              ],
+            },
+          },
+        },
+      },
+      {
+        $sort: {
+          _id: 1,
+        },
+      },
     ]);
 
     // adding to Done Array
@@ -400,14 +425,16 @@ router.post("/stackedChart", async function (req, res) {
 
     stackedChartDone.forEach((element) => {
       dataFromServer.push({
-        done: element.done, notDone: element.notDone, date: element._id,
+        done: element.done,
+        notDone: element.notDone,
+        date: element._id,
       });
     });
 
     res.send({
       success: true,
       error: null,
-      info: dataFromServer
+      info: dataFromServer,
     });
   }
   // res.send({ success: false, error: null, info: null });
@@ -418,46 +445,55 @@ router.get("/stackedChart", async function (req, res) {
   {
     datefrom = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
     dateTo = new Date();
-    let stackedChartDone = await TaskModel.aggregate([{
-      $match: {
-        "taskItem.updatedTime": {
-          $gte: datefrom,
-          $lte: dateTo
-        },
-      },
-    },
-    {
-      $group: {
-        _id: {
-          $dateToString: {
-            date: "$taskItem.updatedTime",
-            format: "%Y-%m-%d",
-          },
-        },
-        count: {
-          $sum: 1
-        },
-        done: {
-          $sum: {
-            $cond: [{
-              $eq: ["$taskItem.isDone", true]
-            }, 1, 0],
-          },
-        },
-        notDone: {
-          $sum: {
-            $cond: [{
-              $eq: ["$taskItem.isDone", false]
-            }, 1, 0],
+    let stackedChartDone = await TaskModel.aggregate([
+      {
+        $match: {
+          "taskItem.updatedTime": {
+            $gte: datefrom,
+            $lte: dateTo,
           },
         },
       },
-    },
-    {
-      $sort: {
-        _id: 1
-      }
-    },
+      {
+        $group: {
+          _id: {
+            $dateToString: {
+              date: "$taskItem.updatedTime",
+              format: "%Y-%m-%d",
+            },
+          },
+          count: {
+            $sum: 1,
+          },
+          done: {
+            $sum: {
+              $cond: [
+                {
+                  $eq: ["$taskItem.isDone", true],
+                },
+                1,
+                0,
+              ],
+            },
+          },
+          notDone: {
+            $sum: {
+              $cond: [
+                {
+                  $eq: ["$taskItem.isDone", false],
+                },
+                1,
+                0,
+              ],
+            },
+          },
+        },
+      },
+      {
+        $sort: {
+          _id: 1,
+        },
+      },
     ]);
     // adding to Done Array
     let tempDate = [];
@@ -491,7 +527,7 @@ router.get("/stackedChart", async function (req, res) {
     res.send({
       success: true,
       error: null,
-      info: series
+      info: series,
     });
   }
 });
@@ -501,46 +537,55 @@ router.get("/stackedChart", async function (req, res) {
 router.get("/TypePie", async function (req, res) {
   datefrom = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
   dateTo = new Date();
-  let TypePieOb = await TaskModel.aggregate([{
-    $match: {
-      "taskItem.updatedTime": {
-        $gte: datefrom,
-        $lte: dateTo
-      },
-    },
-  },
-  {
-    $group: {
-      _id: {
-        $dateToString: {
-          date: "$taskItem.updatedTime",
-          format: "%Y-%m-%d",
-        },
-      },
-      count: {
-        $sum: 1
-      },
-      done: {
-        $sum: {
-          $cond: [{
-            $eq: ["$taskItem.isDone", true]
-          }, 1, 0],
-        },
-      },
-      notDone: {
-        $sum: {
-          $cond: [{
-            $eq: ["$taskItem.isDone", false]
-          }, 1, 0],
+  let TypePieOb = await TaskModel.aggregate([
+    {
+      $match: {
+        "taskItem.updatedTime": {
+          $gte: datefrom,
+          $lte: dateTo,
         },
       },
     },
-  },
-  {
-    $sort: {
-      _id: 1
-    }
-  },
+    {
+      $group: {
+        _id: {
+          $dateToString: {
+            date: "$taskItem.updatedTime",
+            format: "%Y-%m-%d",
+          },
+        },
+        count: {
+          $sum: 1,
+        },
+        done: {
+          $sum: {
+            $cond: [
+              {
+                $eq: ["$taskItem.isDone", true],
+              },
+              1,
+              0,
+            ],
+          },
+        },
+        notDone: {
+          $sum: {
+            $cond: [
+              {
+                $eq: ["$taskItem.isDone", false],
+              },
+              1,
+              0,
+            ],
+          },
+        },
+      },
+    },
+    {
+      $sort: {
+        _id: 1,
+      },
+    },
   ]);
   // adding to Done Array
   let tempDate = [];
@@ -574,114 +619,128 @@ router.get("/TypePie", async function (req, res) {
   res.send({
     success: true,
     error: null,
-    info: Data
+    info: Data,
   });
 });
 
 router.post("/TypePie", async function (req, res) {
   let TypePieOb;
-  let {
-    modificationType,
-    startDate,
-    endDate,
-  } = req.body;
+  let { modificationType, startDate, endDate } = req.body;
   let formatLabel = "%Y-%m-%d";
-  if (startDate === '' && endDate === '') {
+  if (startDate === "" && endDate === "") {
     startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
     endDate = new Date();
-  } else if (startDate != '' && endDate != '') {
+  } else if (startDate != "" && endDate != "") {
     startDate = new Date(startDate + "T00:00:00.00Z");
     endDate = new Date(endDate + "T23:59:59.0099Z");
-  } else if (startDate != '' && endDate === '') {
+  } else if (startDate != "" && endDate === "") {
     startDate = new Date(startDate + "T00:00:00.00Z");
     endDate = new Date();
   }
 
-  if (modificationType != '' && modificationType != "All") {
-    TypePieOb = await TaskModel.aggregate([{
-      $match: {
-        "taskItem.updatedTime": {
-          $gte: startDate,
-          $lte: endDate
-        },
-        "diffItem.type": modificationType,
-      },
-    },
-    {
-      $group: {
-        _id: {
-          $dateToString: {
-            date: "$taskItem.updatedTime",
-            format: formatLabel, //"%Y-%m-%d",
+  if (modificationType != "" && modificationType != "All") {
+    TypePieOb = await TaskModel.aggregate([
+      {
+        $match: {
+          "taskItem.updatedTime": {
+            $gte: startDate,
+            $lte: endDate,
           },
-        },
-        count: {
-          $sum: 1
-        },
-        done: {
-          $sum: {
-            $cond: [{
-              $eq: ["$taskItem.isDone", true]
-            }, 1, 0],
-          },
-        },
-        notDone: {
-          $sum: {
-            $cond: [{
-              $eq: ["$taskItem.isDone", false]
-            }, 1, 0],
-          },
+          "diffItem.type": modificationType,
         },
       },
-    },
-    {
-      $sort: {
-        _id: 1
-      }
-    },
+      {
+        $group: {
+          _id: {
+            $dateToString: {
+              date: "$taskItem.updatedTime",
+              format: formatLabel, //"%Y-%m-%d",
+            },
+          },
+          count: {
+            $sum: 1,
+          },
+          done: {
+            $sum: {
+              $cond: [
+                {
+                  $eq: ["$taskItem.isDone", true],
+                },
+                1,
+                0,
+              ],
+            },
+          },
+          notDone: {
+            $sum: {
+              $cond: [
+                {
+                  $eq: ["$taskItem.isDone", false],
+                },
+                1,
+                0,
+              ],
+            },
+          },
+        },
+      },
+      {
+        $sort: {
+          _id: 1,
+        },
+      },
     ]);
   } else {
-    TypePieOb = await TaskModel.aggregate([{
-      $match: {
-        "taskItem.updatedTime": {
-          $gte: startDate,
-          $lte: endDate
-        },
-        // "diffItem.type": modificationType,
-      },
-    },
-    {
-      $group: {
-        _id: {
-          $dateToString: {
-            date: "$taskItem.updatedTime",
-            format: formatLabel, //"%Y-%m-%d",
+    TypePieOb = await TaskModel.aggregate([
+      {
+        $match: {
+          "taskItem.updatedTime": {
+            $gte: startDate,
+            $lte: endDate,
           },
-        },
-        count: {
-          $sum: 1
-        },
-        done: {
-          $sum: {
-            $cond: [{
-              $eq: ["$taskItem.isDone", true]
-            }, 1, 0],
-          },
-        },
-        notDone: {
-          $sum: {
-            $cond: [{
-              $eq: ["$taskItem.isDone", false]
-            }, 1, 0],
-          },
+          // "diffItem.type": modificationType,
         },
       },
-    },
-    {
-      $sort: {
-        _id: 1
-      }
-    },
+      {
+        $group: {
+          _id: {
+            $dateToString: {
+              date: "$taskItem.updatedTime",
+              format: formatLabel, //"%Y-%m-%d",
+            },
+          },
+          count: {
+            $sum: 1,
+          },
+          done: {
+            $sum: {
+              $cond: [
+                {
+                  $eq: ["$taskItem.isDone", true],
+                },
+                1,
+                0,
+              ],
+            },
+          },
+          notDone: {
+            $sum: {
+              $cond: [
+                {
+                  $eq: ["$taskItem.isDone", false],
+                },
+                1,
+                0,
+              ],
+            },
+          },
+        },
+      },
+      {
+        $sort: {
+          _id: 1,
+        },
+      },
     ]);
   }
   // adding to Done Array
@@ -715,7 +774,7 @@ router.post("/TypePie", async function (req, res) {
   res.send({
     success: true,
     error: null,
-    info: Data
+    info: Data,
   });
 });
 //end type pie
@@ -724,47 +783,56 @@ router.post("/TypePie", async function (req, res) {
 router.get("/fieldPie", async function (req, res) {
   datefrom = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
   dateTo = new Date();
-  let TypePieOb = await TaskModel.aggregate([{
-    $match: {
-      "taskItem.updatedTime": {
-        $gte: datefrom,
-        $lte: dateTo
-      },
-      "diffItem.type": "Update",
-    },
-  },
-  {
-    $group: {
-      _id: {
-        $dateToString: {
-          date: "$taskItem.updatedTime",
-          format: "%Y-%m-%d",
+  let TypePieOb = await TaskModel.aggregate([
+    {
+      $match: {
+        "taskItem.updatedTime": {
+          $gte: datefrom,
+          $lte: dateTo,
         },
-      },
-      count: {
-        $sum: 1
-      },
-      done: {
-        $sum: {
-          $cond: [{
-            $eq: ["$taskItem.isDone", true]
-          }, 1, 0],
-        },
-      },
-      notDone: {
-        $sum: {
-          $cond: [{
-            $eq: ["$taskItem.isDone", false]
-          }, 1, 0],
-        },
+        "diffItem.type": "Update",
       },
     },
-  },
-  {
-    $sort: {
-      _id: 1
-    }
-  },
+    {
+      $group: {
+        _id: {
+          $dateToString: {
+            date: "$taskItem.updatedTime",
+            format: "%Y-%m-%d",
+          },
+        },
+        count: {
+          $sum: 1,
+        },
+        done: {
+          $sum: {
+            $cond: [
+              {
+                $eq: ["$taskItem.isDone", true],
+              },
+              1,
+              0,
+            ],
+          },
+        },
+        notDone: {
+          $sum: {
+            $cond: [
+              {
+                $eq: ["$taskItem.isDone", false],
+              },
+              1,
+              0,
+            ],
+          },
+        },
+      },
+    },
+    {
+      $sort: {
+        _id: 1,
+      },
+    },
   ]);
   // adding to Done Array
   let tempDate = [];
@@ -797,120 +865,135 @@ router.get("/fieldPie", async function (req, res) {
   res.send({
     success: true,
     error: null,
-    info: Data
+    info: Data,
   });
 });
 
 router.post("/fieldPie", async function (req, res) {
   let TypePieOb;
-  let {
-    modificationField,
-    startDate,
-    endDate,
-  } = req.body;
+  let { modificationField, startDate, endDate } = req.body;
   let formatLabel = "%Y-%m-%d";
-  if (startDate === '' && endDate === '') {
+  if (startDate === "" && endDate === "") {
     startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
     endDate = new Date();
-  } else if (startDate != '' && endDate != '') {
+  } else if (startDate != "" && endDate != "") {
     startDate = new Date(startDate + "T00:00:00.00Z");
     endDate = new Date(endDate + "T23:59:59.0099Z");
-  } else if (startDate != '' && endDate === '') {
+  } else if (startDate != "" && endDate === "") {
     startDate = new Date(startDate + "T00:00:00.00Z");
     endDate = new Date();
   } else {
     startDate = new Date(0);
     endDate = new Date();
   }
-  if (modificationField != '' && modificationField!="All") {
-     TypePieOb = await TaskModel.aggregate([{
-      $match: {
-        "taskItem.updatedTime": {
-          $gte: startDate,
-          $lte: endDate
-        },
-        "diffItem.updatedField.fieldName": modificationField,
-      },
-    },
-    {
-      $group: {
-        _id: {
-          $dateToString: {
-            date: "$taskItem.updatedTime",
-            format: formatLabel, //"%Y-%m-%d",
+  if (modificationField != "" && modificationField != "All") {
+    TypePieOb = await TaskModel.aggregate([
+      {
+        $match: {
+          "taskItem.updatedTime": {
+            $gte: startDate,
+            $lte: endDate,
           },
-        },
-        count: {
-          $sum: 1
-        },
-        done: {
-          $sum: {
-            $cond: [{
-              $eq: ["$taskItem.isDone", true]
-            }, 1, 0],
-          },
-        },
-        notDone: {
-          $sum: {
-            $cond: [{
-              $eq: ["$taskItem.isDone", false]
-            }, 1, 0],
-          },
+          "diffItem.updatedField.fieldName": modificationField,
         },
       },
-    },
-    {
-      $sort: {
-        _id: 1
-      }
-    },
+      {
+        $group: {
+          _id: {
+            $dateToString: {
+              date: "$taskItem.updatedTime",
+              format: formatLabel, //"%Y-%m-%d",
+            },
+          },
+          count: {
+            $sum: 1,
+          },
+          done: {
+            $sum: {
+              $cond: [
+                {
+                  $eq: ["$taskItem.isDone", true],
+                },
+                1,
+                0,
+              ],
+            },
+          },
+          notDone: {
+            $sum: {
+              $cond: [
+                {
+                  $eq: ["$taskItem.isDone", false],
+                },
+                1,
+                0,
+              ],
+            },
+          },
+        },
+      },
+      {
+        $sort: {
+          _id: 1,
+        },
+      },
     ]);
   } else {
-    TypePieOb = await TaskModel.aggregate([{
-      $match: {
-        "taskItem.updatedTime": {
-          $gte: startDate,
-          $lte: endDate
-        },
-      },
-    },
-    {
-      $group: {
-        _id: {
-          $dateToString: {
-            date: "$taskItem.updatedTime",
-            format: formatLabel, //"%Y-%m-%d",
-          },
-        },
-        count: {
-          $sum: 1
-        },
-        done: {
-          $sum: {
-            $cond: [{
-              $eq: ["$taskItem.isDone", true]
-            }, 1, 0],
-          },
-        },
-        notDone: {
-          $sum: {
-            $cond: [{
-              $eq: ["$taskItem.isDone", false]
-            }, 1, 0],
+    TypePieOb = await TaskModel.aggregate([
+      {
+        $match: {
+          "taskItem.updatedTime": {
+            $gte: startDate,
+            $lte: endDate,
           },
         },
       },
-    },
-    {
-      $sort: {
-        _id: 1
-      }
-    },
+      {
+        $group: {
+          _id: {
+            $dateToString: {
+              date: "$taskItem.updatedTime",
+              format: formatLabel, //"%Y-%m-%d",
+            },
+          },
+          count: {
+            $sum: 1,
+          },
+          done: {
+            $sum: {
+              $cond: [
+                {
+                  $eq: ["$taskItem.isDone", true],
+                },
+                1,
+                0,
+              ],
+            },
+          },
+          notDone: {
+            $sum: {
+              $cond: [
+                {
+                  $eq: ["$taskItem.isDone", false],
+                },
+                1,
+                0,
+              ],
+            },
+          },
+        },
+      },
+      {
+        $sort: {
+          _id: 1,
+        },
+      },
     ]);
   }
   //adding to Done Array
   let tempDate = [];
-  let tempCountDone = [], tempCountNotDone = [];
+  let tempCountDone = [],
+    tempCountNotDone = [];
   let Data = {
     series: [],
     options: {
@@ -934,11 +1017,11 @@ router.post("/fieldPie", async function (req, res) {
     sumDoneNotDone += element;
   });
   Data.series.push(sumDoneNotDone);
-  console.log(Data, "972")
+  console.log(Data, "972");
   res.send({
     success: true,
     error: null,
-    info: Data
+    info: Data,
   });
 });
 
@@ -946,10 +1029,12 @@ router.post("/fieldPie", async function (req, res) {
 
 // modificationTypeOptions start
 router.get("/modificationTypeOptions", async function (req, res) {
-  let Data = [{
-    value: "All",
-    label: "All"
-  }];
+  let Data = [
+    {
+      value: "All",
+      label: "All",
+    },
+  ];
   let obj = {};
   TaskModel.distinct("diffItem.type", function (err, doc) {
     // success:T/F,error:string,info{TaskItem[Task]
@@ -957,7 +1042,7 @@ router.get("/modificationTypeOptions", async function (req, res) {
       console.log(element);
       obj = {
         value: element,
-        label: element
+        label: element,
       };
       Data.push(obj);
     });
@@ -965,8 +1050,8 @@ router.get("/modificationTypeOptions", async function (req, res) {
       success: true,
       error: null,
       info: {
-        Data
-      }
+        Data,
+      },
     });
   }).then((err) => console.log(err));
 });
@@ -974,14 +1059,16 @@ router.get("/modificationTypeOptions", async function (req, res) {
 
 //modificationFieldOptions start
 router.get("/modificationFieldOptions", async function (req, res) {
-  let Data = [{
-    value: "All",
-    label: "All"
-  }];
+  let Data = [
+    {
+      value: "All",
+      label: "All",
+    },
+  ];
   let obj = {};
-  console.log("modificationFieldOptions")
+  console.log("modificationFieldOptions");
   TaskModel.find({
-    "diffItem.type": "Update"
+    "diffItem.type": "Update",
   })
     .distinct("diffItem.updatedField.fieldName", function (err, doc) {
       // success:T/F,error:string,info{TaskItem[Task]
@@ -989,7 +1076,7 @@ router.get("/modificationFieldOptions", async function (req, res) {
         console.log(element);
         obj = {
           value: element,
-          label: element
+          label: element,
         };
         Data.push(obj);
       });
@@ -997,8 +1084,8 @@ router.get("/modificationFieldOptions", async function (req, res) {
         success: true,
         error: null,
         info: {
-          Data
-        }
+          Data,
+        },
       });
     })
     .then((err) => console.log(err));
@@ -1008,10 +1095,12 @@ router.get("/modificationFieldOptions", async function (req, res) {
 // modificationFieldOptions start
 router.post("/modificationFieldValueOptions", async function (req, res) {
   let data = req.body;
-  let returnData = [{
-    value: "All",
-    label: "All"
-  }];
+  let returnData = [
+    {
+      value: "All",
+      label: "All",
+    },
+  ];
 
   TaskModel.find({
     "diffItem.type": data[0].value,
@@ -1020,10 +1109,10 @@ router.post("/modificationFieldValueOptions", async function (req, res) {
     doc.forEach((element) => {
       console.log("docdoc");
       console.log(element);
-      if (element != null && element != '') {
+      if (element != null && element != "") {
         obj = {
           value: element,
-          label: element
+          label: element,
         };
         returnData.push(obj);
       }
@@ -1032,111 +1121,132 @@ router.post("/modificationFieldValueOptions", async function (req, res) {
     res.send({
       success: true,
       error: null,
-      info: returnData
+      info: returnData,
     });
   });
   // end
 });
 // modificationFieldOptions end
 
-
 //  start
 router.post("/filltersAllSubmit", async function (req, res) {
   let data = req.body;
-  console.log("12312313123213131321", data)
+  console.log("12312313123213131321", data);
 
-  if (data[0].value === "Update" && data[1].value != null && data[2].value != null && data[2].value != "All" && data[1].value != "All") {
-    TaskModel.find({
-      "diffItem.type": data[0].value,
-      "diffItem.updatedField.fieldName": data[1].value,
-      "diffItem.updatedField.newValue": data[2].value,
-    },
+  if (
+    data[0].value === "Update" &&
+    data[1].value != null &&
+    data[2].value != null &&
+    data[2].value != "All" &&
+    data[1].value != "All"
+  ) {
+    TaskModel.find(
+      {
+        "diffItem.type": data[0].value,
+        "diffItem.updatedField.fieldName": data[1].value,
+        "diffItem.updatedField.newValue": data[2].value,
+      },
       function (err, doc) {
         res.send({
           success: true,
           error: null,
           info: {
-            doc
-          }
+            doc,
+          },
         });
       }
     ).then((err) => console.log(err));
-  } else if (data[0].value === "Update" && data[1].value != null && data[2].value == null && data[1].value != "All") {
-    TaskModel.find({
-      "diffItem.type": data[0].value,
-      "diffItem.updatedField.fieldName": data[1].value,
-    },
+  } else if (
+    data[0].value === "Update" &&
+    data[1].value != null &&
+    data[2].value == null &&
+    data[1].value != "All"
+  ) {
+    TaskModel.find(
+      {
+        "diffItem.type": data[0].value,
+        "diffItem.updatedField.fieldName": data[1].value,
+      },
       function (err, doc) {
         res.send({
           success: true,
           error: null,
           info: {
-            doc
-          }
+            doc,
+          },
         });
       }
     ).then((err) => console.log(err));
-  } else if (data[0].value === "Update" && data[1].value != null && data[2].value === "All"&& data[1].value != "All") {
+  } else if (
+    data[0].value === "Update" &&
+    data[1].value != null &&
+    data[2].value === "All" &&
+    data[1].value != "All"
+  ) {
     //************************ */
-    TaskModel.find({
-      "diffItem.type": data[0].value,
-      "diffItem.updatedField.fieldName": data[1].value,
-    },
+    TaskModel.find(
+      {
+        "diffItem.type": data[0].value,
+        "diffItem.updatedField.fieldName": data[1].value,
+      },
       function (err, doc) {
         res.send({
           success: true,
           error: null,
           info: {
-            doc
-          }
+            doc,
+          },
         });
       }
     ).then((err) => console.log(err));
 
     //*&********
-
-  }
-  else if (data[0].value === "Update" && data[1].value === "All" ||data[0].value === "Update" && data[1].value === "All"&& data[2].value==="All" ) {
+  } else if (
+    (data[0].value === "Update" && data[1].value === "All") ||
+    (data[0].value === "Update" &&
+      data[1].value === "All" &&
+      data[2].value === "All")
+  ) {
     //************************ */
-    TaskModel.find({
-      "diffItem.type": data[0].value,
-     },
+    TaskModel.find(
+      {
+        "diffItem.type": data[0].value,
+      },
       function (err, doc) {
         res.send({
           success: true,
           error: null,
           info: {
-            doc
-          }
+            doc,
+          },
         });
       }
     ).then((err) => console.log(err));
 
     //*&********
-
-  }
-  else if (data[0].value === "All" || data[0].value === "all") {
+  } else if (data[0].value === "All" || data[0].value === "all") {
     TaskModel.find({}, function (err, doc) {
       res.send({
         success: true,
         error: null,
         info: {
-          doc
-        }
+          doc,
+        },
       });
     }).then((err) => console.log(err));
   } else {
     {
-      TaskModel.find({
-        "diffItem.type": data[0].value,
-      },
+      TaskModel.find(
+        {
+          "diffItem.type": data[0].value,
+        },
         function (err, doc) {
           res.send({
             success: true,
             error: null,
             info: {
-              doc
-            }
+              doc,
+            },
           });
         }
       ).then((err) => console.log(err));
@@ -1170,20 +1280,22 @@ router.post("/filltersAllSubmit", async function (req, res) {
 //test function for open task with filter
 function openTasksWithFilter(type, fieldName) {
   if (type === "Update" && fieldName != "") {
-    TaskModel.find({
-      "diffItem.type": type,
-      "diffItem.updatedField.fieldName": fieldName,
-      "taskItem.isDone": false,
-    },
+    TaskModel.find(
+      {
+        "diffItem.type": type,
+        "diffItem.updatedField.fieldName": fieldName,
+        "taskItem.isDone": false,
+      },
       function (err, doc) {
         console.log(doc);
       }
     );
   } else {
-    TaskModel.find({
-      "diffItem.type": type,
-      "taskItem.isDone": false
-    },
+    TaskModel.find(
+      {
+        "diffItem.type": type,
+        "taskItem.isDone": false,
+      },
       function (err, doc) {
         console.log(doc);
       }
@@ -1193,10 +1305,11 @@ function openTasksWithFilter(type, fieldName) {
 // openTasksWithFilter("Update", "qaRepresentative1");
 //fieldName start
 router.get("/getFieldName", async function (req, res) {
-  let Data = [{
-    value: "All",
-    label: "All"
-  }
+  let Data = [
+    {
+      value: "All",
+      label: "All",
+    },
   ];
   TaskModel.distinct("diffItem.updatedField.fieldName", function (err, doc) {
     // success:T/F,error:string,info{TaskItem[Task]
@@ -1204,7 +1317,7 @@ router.get("/getFieldName", async function (req, res) {
       console.log(element);
       obj = {
         value: element,
-        label: element
+        label: element,
       };
       Data.push(obj);
     });
@@ -1212,8 +1325,8 @@ router.get("/getFieldName", async function (req, res) {
       success: true,
       error: null,
       info: {
-        Data
-      }
+        Data,
+      },
     });
   }).then((err) => console.log(err));
 });
@@ -1221,15 +1334,14 @@ router.get("/getFieldName", async function (req, res) {
 
 //getType start
 router.get("/getType", async function (req, res) {
-
   TaskModel.distinct("diffItem.type", function (err, doc) {
     // success:T/F,error:string,info{TaskItem[Task]
     res.send({
       success: true,
       error: null,
       info: {
-        doc
-      }
+        doc,
+      },
     });
   }).then((err) => console.log(err));
 });
