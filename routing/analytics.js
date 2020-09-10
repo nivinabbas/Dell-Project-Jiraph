@@ -28,10 +28,7 @@ router.post('/modificationByField', async (req, res) => {
         dateFormat = "%Y-%m"
     }
 
-
     //here we build the match expression according to the user's filters.
-
-
 
     let filtersArray = [{ "diffItem.type": "Update" }, { "diffItem.updatedTime": { $gte: startDate } }, { "diffItem.updatedTime": { $lte: endDate } }]
     let matchFilterValue = {
@@ -87,7 +84,6 @@ router.post('/modificationByField', async (req, res) => {
 
     matchFilterValue["$and"] = filtersArray
     tasks = await TaskModel.aggregate(aggregateArray)
-
     let maxLength = 0;
     let sumLength = 0;
     if (tasks.length > 0) {
@@ -313,49 +309,67 @@ router.post('/changesByParentIdFilters', async (req, res) => {
     }
     else {
         const version = fixVersion[0];
-        console.log(version)
         tasks = await TaskModel.aggregate([
             {
-                $match: { "jiraItem.fixVersion": version, "jiraItem.jiraType": "Epic" }
+                $match: { "jiraItem.fixVersion": version, "jiraItem.type": "Epic" }
             },
-
-            // {
-            //     // "jiraItem.jiraType":"Feature","jiraItem.jiraType":"Epic"
-            //    // $match: { "jiraItem.fixVersion": version ,}
-            //     $match:{ $and: [ { "jiraItem.fixVersion": version }, { $or: [ { "jiraItem.jiraType":"Feature"}, {"jiraItem.jiraType":"Epic"} ] } ] }
-            // },
             {
                 $group: {
-                    _id: "$jiraItem.jiraParentId",
+                    //type: "$diffItem.type", 
+                    _id: "$jiraItem.parentId",
                     tasks: { $push: "$$ROOT" },
-                    size: {
+                    TotalChanges: {
                         $sum: 1
                     }
                 }
-            },
-            // {
-            //     $group: {
-            //         _id: "$size",
-            //         // color:
-            //         // {
-            //         //   $addToSet : {$cond: [ { $lte: [ "$size" , 10 ] }, 'Green', 'Yellow' ]}
-            //         // },
-            //         tasks: { $push: "$$ROOT" }
-            //         //_id: { $dateFromString: { dateString: "$_id.date" , format: "%Y-%m-%d" } },
-            //         //arr: { $push: { priority: "$_id.priority", tasks: "$tasks", size: { $size: "$tasks" } } },
-
-            //     }
-
-            // }
+            }
         ])
+        let updateCounter = 0;
+        let deleteCounter = 0;
+        let createCounter = 0;
+        tasks.map((item,index)=>{
+            let tasks = item.tasks
+            tasks.map((task,index)=>{
+                if(task.diffItem.type === "Update"){
+                    updateCounter++
+                }
+                else if(task.diffItem.type === "Create"){
+                    createCounter++
+                }
+                else{
+                    deleteCounter++
+                }
+            })
+            item.Update = updateCounter
+            item.Create = createCounter
+            item.Delete = deleteCounter
+        })
     }
-
     res.send(tasks)
-
 })
 
 // ---------------------------------------------------------- changes in jira tickets
 
+
+
+// {featureID,TotalChanges,Tasks,update,create,delete}
+
+
+/*
+
+ [
+    {Id:red , features:[{ id: featureId, arr : {type:create}, tasks}]}
+    {Id:Green , }
+    {Id:Yellow , }
+
+
+
+
+
+
+ ]
+
+*/
 router.post('/changeOfJIRATicketsStatus', async (req, res) => {
     const filterValue = req.body.values
     const filterStatus = req.body.status
