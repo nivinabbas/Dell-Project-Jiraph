@@ -17,7 +17,7 @@ function ModificationByField(props) {
   // serverFilters = { fieldName: [], values: [], qaRepresentative: [], startDate: (new Date("2020-08-1")), endDate: new Date("2020-09-1"), label: ["weekly"] };
   useEffect(() => {
     serverFilters = { fieldName: [], values: [], qaRepresentative: [], startDate: (new Date("2020-08-1")), endDate: new Date("2020-09-1"), label: ["weekly"] };
-    
+
     fetch('/api/analytics/modificationByFieldFilters', {
       method: 'POST',
       body: JSON.stringify({ fieldName: serverFilters.fieldName, startDate:serverFilters.startDate, endDate:serverFilters.endDate  }),
@@ -159,7 +159,7 @@ function ModificationByField(props) {
   return (
     <div className='ModificationByField__Wrapper'>
       <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
-      <div className="ModificationByField__Chart"> {UiObjs.length > 0 && <Chart UiObjs={UiObjs} />}</div>
+      <div className="ModificationByField__Chart"> {UiObjs && <Chart UiObjs={UiObjs} />}</div>
       <div className="ModificationByField__MainTitle">Modification By Field</div>
 
       <div className="ModificationByField__Filters">
