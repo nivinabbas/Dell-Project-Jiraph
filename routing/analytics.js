@@ -69,7 +69,7 @@ router.post('/modificationByField', async (req, res) => {
             $group: {
                 _id: "$_id.date",
                 //_id: { $dateFromString: { dateString: "$_id.date" , format: "%Y-%m-%d" } },
-                arr: { $push: { fieldName: "$_id.fieldName", tasks: "$tasks", size: { $size: "$tasks" } } },
+                arr: { $push: { value: "$_id.fieldName", tasks: "$tasks", size: { $size: "$tasks" } } },
 
             }
 
@@ -216,7 +216,7 @@ router.post('/deletedJiraTickets', async (req, res) => {
         {
             $group: {
                 _id: "$_id.date",
-                arr: { $push: { priority: "$_id.priority", tasks: "$tasks", size: { $size: "$tasks" } } },
+                arr: { $push: { value: "$_id.priority", tasks: "$tasks", size: { $size: "$tasks" } } },
 
             }
 
