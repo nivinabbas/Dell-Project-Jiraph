@@ -40,6 +40,7 @@ function Chart(props) {
             </div>
           )
         })}
+        {UiObjs.length==0 && <div>fuck</div>}
       </div>
 
       <div className="Chart__Table">
