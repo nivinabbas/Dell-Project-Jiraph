@@ -344,6 +344,25 @@ router.post('/changesByParentIdFilters', async (req, res) => {
             item.Create = createCounter
             item.Delete = deleteCounter
         })
+        let groupedArray = [
+            {_id: "Green" , features:[]},
+            {_id: "Yellow" , features:[]},
+            {_id: "Red" , features:[]}
+        ]
+
+        tasks.map((item,index)=>{
+            let totalChanges = item.TotalChanges
+            if( totalChanges >= 0 && totalChanges <5){
+                groupedArray[0].features.push(item)
+            }
+            else if( totalChanges >= 5 && totalChanges <10){
+                groupedArray[1].features.push(item)
+            }
+            else{
+                groupedArray[2].features.push(item)
+            }
+        })
+        tasks = groupedArray
     }
     res.send(tasks)
 })
