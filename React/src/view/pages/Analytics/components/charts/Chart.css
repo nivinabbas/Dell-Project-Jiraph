@@ -105,8 +105,8 @@
   /* padding-right: 10rem; */
 }
 .warningDisplay , h4 {
-  position: absolute;
-  left: 50%;
+  position: relative;
+  left:40vw;
   top: 50%;
   transform: translate(-50%,-50%);
   
