@@ -82,7 +82,6 @@ function ModificationByField(props) {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
         if (data!=null) {
           if(data.length>0)
             setValueOptions(data[0].Values);

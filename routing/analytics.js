@@ -31,27 +31,13 @@ router.post('/modificationByField', async (req, res) => {
 
     //here we build the match expression according to the user's filters.
 
-    let filtersArray = [{ "diffItem.type": "Update" }, { "diffItem.updatedTime": { $gte: startDate } }, { "diffItem.updatedTime": { $lte: endDate } }] // add the startdate and enddate and label here
+
+
+    let filtersArray = [{ "diffItem.type": "Update" }, { "diffItem.updatedTime": { $gte: startDate } }, { "diffItem.updatedTime": { $lte: endDate } }]
     let matchFilterValue = {
         "$and": []
     }
-    if (fieldName.length != 0) {
-        filtersArray.push({ "diffItem.updatedField.fieldName": fieldName[0] })
-    }
-    if (qaRepresentative.length != 0) {
-        filtersArray.push({ "jiraItem.qaRepresentative": qaRepresentative[0] })
-    }
-    if (values.length != 0) {
-        let valuesArray = []
-        values.map((item, index) => {
-            valuesArray.push({ "diffItem.updatedField.newValue": item })
-        })
-        filtersArray.push({ "$or": valuesArray })
-    }
-
-    matchFilterValue["$and"] = filtersArray
-
-    tasks = await TaskModel.aggregate([
+    let aggregateArray = [
         {
             $match: matchFilterValue
         },
@@ -68,14 +54,39 @@ router.post('/modificationByField', async (req, res) => {
         {
             $group: {
                 _id: "$_id.date",
-                //_id: { $dateFromString: { dateString: "$_id.date" , format: "%Y-%m-%d" } },
                 arr: { $push: { value: "$_id.fieldName", tasks: "$tasks", size: { $size: "$tasks" } } },
 
             }
 
         },
         { $sort: { _id: 1 } }
-    ])
+    ]
+    if (fieldName.length != 0) {
+        filtersArray.push({ "diffItem.updatedField.fieldName": fieldName[0] })
+        aggregateArray.splice(1, 1,
+            {
+                $group: {
+                    _id: {
+                        date: { $dateToString: { format: dateFormat, date: "$diffItem.updatedTime" } },
+                        fieldName: "$diffItem.updatedField.newValue"
+                    },
+                    tasks: { $push: "$$ROOT" },
+                }
+            });
+    }
+    if (qaRepresentative.length != 0) {
+        filtersArray.push({ "jiraItem.qaRepresentative": qaRepresentative[0] })
+    }
+    if (values.length != 0) {
+        let valuesArray = []
+        values.map((item, index) => {
+            valuesArray.push({ "diffItem.updatedField.newValue": item })
+        })
+        filtersArray.push({ "$or": valuesArray })
+    }
+
+    matchFilterValue["$and"] = filtersArray
+    tasks = await TaskModel.aggregate(aggregateArray)
 
     let maxLength = 0;
     let sumLength = 0;

@@ -4,769 +4,271 @@
  */
 
 const fetch = require('node-fetch');
-const Data=[
+
+
+const Data = [
     {
         "diffItem": {
-            "updatedTime": 1598489421, 
-            "type": "Update", 
-            "updatedField": 
+            "updateTime": 1599708365, 
+            "type": "Updated", 
+            "updatedFields": [
                 {
-                    "fieldName": "qaRepresentative", 
-                    "newValue": "", 
-                    "oldValue": null
-                }
-            
-        }, 
-        "jiraItem": {
-            "priority": "P00", 
-            "status": "Implementing", 
-            "jiraType": "Epic", 
-            "jiraName": "PSI 41: Performance, Memory budget and ATP - LST", 
-            "qaRepresentative": null, 
-            "functionalTest": true, 
-            "fixVersion": "PSI_41", 
-            "jiraId": "TRIES-44399", 
-            "jiraParentId": "TRIF-1098"
-        }, 
-        "qcItem": {
-            "status": "In Progress", 
-            "requirementType": "Epic", 
-            "requirementId": "2321"
-        }
-    }, 
-    {
-        "diffItem": {
-            "updatedTime": 1598489421, 
-            "type": "Update", 
-            "updatedField": 
-                {
-                    "fieldName": "qaRepresentative", 
-                    "newValue": "", 
-                    "oldValue": null
-                }
-            
-        }, 
-        "jiraItem": {
-            "priority": "P01", 
-            "status": "Done", 
-            "jiraType": "Epic", 
-            "jiraName": "Platform IL - SYM recovery topology support for FSCK Memory Budget ", 
-            "qaRepresentative": null, 
-            "functionalTest":true, 
-            "fixVersion": "PSI_41", 
-            "jiraId": "TRIES-42962", 
-            "jiraParentId": "TRIF-1098"
-        }, 
-        "qcItem": {
-            "status": "Done", 
-            "requirementType": "Epic", 
-            "requirementId": "2267"
-        }
-    }, 
-    {
-        "diffItem": {
-            "updatedTime": 1598489421, 
-            "type": "Update", 
-            "updatedField": 
-                {
-                    "fieldName": "qaRepresentative", 
-                    "newValue": "", 
-                    "oldValue": null
-                }
-            
-        }, 
-        "jiraItem": {
-            "priority": "P01", 
-            "status": "Backlog", 
-            "jiraType": "Epic", 
-            "jiraName": "Quality : FSCK Scale Testing on HW configs", 
-            "qaRepresentative": null, 
-            "functionalTest": true, 
-            "fixVersion": "PSI_41", 
-            "jiraId": "TRIES-36419", 
-            "jiraParentId": "TRIF-1098"
-        }, 
-        "qcItem": {
-            "status": "Backlog", 
-            "requirementType": "Epic", 
-            "requirementId": "2155"
-        }
-    }, 
-    {
-        "diffItem": {
-            "updatedTime": 1598489421, 
-            "type": "Update", 
-            "updatedField": 
-                {
-                    "fieldName": "qaRepresentative", 
-                    "newValue": "", 
-                    "oldValue": null
-                }
-            
-        }, 
-        "jiraItem": {
-            "priority": "P00", 
-            "status": "Implementing", 
-            "jiraType": "Epic", 
-            "jiraName": "Quality TRIF-1098: SP FSCK Scalability", 
-            "qaRepresentative": null, 
-            "functionalTest": true, 
-            "fixVersion": "PSI_41", 
-            "jiraId": "TRIES-35633", 
-            "jiraParentId": "TRIF-1098"
-        }, 
-        "qcItem": {
-            "status": "In Progress", 
-            "requirementType": "Epic", 
-            "requirementId": "2156"
-        }
-    }, 
-    {
-        "diffItem": {
-            "updatedTime": 1598489421, 
-            "type": "Update", 
-            "updatedField": 
-                {
-                    "fieldName": "qaRepresentative", 
-                    "newValue": "", 
-                    "oldValue": null
-                }
-            
-        }, 
-        "jiraItem": {
-            "priority": "P02", 
-            "status": "Done", 
-            "jiraType": "Epic", 
-            "jiraName": "Platform - Memory Budget Support", 
-            "qaRepresentative": null, 
-            "functionalTest": true, 
-            "fixVersion": "PSI_40", 
-            "jiraId": "TRIES-35130", 
-            "jiraParentId": "TRIF-1098"
-        }, 
-        "qcItem": {
-            "status": "Done", 
-            "requirementType": "Epic", 
-            "requirementId": "2157"
-        }
-    }, 
-    {
-        "diffItem": {
-            "updatedTime": 1598489421, 
-            "type": "Update", 
-            "updatedField": 
-                {
-                    "fieldName": "qaRepresentative", 
-                    "newValue": "", 
-                    "oldValue": null
-                }
-            
-        }, 
-        "jiraItem": {
-            "priority": "P01", 
-            "status": "Done", 
-            "jiraType": "Epic", 
-            "jiraName": "Fsck Diagnosability Improvements", 
-            "qaRepresentative": null, 
-            "functionalTest": true, 
-            "fixVersion": "PSI_40", 
-            "jiraId": "TRIES-33508", 
-            "jiraParentId": "TRIF-1098"
-        }, 
-        "qcItem": {
-            "status": "Done", 
-            "requirementType": "Epic", 
-            "requirementId": "2158"
-        }
-    }, 
-    {
-        "diffItem": {
-            "updatedTime": 1598489421, 
-            "type": "Update", 
-            "updatedField": 
-                {
-                    "fieldName": "qaRepresentative", 
-                    "newValue": "", 
-                    "oldValue": null
-                }
-            
-        }, 
-        "jiraItem": {
-            "priority": "P00", 
-            "status": "Done", 
-            "jiraType": "Epic", 
-            "jiraName": "[SP3] FSCK Memory Budget ", 
-            "qaRepresentative": null, 
-            "functionalTest": true, 
-            "fixVersion": "PSI_40", 
-            "jiraId": "TRIES-33341", 
-            "jiraParentId": "TRIF-1098"
-        }, 
-        "qcItem": {
-            "status": "Done", 
-            "requirementType": "Epic", 
-            "requirementId": "2160"
-        }
-    }, 
-    {
-        "diffItem": {
-            "updatedTime": 1598489422, 
-            "type": "Update", 
-            "updatedField": 
-                {
-                    "fieldName": "qaRepresentative", 
+                    "fieldName": "qaFeatureOwner", 
                     "newValue": null, 
                     "oldValue": "rajagr2"
                 }
+            ]
         }, 
         "jiraItem": {
-            "priority": "P01", 
+            "priority": "P00", 
             "status": "Done", 
             "jiraType": "Feature", 
-            "jiraName": "REST: 5-min Metrics Capture for Plugins (e.g. SRM, ESA) and other Reporting Systems PART2", 
+            "jiraName": "Display cluster time in GUI and Resync when NTP between nodes are out of sync", 
             "qaRepresentative": "rajasekaran.rajagopal@emc.com", 
-            "functionalTest": true, 
-            "fixVersion": "Smuttynose-SP3", 
-            "jiraId": "TRIF-1031", 
-            "jiraParentId": null
+            "functionalTest": "Yes", 
+            "fixVersion": "Foothills", 
+            "jiraId": "TRIF-789", 
+            "jiraParentId": "TRII-67"
         }, 
         "qcItem": {
             "status": "N/A", 
             "requirementType": "Feature", 
-            "requirementId": "2150"
-        }
-    },
-    {
-        "diffItem": {
-            "updatedTime": 1598489422, 
-            "type": "Update", 
-            "updatedField": 
-                {
-                    "fieldName": "jiraParentId", 
-                    "newValue": "2339", 
-                    "oldValue": "1870"
-                }
-            
-        }, 
-        "jiraItem": {
-            "priority": "P01", 
-            "status": "Done", 
-            "jiraType": "Feature", 
-            "jiraName": "REST: 5-min Metrics Capture for Plugins (e.g. SRM, ESA) and other Reporting Systems PART2", 
-            "qaRepresentative": "rajasekaran.rajagopal@emc.com", 
-            "functionalTest": true, 
-            "fixVersion": "Smuttynose-SP3", 
-            "jiraId": "TRIF-1031", 
-            "jiraParentId": null
-        }, 
-        "qcItem": {
-            "status": "N/A", 
-            "requirementType": "Feature", 
-            "requirementId": "2150"
-        }
-    },
-    
-
-
-
-
-
-
-    {
-        "diffItem": {
-            "updatedTime": 1598489425, 
-            "type": "Update", 
-            "updatedField": 
-                {
-                    "fieldName": "qaRepresentative", 
-                    "newValue": "", 
-                    "oldValue": "smit_mungali"
-                }
-            
-        }, 
-        "jiraItem": {
-            "priority": "P00", 
-            "status": "Done", 
-            "jiraType": "Epic", 
-            "jiraName": "SDNAS CP to consume DP raised single notification", 
-            "qaRepresentative": null, 
-            "functionalTest": true, 
-            "fixVersion": "PSI_40", 
-            "jiraId": "TRIES-35898", 
-            "jiraParentId": "TRIF-1017"
-        }, 
-        "qcItem": {
-            "status": "Done", 
-            "requirementType": "Epic", 
-            "requirementId": "2147"
+            "requirementId": "1765"
         }
     }, 
     {
         "diffItem": {
-            "updatedTime": 1598489425, 
-            "type": "Update", 
-            "updatedField": 
+            "updateTime": 1599708367, 
+            "type": "Updated", 
+            "updatedFields": [
                 {
-                    "fieldName": "qaRepresentative", 
-                    "newValue": "", 
-                    "oldValue": "vinod_gk"
+                    "fieldName": "qaFeatureOwner", 
+                    "newValue": null, 
+                    "oldValue": "jbird"
                 }
-            
-        }, 
-        "jiraItem": {
-            "priority": "P01", 
-            "status": "Done", 
-            "jiraType": "Epic", 
-            "jiraName": "Quality TRIF-1017 [SDNAS-INT] Enhancements to Handle Out of Space on an appliance", 
-            "qaRepresentative": null, 
-            "functionalTest": true, 
-            "fixVersion": "PSI_41", 
-            "jiraId": "TRIES-35721", 
-            "jiraParentId": "TRIF-1017"
-        }, 
-        "qcItem": {
-            "status": "Done", 
-            "requirementType": "Epic", 
-            "requirementId": "2217"
-        }
-    }, 
-    {
-        "diffItem": {
-            "updatedTime": 1598489425, 
-            "type": "Update", 
-            "updatedField": 
-                {
-                    "fieldName": "qaRepresentative", 
-                    "newValue": "", 
-                    "oldValue": null
-                }
-            
-        }, 
-        "jiraItem": {
-            "priority": "P00", 
-            "status": "Done", 
-            "jiraType": "Epic", 
-            "jiraName": "MD Out Of Space early call home alert", 
-            "qaRepresentative": null, 
-            "functionalTest": true, 
-            "fixVersion": "PSI_40", 
-            "jiraId": "TRIES-35310", 
-            "jiraParentId": "TRIF-1017"
-        }, 
-        "qcItem": {
-            "status": "Done", 
-            "requirementType": "Epic", 
-            "requirementId": "2027"
-        }
-    }, 
-    {
-        "diffItem": {
-            "updatedTime": 1598489425, 
-            "type": "Update", 
-            "updatedField": 
-                {
-                    "fieldName": "qaRepresentative", 
-                    "newValue": "", 
-                    "oldValue": null
-                }
-            
-        }, 
-        "jiraItem": {
-            "priority": "P00", 
-            "status": "Done", 
-            "jiraType": "Epic", 
-            "jiraName": "Dynamic adjust MD/VLB expansion threshold for special IO/config pattern", 
-            "qaRepresentative": null, 
-            "functionalTest": true, 
-            "fixVersion": "PSI_40", 
-            "jiraId": "TRIES-35280", 
-            "jiraParentId": "TRIF-1017"
-        }, 
-        "qcItem": {
-            "status": "Done", 
-            "requirementType": "Epic", 
-            "requirementId": "2026"
-        }
-    }, 
-    {
-        "diffItem": {
-            "updatedTime": 1598489425, 
-            "type": "Update", 
-            "updatedField": 
-                {
-                    "fieldName": "qaRepresentative", 
-                    "newValue": "", 
-                    "oldValue": null
-                }
-            
-        }, 
-        "jiraItem": {
-            "priority": "P00", 
-            "status": "Done", 
-            "jiraType": "Epic", 
-            "jiraName": "Change Call Home behavior at utilization level 90%/95%/99% - Data", 
-            "qaRepresentative": null, 
-            "functionalTest": true, 
-            "fixVersion": "PSI_40", 
-            "jiraId": "TRIES-34129", 
-            "jiraParentId": "TRIF-1017"
-        }, 
-        "qcItem": {
-            "status": "Done", 
-            "requirementType": "Epic", 
-            "requirementId": "2025"
-        }
-    }, 
-    {
-        "diffItem": {
-            "updatedTime": 1598489426, 
-            "type": "Update", 
-            "updatedField": 
-                {
-                    "fieldName": "qaRepresentative", 
-                    "newValue": "", 
-                    "oldValue": null
-                }
-            
-        }, 
-        "jiraItem": {
-            "priority": "P00", 
-            "status": "Done", 
-            "jiraType": "Epic", 
-            "jiraName": "Disable volume expansion when system is in OOS/WP", 
-            "qaRepresentative": null, 
-            "functionalTest": true, 
-            "fixVersion": "PSI_40", 
-            "jiraId": "TRIES-33265", 
-            "jiraParentId": "TRIF-1017"
-        }, 
-        "qcItem": {
-            "status": "Done", 
-            "requirementType": "Epic", 
-            "requirementId": "2023"
-        }
-    }, 
-    {
-        "diffItem": {
-            "updatedTime": 1598489426, 
-            "type": "Update", 
-            "updatedField": 
-                {
-                    "fieldName": "qaRepresentative", 
-                    "newValue": "", 
-                    "oldValue": null
-                }
-            
-        }, 
-        "jiraItem": {
-            "priority": "P00", 
-            "status": "Done", 
-            "jiraType": "Epic", 
-            "jiraName": "Reject volume creation with explicit error status when system is in OOS/WP mode", 
-            "qaRepresentative": null, 
-            "functionalTest": true, 
-            "fixVersion": "PSI_40", 
-            "jiraId": "TRIES-33262", 
-            "jiraParentId": "TRIF-1017"
-        }, 
-        "qcItem": {
-            "status": "Done", 
-            "requirementType": "Epic", 
-            "requirementId": "2022"
-        }
-    }, 
-    {
-        "diffItem": {
-            "updatedTime": 1598489426, 
-            "type": "Update", 
-            "updatedField": 
-                {
-                    "fieldName": "qaRepresentative", 
-                    "newValue": "", 
-                    "oldValue": null
-                }
-            
-        }, 
-        "jiraItem": {
-            "priority": "P00", 
-            "status": "Done", 
-            "jiraType": "Epic", 
-            "jiraName": "DP raise notification for SDNAS and other clients to provide earlier warning of Out Of Space ", 
-            "qaRepresentative": null, 
-            "functionalTest": true, 
-            "fixVersion": "PSI_40", 
-            "jiraId": "TRIES-32843", 
-            "jiraParentId": "TRIF-1017"
-        }, 
-        "qcItem": {
-            "status": "Done", 
-            "requirementType": "Epic", 
-            "requirementId": "2021"
-        }
-    }, 
-    {
-        "diffItem": {
-            "updatedTime": 1598489426, 
-            "type": "Update", 
-            "updatedField": 
-                {
-                    "fieldName": "qaRepresentative", 
-                    "newValue": "", 
-                    "oldValue": null
-                }
-            
-        }, 
-        "jiraItem": {
-            "priority": "P00", 
-            "status": "Done", 
-            "jiraType": "Epic", 
-            "jiraName": "PLB defrag", 
-            "qaRepresentative": null, 
-            "functionalTest": true, 
-            "fixVersion": "PSI_40", 
-            "jiraId": "TRIES-32842", 
-            "jiraParentId": "TRIF-1017"
-        }, 
-        "qcItem": {
-            "status": "Done", 
-            "requirementType": "Epic", 
-            "requirementId": "2148"
-        }
-    }, 
-    {
-        "diffItem": {
-            "updatedTime": 1598489426, 
-            "type": "Update", 
-            "updatedField": 
-                {
-                    "fieldName": "jiraParentId", 
-                    "newValue": "2339", 
-                    "oldValue": "2215"
-                }
-            
-        }, 
-        "jiraItem": {
-            "priority": "P00", 
-            "status": "Done", 
-            "jiraType": "Feature", 
-            "jiraName": "Trident NAS NDU should continue on NAS warnings", 
-            "qaRepresentative": "Vinod.GK@emc.com", 
-            "functionalTest": true, 
-            "fixVersion": "Smuttynose-SP3", 
-            "jiraId": "TRIF-990", 
-            "jiraParentId": null
-        }, 
-        "qcItem": {
-            "status": "N/A", 
-            "requirementType": "Feature", 
-            "requirementId": "2287"
-        }
-    }, 
-    {
-        "diffItem": {
-            "updatedTime": 1598489427, 
-            "type": "Update", 
-            "updatedField": 
-                {
-                    "fieldName": "jiraParentId", 
-                    "newValue": "2339", 
-                    "oldValue": "2210"
-                }
-            
-        }, 
-        "jiraItem": {
-            "priority": "P01", 
-            "status": "Implementing", 
-            "jiraType": "Feature", 
-            "jiraName": "PowerStoreX ESX version update for SN SP3", 
-            "qaRepresentative": null, 
-            "functionalTest": true, 
-            "fixVersion": "Smuttynose-SP3", 
-            "jiraId": "TRIF-969", 
-            "jiraParentId": null
-        }, 
-        "qcItem": {
-            "status": "N/A", 
-            "requirementType": "Feature", 
-            "requirementId": "2286"
-        }
-    }, 
-    {
-        "diffItem": {
-            "updatedTime": 1598489429, 
-            "type": "Update", 
-            "updatedField": 
-                {
-                    "fieldName": "qaRepresentative", 
-                    "newValue": "", 
-                    "oldValue": null
-                }
-            
+            ]
         }, 
         "jiraItem": {
             "priority": "P00", 
             "status": "Implementing", 
-            "jiraType": "Epic", 
-            "jiraName": "Platform work items for 6.7EP15 delivery to SP3", 
-            "qaRepresentative": null, 
-            "functionalTest": true, 
-            "fixVersion": "PSI_41", 
-            "jiraId": "TRIES-45254", 
-            "jiraParentId": "TRIF-969"
+            "jiraType": "Feature", 
+            "jiraName": "Warning State for Job Steps  is not intuitively available for users", 
+            "qaRepresentative": "bjack@emc.com", 
+            "functionalTest": "Yes", 
+            "fixVersion": "Foothills", 
+            "jiraId": "TRIF-761", 
+            "jiraParentId": "TRII-23"
         }, 
         "qcItem": {
-            "status": "In Progress", 
-            "requirementType": "Epic", 
-            "requirementId": "2350"
+            "status": "N/A", 
+            "requirementType": "Feature", 
+            "requirementId": "1918"
         }
     }, 
     {
         "diffItem": {
-            "updatedTime": 1598489430, 
-            "type": "Update", 
-            "updatedField": 
+            "updateTime": 1599708374, 
+            "type": "Updated", 
+            "updatedFields": [
                 {
-                    "fieldName": "qaRepresentative", 
-                    "newValue": "", 
-                    "oldValue": null
-                }
-            
-        }, 
-        "jiraItem": {
-            "priority": "P00", 
-            "status": "Implementing", 
-            "jiraType": "Epic", 
-            "jiraName": "vSphere 6.7P02 bake time and roll out", 
-            "qaRepresentative": null, 
-            "functionalTest": true, 
-            "fixVersion": "PSI_41", 
-            "jiraId": "TRIES-28626", 
-            "jiraParentId": "TRIF-969"
-        }, 
-        "qcItem": {
-            "status": "In Progress", 
-            "requirementType": "Epic", 
-            "requirementId": "2351"
-        }
-    }, 
-    {
-        "diffItem": {
-            "updatedTime": 1598489430, 
-            "type": "Update", 
-            "updatedField": 
-                {
-                    "fieldName": "qaRepresentative", 
+                    "fieldName": "qaFeatureOwner", 
                     "newValue": null, 
                     "oldValue": "rajagr2"
                 }
-            
+            ]
+        }, 
+        "jiraItem": {
+            "priority": "P01", 
+            "status": "Done", 
+            "jiraType": "Feature", 
+            "jiraName": "Add iSCSI storage performance metrics per ip_port on REST and TMA", 
+            "qaRepresentative": "rajasekaran.rajagopal@emc.com", 
+            "functionalTest": "Yes", 
+            "fixVersion": "Foothills", 
+            "jiraId": "TRIF-534", 
+            "jiraParentId": "TRII-105"
+        }, 
+        "qcItem": {
+            "status": "N/A", 
+            "requirementType": "Feature", 
+            "requirementId": "1726"
+        }
+    }, 
+    {
+        "diffItem": {
+            "updateTime": 1599708381, 
+            "type": "Updated", 
+            "updatedFields": [
+                {
+                    "fieldName": "qaFeatureOwner", 
+                    "newValue": null, 
+                    "oldValue": "jbird"
+                }
+            ]
         }, 
         "jiraItem": {
             "priority": "P00", 
-            "status": "Implementing", 
+            "status": "Done", 
             "jiraType": "Feature", 
-            "jiraName": "Appliance capacity metrics availability when DP is OOS", 
-            "qaRepresentative": "rajasekaran.rajagopal@emc.com", 
-            "functionalTest": true, 
-            "fixVersion": "Smuttynose-SP3", 
-            "jiraId": "TRIF-925", 
+            "jiraName": "CPDM GUI Infrastructure (Foothills) - Not Customer Facing", 
+            "qaRepresentative": "bjack@emc.com", 
+            "functionalTest": "Yes", 
+            "fixVersion": "Foothills", 
+            "jiraId": "TRIF-465", 
             "jiraParentId": "TRII-106"
         }, 
         "qcItem": {
             "status": "N/A", 
             "requirementType": "Feature", 
-            "requirementId": "2144"
+            "requirementId": "1920"
         }
     }, 
     {
         "diffItem": {
-            "updatedTime": 1598489431, 
-            "type": "Update", 
-            "updatedField": 
+            "updateTime": 1599708385, 
+            "type": "Updated", 
+            "updatedFields": [
                 {
-                    "fieldName": "status", 
-                    "newValue": "Done", 
-                    "oldValue": "In Progress"
+                    "fieldName": "qaFeatureOwner", 
+                    "newValue": null, 
+                    "oldValue": "jbird"
                 }
-            
-        }, 
-        "jiraItem": {
-            "priority": "P01", 
-            "status": "Done", 
-            "jiraType": "Epic", 
-            "jiraName": "Display capacity metrics when DP is in RO mode due to OOS condition ", 
-            "qaRepresentative": null, 
-            "functionalTest": true, 
-            "fixVersion": "PSI_41", 
-            "jiraId": "TRIES-23818", 
-            "jiraParentId": "TRIF-925"
-        }, 
-        "qcItem": {
-            "status": "Done", 
-            "requirementType": "Epic", 
-            "requirementId": "2146"
-        }
-    }, 
-    {
-        "diffItem": {
-            "updatedTime": 1598489431, 
-            "type": "Update", 
-            "updatedField": 
-                {
-                    "fieldName": "jiraParentId", 
-                    "newValue": "2339", 
-                    "oldValue": "2210"
-                }
-            
+            ]
         }, 
         "jiraItem": {
             "priority": "P00", 
             "status": "Done", 
             "jiraType": "Feature", 
-            "jiraName": "PSTX: Configuration for best performance should happen automatically", 
-            "qaRepresentative": "anitha.chittibabu@emc.com", 
-            "functionalTest": true, 
-            "fixVersion": "Smuttynose-SP3", 
-            "jiraId": "TRIF-896", 
-            "jiraParentId": null
+            "jiraName": " Independent System Health check ", 
+            "qaRepresentative": "bjack@emc.com", 
+            "functionalTest": "Yes", 
+            "fixVersion": "Foothills", 
+            "jiraId": "TRIF-460", 
+            "jiraParentId": "TRII-91"
         }, 
         "qcItem": {
             "status": "N/A", 
             "requirementType": "Feature", 
-            "requirementId": "2257"
+            "requirementId": "1806"
         }
     }, 
     {
         "diffItem": {
-            "updatedTime": 1598489433, 
-            "type": "Update", 
-            "updatedField": 
+            "updateTime": 1599708389, 
+            "type": "Updated", 
+            "updatedFields": [
                 {
-                    "fieldName": "qaRepresentative", 
+                    "fieldName": "qaFeatureOwner", 
                     "newValue": null, 
-                    "oldValue": "krishanu_dhar"
+                    "oldValue": "jbird"
                 }
-            
+            ]
         }, 
         "jiraItem": {
-            "priority": "P00", 
+            "priority": "P01", 
             "status": "Done", 
             "jiraType": "Feature", 
-            "jiraName": "Orchestrated disruptive migration (Agent-less DT) for current supported source arrays and XtremIO", 
-            "qaRepresentative": "Krishanu_Dhar@Dell.com", 
-            "functionalTest": true, 
-            "fixVersion": "Smuttynose-SP3", 
-            "jiraId": "TRIF-604", 
+            "jiraName": "CloudIQ Integrations from Trident back-end engineering data/metrics (Post SN GA MVP)", 
+            "qaRepresentative": "bjack@emc.com", 
+            "functionalTest": "Yes", 
+            "fixVersion": "Foothills", 
+            "jiraId": "TRIF-360", 
+            "jiraParentId": "TRII-1"
+        }, 
+        "qcItem": {
+            "status": "N/A", 
+            "requirementType": "Feature", 
+            "requirementId": "1789"
+        }
+    }, 
+    {
+        "diffItem": {
+            "updateTime": 1599708390, 
+            "type": "Updated", 
+            "updatedFields": [
+                {
+                    "fieldName": "qaFeatureOwner", 
+                    "newValue": null, 
+                    "oldValue": "rajagr2"
+                }
+            ]
+        }, 
+        "jiraItem": {
+            "priority": "P01", 
+            "status": "Done", 
+            "jiraType": "Feature", 
+            "jiraName": "SAN Replication - Support DR testing of a Volume or VG", 
+            "qaRepresentative": "rajasekaran.rajagopal@emc.com", 
+            "functionalTest": "Yes", 
+            "fixVersion": "Foothills", 
+            "jiraId": "TRIF-349", 
+            "jiraParentId": "TRII-64"
+        }, 
+        "qcItem": {
+            "status": "Not Covered", 
+            "requirementType": "Feature", 
+            "requirementId": "1402"
+        }
+    }, 
+    {
+        "diffItem": {
+            "updateTime": 1599708438, 
+            "type": "Updated", 
+            "updatedFields": [
+                {
+                    "fieldName": "qaFeatureOwner", 
+                    "newValue": null, 
+                    "oldValue": "rajagr2"
+                }
+            ]
+        }, 
+        "jiraItem": {
+            "priority": "P01", 
+            "status": "Done", 
+            "jiraType": "Feature", 
+            "jiraName": "DM - GUI Enhancements", 
+            "qaRepresentative": "rajasekaran.rajagopal@emc.com", 
+            "functionalTest": "Yes", 
+            "fixVersion": "Foothills", 
+            "jiraId": "TRIF-306", 
             "jiraParentId": "TRII-73"
         }, 
         "qcItem": {
             "status": "N/A", 
             "requirementType": "Feature", 
-            "requirementId": "2221"
+            "requirementId": "1768"
+        }
+    }, 
+    {
+        "diffItem": {
+            "updateTime": 1599708456, 
+            "type": "Updated", 
+            "updatedFields": [
+                {
+                    "fieldName": "qaFeatureOwner", 
+                    "newValue": null, 
+                    "oldValue": "bashs"
+                }
+            ]
+        }, 
+        "jiraItem": {
+            "priority": "P01", 
+            "status": "Done", 
+            "jiraType": "Feature", 
+            "jiraName": "TMA Foothills - UX feedback & GUI enhancements", 
+            "qaRepresentative": "bjack@emc.com", 
+            "functionalTest": "Yes", 
+            "fixVersion": "Foothills", 
+            "jiraId": "TRIF-128", 
+            "jiraParentId": "TRII-23"
+        }, 
+        "qcItem": {
+            "status": "Not Covered", 
+            "requirementType": "Feature", 
+            "requirementId": "772"
         }
     }
 ]
-
 const key = "QYZNRVlzTAzJjWJLxobY24hGYcoclsaf4ZX5BLhGSi0Xa4cMC1APBoN";
 async function sendbellaData() {
     await fetch('http://localhost:4000/api/PostBellaData/GetBellaData', {
