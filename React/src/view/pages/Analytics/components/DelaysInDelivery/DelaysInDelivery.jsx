@@ -3,7 +3,7 @@ import "./DelaysInDelivery.css";
 import Select from 'react-select'
 import { useState, useEffect,useRef } from 'react';
 
-const serverFilters = {
+let serverFilters = {
   fixVersion: [],
   jiraType: [],
   qaRepresentative: [],
@@ -53,6 +53,14 @@ function DelaysInDelivery() {
   }
 
   useEffect(() => {
+     serverFilters = {
+      fixVersion: [],
+      jiraType: [],
+      qaRepresentative: [],
+      startDate: "",
+      endDate: "",
+      label: ["weekly"]
+    };
     fetch('api/analytics/delaysInDeliveryFilters', {
       method: 'POST',
       body: JSON.stringify(serverFilters),

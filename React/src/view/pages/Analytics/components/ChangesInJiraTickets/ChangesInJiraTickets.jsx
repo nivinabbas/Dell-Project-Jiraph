@@ -9,7 +9,7 @@ import Chart from "../charts/Chart"
 
 
 // Options To Send == > Server 
-const serverFilters = {
+let serverFilters = {
   values: [],
   status: [],
   qaRepresentative: [],
@@ -24,7 +24,14 @@ function ChangesInJiraTickets() {
   // Functions ==> Fetch : 
 
   useEffect(() => {
-
+     serverFilters = {
+      values: [],
+      status: [],
+      qaRepresentative: [],
+      startDate: "",
+      endDate: "",
+      label: ["weekly"]
+    };
     fetch('/api/analytics/changeOfJIRATicketsStatusFilters', {
       method: 'POST',
       body: JSON.stringify(serverFilters),

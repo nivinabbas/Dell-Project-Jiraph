@@ -3,7 +3,7 @@ import "./ChangesByParentId.css";
 import Select from 'react-select'
 import { useState, useEffect } from 'react';
 import Chart from "../charts/Chart"
-const serverFilters = { fixVersion: [], startDate: (new Date("2020-08-1")), endDate: new Date("2020-09-1")};
+let serverFilters = { fixVersion: [], startDate: (new Date("2020-08-1")), endDate: new Date("2020-09-1")};
 
 function ChangesByParentId() {
 
@@ -16,6 +16,7 @@ function ChangesByParentId() {
   
 
   useEffect(() => {
+    serverFilters = { fixVersion: [], startDate: (new Date("2020-08-1")), endDate: new Date("2020-09-1")};
     fetch('/api/analytics/changesByParentIdFilters', {
       method: 'POST',
       body: JSON.stringify({ serverFilters }),
