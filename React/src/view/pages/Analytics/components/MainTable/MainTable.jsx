@@ -33,6 +33,8 @@ function MainTable(props) {
       cellStyle: {
         minWidth: 150,
         border: '1px solid steelBlue',
+        backgroundColor: 'whiteSmoke',
+        color: 'black',
        
       },
     },
@@ -40,22 +42,27 @@ function MainTable(props) {
       title: 'jira Name', field: 'jiraName',
       cellStyle: {
         minWidth: 300,
-        border: '1px solid steelBlue'
+        border: '1px solid steelBlue',
+        backgroundColor: 'whiteSmoke',
+        color: 'black',
       },
     },
     {
       title: 'jira Type', field: 'jiraType',
       cellStyle: {
         minWidth: 100,
-        border: '1px solid steelBlue'
-
+        border: '1px solid steelBlue',
+        backgroundColor: 'whiteSmoke',
+        color: 'black',
       },
     },
     {
       title: 'Jira Priority', field: 'jiraPriority',
       cellStyle: {
         minWidth: 150,
-        border: '1px solid steelBlue'
+        border: '1px solid steelBlue',
+        backgroundColor: 'whiteSmoke',
+        color: 'black',
 
       },
     },
@@ -63,7 +70,9 @@ function MainTable(props) {
       title: 'Jira Item Status', field: 'JiraItemStatus',
       cellStyle: {
         minWidth: 150,
-        border: '1px solid steelBlue'
+        border: '1px solid steelBlue',
+        backgroundColor: 'whiteSmoke',
+        color: 'black',
 
       },
     },
@@ -71,7 +80,9 @@ function MainTable(props) {
       title: 'jira Parent Id', field: 'jiraParentId',
       cellStyle: {
         minWidth: 200,
-        border: '1px solid steelBlue'
+        border: '1px solid steelBlue',
+        backgroundColor: 'whiteSmoke',
+        color: 'black',
 
       },
     },
@@ -79,7 +90,9 @@ function MainTable(props) {
       title: 'Functional Test', field: 'functionalTest',
       cellStyle: {
         minWidth: 150,
-        border: '1px solid steelBlue'
+        border: '1px solid steelBlue',
+        backgroundColor: 'whiteSmoke',
+        color: 'black',
 
       },
     },
@@ -87,7 +100,10 @@ function MainTable(props) {
       title: 'Qa Representative', field: 'qaRepresentative',
       cellStyle: {
         minWidth: 200,
-        border: '1px solid steelBlue'
+        border: '1px solid steelBlue',
+        backgroundColor: 'whiteSmoke',
+        color: 'black',
+        
 
       },
     },
@@ -95,7 +111,9 @@ function MainTable(props) {
       title: 'Fix Version', field: 'fixVersion',
       cellStyle: {
         minWidth: 150,
-        border: '1px solid steelBlue'
+        border: '1px solid steelBlue',
+        backgroundColor: 'whiteSmoke',
+        color: 'black',
 
       },
     },
@@ -103,7 +121,9 @@ function MainTable(props) {
       title: 'Qc Requirement Id', field: 'qcRequirementId',
       cellStyle: {
         minWidth: 150,
-        border: '1px solid steelBlue'
+        border: '1px solid steelBlue',
+        backgroundColor: 'whiteSmoke',
+        color: 'black',
 
       },
     },
@@ -111,7 +131,9 @@ function MainTable(props) {
       title: 'Qc Requirement Type', field: 'qcRequirementType',
       cellStyle: {
         minWidth: 200,
-        border: '1px solid steelBlue'
+        border: '1px solid steelBlue',
+        backgroundColor: 'whiteSmoke',
+        color: 'black',
 
       },
     },
@@ -119,7 +141,9 @@ function MainTable(props) {
       title: 'QC Status', field: 'qcStatus',
       cellStyle: {
         minWidth: 150,
-        border: '1px solid steelBlue'
+        border: '1px solid steelBlue',
+        backgroundColor: 'whiteSmoke',
+        color: 'black',
 
       },
     },
@@ -127,7 +151,9 @@ function MainTable(props) {
       title: 'Updated Time', field: 'updatedTime',
       cellStyle: {
         minWidth: 200,
-        border: '1px solid steelBlue'
+        border: '1px solid steelBlue',
+        backgroundColor: 'whiteSmoke',
+        color: 'black',
 
       },
     },
@@ -136,14 +162,18 @@ function MainTable(props) {
       cellStyle: {
         height: 'fit-content',
         minWidth: 200,
-        border: '1px solid steelBlue'
+        border: '1px solid steelBlue',
+        backgroundColor: 'whiteSmoke',
+        color: 'black',
       },
     },
     {
       title: 'Old Value', field: 'oldValue',
       cellStyle: {
         minWidth: 100,
-        border: '1px solid steelBlue'
+        border: '1px solid steelBlue',
+        backgroundColor: 'whiteSmoke',
+        color: 'black',
 
       },
     },
@@ -151,7 +181,9 @@ function MainTable(props) {
       title: 'New Value', field: 'newValue',
       cellStyle: {
         minWidth: 100,
-        border: '1px solid steelBlue'
+        border: '1px solid steelBlue',
+        backgroundColor: 'whiteSmoke',
+        color: 'black',
 
       },
     },
@@ -191,6 +223,7 @@ function MainTable(props) {
           columns={columns}
           data={data}
           options={{
+            
             headerStyle: {
               backgroundColor: '#00447C',
               color: '#FFF',
