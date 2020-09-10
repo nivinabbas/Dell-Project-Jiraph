@@ -42,9 +42,13 @@ function ChangesInJiraTickets() {
       .then((res) => res.json())
       .then((data) => {
         console.log(data)
+        if(data.length>0){
         setStatusOptions(data[0].status)
         setQaRepresentativeOptions(data[0].qa)
-
+        }
+        else {
+          alert("Check the connection with server...")
+        }
       })
 
     fetch('/api/analytics/changeOfJIRATicketsStatus', {

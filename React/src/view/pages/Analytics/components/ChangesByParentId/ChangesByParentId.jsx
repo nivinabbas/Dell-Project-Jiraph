@@ -27,7 +27,12 @@ function ChangesByParentId() {
       .then((res) => res.json())
       .then((data) => {
         console.log(data)
-        setfixVersionOptions(data[0].fixVersions)
+        if(data.length>0){
+        setfixVersionOptions(data[0].fixVersions)}
+        else {
+          alert("Check the connection with server ... ")
+        }
+        
       })
   }, [])
 

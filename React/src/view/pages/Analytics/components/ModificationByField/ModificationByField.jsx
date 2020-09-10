@@ -28,8 +28,13 @@ function ModificationByField(props) {
       .then(res => res.json())
       .then(data => {
         console.log(data)
+        if(data.length>0){
         setFieldNameOptions(data[0].labels)
         setQaRepresentativeOptions(data[0].QA);
+        }
+        else {
+          alert("Check the connection with the server...")
+        }
       })
 
       fetch('/api/analytics/modificationByField', {
