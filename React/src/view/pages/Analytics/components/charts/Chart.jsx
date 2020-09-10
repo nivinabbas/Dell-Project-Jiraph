@@ -40,7 +40,8 @@ function Chart(props) {
             </div>
           )
         })}
-        {UiObjs.length==0 && <div>fuck</div>}
+        {UiObjs.length==0 && <div className="warningData">
+                                  <h4>     No records to display    </h4></div>}
       </div>
 
       <div className="Chart__Table">

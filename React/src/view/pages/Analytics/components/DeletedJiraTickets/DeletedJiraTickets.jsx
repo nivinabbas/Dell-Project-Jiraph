@@ -156,7 +156,7 @@ function DeletedJiraTickets() {
   return (
 
     <div className='DeletedJiraTicketsWrapper'>
-      <div className="DeletedJiraTickets__Chart"> {UiObjs.length > 0 && <Chart UiObjs={UiObjs} />}</div>
+      <div className="DeletedJiraTickets__Chart"> {UiObjs && <Chart UiObjs={UiObjs} />}</div>
       <div className="DeletedJiraTickets__Title">Deleted Jira Tickets</div>
 
       {/* Select Filters */}
