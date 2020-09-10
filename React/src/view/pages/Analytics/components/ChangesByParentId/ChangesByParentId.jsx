@@ -3,6 +3,7 @@ import "./ChangesByParentId.css";
 import Select from 'react-select'
 import { useState, useEffect } from 'react';
 import Chart from "../charts/Chart"
+import PieChartAnalysis from "../charts/PicChartAnalysis"
 let serverFilters = { fixVersion: [], startDate: (new Date("2020-08-1")), endDate: new Date("2020-09-1")};
 
 function ChangesByParentId() {
@@ -98,8 +99,8 @@ function ChangesByParentId() {
         />
 
       </form>
-      <div className="ChangesByParentId__Chart">
-
+      <div className="ChangesByParentId__Chart" >
+      <PieChartAnalysis />
       </div>
     </div>
   )
