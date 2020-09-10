@@ -193,12 +193,12 @@ function MainTable(props) {
   tasks.map((task) => {
     return data = [...data,
     {
-      jiraId: task.jiraItem.jiraId,
-      jiraName: task.jiraItem.jiraName,
-      jiraType: task.jiraItem.jiraType,
+      jiraId: task.jiraItem.id,
+      jiraName: task.jiraItem.name,
+      jiraType: task.jiraItem.type,
       jiraPriority: task.jiraItem.priority,
       JiraItemStatus: task.jiraItem.status,
-      jiraParentId: task.jiraItem.jiraParentId,
+      jiraParentId: task.jiraItem.parentId,
       functionalTest: task.jiraItem.functionalTest,
       qaRepresentative: task.jiraItem.qaRepresentative,
       fixVersion: task.jiraItem.fixVersion,

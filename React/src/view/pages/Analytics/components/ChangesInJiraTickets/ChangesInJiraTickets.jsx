@@ -42,9 +42,13 @@ function ChangesInJiraTickets() {
       .then((res) => res.json())
       .then((data) => {
         console.log(data)
+        if(data.length>0){
         setStatusOptions(data[0].status)
         setQaRepresentativeOptions(data[0].qa)
-
+        }
+        else {
+          alert("Check the connection with server...")
+        }
       })
 
     fetch('/api/analytics/changeOfJIRATicketsStatus', {
@@ -173,7 +177,7 @@ function ChangesInJiraTickets() {
       <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
 
       <div className="ChangeOfJiraTicket__Chart">
-        {UiObjs.length > 0 && <Chart UiObjs={UiObjs} />}
+        {UiObjs && <Chart UiObjs={UiObjs} />}
       </div>
 
       <div className="ChangeOfJiraTicket__Title">Changes Of Jira Tickets</div>

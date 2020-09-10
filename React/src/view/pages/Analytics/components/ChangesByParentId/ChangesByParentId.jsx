@@ -28,7 +28,12 @@ function ChangesByParentId() {
       .then((res) => res.json())
       .then((data) => {
         console.log(data)
-        setfixVersionOptions(data[0].fixVersions)
+        if(data.length>0){
+        setfixVersionOptions(data[0].fixVersions)}
+        else {
+          alert("Check the connection with server ... ")
+        }
+        
       })
   }, [])
 
@@ -70,7 +75,7 @@ function ChangesByParentId() {
     <div className='ChangesByParentIdWrapper'>
       <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
       <div className="ChangesByParentId__Title">Changes By Parent Id</div>
-      <div className="ChangesByParentId__Chart"> {UiObjs.length > 0 && <Chart UiObjs={UiObjs} />}</div>
+      <div className="ChangesByParentId__Chart"> {UiObjs && <Chart UiObjs={UiObjs} />}</div>
       {/* Select Filters */}
 
       <form className="ChangesByParentId__Filters">

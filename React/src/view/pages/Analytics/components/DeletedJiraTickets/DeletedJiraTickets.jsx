@@ -81,8 +81,12 @@ function DeletedJiraTickets() {
       .then((res) => res.json())
       .then((data) => {
         console.log(data)
+        if(data.length>0){
         setPriorityOptions(data[0].priorities)
-        setQaRepresentativeOptions(data[0].QA)
+        setQaRepresentativeOptions(data[0].QA)}
+        else {
+          alert(" Check the connection with server ...")
+        }
       })
 
   }
@@ -156,7 +160,7 @@ function DeletedJiraTickets() {
   return (
 
     <div className='DeletedJiraTicketsWrapper'>
-      <div className="DeletedJiraTickets__Chart"> {UiObjs.length > 0 && <Chart UiObjs={UiObjs} />}</div>
+      <div className="DeletedJiraTickets__Chart"> {UiObjs && <Chart UiObjs={UiObjs} />}</div>
       <div className="DeletedJiraTickets__Title">Deleted Jira Tickets</div>
 
       {/* Select Filters */}
