@@ -8,7 +8,7 @@
   ". filterButtons ."
   ". . ."
 
-  "chartColors chart .";
+  ". chart .";
   
   background-color: #C8C9C7;
   }
@@ -16,6 +16,8 @@
 
   .ChangesByParentId__Chart{
     grid-area: chart;
+    margin: auto;
+   
   }
 
   .ChangesByParentId__Title{
@@ -76,13 +78,7 @@
   }
  
   
-  .ChangesByParentId__Chart{
-    
-      display: grid;
-    grid-area: PieChart;
-
-   justify-items: flex-end;
-  }
+  
 
   
 
