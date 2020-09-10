@@ -43,7 +43,7 @@ function Chart(props) {
       </div>
 
       <div className="Chart__Table">
-        {tasks && <MainTable changes={true} tasks={tasks} />}
+        {tasks.length>0 && <MainTable tasks={tasks} />}
       </div>
 
     </div>
