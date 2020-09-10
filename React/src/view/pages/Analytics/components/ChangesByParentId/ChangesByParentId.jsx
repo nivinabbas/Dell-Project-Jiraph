@@ -17,7 +17,7 @@ function ChangesByParentId() {
   
 
   useEffect(() => {
-    serverFilters = { fixVersion: [], startDate: ("2020-08-1"), endDate: "2020-09-30"};
+    serverFilters = { fixVersion: [], startDate: ("2020-08-1"), endDate: ("2020-09-30")};
     fetch('/api/analytics/changesByParentIdFilters', {
       method: 'POST',
       body: JSON.stringify({ serverFilters }),
@@ -50,7 +50,7 @@ function ChangesByParentId() {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        
+        setUiObjs(data)
       })
   }
 
@@ -76,7 +76,7 @@ function ChangesByParentId() {
       <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
       <div className="ChangesByParentId__Title">Changes By Parent Id</div>
       <div className="ChangesByParentId__Chart" >
-      <PieChartAnalysis />
+      {UiObjs.length>0 && <PieChartAnalysis UiObjs={UiObjs} />}
       </div>
       {/* Select Filters */}
 
