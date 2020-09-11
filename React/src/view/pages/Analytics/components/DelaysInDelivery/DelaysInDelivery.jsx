@@ -51,11 +51,12 @@ function DelaysInDelivery() {
 
   useEffect(() => {
     let startDate = new Date()
-  let endDate = new Date()
-  startDate.setMonth(endDate.getMonth() - 1)
-  const timeZone = startDate.getTimezoneOffset()/60
-  startDate.setHours(0-timeZone, 0, 0, 0)
-  endDate.setHours(0-timeZone, 0, 0, 0)
+    let endDate = new Date()
+    startDate.setMonth(endDate.getMonth() - 1)
+    const timeZone = startDate.getTimezoneOffset()/60
+    
+    startDate.setHours(0-timeZone, 0, 0, 0)
+    endDate.setHours(0-timeZone, 0, 0, 0)
      serverFilters = {
       fixVersion: [],
       jiraType: [],
@@ -78,7 +79,7 @@ function DelaysInDelivery() {
         if(data.length>0){
         setfixVersionOptions(data[0].fixVersion)}
         else {
-          alert("Check the connection with the server... ")
+          alert("no data received from the server... ")
         }
 
       })
@@ -94,8 +95,11 @@ function DelaysInDelivery() {
       })
         .then((res) => res.json())
         .then((data) => { 
-          
-          setQaRepresentativeOptions(data[0].qa); 
+          if(data.length>0){
+          setQaRepresentativeOptions(data[0].qa); }
+          else {
+            alert("no data received for (Qa) from the server... ")
+          }
         })
   
     }
@@ -105,11 +109,16 @@ function DelaysInDelivery() {
     const HandlefixVersionChange = (version => {
       serverFilters.jiraType=[]
       serverFilters.qaRepresentative = []
-      serverFilters.fixVersion=[version.value];
-      
-        render(serverFilters)
-        renderFilters(serverFilters);
-      })
+      if (version != null) {
+        serverFilters.fixVersion = [version.value]
+      }
+      else {
+        serverFilters.values = []
+      }
+      render(serverFilters);
+      renderFilters(serverFilters);
+    })
+   
 
   const HandlejiraTypeChange = (type => {
     serverFilters.jiraType=[]
@@ -173,6 +182,7 @@ function DelaysInDelivery() {
           placeholder="fix Version "
           className="DelaysInDelivery__Filter"
           onChange={HandlefixVersionChange}
+          isClearable={true}
 
         />
 

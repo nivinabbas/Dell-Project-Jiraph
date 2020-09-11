@@ -39,7 +39,7 @@ function ModificationByField(props) {
           setQaRepresentativeOptions(data[0].QA);
         }
         else {
-          alert("Check the connection with the server...")
+          alert("No data received from the server...")
         }
       })
 
