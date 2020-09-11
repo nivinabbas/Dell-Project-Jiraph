@@ -47,7 +47,6 @@ app.use("/api/PostBellaData", bellaRouting);
 // })
 
 
-
 // updateSaleh()
 //updating the time in diffitem
 function updateSaleh() {
@@ -77,8 +76,6 @@ function randomDate(start, end /*, startHour, endHour*/) {
     return date;
 }
 
-
- 
 
 
 app.listen(4000, () => {
