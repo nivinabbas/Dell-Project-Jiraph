@@ -54,6 +54,7 @@ function DelaysInDelivery() {
     let endDate = new Date()
     startDate.setMonth(endDate.getMonth() - 1)
     const timeZone = startDate.getTimezoneOffset()/60
+    
     startDate.setHours(0-timeZone, 0, 0, 0)
     endDate.setHours(0-timeZone, 0, 0, 0)
      serverFilters = {
@@ -94,8 +95,11 @@ function DelaysInDelivery() {
       })
         .then((res) => res.json())
         .then((data) => { 
-          
-          setQaRepresentativeOptions(data[0].qa); 
+          if(data.length>0){
+          setQaRepresentativeOptions(data[0].qa); }
+          else {
+            alert("no data received for (Qa) from the server... ")
+          }
         })
   
     }
