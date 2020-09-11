@@ -25,7 +25,7 @@ function ChangesInJiraTickets() {
 
   useEffect(() => {
      serverFilters = {
-      values: [],
+      values: ["newValue"],
       status: [],
       qaRepresentative: [],
       startDate: "",

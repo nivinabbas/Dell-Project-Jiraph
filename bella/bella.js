@@ -268,6 +268,7 @@ const Data = [
             "requirementId": "772"
         }
     }
+    
 ]
 const key = "QYZNRVlzTAzJjWJLxobY24hGYcoclsaf4ZX5BLhGSi0Xa4cMC1APBoN";
 async function sendbellaData() {
