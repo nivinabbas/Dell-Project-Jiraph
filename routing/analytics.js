@@ -401,11 +401,17 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
 
 
     //here we build the match expression according to the user's filters.
-    console.log(filterValue, filterStatus, filterQaRep, endDate, startDate, label)
 
 
     let matchFilterValue = { "$and": [] };
-    let ValToAgg = filterValue.length == 0 ? "$diffItem.updatedField.newValue" : `$diffItem.updatedField.${filterValue}`
+   
+    let ValToAgg = filterValue.length == 0 ? "$diffItem.updatedField.newValue" : `$diffItem.updatedField.${filterValue[0]}`
+
+    if(filterValue.length == 0){
+        filterValue[0] = "newValue"
+    }
+
+    console.log(filterValue, filterStatus, filterQaRep, endDate, startDate, label)
 
     let filtersArray = [];
 
