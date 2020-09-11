@@ -10,7 +10,7 @@ const PieChartAnalysis = (props) => {
   const [tasks,setTasks]= useState([]);
   const options = {
     series: [UiObjs[0].featuresSize, UiObjs[1].featuresSize, UiObjs[2].featuresSize],
-    labels: ['Light Changes(1-10)', 'Major Changes(11-19)', 'Critical Changes(20+)'],
+    labels: ['Light Changes(1-4)', 'Major Changes(5-9)', 'Critical Changes(10+)'],
     colors: ['#00ff00', '#ffff00', '#ff0000'],
     chart: {
       events: {
