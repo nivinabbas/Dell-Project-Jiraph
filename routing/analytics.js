@@ -327,19 +327,19 @@ router.post('/changesByParentIdFilters', async (req, res) => {
                 }
             }
         ])
-        let updateCounter = 0;
-        let deleteCounter = 0;
-        let createCounter = 0;
-        tasks.map((item,index)=>{
-            let tasks = item.tasks
-            tasks.map((task,index)=>{
-                if(task.diffItem.type === "Update"){
+        tasks.map((item, index) => {
+            let updateCounter = 0;
+            let deleteCounter = 0;
+            let createCounter = 0;
+            let tasksArray = item.tasks
+            tasksArray.map((task, index) => {
+                if (task.diffItem.type === "Update") {
                     updateCounter++
                 }
-                else if(task.diffItem.type === "Create"){
+                else if (task.diffItem.type === "Create") {
                     createCounter++
                 }
-                else{
+                else {
                     deleteCounter++
                 }
             })
@@ -348,23 +348,23 @@ router.post('/changesByParentIdFilters', async (req, res) => {
             item.Delete = deleteCounter
         })
         let groupedArray = [
-            {_id: "Green" , features:[] , featuresSize:0},
-            {_id: "Yellow" , features:[] , featuresSize:0},
-            {_id: "Red" , features:[] , featuresSize:0}
+            { _id: "Green", features: [], featuresSize: 0 },
+            { _id: "Yellow", features: [], featuresSize: 0 },
+            { _id: "Red", features: [], featuresSize: 0 }
         ]
 
-        tasks.map((item,index)=>{
+        tasks.map((item, index) => {
             let totalChanges = item.TotalChanges
-            if( totalChanges >= 0 && totalChanges <5){
+            if (totalChanges >= 0 && totalChanges < 5) {
                 groupedArray[0].features.push(item)
                 groupedArray[0].featuresSize++
             }
-            else if( totalChanges >= 5 && totalChanges <10){
+            else if (totalChanges >= 5 && totalChanges < 10) {
                 groupedArray[1].features.push(item)
                 groupedArray[1].featuresSize++
 
             }
-            else{
+            else {
                 groupedArray[2].features.push(item)
                 groupedArray[2].featuresSize++
 
