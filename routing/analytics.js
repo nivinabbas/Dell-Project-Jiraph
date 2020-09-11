@@ -573,52 +573,85 @@ router.post('/delaysInDelivery', async (req, res) => {
     console.log("DELAYSAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 
     const fixVersion = req.body.fixVersion[0]
+    const jiraTypeFilter = req.body.jiraType
     const label = req.body.label
-    // let startDate = req.body.startDate
-    // let endDate = req.body.endDate
-    // startDate = new Date(startDate)
-    // endDate = new Date(endDate)
+    const qaRepresentativeFilter = req.body.qaRepresentative
+    let startDate = req.body.startDate
+    let endDate = req.body.endDate
+    startDate = new Date(startDate)
+    endDate = new Date(endDate)
 
 
+    console.log(fixVersion,jiraTypeFilter,label,qaRepresentativeFilter)
 
     let dateFormat = '';
-    // if (label[0] == 'daily') {
-    //     dateFormat = "%Y-%m-%d"
-    //     console.log("yousef")
-    // }
-    // else if (label[0] == 'yearly') {
-    //     dateFormat = "%Y"
-    // }
-    // else {
-    //     dateFormat = "%Y-%m"
-    // }
 
-    dateFormat = "%Y-%m-%d"
+    if (label[0] == 'daily') {
+        dateFormat = "%Y-%m-%d"
+        console.log("yousef")
+    }
+    else if (label[0] == 'yearly') {
+        dateFormat = "%Y"
+    }
+    else {
+        dateFormat = "%Y-%m"
+    }
 
     console.log(fixVersion)
 
+
+    let filtersArray = [];
+    let matchFilterValue = { "$and": [] };
+
+
+    filtersArray.push({
+        "$or": [
+            { "diffItem.type": "Create" },
+            { "diffItem.type": "Delete" },
+            { "diffItem.type": "Update" }
+        ]
+    })
+    filtersArray.push({
+        "$or": [
+            {
+                "diffItem.updatedField.fieldName": "fixVersion",
+                "$or": [
+                    { "diffItem.updatedField.newValue": fixVersion },
+                    { "diffItem.updatedField.oldValue": fixVersion }
+                ]
+            },
+            { "diffItem.updatedField.fieldName": "functionalTest" }
+        ]
+    })
+
+    filtersArray.push({ "diffItem.updatedTime": { $gte: startDate } }, { "diffItem.updatedTime": { $lte: endDate } })
+    
+    if(jiraTypeFilter[0] != undefined && jiraTypeFilter.length != 0){
+        let typesArray = []
+        jiraTypeFilter.map((item,index) => {
+            typesArray.push({'diffItem.type' : item})
+        })
+        filtersArray.push({"$or": typesArray})
+    }
+
+    // multiselect QA REP
+    if (qaRepresentativeFilter[0] != undefined) {
+        if (qaRepresentativeFilter.length != 0) {
+            let qaArray = []
+            qaRepresentativeFilter.map(item => {
+                qaArray.push({ 'jiraItem.qaRepresentative': item })
+            })
+            // orArray.push(qaArray)
+            filtersArray.push({ "$or": qaArray })
+        }
+    }
+
+    matchFilterValue["$and"] = filtersArray
+
     const tasks = await TaskModel.aggregate([
         {
-            $match: {
-
-
-                $or: [
-                    { "diffItem.type": "Create" },
-                    { "diffItem.type": "Delete" },
-                    { "diffItem.type": "Update" }
-                ],
-                $or: [
-                    {
-                        "diffItem.updatedField.fieldName": "fixVersion",
-                        $or: [
-                            { "diffItem.updatedField.newValue": fixVersion },
-                            { "diffItem.updatedField.oldValue": fixVersion }
-                        ]
-                    },
-                    { "diffItem.updatedField.fieldName": "functionalTest" }
-                ]
-
-            }
+            $match: matchFilterValue
+            
         },
         {
             $group: {
