@@ -2,7 +2,7 @@ import React from 'react';
 import "./DelaysInDelivery.css";
 import Select from 'react-select'
 import { useState, useEffect,useRef } from 'react';
-
+import Chart from "../charts/Chart"
 let serverFilters = {
   fixVersion: [],
   jiraType: [],
@@ -15,27 +15,24 @@ let serverFilters = {
 function DelaysInDelivery() {
 
 
-  // const [UiObjs, setUiObjs] = useState([]);
+   const [UiObjs, setUiObjs] = useState([]);
 
   // Options To get From Server 
   const [fixVersionOptions, setfixVersionOptions] = useState([])
   const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([])
 
   const [jiraTypeOptions, setJiraTypeOptions] = useState([
-    {  value: "epic", label: "Epic" },
-    {  value: "feature", label: "Feature" },
-    {  value: "initiative", label: "Initiative" },
-    {  value: "version", label: "Version" }
-    
-    
+    {  value: "create", label: "Create" },
+    {  value: "deleted", label: "Deleted" },
+    {  value: "update", label: "Update" },
   ])
 
 
   const [labelOptions, setLabelOptions] = useState([
-    { name: "label", value: "daily", label: "Daily" },
-    { name: "label", value: "weekly", label: "Weekly" },
-    { name: "label", value: "monthly", label: "Monthly" },
-    { name: "label", value: "yearly", label: "Yearly" }
+    { value: "daily", label: "Daily" },
+    { value: "weekly", label: "Weekly" },
+    { value: "monthly", label: "Monthly" },
+    { value: "yearly", label: "Yearly" }
   ])
 
   // Functions ==> Fetch : 
@@ -53,7 +50,7 @@ function DelaysInDelivery() {
   }
 
   useEffect(() => {
-     serverFilters = {
+      serverFilters = {
       fixVersion: [],
       jiraType: [],
       qaRepresentative: [],
@@ -61,6 +58,7 @@ function DelaysInDelivery() {
       endDate: "",
       label: ["weekly"]
     };
+
     fetch('api/analytics/delaysInDeliveryFilters', {
       method: 'POST',
       body: JSON.stringify(serverFilters),
@@ -138,7 +136,8 @@ function DelaysInDelivery() {
 
     <div className='DelaysInDeliveryWrapper'>
        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
-      <div className="DelaysInDelivery__Title">Delays in Delivery</div>
+       <div className="DelaysInDelivery__Chart"> {UiObjs && <Chart UiObjs={UiObjs} />}</div>
+       <div className="DelaysInDelivery__Title">Delays in Delivery</div>
 
       {/* Select Filters */}
 
