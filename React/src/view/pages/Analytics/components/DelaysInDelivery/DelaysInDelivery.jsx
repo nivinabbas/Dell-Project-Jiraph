@@ -9,7 +9,7 @@ let serverFilters = {
   qaRepresentative: [],
   startDate: "",
   endDate: "",
-  label: ["weekly"]
+  label: []
 };
 
 function DelaysInDelivery() {
@@ -53,13 +53,19 @@ function DelaysInDelivery() {
   }
 
   useEffect(() => {
+    let startDate = new Date()
+  let endDate = new Date()
+  startDate.setMonth(endDate.getMonth() - 1)
+  const timeZone = startDate.getTimezoneOffset()/60
+  startDate.setHours(0-timeZone, 0, 0, 0)
+  endDate.setHours(0-timeZone, 0, 0, 0)
      serverFilters = {
       fixVersion: [],
       jiraType: [],
       qaRepresentative: [],
-      startDate: "",
-      endDate: "",
-      label: ["weekly"]
+      startDate: startDate,
+      endDate: endDate,
+      label: ["daily"]
     };
     fetch('api/analytics/delaysInDeliveryFilters', {
       method: 'POST',

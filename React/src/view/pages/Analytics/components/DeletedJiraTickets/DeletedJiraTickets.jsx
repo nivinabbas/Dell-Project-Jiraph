@@ -6,7 +6,7 @@ import Select from 'react-select';
 
 import { useState, useEffect } from 'react';
 
-let serverFilters = { priority: [], functionalTest: [], label: ["weekly"], qaRepresentative: [], startDate: (new Date("2020-08-1")), endDate: new Date("2020-09-1")};
+let serverFilters = { priority: [], functionalTest: [], label: [], qaRepresentative: [], startDate: "", endDate:""};
 
 
 
@@ -55,7 +55,13 @@ function DeletedJiraTickets() {
 
 
   useEffect(() => {
-    serverFilters = { priority: [], functionalTest: [], label: ["weekly"], qaRepresentative: [],  startDate: ("2020-08-1"), endDate: ("2020-09-30")};
+    let startDate = new Date()
+  let endDate = new Date()
+  startDate.setMonth(endDate.getMonth() - 1)
+  const timeZone = startDate.getTimezoneOffset()/60
+  startDate.setHours(0-timeZone, 0, 0, 0)
+  endDate.setHours(0-timeZone, 0, 0, 0)
+    serverFilters = { priority: [], functionalTest: [], label: ["daily"], qaRepresentative: [],  startDate: startDate, endDate: endDate};
 
     fetch('/api/analytics/deletedJiraTickets', {
       method: 'POST',

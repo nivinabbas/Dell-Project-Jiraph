@@ -1,11 +1,8 @@
 import React, { useEffect } from 'react';
 import "./ModificationByField.css";
 import { useState, useRef } from 'react';
-//import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
 import Select from "react-select"
 import Chart from "../charts/Chart"
-
-
 
 let serverFilters = { fieldName: [], values: [], qaRepresentative: [], startDate: "", endDate: "", label: [] };
 
@@ -15,17 +12,12 @@ let serverFilters = { fieldName: [], values: [], qaRepresentative: [], startDate
 function ModificationByField(props) {
 
   let startDate = new Date()
-
   let endDate = new Date()
   startDate.setMonth(endDate.getMonth() - 1)
   const timeZone = startDate.getTimezoneOffset()/60
   startDate.setHours(0-timeZone, 0, 0, 0)
   endDate.setHours(0-timeZone, 0, 0, 0)
-  var today = new Date();
-  today.setHours(0, 0, 0, 0)
-  var str = today.toGMTString();  // deprecated! use toUTCString()
-  
-  console.log(timeZone);
+
 
   
 
