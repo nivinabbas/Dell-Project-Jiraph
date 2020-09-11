@@ -31,7 +31,7 @@ function ChangesByParentId() {
         if(data.length>0){
         setfixVersionOptions(data[0].fixVersions)}
         else {
-          alert("Check the connection with server ... ")
+          alert("No data recieved from the server... ")
         }
         
       })

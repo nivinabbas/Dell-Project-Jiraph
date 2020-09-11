@@ -53,7 +53,7 @@ function ChangesInJiraTickets() {
           setQaRepresentativeOptions(data[0].qa)
         }
         else {
-          alert("Check the connection with server...")
+          alert("No data received from the server...")
         }
       })
 

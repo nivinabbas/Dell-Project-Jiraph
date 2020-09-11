@@ -78,7 +78,7 @@ function DelaysInDelivery() {
         if(data.length>0){
         setfixVersionOptions(data[0].fixVersion)}
         else {
-          alert("Check the connection with the server... ")
+          alert("no data received from the server... ")
         }
 
       })

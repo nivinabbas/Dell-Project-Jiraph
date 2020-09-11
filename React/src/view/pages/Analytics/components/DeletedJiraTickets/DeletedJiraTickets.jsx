@@ -91,7 +91,7 @@ function DeletedJiraTickets() {
         setPriorityOptions(data[0].priorities)
         setQaRepresentativeOptions(data[0].QA)}
         else {
-          alert(" Check the connection with server ...")
+          alert("No data received from the server...")
         }
       })
 
