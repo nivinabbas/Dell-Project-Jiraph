@@ -11,7 +11,7 @@ const PieChartAnalysis = (props) => {
   const options = {
     series: [UiObjs[0].featuresSize, UiObjs[1].featuresSize, UiObjs[2].featuresSize],
     labels: ['Light Changes(1-4)', 'Major Changes(5-9)', 'Critical Changes(10+)'],
-    colors: ['#00ff00', '#ffff00', '#ff0000'],
+    colors: ['#228B22', '#CCCC00', '#B22222'],
     chart: {
       events: {
         dataPointSelection: function (event, chartContext, config) {
@@ -34,7 +34,7 @@ const PieChartAnalysis = (props) => {
         options={options}
         series={options.series}
         type="pie"
-        width="500px"
+        width="470px"
       />
       {featuresToDisplay && 
       <div className="PieChartAnalysis__FeaturesTable">

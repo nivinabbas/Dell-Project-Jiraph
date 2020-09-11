@@ -8,7 +8,6 @@ const UserSchema = require('../schemas/UserSchema')
 const TaskModel = require('../schemas/TaskSchema');
 const mongoose = require('mongoose');
 
-let newData = [];
 const UserModel = mongoose.model("UserModel", UserSchema)
 
 
@@ -40,7 +39,7 @@ const UserModel = mongoose.model("UserModel", UserSchema)
         }
 
         // functional test yes/no => true/false
-        item.jiraItem.functionalTest == "Yes" ? item.jiraItem.functionalTest = true : item.jiraItem.functionalTest = false
+        //item.jiraItem.functionalTest == "Yes" ? item.jiraItem.functionalTest = true : item.jiraItem.functionalTest = false
 
         //type updated => update
         if (item.diffItem.type == "Updated") {
@@ -61,17 +60,18 @@ function convertUpdatedFields(data) {
         let diffItem = ticket.diffItem;
         updatedFields.forEach(field => {
             newData.push({
-                jiraItem: {
-                    id: jiraItem.jiraId,
-                    name: jiraItem.jiraName,
-                    type: jiraItem.jiraType,
-                    priority: jiraItem.priority,
-                    status: jiraItem.status,
-                    parentId: jiraItem.jiraParentId,
-                    functionalTest: jiraItem.functionalTest,
-                    qaRepresentative: jiraItem.qaRepresentative,
-                    fixVersion: jiraItem.fixVersion
-                },
+                // jiraItem: {
+                //     id: jiraItem.jiraId,
+                //     name: jiraItem.jiraName,
+                //     type: jiraItem.jiraType,
+                //     priority: jiraItem.priority,
+                //     status: jiraItem.status,
+                //     parentId: jiraItem.jiraParentId,
+                //     functionalTest: jiraItem.functionalTest,
+                //     qaRepresentative: jiraItem.qaRepresentative,
+                //     fixVersion: jiraItem.fixVersion
+                // },
+                jiraItem,
                 qcItem,
                 diffItem: {
                     updatedField: {
