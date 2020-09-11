@@ -372,39 +372,25 @@ router.post('/changesByParentIdFilters', async (req, res) => {
     res.send(tasks)
 })
 
-// ---------------------------------------------------------- changes in jira tickets
+// ---------------------------------------------------------- changes in jira tickets ----------------------------------------------------------
 
 
 
-// {featureID,TotalChanges,Tasks,update,create,delete}
-
-
-/*
-
- [
-    {Id:red , features:[{ id: featureId, arr : {type:create}, tasks}]}
-    {Id:Green , }
-    {Id:Yellow , }
-
-
-
-
-
-
- ]
-
-*/
 router.post('/changeOfJIRATicketsStatus', async (req, res) => {
     const filterValue = req.body.values
     const filterStatus = req.body.status
     const filterQaRep = req.body.qaRepresentative
-    const label = req.body
-    let { startDate, endDate } = req.body
+    const label = req.body.label
+    let startDate = req.body.startDate
+    let endDate = req.body.endDate
     startDate = new Date(startDate)
     endDate = new Date(endDate)
+
+
     let dateFormat = '';
     if (label[0] == 'daily') {
         dateFormat = "%Y-%m-%d"
+        console.log("yousef")
     }
     else if (label[0] == 'yearly') {
         dateFormat = "%Y"
@@ -415,7 +401,8 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
 
 
     //here we build the match expression according to the user's filters.
-    console.log(filterValue, filterStatus, filterQaRep, endDate, startDate)
+    console.log(filterValue, filterStatus, filterQaRep, endDate, startDate, label)
+
 
     let matchFilterValue = { "$and": [] };
     let ValToAgg = filterValue.length == 0 ? "$diffItem.updatedField.newValue" : `$diffItem.updatedField.${filterValue}`
@@ -426,6 +413,8 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
 
     filtersArray.push({ 'diffItem.type': 'Update' })
     filtersArray.push({ 'diffItem.updatedField.fieldName': 'status' })
+    filtersArray.push({ "diffItem.updatedTime": { $gte: startDate } }, { "diffItem.updatedTime": { $lte: endDate } })
+
     //multiselect status
     if (filterStatus[0] != undefined && filterValue[0] != undefined) {
         if (filterStatus.length != 0) {
@@ -442,6 +431,7 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
             filtersArray.push({ "$or": statusArray })
         }
     }
+
     // multiselect QA REP
     if (filterQaRep[0] != undefined && filterValue[0] != undefined) {
         if (filterQaRep.length != 0) {
@@ -453,6 +443,8 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
             filtersArray.push({ "$or": qaArray })
         }
     }
+    
+    
     if (filtersArray.length == 0) {
         delete matchFilterValue.$and;
     }
@@ -471,7 +463,6 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
                 _id: {
                     date: { $dateToString: { format: dateFormat, date: "$diffItem.updatedTime" } },
                     Val: ValToAgg
-                    // Val: `$diffItem.updatedField.${filterValue}`
 
                 },
                 tasks: { $push: "$$ROOT" },

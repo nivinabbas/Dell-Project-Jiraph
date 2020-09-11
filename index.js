@@ -6,7 +6,7 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
     extended: true
 }));
 
-const port = process.env.PORT || 4000;
+// const port = process.env.PORT || 3003;
 //const TaskModel = require('./schemas/TaskSchema');
 
 const TaskModel = require('./schemas/TaskSchema');
@@ -42,9 +42,9 @@ app.use("/api/analytics", analyticsRouter);
 const bellaRouting = require('./routing/bellaRouting');
 app.use("/api/PostBellaData", bellaRouting);
 
-app.listen(port, () => {
-    console.log("App is Listening to port:", port)
-})
+// app.listen(port, () => {
+//     console.log("App is Listening to port:", port)
+// })
 
 
 
@@ -81,8 +81,8 @@ function randomDate(start, end /*, startHour, endHour*/) {
  
 
 
-app.listen(port, () => {
-    console.log("App is Listening to port:",port)
+app.listen(4000, () => {
+    console.log("App is Listening to port: 4000")
 })
 
 
