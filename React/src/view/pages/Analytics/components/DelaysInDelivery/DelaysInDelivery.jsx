@@ -2,8 +2,8 @@ import React from 'react';
 import "./DelaysInDelivery.css";
 import Select from 'react-select'
 import { useState, useEffect,useRef } from 'react';
-
-const serverFilters = {
+import Chart from "../charts/Chart"
+let serverFilters = {
   fixVersion: [],
   jiraType: [],
   qaRepresentative: [],
@@ -15,32 +15,29 @@ const serverFilters = {
 function DelaysInDelivery() {
 
 
-  // const [UiObjs, setUiObjs] = useState([]);
+   const [UiObjs, setUiObjs] = useState([]);
 
   // Options To get From Server 
   const [fixVersionOptions, setfixVersionOptions] = useState([])
   const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([])
 
   const [jiraTypeOptions, setJiraTypeOptions] = useState([
-    {  value: "epic", label: "Epic" },
-    {  value: "feature", label: "Feature" },
-    {  value: "initiative", label: "Initiative" },
-    {  value: "version", label: "Version" }
-    
-    
+    {  value: "create", label: "Create" },
+    {  value: "deleted", label: "Deleted" },
+    {  value: "update", label: "Update" },
   ])
 
 
   const [labelOptions, setLabelOptions] = useState([
-    { name: "label", value: "daily", label: "Daily" },
-    { name: "label", value: "weekly", label: "Weekly" },
-    { name: "label", value: "monthly", label: "Monthly" },
-    { name: "label", value: "yearly", label: "Yearly" }
+    { value: "daily", label: "Daily" },
+    { value: "weekly", label: "Weekly" },
+    { value: "monthly", label: "Monthly" },
+    { value: "yearly", label: "Yearly" }
   ])
 
   // Functions ==> Fetch : 
   const render = (serverFilters) => {
-    fetch('api/analytics/filters/delaysInDelivery', {
+    fetch('api/analytics/delaysInDelivery', {
       method: 'POST',
       body: JSON.stringify(serverFilters),
       headers: {
@@ -53,6 +50,15 @@ function DelaysInDelivery() {
   }
 
   useEffect(() => {
+      serverFilters = {
+      fixVersion: [],
+      jiraType: [],
+      qaRepresentative: [],
+      startDate: "",
+      endDate: "",
+      label: ["weekly"]
+    };
+
     fetch('api/analytics/delaysInDeliveryFilters', {
       method: 'POST',
       body: JSON.stringify(serverFilters),
@@ -63,7 +69,11 @@ function DelaysInDelivery() {
       .then((res) => res.json())
       .then((data) => {
         console.log(data)
-        setfixVersionOptions(data[0].fixVersion)
+        if(data.length>0){
+        setfixVersionOptions(data[0].fixVersion)}
+        else {
+          alert("Check the connection with the server... ")
+        }
 
       })
     },[])
@@ -87,15 +97,25 @@ function DelaysInDelivery() {
 
 
     const HandlefixVersionChange = (version => {
-      
+      serverFilters.jiraType=[]
+      serverFilters.qaRepresentative = []
       serverFilters.fixVersion=[version.value];
-       
+      
         render(serverFilters)
         renderFilters(serverFilters);
       })
 
   const HandlejiraTypeChange = (type => {
-    serverFilters.jiraType=[type.value]
+    serverFilters.jiraType=[]
+
+    if(type!=null){
+      type.map((item, index) => {
+        return serverFilters.jiraType.push(item.value)
+      })}
+
+      else {
+        serverFilters.jiraType=[]
+      }
     render(serverFilters);
   })
 
@@ -126,11 +146,15 @@ function DelaysInDelivery() {
     render(serverFilters);
   })
 
+  const jiraTypeInput=useRef("")
+  const qaInput=useRef("")
+
   return (
 
     <div className='DelaysInDeliveryWrapper'>
        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
-      <div className="DelaysInDelivery__Title">Delays in Delivery</div>
+       <div className="DelaysInDelivery__Chart"> {UiObjs && <Chart UiObjs={UiObjs} />}</div>
+       <div className="DelaysInDelivery__Title">Delays in Delivery</div>
 
       {/* Select Filters */}
 
@@ -138,6 +162,7 @@ function DelaysInDelivery() {
 
         <Select
           name="fixVersion"
+          onInputChange={()=> {jiraTypeInput.current.state.value="";qaInput.current.state.value=""}}
           options={fixVersionOptions}
           placeholder="fix Version "
           className="DelaysInDelivery__Filter"
@@ -148,6 +173,7 @@ function DelaysInDelivery() {
         <Select
           name="jiraType"
           isMulti
+          ref={jiraTypeInput}
           options={jiraTypeOptions}
           placeholder="jira Type  "
           className="DelaysInDelivery__Filter"
@@ -157,6 +183,7 @@ function DelaysInDelivery() {
         <Select
           name="qaRepresentative"
           isMulti
+          ref={qaInput}
           options={qaRepresentativeOptions}
           placeholder="Qa Representative "
           className="DelaysInDelivery__Filter"

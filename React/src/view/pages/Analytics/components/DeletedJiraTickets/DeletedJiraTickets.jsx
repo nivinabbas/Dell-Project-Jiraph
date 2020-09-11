@@ -6,7 +6,7 @@ import Select from 'react-select';
 
 import { useState, useEffect } from 'react';
 
-const serverFilters = { priority: [], functionalTest: [], label: ["weekly"], qaRepresentative: [], startDate: (new Date("2020-08-1")), endDate: new Date("2020-09-1")};
+let serverFilters = { priority: [], functionalTest: [], label: ["weekly"], qaRepresentative: [], startDate: (new Date("2020-08-1")), endDate: new Date("2020-09-1")};
 
 
 
@@ -55,6 +55,7 @@ function DeletedJiraTickets() {
 
 
   useEffect(() => {
+    serverFilters = { priority: [], functionalTest: [], label: ["weekly"], qaRepresentative: [],  startDate: ("2020-08-1"), endDate: ("2020-09-30")};
 
     fetch('/api/analytics/deletedJiraTickets', {
       method: 'POST',
@@ -80,8 +81,12 @@ function DeletedJiraTickets() {
       .then((res) => res.json())
       .then((data) => {
         console.log(data)
+        if(data.length>0){
         setPriorityOptions(data[0].priorities)
-        setQaRepresentativeOptions(data[0].QA)
+        setQaRepresentativeOptions(data[0].QA)}
+        else {
+          alert(" Check the connection with server ...")
+        }
       })
 
   }
@@ -155,7 +160,7 @@ function DeletedJiraTickets() {
   return (
 
     <div className='DeletedJiraTicketsWrapper'>
-      <div className="DeletedJiraTickets__Chart"> {UiObjs.length > 0 && <Chart UiObjs={UiObjs} />}</div>
+      <div className="DeletedJiraTickets__Chart"> {UiObjs && <Chart UiObjs={UiObjs} />}</div>
       <div className="DeletedJiraTickets__Title">Deleted Jira Tickets</div>
 
       {/* Select Filters */}

@@ -7,15 +7,18 @@ import Chart from "../charts/Chart"
 
 
 
-const serverFilters = { fieldName: [], values: [], qaRepresentative: [], startDate: (new Date("2020-08-1")), endDate: new Date("2020-09-1"), label: ["weekly"] };
+let serverFilters = { fieldName: [], values: [], qaRepresentative: [], startDate: ("2020-08-1"), endDate: ("2020-09-30"), label: ["weekly"] };
 
 
 
 
 function ModificationByField(props) {
 
-
+  let startDate = new Date()
+  console.log(startDate)
+  let endDate = new Date()
   useEffect(() => {
+    serverFilters = { fieldName: [], values: [], qaRepresentative: [],  startDate: ("2020-08-1"), endDate: ("2020-09-30"), label: ["weekly"] };
 
     fetch('/api/analytics/modificationByFieldFilters', {
       method: 'POST',
@@ -27,8 +30,13 @@ function ModificationByField(props) {
       .then(res => res.json())
       .then(data => {
         console.log(data)
+        if(data.length>0){
         setFieldNameOptions(data[0].labels)
         setQaRepresentativeOptions(data[0].QA);
+        }
+        else {
+          alert("Check the connection with the server...")
+        }
       })
 
       fetch('/api/analytics/modificationByField', {
@@ -59,7 +67,7 @@ function ModificationByField(props) {
       .then((res) => res.json())
       .then((data) => {
         console.log(data)
-        //setUiObjs(data)
+        setUiObjs(data)
       })
   }
 
@@ -109,8 +117,12 @@ function ModificationByField(props) {
   const handleChangeFieldName = (change => {
     serverFilters.values=[]
     serverFilters.qaRepresentative=[]
+    if(change!=null){
    serverFilters.fieldName=[change.value];
-   
+    }
+    else {
+      serverFilters.fieldName=[];
+    }
     render(serverFilters)
     renderFilters(serverFilters);
   })
@@ -153,7 +165,7 @@ function ModificationByField(props) {
   return (
     <div className='ModificationByField__Wrapper'>
       <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
-      <div className="ModificationByField__Chart"> {UiObjs.length > 0 && <Chart UiObjs={UiObjs} />}</div>
+      <div className="ModificationByField__Chart"> {UiObjs && <Chart UiObjs={UiObjs} />}</div>
       <div className="ModificationByField__MainTitle">Modification By Field</div>
 
       <div className="ModificationByField__Filters">
@@ -165,7 +177,8 @@ function ModificationByField(props) {
           onChange={handleChangeFieldName}
           placeholder="fieldName"
           className="ModificationByField__Filter"
-          options={fieldNameOptions} />
+          options={fieldNameOptions}
+          isClearable={true} />
 
         <Select
           name="value"
