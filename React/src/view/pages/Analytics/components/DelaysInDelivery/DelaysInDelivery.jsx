@@ -22,9 +22,9 @@ function DelaysInDelivery() {
   const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([])
 
   const [jiraTypeOptions, setJiraTypeOptions] = useState([
-    {  value: "create", label: "Create" },
-    {  value: "deleted", label: "Deleted" },
-    {  value: "update", label: "Update" },
+    {  value: "Create", label: "Create" },
+    {  value: "Deleted", label: "Deleted" },
+    {  value: "Update", label: "Update" },
   ])
 
 
@@ -159,7 +159,7 @@ function DelaysInDelivery() {
     render(serverFilters);
   })
   const HandleLabelChange = (label => {
-    serverFilters.label = [label.label];
+    serverFilters.label = [label.value];
     render(serverFilters);
   })
 
