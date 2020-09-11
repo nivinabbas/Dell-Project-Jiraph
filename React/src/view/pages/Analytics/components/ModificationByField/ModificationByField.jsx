@@ -7,16 +7,18 @@ import Chart from "../charts/Chart"
 
 
 
-let serverFilters = { fieldName: [], values: [], qaRepresentative: [], startDate: (new Date("2020-08-1")), endDate: new Date("2020-09-1"), label: ["weekly"] };
+let serverFilters = { fieldName: [], values: [], qaRepresentative: [], startDate: ("2020-08-1"), endDate: ("2020-09-30"), label: ["weekly"] };
 
 
 
 
 function ModificationByField(props) {
 
-  // serverFilters = { fieldName: [], values: [], qaRepresentative: [], startDate: (new Date("2020-08-1")), endDate: new Date("2020-09-1"), label: ["weekly"] };
+  let startDate = new Date()
+  console.log(startDate)
+  let endDate = new Date()
   useEffect(() => {
-    serverFilters = { fieldName: [], values: [], qaRepresentative: [], startDate: (new Date("2020-08-1")), endDate: new Date("2020-09-1"), label: ["weekly"] };
+    serverFilters = { fieldName: [], values: [], qaRepresentative: [],  startDate: ("2020-08-1"), endDate: ("2020-09-30"), label: ["weekly"] };
 
     fetch('/api/analytics/modificationByFieldFilters', {
       method: 'POST',
@@ -80,7 +82,6 @@ function ModificationByField(props) {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
         if (data!=null) {
           if(data.length>0)
             setValueOptions(data[0].Values);

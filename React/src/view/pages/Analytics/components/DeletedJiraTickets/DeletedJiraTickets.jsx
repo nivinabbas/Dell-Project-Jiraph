@@ -55,8 +55,8 @@ function DeletedJiraTickets() {
 
 
   useEffect(() => {
-    serverFilters = { priority: [], functionalTest: [], label: ["weekly"], qaRepresentative: [], startDate: (new Date("2020-08-1")), endDate: new Date("2020-09-1")};
-    
+    serverFilters = { priority: [], functionalTest: [], label: ["weekly"], qaRepresentative: [],  startDate: ("2020-08-1"), endDate: ("2020-09-30")};
+
     fetch('/api/analytics/deletedJiraTickets', {
       method: 'POST',
       body: JSON.stringify({ serverFilters }),

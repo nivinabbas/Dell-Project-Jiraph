@@ -28,30 +28,13 @@ router.post('/modificationByField', async (req, res) => {
         dateFormat = "%Y-%m"
     }
 
-
     //here we build the match expression according to the user's filters.
 
-    let filtersArray = [{ "diffItem.type": "Update" }, { "diffItem.updatedTime": { $gte: startDate } }, { "diffItem.updatedTime": { $lte: endDate } }] // add the startdate and enddate and label here
+    let filtersArray = [{ "diffItem.type": "Update" }, { "diffItem.updatedTime": { $gte: startDate } }, { "diffItem.updatedTime": { $lte: endDate } }]
     let matchFilterValue = {
         "$and": []
     }
-    if (fieldName.length != 0) {
-        filtersArray.push({ "diffItem.updatedField.fieldName": fieldName[0] })
-    }
-    if (qaRepresentative.length != 0) {
-        filtersArray.push({ "jiraItem.qaRepresentative": qaRepresentative[0] })
-    }
-    if (values.length != 0) {
-        let valuesArray = []
-        values.map((item, index) => {
-            valuesArray.push({ "diffItem.updatedField.newValue": item })
-        })
-        filtersArray.push({ "$or": valuesArray })
-    }
-
-    matchFilterValue["$and"] = filtersArray
-
-    tasks = await TaskModel.aggregate([
+    let aggregateArray = [
         {
             $match: matchFilterValue
         },
@@ -68,15 +51,39 @@ router.post('/modificationByField', async (req, res) => {
         {
             $group: {
                 _id: "$_id.date",
-                //_id: { $dateFromString: { dateString: "$_id.date" , format: "%Y-%m-%d" } },
                 arr: { $push: { value: "$_id.fieldName", tasks: "$tasks", size: { $size: "$tasks" } } },
 
             }
 
         },
         { $sort: { _id: 1 } }
-    ])
+    ]
+    if (fieldName.length != 0) {
+        filtersArray.push({ "diffItem.updatedField.fieldName": fieldName[0] })
+        aggregateArray.splice(1, 1,
+            {
+                $group: {
+                    _id: {
+                        date: { $dateToString: { format: dateFormat, date: "$diffItem.updatedTime" } },
+                        fieldName: "$diffItem.updatedField.newValue"
+                    },
+                    tasks: { $push: "$$ROOT" },
+                }
+            });
+    }
+    if (qaRepresentative.length != 0) {
+        filtersArray.push({ "jiraItem.qaRepresentative": qaRepresentative[0] })
+    }
+    if (values.length != 0) {
+        let valuesArray = []
+        values.map((item, index) => {
+            valuesArray.push({ "diffItem.updatedField.newValue": item })
+        })
+        filtersArray.push({ "$or": valuesArray })
+    }
 
+    matchFilterValue["$and"] = filtersArray
+    tasks = await TaskModel.aggregate(aggregateArray)
     let maxLength = 0;
     let sumLength = 0;
     if (tasks.length > 0) {
@@ -302,49 +309,91 @@ router.post('/changesByParentIdFilters', async (req, res) => {
     }
     else {
         const version = fixVersion[0];
-        console.log(version)
         tasks = await TaskModel.aggregate([
             {
-                $match: { "jiraItem.fixVersion": version, "jiraItem.jiraType": "Epic" }
+                $match: { "jiraItem.fixVersion": version, "jiraItem.type": "Epic" }
             },
-
-            // {
-            //     // "jiraItem.jiraType":"Feature","jiraItem.jiraType":"Epic"
-            //    // $match: { "jiraItem.fixVersion": version ,}
-            //     $match:{ $and: [ { "jiraItem.fixVersion": version }, { $or: [ { "jiraItem.jiraType":"Feature"}, {"jiraItem.jiraType":"Epic"} ] } ] }
-            // },
             {
                 $group: {
-                    _id: "$jiraItem.jiraParentId",
+                    //type: "$diffItem.type", 
+                    _id: "$jiraItem.parentId",
                     tasks: { $push: "$$ROOT" },
-                    size: {
+                    TotalChanges: {
                         $sum: 1
                     }
                 }
-            },
-            // {
-            //     $group: {
-            //         _id: "$size",
-            //         // color:
-            //         // {
-            //         //   $addToSet : {$cond: [ { $lte: [ "$size" , 10 ] }, 'Green', 'Yellow' ]}
-            //         // },
-            //         tasks: { $push: "$$ROOT" }
-            //         //_id: { $dateFromString: { dateString: "$_id.date" , format: "%Y-%m-%d" } },
-            //         //arr: { $push: { priority: "$_id.priority", tasks: "$tasks", size: { $size: "$tasks" } } },
-
-            //     }
-
-            // }
+            }
         ])
+        let updateCounter = 0;
+        let deleteCounter = 0;
+        let createCounter = 0;
+        tasks.map((item,index)=>{
+            let tasks = item.tasks
+            tasks.map((task,index)=>{
+                if(task.diffItem.type === "Update"){
+                    updateCounter++
+                }
+                else if(task.diffItem.type === "Create"){
+                    createCounter++
+                }
+                else{
+                    deleteCounter++
+                }
+            })
+            item.Update = updateCounter
+            item.Create = createCounter
+            item.Delete = deleteCounter
+        })
+        let groupedArray = [
+            {_id: "Green" , features:[] , featuresSize:0},
+            {_id: "Yellow" , features:[] , featuresSize:0},
+            {_id: "Red" , features:[] , featuresSize:0}
+        ]
+
+        tasks.map((item,index)=>{
+            let totalChanges = item.TotalChanges
+            if( totalChanges >= 0 && totalChanges <5){
+                groupedArray[0].features.push(item)
+                groupedArray[0].featuresSize++
+            }
+            else if( totalChanges >= 5 && totalChanges <10){
+                groupedArray[1].features.push(item)
+                groupedArray[1].featuresSize++
+
+            }
+            else{
+                groupedArray[2].features.push(item)
+                groupedArray[2].featuresSize++
+
+            }
+        })
+        tasks = groupedArray
     }
-
     res.send(tasks)
-
 })
 
 // ---------------------------------------------------------- changes in jira tickets
 
+
+
+// {featureID,TotalChanges,Tasks,update,create,delete}
+
+
+/*
+
+ [
+    {Id:red , features:[{ id: featureId, arr : {type:create}, tasks}]}
+    {Id:Green , }
+    {Id:Yellow , }
+
+
+
+
+
+
+ ]
+
+*/
 router.post('/changeOfJIRATicketsStatus', async (req, res) => {
     const filterValue = req.body.values
     const filterStatus = req.body.status
