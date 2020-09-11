@@ -1,15 +1,17 @@
 .PieChartAnalysis__Wrapper{
 display: grid;
 grid-template-columns:40vw 40vw;
-grid-template-rows: 40vh auto;
+grid-template-rows: 40vh 5vh auto;
 grid-template-areas: 
 "pieChart featureTable"
+". ."
 "mainTable mainTable";
 
 
 }
 .PieChartAnalysis__Chart{
   grid-area:pieChart;
+  margin: auto;
   /* width: 100%; */
 }
 
@@ -18,6 +20,8 @@ grid-area: mainTable;
 }
 .PieChartAnalysis__FeaturesTable{
   grid-area: featureTable;
+  max-height: 100%;
+  overflow: auto;
 }
 
 
@@ -52,6 +56,7 @@ grid-area: mainTable;
 
 .PieChartAnalysis__FeaturesTableContainer tr:hover {
   background-color: #ddd;
+  cursor: pointer;
 }
 
 .PieChartAnalysis__FeaturesTableContainer th {
