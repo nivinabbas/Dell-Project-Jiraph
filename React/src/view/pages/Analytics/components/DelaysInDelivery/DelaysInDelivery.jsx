@@ -37,7 +37,7 @@ function DelaysInDelivery() {
 
   // Functions ==> Fetch : 
   const render = (serverFilters) => {
-    fetch('api/analytics/filters/delaysInDelivery', {
+    fetch('api/analytics/delaysInDelivery', {
       method: 'POST',
       body: JSON.stringify(serverFilters),
       headers: {
@@ -69,7 +69,11 @@ function DelaysInDelivery() {
       .then((res) => res.json())
       .then((data) => {
         console.log(data)
-        setfixVersionOptions(data[0].fixVersion)
+        if(data.length>0){
+        setfixVersionOptions(data[0].fixVersion)}
+        else {
+          alert("Check the connection with the server... ")
+        }
 
       })
     },[])
@@ -93,15 +97,25 @@ function DelaysInDelivery() {
 
 
     const HandlefixVersionChange = (version => {
-      
+      serverFilters.jiraType=[]
+      serverFilters.qaRepresentative = []
       serverFilters.fixVersion=[version.value];
-       
+      
         render(serverFilters)
         renderFilters(serverFilters);
       })
 
   const HandlejiraTypeChange = (type => {
-    serverFilters.jiraType=[type.value]
+    serverFilters.jiraType=[]
+
+    if(type!=null){
+      type.map((item, index) => {
+        return serverFilters.jiraType.push(item.value)
+      })}
+
+      else {
+        serverFilters.jiraType=[]
+      }
     render(serverFilters);
   })
 
@@ -132,6 +146,9 @@ function DelaysInDelivery() {
     render(serverFilters);
   })
 
+  const jiraTypeInput=useRef("")
+  const qaInput=useRef("")
+
   return (
 
     <div className='DelaysInDeliveryWrapper'>
@@ -145,6 +162,7 @@ function DelaysInDelivery() {
 
         <Select
           name="fixVersion"
+          onInputChange={()=> {jiraTypeInput.current.state.value="";qaInput.current.state.value=""}}
           options={fixVersionOptions}
           placeholder="fix Version "
           className="DelaysInDelivery__Filter"
@@ -155,6 +173,7 @@ function DelaysInDelivery() {
         <Select
           name="jiraType"
           isMulti
+          ref={jiraTypeInput}
           options={jiraTypeOptions}
           placeholder="jira Type  "
           className="DelaysInDelivery__Filter"
@@ -164,6 +183,7 @@ function DelaysInDelivery() {
         <Select
           name="qaRepresentative"
           isMulti
+          ref={qaInput}
           options={qaRepresentativeOptions}
           placeholder="Qa Representative "
           className="DelaysInDelivery__Filter"

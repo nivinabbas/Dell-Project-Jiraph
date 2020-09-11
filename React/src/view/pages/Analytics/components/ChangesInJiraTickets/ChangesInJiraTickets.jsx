@@ -10,7 +10,7 @@ import Chart from "../charts/Chart"
 
 // Options To Send == > Server 
 let serverFilters = {
-  values: [],
+  values: ["newValue"],
   status: [],
   qaRepresentative: [],
   startDate: "",
