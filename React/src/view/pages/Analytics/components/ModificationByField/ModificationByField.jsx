@@ -181,9 +181,9 @@ function ModificationByField(props) {
       <div className="ModificationByField__MainTitle">Modification By Field</div>
       <div className="ModificationByField__Filters">
 
-        /*ALL THE FILTERS */
+        
 
-        /*FIELD NAME*/
+        
         <Select
           name="fieldName"
           onInputChange={() => { valueInput.current.state.value = ""; qaInput.current.state.value = "" }}
@@ -193,7 +193,7 @@ function ModificationByField(props) {
           options={fieldNameOptions}
           isClearable={true} />
 
-        /*VALUE*/
+        
         <Select
           name="value"
           onChange={handleChangeValues}
@@ -203,7 +203,7 @@ function ModificationByField(props) {
           className="ModificationByField__Filter"
           options={valueOptions} />
 
-        /*Qa Representative*/
+        
         <Select
           name="qaRepresentative"
           ref={qaInput}
@@ -212,7 +212,7 @@ function ModificationByField(props) {
           className="ModificationByField__Filter"
           options={qaRepresentativeOptions} />
 
-        /*START DATE*/
+        From
         <input
           className="ModificationByField__Filter__date"
           type="date"
@@ -220,7 +220,7 @@ function ModificationByField(props) {
           onChange={handleChangeStartDate}
         />
 
-        /*END DATE*/
+        To
         <input
           className="ModificationByField__Filter__date"
           type="date"
@@ -228,7 +228,7 @@ function ModificationByField(props) {
           onChange={handleChangeEndDate}
         />
 
-        /*LABEL */
+        
         <Select
           name="label"
           onChange={handleChangeLabel}

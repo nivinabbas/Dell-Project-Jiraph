@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import "./ChangesByParentId.css";
 import Select from 'react-select'
 import { useEffect } from 'react';
@@ -45,8 +45,11 @@ function ChangesByParentId() {
       })
   }, [])
 
+  const [UiObjs,setUiObjs]=useState([]);
+  const [fixVersionOptions,setfixVersionOptions] = useState([]);
 
 
+  //fetch to receive Data (UiObj) from server after every filter Change
   const render = (serverFilters) => {
     fetch('/api/analytics/ChangesByParentIdFilters', {
       method: 'POST',
@@ -62,17 +65,23 @@ function ChangesByParentId() {
       })
   }
 
+  //Filters Changes Handlers
+  // for each Filter we have a handler
+  // to update serverFilters that we send to server to receive data according to our picks
 
+  //fixVersion
   const HandlefixVersionChange = (change => {
     serverFilters.fixVersion = [change.label];
     render(serverFilters);
   })
-
+  
+  //Start Date
   const HandleStartDateChange = (change => {
     serverFilters.startDate = change.target.value;
     render(serverFilters);
   })
 
+  //End Date
   const HandleEndDateChange = (change => {
     serverFilters.endDate = change.target.value;
     render(serverFilters);
