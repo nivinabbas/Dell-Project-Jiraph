@@ -309,12 +309,13 @@ router.post('/changesByParentIdFilters', async (req, res) => {
     }
     else {
         const version = fixVersion[0];
-        
+
         tasks = await TaskModel.aggregate([
             {
-                $match: { "jiraItem.fixVersion": version, "jiraItem.type": "Epic","diffItem.updatedTime": { $gte: startDate, $lte: endDate },
-                  
-           }
+                $match: {
+                    "jiraItem.fixVersion": version, "jiraItem.type": "Epic", "diffItem.updatedTime": { $gte: startDate, $lte: endDate },
+
+                }
             },
             {
                 $group: {
@@ -407,10 +408,10 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
 
 
     let matchFilterValue = { "$and": [] };
-   
+
     let ValToAgg = filterValue.length == 0 ? "$diffItem.updatedField.newValue" : `$diffItem.updatedField.${filterValue[0]}`
 
-    if(filterValue.length == 0){
+    if (filterValue.length == 0) {
         filterValue[0] = "newValue"
     }
 
@@ -452,8 +453,8 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
             filtersArray.push({ "$or": qaArray })
         }
     }
-    
-    
+
+
     if (filtersArray.length == 0) {
         delete matchFilterValue.$and;
     }
@@ -567,7 +568,75 @@ router.post('/changeOfJIRATicketsStatusFilters', async (req, res) => {
 
 // --------------------------------------------------------------- delays in delivery ---------------------------------------------------------------------
 
-router.post('/delaysInDelivery', (req, res) => {
+router.post('/delaysInDelivery', async (req, res) => {
+
+    console.log("DELAYSAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+
+    const fixVersion = req.body.fixVersion[0]
+    const label = req.body.label
+    // let startDate = req.body.startDate
+    // let endDate = req.body.endDate
+    // startDate = new Date(startDate)
+    // endDate = new Date(endDate)
+
+
+
+    let dateFormat = '';
+    // if (label[0] == 'daily') {
+    //     dateFormat = "%Y-%m-%d"
+    //     console.log("yousef")
+    // }
+    // else if (label[0] == 'yearly') {
+    //     dateFormat = "%Y"
+    // }
+    // else {
+    //     dateFormat = "%Y-%m"
+    // }
+
+    dateFormat = "%Y-%m-%d"
+
+    console.log(fixVersion)
+
+
+    const tasks = await TaskModel.aggregate([
+        {
+            $match: {
+                "diffItem.type": "Update",
+                $or: [
+                    {
+                        "diffItem.updatedField.fieldName": "fixVersion",
+                        $or: [
+                            { "diffItem.updatedField.newValue": fixVersion },
+                            { "diffItem.updatedField.oldValue": fixVersion }
+                        ]
+                    },
+                    { "diffItem.updatedField.fieldName": "functionalTest" }
+                ]
+            }
+        },
+        {
+            $group: {
+                _id: {
+                    date: { $dateToString: { format: dateFormat, date: "$diffItem.updatedTime" } },
+                    value: "$diffItem.updatedField.fieldName"
+                },
+                tasks: { $push: "$$ROOT" },
+            }
+
+        },
+        {
+            $group: {
+
+                _id: "$_id.date",
+                arr: { $push: { value: "$_id.value", tasks: "$tasks", size: { $size: "$tasks" } } },
+            }
+        }
+    ])
+
+    console.log("DELAYSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
+    console.log(tasks.length)
+    res.send(tasks)
+
 
 })
 
