@@ -45,7 +45,7 @@ function DelaysInDelivery() {
       }
     })
       .then((res) => res.json())
-      .then((data) => { console.log(data) })
+      .then((data) => {  setUiObjs(data) })
 
   }
 
@@ -54,7 +54,7 @@ function DelaysInDelivery() {
     let endDate = new Date()
     startDate.setMonth(endDate.getMonth() - 1)
     const timeZone = startDate.getTimezoneOffset()/60
-    
+
     startDate.setHours(0-timeZone, 0, 0, 0)
     endDate.setHours(0-timeZone, 0, 0, 0)
      serverFilters = {
