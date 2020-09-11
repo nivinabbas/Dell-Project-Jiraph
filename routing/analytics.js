@@ -18,15 +18,16 @@ router.post('/modificationByField', async (req, res) => {
     endDate = new Date(endDate)
 
     let dateFormat = '';
-    if (label[0] == 'daily') {
-        dateFormat = "%Y-%m-%d"
-    }
-    else if (label[0] == 'yearly') {
+    if (label[0] == 'yearly') {
         dateFormat = "%Y"
     }
-    else {
+    else if (label[0] == 'monthly') {
         dateFormat = "%Y-%m"
     }
+    else {
+        dateFormat = "%Y-%m-%d"
+    }
+
 
     //here we build the match expression according to the user's filters.
 
@@ -84,6 +85,65 @@ router.post('/modificationByField', async (req, res) => {
 
     matchFilterValue["$and"] = filtersArray
     tasks = await TaskModel.aggregate(aggregateArray)
+    if (label[0] === "weekly") {
+        function addDays(date, days) {
+            var result = new Date(date);
+            result.setDate(result.getDate() + days);
+            return result;} 
+        
+        
+        const diffTime = Math.abs(endDate - startDate);
+        let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+        console.log(diffDays + " days");
+            // console.log(tasks)
+            let weeklyStartDate=startDate;
+            let weeklyEndDate = addDays(weeklyStartDate,7)
+            let currentWeek=0;
+            let arrayForWeeks=[];
+
+            while(diffDays>0){
+                arrayForWeeks.push(
+                    {_id:`${weeklyStartDate.getDate()+1}/${weeklyStartDate.getMonth()+1}-${weeklyEndDate.getDate()+1}/${weeklyEndDate.getMonth()+1}`,arr:[]})
+                    diffDays=diffDays-7;
+                    weeklyStartDate=addDays(weeklyEndDate,1);
+                    weeklyEndDate=addDays(weeklyStartDate,7);
+            }
+            
+            weeklyEndDate=addDays(startDate,7);
+            // console.log(tasks)
+            for(i=0;i<tasks.length;i++){
+                // console.log(tasks[i].arr)
+                if(new Date(tasks[i]._id)<weeklyEndDate){
+                    arrayForWeeks[currentWeek].arr=arrayForWeeks[currentWeek].arr.concat(tasks[i].arr)
+                }
+                else if(tasks[i].id>weeklyEndDate){
+                    weeklyEndDate=addDays(weeklyEndDate,7);
+                    currentWeek++;
+                }
+            }
+            tasks=arrayForWeeks;
+            console.log(arrayForWeeks)
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+            // while(weekEndDate<endDate){
+            //     weekEndDate = addDays(weekEndDate,7)
+          
+            //     console.log(weekEndDate)
+            // }
+    }
+
     let maxLength = 0;
     let sumLength = 0;
     if (tasks.length > 0) {
