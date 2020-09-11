@@ -82,6 +82,8 @@ export default function TasksTable({
                     onClick={() => onDoneClick(task.jiraItem.jiraId)}
                     key={task._id}
                     checked={task.taskItem.isDone}
+                    disabled={task.taskItem.isDone}
+                    onChange={(e) => {}}
                   />
                 </td>
               </tr>

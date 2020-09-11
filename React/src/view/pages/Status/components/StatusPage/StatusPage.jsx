@@ -87,7 +87,6 @@ const StatusPage = (props) => {
       .then((data) => {
         let { success, error, info } = data;
         if (success) {
-          console.log("bar chart", info);
           // const dataFromServer = [
           //   {
           //     done: 5,
@@ -110,7 +109,7 @@ const StatusPage = (props) => {
           //     date: "04/09/2020",
           //   },
           // ];
-          console.log(info);
+
           setStackedChart(info);
         } else {
           alert(error);
@@ -120,7 +119,6 @@ const StatusPage = (props) => {
   //left pie ==> convert to post method and pass in the body startDate, endDate,pieChartsFilters[0]
   // add conditions to the array startDate, endDate, pieChartsFilters[0]
   const handleSegmentClick = (date, status) => {
-    console.log(date, status);
     // send date and status to server
     fetch("/api/status/segmentData", {
       method: "POST",
@@ -244,7 +242,6 @@ const StatusPage = (props) => {
         {
           label: "Yes",
           onClick: () => {
-            console.log("yes");
             try {
               const userId = null;
               const result = openTasks.filter(
@@ -336,7 +333,6 @@ const StatusPage = (props) => {
   return (
     <div className="statusPageContainer">
       <div className="statusPage__dashboard">
-        {console.log(cardsContent)}
         <DailyAlerts cardsContent={cardsContent} />
       </div>
       <div className="statusPage__charts">
