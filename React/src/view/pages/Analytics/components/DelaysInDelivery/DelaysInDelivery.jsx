@@ -45,7 +45,9 @@ function DelaysInDelivery() {
       }
     })
       .then((res) => res.json())
-      .then((data) => {  setUiObjs(data) })
+      .then((data) => {  
+        console.log(data)
+        setUiObjs(data) })
 
   }
 

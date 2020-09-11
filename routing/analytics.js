@@ -597,11 +597,16 @@ router.post('/delaysInDelivery', async (req, res) => {
 
     console.log(fixVersion)
 
-
     const tasks = await TaskModel.aggregate([
         {
             $match: {
-                "diffItem.type": "Update",
+
+
+                $or: [
+                    { "diffItem.type": "Create" },
+                    { "diffItem.type": "Delete" },
+                    { "diffItem.type": "Update" }
+                ],
                 $or: [
                     {
                         "diffItem.updatedField.fieldName": "fixVersion",
@@ -612,13 +617,15 @@ router.post('/delaysInDelivery', async (req, res) => {
                     },
                     { "diffItem.updatedField.fieldName": "functionalTest" }
                 ]
+
             }
         },
         {
             $group: {
                 _id: {
                     date: { $dateToString: { format: dateFormat, date: "$diffItem.updatedTime" } },
-                    value: "$diffItem.updatedField.fieldName"
+                    value: "$diffItem.updatedField.fieldName",
+                    type: "$diffItem.type"
                 },
                 tasks: { $push: "$$ROOT" },
             }
@@ -628,13 +635,55 @@ router.post('/delaysInDelivery', async (req, res) => {
             $group: {
 
                 _id: "$_id.date",
-                arr: { $push: { value: "$_id.value", tasks: "$tasks", size: { $size: "$tasks" } } },
+                arr: {
+                    $push: {
+                        value:
+                        {
+                            $cond: {
+                                if: { $eq: ["$_id.value", "functionalTest"] },
+                                then: "$_id.value",
+                                else: "$_id.type"
+                            }
+                        },
+                        type: {
+                            $cond: {
+                                if: { $eq: ["$_id.value", "functionalTest"] },
+                                then: "$_id.type",
+                                else: "$_id.value"
+                            }
+                        },
+                        tasks: "$tasks", size: { $size: "$tasks" }
+                    }
+                },
             }
         }
+
     ])
 
+    if (tasks.length != 0) {
+        tasks.map((item, index) => {
+            item.arr.sort((a, b) => (a.value > b.value) ? 1 : -1);
+        })
+        tasks.sort((a, b) => (a._id > b._id) ? 1 : -1);
+        let maxLength = -1;
+        tasks.map((task, index) => {
+            let sum = 0;
+            task.arr.forEach(element => {
+                sum += element.size
+                if (element.size > maxLength)
+                    maxLength = element.size
+            })
+            tasks[index].sum = sum
+        })
+
+        tasks.map((task, index) => {
+            tasks[index].maxLength = maxLength
+        })
+
+    }
+
     console.log("DELAYSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
-    console.log(tasks.length)
+    // console.log(tasks)
     res.send(tasks)
 
 
