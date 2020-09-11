@@ -1,123 +1,7 @@
 [
     {
         "diffItem": {
-            "updateTime": 1598487977, 
-            "type": "Updated", 
-            "updatedFields": [
-                {
-                    "fieldName": "parent-id", 
-                    "newValue": "2329", 
-                    "oldValue": "1976"
-                }
-            ]
-        }, 
-        "jiraItem": {
-            "priority": "P01", 
-            "status": "Implementing", 
-            "jiraType": "Feature", 
-            "jiraName": "Intel CSDP 375GB, 750GB Riptide Platform Drive Qual", 
-            "qaRepresentative": "Vadim.Aliev@emc.com", 
-            "functionalTest": "Yes", 
-            "fixVersion": "Foothills", 
-            "jiraId": "TRIF-1097", 
-            "jiraParentId": null
-        }, 
-        "qcItem": {
-            "status": "N/A", 
-            "requirementType": "Feature", 
-            "requirementId": "2223"
-        }
-    }, 
-    {
-        "diffItem": {
-            "updateTime": 1598487978, 
-            "type": "Updated", 
-            "updatedFields": [
-                {
-                    "fieldName": "parent-id", 
-                    "newValue": "2329", 
-                    "oldValue": "1976"
-                }
-            ]
-        }, 
-        "jiraItem": {
-            "priority": "P01", 
-            "status": "Implementing", 
-            "jiraType": "Feature", 
-            "jiraName": "Samsung 1723b NVMe 1.92TB, 3.84TB, 7.68TB, 15.36TB Riptide Platform Drive Qual", 
-            "qaRepresentative": "Vadim.Aliev@emc.com", 
-            "functionalTest": "Yes", 
-            "fixVersion": "Foothills", 
-            "jiraId": "TRIF-1096", 
-            "jiraParentId": null
-        }, 
-        "qcItem": {
-            "status": "N/A", 
-            "requirementType": "Feature", 
-            "requirementId": "2343"
-        }
-    }, 
-    {
-        "diffItem": {
-            "updateTime": 1598487979, 
-            "type": "Updated", 
-            "updatedFields": [
-                {
-                    "fieldName": "parent-id", 
-                    "newValue": "2329", 
-                    "oldValue": "1976"
-                }
-            ]
-        }, 
-        "jiraItem": {
-            "priority": "P01", 
-            "status": "Backlog", 
-            "jiraType": "Feature", 
-            "jiraName": "Samsung 1733 NVMe 1.92TB, 3.84TB, 7.68TB, 15.36TB Riptide Platform Drive Qual", 
-            "qaRepresentative": "Vadim.Aliev@emc.com", 
-            "functionalTest": "Yes", 
-            "fixVersion": "Foothills", 
-            "jiraId": "TRIF-1095", 
-            "jiraParentId": null
-        }, 
-        "qcItem": {
-            "status": "N/A", 
-            "requirementType": "Feature", 
-            "requirementId": "2344"
-        }
-    }, 
-    {
-        "diffItem": {
-            "updateTime": 1598487979, 
-            "type": "Updated", 
-            "updatedFields": [
-                {
-                    "fieldName": "parent-id", 
-                    "newValue": "2329", 
-                    "oldValue": "1976"
-                }
-            ]
-        }, 
-        "jiraItem": {
-            "priority": "P01", 
-            "status": "Implementing", 
-            "jiraType": "Feature", 
-            "jiraName": "Intel CDR NVMe 1.92TB, 3.84TB, 7.68TB, 15.36TB Riptide Platform Drive Qual", 
-            "qaRepresentative": "Vadim.Aliev@emc.com", 
-            "functionalTest": "Yes", 
-            "fixVersion": "Foothills", 
-            "jiraId": "TRIF-1094", 
-            "jiraParentId": null
-        }, 
-        "qcItem": {
-            "status": "N/A", 
-            "requirementType": "Feature", 
-            "requirementId": "2345"
-        }
-    }, 
-    {
-        "diffItem": {
-            "updateTime": 1598487990, 
+            "updateTime": 1599524762, 
             "type": "Update", 
             "updatedFields": [
                 {
@@ -146,7 +30,7 @@
     }, 
     {
         "diffItem": {
-            "updateTime": 1598487990, 
+            "updateTime": 1599524762, 
             "type": "Update", 
             "updatedFields": [
                 {
@@ -175,7 +59,7 @@
     }, 
     {
         "diffItem": {
-            "updateTime": 1598487990, 
+            "updateTime": 1599524762, 
             "type": "Update", 
             "updatedFields": [
                 {
@@ -204,7 +88,7 @@
     }, 
     {
         "diffItem": {
-            "updateTime": 1598487991, 
+            "updateTime": 1599524763, 
             "type": "Update", 
             "updatedFields": [
                 {
@@ -233,7 +117,7 @@
     }, 
     {
         "diffItem": {
-            "updateTime": 1598487991, 
+            "updateTime": 1599524763, 
             "type": "Update", 
             "updatedFields": [
                 {
@@ -262,7 +146,7 @@
     }, 
     {
         "diffItem": {
-            "updateTime": 1598487991, 
+            "updateTime": 1599524763, 
             "type": "Update", 
             "updatedFields": [
                 {
@@ -291,7 +175,7 @@
     }, 
     {
         "diffItem": {
-            "updateTime": 1598487992, 
+            "updateTime": 1599524764, 
             "type": "Updated", 
             "updatedFields": [
                 {
@@ -320,85 +204,7 @@
     }, 
     {
         "diffItem": {
-            "updateTime": 1598487997, 
-            "type": "Update", 
-            "updatedFields": [
-                {
-                    "fieldName": "target-rel", 
-                    "newValue": "1066", 
-                    "oldValue": "1070"
-                }, 
-                {
-                    "fieldName": "target-rcyc", 
-                    "newValue": "1258", 
-                    "oldValue": null
-                }, 
-                {
-                    "fieldName": "parent-id", 
-                    "newValue": "1766", 
-                    "oldValue": "2348"
-                }
-            ]
-        }, 
-        "jiraItem": {
-            "priority": "P00", 
-            "status": "Done", 
-            "jiraType": "Epic", 
-            "jiraName": "[32 Networks] Support of 32 storage networks - create, remove, reconfig, scale and unscale", 
-            "qaRepresentative": null, 
-            "functionalTest": "No", 
-            "fixVersion": "PSI_40", 
-            "jiraId": "TRIES-27873", 
-            "jiraParentId": "TRIF-765"
-        }, 
-        "qcItem": {
-            "status": "Done", 
-            "requirementType": "Epic", 
-            "requirementId": "1747"
-        }
-    }, 
-    {
-        "diffItem": {
-            "updateTime": 1598487997, 
-            "type": "Update", 
-            "updatedFields": [
-                {
-                    "fieldName": "target-rel", 
-                    "newValue": "1066", 
-                    "oldValue": "1070"
-                }, 
-                {
-                    "fieldName": "target-rcyc", 
-                    "newValue": "1255", 
-                    "oldValue": null
-                }, 
-                {
-                    "fieldName": "parent-id", 
-                    "newValue": "1766", 
-                    "oldValue": "2348"
-                }
-            ]
-        }, 
-        "jiraItem": {
-            "priority": "P00", 
-            "status": "Done", 
-            "jiraType": "Epic", 
-            "jiraName": "[32 networks][Networking] GUI support for multiple storage networks", 
-            "qaRepresentative": null, 
-            "functionalTest": "No", 
-            "fixVersion": "PSI_39", 
-            "jiraId": "TRIES-24305", 
-            "jiraParentId": "TRIF-765"
-        }, 
-        "qcItem": {
-            "status": "Done", 
-            "requirementType": "Epic", 
-            "requirementId": "1746"
-        }
-    }, 
-    {
-        "diffItem": {
-            "updateTime": 1598487998, 
+            "updateTime": 1599524766, 
             "type": "Updated", 
             "updatedFields": [
                 {
@@ -427,7 +233,7 @@
     }, 
     {
         "diffItem": {
-            "updateTime": 1598488002, 
+            "updateTime": 1599524770, 
             "type": "Update", 
             "updatedFields": [
                 {
@@ -456,7 +262,7 @@
     }, 
     {
         "diffItem": {
-            "updateTime": 1598488002, 
+            "updateTime": 1599524770, 
             "type": "Update", 
             "updatedFields": [
                 {
@@ -485,7 +291,7 @@
     }, 
     {
         "diffItem": {
-            "updateTime": 1598488004, 
+            "updateTime": 1599524771, 
             "type": "Update", 
             "updatedFields": [
                 {
@@ -514,7 +320,7 @@
     }, 
     {
         "diffItem": {
-            "updateTime": 1598488007, 
+            "updateTime": 1599524773, 
             "type": "Updated", 
             "updatedFields": [
                 {
@@ -543,36 +349,7 @@
     }, 
     {
         "diffItem": {
-            "updateTime": 1598488009, 
-            "type": "Updated", 
-            "updatedFields": [
-                {
-                    "fieldName": "qaFeatureOwner", 
-                    "newValue": null, 
-                    "oldValue": "rajagr2"
-                }
-            ]
-        }, 
-        "jiraItem": {
-            "priority": "P00", 
-            "status": "Implementing", 
-            "jiraType": "Feature", 
-            "jiraName": "Clustering PowerStore X Appliances", 
-            "qaRepresentative": "rajasekaran.rajagopal@emc.com", 
-            "functionalTest": "Yes", 
-            "fixVersion": "Foothills", 
-            "jiraId": "TRIF-530", 
-            "jiraParentId": null
-        }, 
-        "qcItem": {
-            "status": "N/A", 
-            "requirementType": "Feature", 
-            "requirementId": "2304"
-        }
-    }, 
-    {
-        "diffItem": {
-            "updateTime": 1598488013, 
+            "updateTime": 1599524777, 
             "type": "Update", 
             "updatedFields": [
                 {
@@ -601,7 +378,7 @@
     }, 
     {
         "diffItem": {
-            "updateTime": 1598488013, 
+            "updateTime": 1599524777, 
             "type": "Update", 
             "updatedFields": [
                 {
@@ -630,7 +407,7 @@
     }, 
     {
         "diffItem": {
-            "updateTime": 1598488013, 
+            "updateTime": 1599524777, 
             "type": "Update", 
             "updatedFields": [
                 {
@@ -659,7 +436,7 @@
     }, 
     {
         "diffItem": {
-            "updateTime": 1598488013, 
+            "updateTime": 1599524777, 
             "type": "Update", 
             "updatedFields": [
                 {
@@ -688,7 +465,7 @@
     }, 
     {
         "diffItem": {
-            "updateTime": 1598488014, 
+            "updateTime": 1599524777, 
             "type": "Update", 
             "updatedFields": [
                 {
@@ -717,7 +494,7 @@
     }, 
     {
         "diffItem": {
-            "updateTime": 1598488021, 
+            "updateTime": 1599524781, 
             "type": "Updated", 
             "updatedFields": [
                 {
@@ -746,7 +523,7 @@
     }, 
     {
         "diffItem": {
-            "updateTime": 1598488027, 
+            "updateTime": 1599524787, 
             "type": "Updated", 
             "updatedFields": [
                 {
@@ -775,94 +552,7 @@
     }, 
     {
         "diffItem": {
-            "updateTime": 1598488034, 
-            "type": "Update", 
-            "updatedFields": [
-                {
-                    "fieldName": "qaFeatureOwner", 
-                    "newValue": "", 
-                    "oldValue": null
-                }
-            ]
-        }, 
-        "jiraItem": {
-            "priority": "P00", 
-            "status": "Done", 
-            "jiraType": "Epic", 
-            "jiraName": "Quality: TRIF-442: VMware Visibility - Part 1 - Functional testing", 
-            "qaRepresentative": null, 
-            "functionalTest": "Yes", 
-            "fixVersion": "PSI_40", 
-            "jiraId": "TRIES-20051", 
-            "jiraParentId": "TRIF-442"
-        }, 
-        "qcItem": {
-            "status": "Done", 
-            "requirementType": "Epic", 
-            "requirementId": "2292"
-        }
-    }, 
-    {
-        "diffItem": {
-            "updateTime": 1598488034, 
-            "type": "Update", 
-            "updatedFields": [
-                {
-                    "fieldName": "qaFeatureOwner", 
-                    "newValue": "", 
-                    "oldValue": null
-                }
-            ]
-        }, 
-        "jiraItem": {
-            "priority": "P00", 
-            "status": "Done", 
-            "jiraType": "Epic", 
-            "jiraName": "Test plan and manual testing for VP registration, VP status discovery, Host running VM discovery", 
-            "qaRepresentative": null, 
-            "functionalTest": "Yes", 
-            "fixVersion": "PSI_39", 
-            "jiraId": "TRIES-20049", 
-            "jiraParentId": "TRIF-442"
-        }, 
-        "qcItem": {
-            "status": "Done", 
-            "requirementType": "Epic", 
-            "requirementId": "2291"
-        }
-    }, 
-    {
-        "diffItem": {
-            "updateTime": 1598488038, 
-            "type": "Updated", 
-            "updatedFields": [
-                {
-                    "fieldName": "qaFeatureOwner", 
-                    "newValue": null, 
-                    "oldValue": "rajagr2"
-                }
-            ]
-        }, 
-        "jiraItem": {
-            "priority": "P01", 
-            "status": "Implementing", 
-            "jiraType": "Feature", 
-            "jiraName": "End user consumable REST interface for Create Cluster and Add Appliance", 
-            "qaRepresentative": "rajasekaran.rajagopal@emc.com", 
-            "functionalTest": "Yes", 
-            "fixVersion": "Foothills", 
-            "jiraId": "TRIF-419", 
-            "jiraParentId": null
-        }, 
-        "qcItem": {
-            "status": "N/A", 
-            "requirementType": "Feature", 
-            "requirementId": "1873"
-        }
-    }, 
-    {
-        "diffItem": {
-            "updateTime": 1598488043, 
+            "updateTime": 1599524791, 
             "type": "Updated", 
             "updatedFields": [
                 {
@@ -891,7 +581,7 @@
     }, 
     {
         "diffItem": {
-            "updateTime": 1598488044, 
+            "updateTime": 1599524793, 
             "type": "Updated", 
             "updatedFields": [
                 {
@@ -920,46 +610,36 @@
     }, 
     {
         "diffItem": {
-            "updateTime": 1598488120, 
+            "updateTime": 1599524849, 
             "type": "Update", 
             "updatedFields": [
                 {
-                    "fieldName": "target-rel", 
-                    "newValue": "1066", 
-                    "oldValue": "1070"
-                }, 
-                {
-                    "fieldName": "target-rcyc", 
-                    "newValue": "1222", 
-                    "oldValue": null
-                }, 
-                {
-                    "fieldName": "parent-id", 
-                    "newValue": "600", 
-                    "oldValue": "2200"
+                    "fieldName": "activeReq", 
+                    "newValue": "N", 
+                    "oldValue": "Y"
                 }
             ]
         }, 
         "jiraItem": {
             "priority": "P00", 
-            "status": "Done", 
+            "status": "Implementing", 
             "jiraType": "Epic", 
-            "jiraName": "Riptide: NTB support - Messaging over NTB (NTRDMA) - Kernel phase 1", 
+            "jiraName": "[QA] SDNAS complete solution testing with Riptide platform", 
             "qaRepresentative": null, 
             "functionalTest": "No", 
-            "fixVersion": "PSI_32", 
-            "jiraId": "TRIES-1063", 
+            "fixVersion": "PSI_41", 
+            "jiraId": "TRIES-25032", 
             "jiraParentId": "TRIF-318"
         }, 
         "qcItem": {
-            "status": "Done", 
+            "status": "In Progress", 
             "requirementType": "Epic", 
-            "requirementId": "602"
+            "requirementId": "2038"
         }
     }, 
     {
         "diffItem": {
-            "updateTime": 1598488122, 
+            "updateTime": 1599524856, 
             "type": "Updated", 
             "updatedFields": [
                 {
@@ -988,36 +668,123 @@
     }, 
     {
         "diffItem": {
-            "updateTime": 1598488189, 
-            "type": "Updated", 
+            "updateTime": 1599524867, 
+            "type": "Update", 
+            "updatedFields": [
+                {
+                    "fieldName": "status", 
+                    "newValue": "In Progress", 
+                    "oldValue": "Backlog"
+                }
+            ]
+        }, 
+        "jiraItem": {
+            "priority": "P00", 
+            "status": "Implementing", 
+            "jiraType": "Epic", 
+            "jiraName": "Fault Containment - DP leftovers (allocate uber on init)", 
+            "qaRepresentative": null, 
+            "functionalTest": "Yes", 
+            "fixVersion": "PSI_41", 
+            "jiraId": "TRIES-40128", 
+            "jiraParentId": "TRIF-243"
+        }, 
+        "qcItem": {
+            "status": "In Progress", 
+            "requirementType": "Epic", 
+            "requirementId": "2265"
+        }
+    }, 
+    {
+        "diffItem": {
+            "updateTime": 1599524871, 
+            "type": "Update", 
             "updatedFields": [
                 {
                     "fieldName": "qaFeatureOwner", 
-                    "newValue": null, 
-                    "oldValue": "rajagr2"
+                    "newValue": "", 
+                    "oldValue": null
+                }
+            ]
+        }, 
+        "jiraItem": {
+            "priority": "P02", 
+            "status": "Done", 
+            "jiraType": "Epic", 
+            "jiraName": "GUI Implementation & Test Epic for Epic-38069: Default table sorting", 
+            "qaRepresentative": null, 
+            "functionalTest": "Yes", 
+            "fixVersion": "PSI_41", 
+            "jiraId": "TRIES-38713", 
+            "jiraParentId": "TRIF-191"
+        }, 
+        "qcItem": {
+            "status": "Done", 
+            "requirementType": "Epic", 
+            "requirementId": "2314"
+        }
+    }, 
+    {
+        "diffItem": {
+            "updateTime": 1599524871, 
+            "type": "Update", 
+            "updatedFields": [
+                {
+                    "fieldName": "qaFeatureOwner", 
+                    "newValue": "", 
+                    "oldValue": null
+                }
+            ]
+        }, 
+        "jiraItem": {
+            "priority": "P00", 
+            "status": "Implementing", 
+            "jiraType": "Epic", 
+            "jiraName": "Log out after cluster create, and log back in to complete actions ", 
+            "qaRepresentative": null, 
+            "functionalTest": "Yes", 
+            "fixVersion": "PSI_41", 
+            "jiraId": "TRIES-38579", 
+            "jiraParentId": "TRIF-191"
+        }, 
+        "qcItem": {
+            "status": "In Progress", 
+            "requirementType": "Epic", 
+            "requirementId": "2315"
+        }
+    }, 
+    {
+        "diffItem": {
+            "updateTime": 1599524871, 
+            "type": "Update", 
+            "updatedFields": [
+                {
+                    "fieldName": "qaFeatureOwner", 
+                    "newValue": "", 
+                    "oldValue": null
                 }
             ]
         }, 
         "jiraItem": {
             "priority": "P01", 
-            "status": "Done", 
-            "jiraType": "Feature", 
-            "jiraName": "Generic CLI enhancements by CLI framework", 
-            "qaRepresentative": "rajasekaran.rajagopal@emc.com", 
+            "status": "Implementing", 
+            "jiraType": "Epic", 
+            "jiraName": "GUI Implementation & Test - CMA Retry framework", 
+            "qaRepresentative": null, 
             "functionalTest": "Yes", 
-            "fixVersion": "Foothills", 
-            "jiraId": "TRIF-149", 
-            "jiraParentId": null
+            "fixVersion": "PSI_41", 
+            "jiraId": "TRIES-35598", 
+            "jiraParentId": "TRIF-191"
         }, 
         "qcItem": {
-            "status": "N/A", 
-            "requirementType": "Feature", 
-            "requirementId": "1827"
+            "status": "In Progress", 
+            "requirementType": "Epic", 
+            "requirementId": "2316"
         }
     }, 
     {
         "diffItem": {
-            "updateTime": 1598488191, 
+            "updateTime": 1599524880, 
             "type": "Updated", 
             "updatedFields": [
                 {
@@ -1042,64 +809,6 @@
             "status": "Not Covered", 
             "requirementType": "Feature", 
             "requirementId": "772"
-        }
-    }, 
-    {
-        "diffItem": {
-            "updateTime": 1598488212, 
-            "type": "Updated", 
-            "updatedFields": [
-                {
-                    "fieldName": "qaFeatureOwner", 
-                    "newValue": null, 
-                    "oldValue": "krishanu_dhar"
-                }
-            ]
-        }, 
-        "jiraItem": {
-            "priority": "P00", 
-            "status": "Done", 
-            "jiraType": "Feature", 
-            "jiraName": "DT - New supported platforms for seamless migration - Foothills Core", 
-            "qaRepresentative": "Krishanu_Dhar@Dell.com", 
-            "functionalTest": "Yes", 
-            "fixVersion": "Foothills", 
-            "jiraId": "TRIF-77", 
-            "jiraParentId": null
-        }, 
-        "qcItem": {
-            "status": "Not Completed", 
-            "requirementType": "Feature", 
-            "requirementId": "1443"
-        }
-    }, 
-    {
-        "diffItem": {
-            "updateTime": 1598488229, 
-            "type": "Update", 
-            "updatedFields": [
-                {
-                    "fieldName": "status", 
-                    "newValue": "Done", 
-                    "oldValue": "In Progress"
-                }
-            ]
-        }, 
-        "jiraItem": {
-            "priority": "P01", 
-            "status": "Done", 
-            "jiraType": "Epic", 
-            "jiraName": "CoreOS 4.19 Platform Core Testing", 
-            "qaRepresentative": null, 
-            "functionalTest": "Yes", 
-            "fixVersion": "PSI_41", 
-            "jiraId": "TRIES-8095", 
-            "jiraParentId": "TRIF-33"
-        }, 
-        "qcItem": {
-            "status": "Done", 
-            "requirementType": "Epic", 
-            "requirementId": "2136"
         }
     }
 ]

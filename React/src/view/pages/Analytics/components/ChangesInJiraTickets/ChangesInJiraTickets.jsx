@@ -10,7 +10,7 @@ import Chart from "../charts/Chart"
 
 // Options To Send == > Server 
 let serverFilters = {
-  values: [],
+  values: ["newValue"],
   status: [],
   qaRepresentative: [],
   startDate: "",
@@ -30,8 +30,8 @@ function ChangesInJiraTickets() {
     const timeZone = startDate.getTimezoneOffset() / 60
     startDate.setHours(0 - timeZone, 0, 0, 0)
     endDate.setHours(0 - timeZone, 0, 0, 0)
-    serverFilters = {
-      values: [],
+     serverFilters = {
+      values: ["newValue"],
       status: [],
       qaRepresentative: [],
       startDate: startDate,

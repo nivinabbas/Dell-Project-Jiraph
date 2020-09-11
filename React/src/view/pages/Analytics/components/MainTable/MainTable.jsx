@@ -158,6 +158,16 @@ function MainTable(props) {
       },
     },
     {
+      title: 'Modify type ', field: 'modifyType',
+      cellStyle: {
+        height: 'fit-content',
+        minWidth: 200,
+        border: '1px solid steelBlue',
+        backgroundColor: 'whiteSmoke',
+        color: 'black',
+      },
+    },
+    {
       title: 'Field Name', field: 'fieldName',
       cellStyle: {
         height: 'fit-content',
@@ -206,6 +216,7 @@ function MainTable(props) {
       qcRequirementType: task.qcItem.requirementType,
       qcStatus: task.qcItem.status,
       updatedTime: task.diffItem.updatedTime,
+      modifyType:task.diffItem.type,
       fieldName: task.diffItem.updatedField.fieldName,
       oldValue: task.diffItem.updatedField.oldValue,
       newValue: task.diffItem.updatedField.newValue,
