@@ -14,9 +14,9 @@ router.post('/modificationByField', async (req, res) => {
     let tasks = []
     const { serverFilters } = req.body
     let { fieldName, values, qaRepresentative, startDate, endDate, label } = serverFilters;
-    console.log(fieldName, values, label, qaRepresentative)
     startDate = new Date(startDate)
     endDate = new Date(endDate)
+
     let dateFormat = '';
     if (label[0] == 'daily') {
         dateFormat = "%Y-%m-%d"
@@ -309,9 +309,12 @@ router.post('/changesByParentIdFilters', async (req, res) => {
     }
     else {
         const version = fixVersion[0];
+        
         tasks = await TaskModel.aggregate([
             {
-                $match: { "jiraItem.fixVersion": version, "jiraItem.type": "Epic" }
+                $match: { "jiraItem.fixVersion": version, "jiraItem.type": "Epic","diffItem.updatedTime": { $gte: startDate, $lte: endDate },
+                  
+           }
             },
             {
                 $group: {

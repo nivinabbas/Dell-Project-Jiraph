@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import "./ModificationByField.css";
-import { useState , useRef} from 'react';
+import { useState, useRef } from 'react';
 //import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
 import Select from "react-select"
 import Chart from "../charts/Chart"
 
 
 
-let serverFilters = { fieldName: [], values: [], qaRepresentative: [], startDate: ("2020-08-1"), endDate: ("2020-09-30"), label: ["weekly"] };
+let serverFilters = { fieldName: [], values: [], qaRepresentative: [], startDate: "", endDate: "", label: [] };
 
 
 
@@ -15,14 +15,26 @@ let serverFilters = { fieldName: [], values: [], qaRepresentative: [], startDate
 function ModificationByField(props) {
 
   let startDate = new Date()
-  console.log(startDate)
+
   let endDate = new Date()
+  startDate.setMonth(endDate.getMonth() - 1)
+  const timeZone = startDate.getTimezoneOffset()/60
+  startDate.setHours(0-timeZone, 0, 0, 0)
+  endDate.setHours(0-timeZone, 0, 0, 0)
+  var today = new Date();
+  today.setHours(0, 0, 0, 0)
+  var str = today.toGMTString();  // deprecated! use toUTCString()
+  
+  console.log(timeZone);
+
+  
+
   useEffect(() => {
-    serverFilters = { fieldName: [], values: [], qaRepresentative: [],  startDate: ("2020-08-1"), endDate: ("2020-09-30"), label: ["weekly"] };
+    serverFilters = { fieldName: [], values: [], qaRepresentative: [], startDate: (startDate), endDate: (endDate), label: ["daily"] };
 
     fetch('/api/analytics/modificationByFieldFilters', {
       method: 'POST',
-      body: JSON.stringify({ fieldName: serverFilters.fieldName, startDate:serverFilters.startDate, endDate:serverFilters.endDate  }),
+      body: JSON.stringify({ fieldName: serverFilters.fieldName, startDate: serverFilters.startDate, endDate: serverFilters.endDate }),
       headers: {
         "Content-Type": "application/json"
       }
@@ -30,27 +42,27 @@ function ModificationByField(props) {
       .then(res => res.json())
       .then(data => {
         console.log(data)
-        if(data.length>0){
-        setFieldNameOptions(data[0].labels)
-        setQaRepresentativeOptions(data[0].QA);
+        if (data.length > 0) {
+          setFieldNameOptions(data[0].labels)
+          setQaRepresentativeOptions(data[0].QA);
         }
         else {
           alert("Check the connection with the server...")
         }
       })
 
-      fetch('/api/analytics/modificationByField', {
-        method: 'POST',
-        body: JSON.stringify({ serverFilters }),
-        headers: {
-          "Content-Type": "application/json"
-        }
+    fetch('/api/analytics/modificationByField', {
+      method: 'POST',
+      body: JSON.stringify({ serverFilters }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data)
+        setUiObjs(data)
       })
-        .then(res => res.json())
-        .then(data => {
-          console.log(data)
-          setUiObjs(data)
-        })
 
   }, [])
 
@@ -59,7 +71,7 @@ function ModificationByField(props) {
   const render = (serverFilters) => {
     fetch('/api/analytics/modificationByField', {
       method: 'POST',
-      body: JSON.stringify({serverFilters}),
+      body: JSON.stringify({ serverFilters }),
       headers: {
         "Content-Type": "application/json"
       }
@@ -75,18 +87,18 @@ function ModificationByField(props) {
   const renderFilters = (serverFilters) => {
     fetch('/api/analytics/modificationByFieldFilters', {
       method: 'POST',
-      body: JSON.stringify({ fieldName: serverFilters.fieldName}),
+      body: JSON.stringify({ fieldName: serverFilters.fieldName }),
       headers: {
         "Content-Type": "application/json"
       }
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data!=null) {
-          if(data.length>0)
+        if (data != null) {
+          if (data.length > 0)
             setValueOptions(data[0].Values);
-          
-          else{
+
+          else {
             setValueOptions(data);
 
           }
@@ -109,19 +121,19 @@ function ModificationByField(props) {
 
 
   const handleChangeLabel = (change => {
-    
-    serverFilters.label=[change.label];
+
+    serverFilters.label = [change.label];
     render(serverFilters);
   })
 
   const handleChangeFieldName = (change => {
-    serverFilters.values=[]
-    serverFilters.qaRepresentative=[]
-    if(change!=null){
-   serverFilters.fieldName=[change.value];
+    serverFilters.values = []
+    serverFilters.qaRepresentative = []
+    if (change != null) {
+      serverFilters.fieldName = [change.value];
     }
     else {
-      serverFilters.fieldName=[];
+      serverFilters.fieldName = [];
     }
     render(serverFilters)
     renderFilters(serverFilters);
@@ -130,9 +142,9 @@ function ModificationByField(props) {
   const handleChangeValues = (change => {
     serverFilters.values = []
     if (change != null) {
-      change.map((item)=>{
-        return(
-        serverFilters.values.push(item.value)
+      change.map((item) => {
+        return (
+          serverFilters.values.push(item.value)
         )
       })
     }
@@ -144,7 +156,7 @@ function ModificationByField(props) {
 
   const handleChangeQaRepresentative = (change => {
 
-    serverFilters.qaRepresentative=[change.value];
+    serverFilters.qaRepresentative = [change.value];
     render(serverFilters);
   })
 
@@ -159,8 +171,8 @@ function ModificationByField(props) {
     render(serverFilters);
   })
 
-  const valueInput=useRef("")
-  const qaInput=useRef("")
+  const valueInput = useRef("")
+  const qaInput = useRef("")
 
   return (
     <div className='ModificationByField__Wrapper'>
@@ -173,7 +185,7 @@ function ModificationByField(props) {
 
         <Select
           name="fieldName"
-          onInputChange={()=> {valueInput.current.state.value="";qaInput.current.state.value=""}}
+          onInputChange={() => { valueInput.current.state.value = ""; qaInput.current.state.value = "" }}
           onChange={handleChangeFieldName}
           placeholder="fieldName"
           className="ModificationByField__Filter"
