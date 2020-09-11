@@ -51,11 +51,11 @@ function DelaysInDelivery() {
 
   useEffect(() => {
     let startDate = new Date()
-  let endDate = new Date()
-  startDate.setMonth(endDate.getMonth() - 1)
-  const timeZone = startDate.getTimezoneOffset()/60
-  startDate.setHours(0-timeZone, 0, 0, 0)
-  endDate.setHours(0-timeZone, 0, 0, 0)
+    let endDate = new Date()
+    startDate.setMonth(endDate.getMonth() - 1)
+    const timeZone = startDate.getTimezoneOffset()/60
+    startDate.setHours(0-timeZone, 0, 0, 0)
+    endDate.setHours(0-timeZone, 0, 0, 0)
      serverFilters = {
       fixVersion: [],
       jiraType: [],
@@ -105,11 +105,16 @@ function DelaysInDelivery() {
     const HandlefixVersionChange = (version => {
       serverFilters.jiraType=[]
       serverFilters.qaRepresentative = []
-      serverFilters.fixVersion=[version.value];
-      
-        render(serverFilters)
-        renderFilters(serverFilters);
-      })
+      if (version != null) {
+        serverFilters.fixVersion = [version.value]
+      }
+      else {
+        serverFilters.values = []
+      }
+      render(serverFilters);
+      renderFilters(serverFilters);
+    })
+   
 
   const HandlejiraTypeChange = (type => {
     serverFilters.jiraType=[]
@@ -173,6 +178,7 @@ function DelaysInDelivery() {
           placeholder="fix Version "
           className="DelaysInDelivery__Filter"
           onChange={HandlefixVersionChange}
+          isClearable={true}
 
         />
 
