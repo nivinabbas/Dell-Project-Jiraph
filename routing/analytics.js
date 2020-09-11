@@ -413,7 +413,7 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
 
     filtersArray.push({ 'diffItem.type': 'Update' })
     filtersArray.push({ 'diffItem.updatedField.fieldName': 'status' })
-    filtersArray.push({ "diffItem.updatedTime": { $gte: startDate } }, { "diffItem.updatedTime": { $lte: endDate } })
+    // filtersArray.push({ "diffItem.updatedTime": { $gte: startDate } }, { "diffItem.updatedTime": { $lte: endDate } })
 
     //multiselect status
     if (filterStatus[0] != undefined && filterValue[0] != undefined) {
