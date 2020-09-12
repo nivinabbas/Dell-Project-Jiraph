@@ -12,12 +12,9 @@ import LastPage from '@material-ui/icons/LastPage';
 import Search from '@material-ui/icons/Search';
 import MaterialTable from 'material-table';
 
-
 function MainTable(props) {
   const { tasks } = props
-
   const tableIcons = {
-
     Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
     FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
     LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
@@ -93,7 +90,6 @@ function MainTable(props) {
         border: '1px solid steelBlue',
         backgroundColor: 'whiteSmoke',
         color: 'black',
-
       },
     },
     {
@@ -103,8 +99,6 @@ function MainTable(props) {
         border: '1px solid steelBlue',
         backgroundColor: 'whiteSmoke',
         color: 'black',
-        
-
       },
     },
     {
@@ -114,7 +108,6 @@ function MainTable(props) {
         border: '1px solid steelBlue',
         backgroundColor: 'whiteSmoke',
         color: 'black',
-
       },
     },
     {
@@ -124,7 +117,6 @@ function MainTable(props) {
         border: '1px solid steelBlue',
         backgroundColor: 'whiteSmoke',
         color: 'black',
-
       },
     },
     {
@@ -134,7 +126,6 @@ function MainTable(props) {
         border: '1px solid steelBlue',
         backgroundColor: 'whiteSmoke',
         color: 'black',
-
       },
     },
     {
@@ -144,7 +135,6 @@ function MainTable(props) {
         border: '1px solid steelBlue',
         backgroundColor: 'whiteSmoke',
         color: 'black',
-
       },
     },
     {
@@ -154,7 +144,6 @@ function MainTable(props) {
         border: '1px solid steelBlue',
         backgroundColor: 'whiteSmoke',
         color: 'black',
-
       },
     },
     {
@@ -184,7 +173,6 @@ function MainTable(props) {
         border: '1px solid steelBlue',
         backgroundColor: 'whiteSmoke',
         color: 'black',
-
       },
     },
     {
@@ -194,7 +182,6 @@ function MainTable(props) {
         border: '1px solid steelBlue',
         backgroundColor: 'whiteSmoke',
         color: 'black',
-
       },
     },
   ]
@@ -224,17 +211,13 @@ function MainTable(props) {
     ]
   })
   
-
-
   return (
-  
         <MaterialTable
           title='Analysis'
           icons={tableIcons}
           columns={columns}
           data={data}
           options={{
-            
             headerStyle: {
               backgroundColor: '#00447C',
               color: '#FFF',
@@ -243,11 +226,8 @@ function MainTable(props) {
               padding: 3,
               textAlign: 'center',
             },
-
           }}
-
         />
-
   );
 }
    
