@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
 const router = express.Router();
 const UserSchema = require('../schemas/UserSchema');
@@ -12,6 +13,8 @@ const AuditModel = mongoose.model("AuditModel", AuditSchema);
 var nodemailer = require('nodemailer')
 var validator = require("email-validator");
 const { find } = require("../schemas/TaskSchema");
+const saltRounds = 10
+ 
 
 var transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -45,19 +48,18 @@ const u = new UserModel({
 router.post('/login', (req, res) => {
     const { email, password } = req.body;
     if (validator.validate(email)) {
-        UserModel.find({ "userInfo.employeeEmail": email }).then(checkEmail => {
+        UserModel.find({ "userInfo.employeeEmail": email }).then(async checkEmail => {
             if (checkEmail.length > 0) {
-                UserModel.find({ "userInfo.employeeEmail": email, "userInfo.password": password }).then(checkPassword => {
-                    if (checkPassword.length > 0) {
-                        if (checkPassword[0].active == 1) {
-                            res.send({ success: true, error: null, info: { role: checkPassword[0].userInfo.employeeRole, id: checkPassword[0]._id } })
-                        } else {
-                            res.send({ success: false, error: "User is deleted from the system", info: null })
-                        }
-                    } else {
-                        res.send({ success: false, error: "Password incorrect", info: null })
+                const isMatch = await bcrypt.compare(password,checkEmail[0].userInfo.password)
+                if(isMatch){
+                    if(checkEmail[0].active == 1){
+                        return (res.send({ success: true, error: null, info: { role: checkEmail[0].userInfo.employeeRole, id: checkEmail[0]._id } }))
+                    }else{
+                        return (res.send({ success: false, error: "User is deleted from the system", info: null }))
                     }
-                })
+                }else{
+                    return (res.send({ success: false, error: "Password incorrect", info: null }))
+                }
             } else {
                 res.send({ success: false, error: "Email not found", info: null })
             }
@@ -107,21 +109,6 @@ router.put('/deleteUser', (req, res) => {
             }
         }
     })
-    // UserModel.remove({ _id: id }, async function (err) {
-    //     if (err) {
-    //         res.send({ success: false, error: err, info: null })
-    //     } else {
-    //         await UserModel.find({}).then(users => {
-    //             if (users.length > 0) {
-
-    //                 for (let index = 0; index < users.length; index++) {
-    //                     table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id })
-    //                 }
-    //                 res.send({ success: true, error: null, info: { table } })
-    //             }
-    //         })
-    //     }
-    // })
 
 })
 
@@ -147,7 +134,7 @@ ${key}`
 
                 transporter.sendMail(mailOptions, function (err, info) {
                     if (err) {
-                        console.log(err);
+                        return (res.send({ success: false, error: err, info: null }))
                     } else {
                         console.log('Email sent: ' + info.response);
                     }
@@ -170,28 +157,11 @@ ${key}`
     }
 })
 
-//  router.post('/getUserInfo',(req,res)=>{
-//     const { email } = req.body;
-//     if(validator.validate(email)){
-//        UserModel.findOne({"userInfo.employeeEmail":email}).then(checkEmail=>{
-//           if(checkEmail.length>0){
-
-//                   res.send({success:true,error:null,info:{email:checkEmail[0].userInfo.employeeEmail,name:checkEmail[0].userInfo.employeeName,role:checkEmail[0].userInfo.employeeRole,id:checkEmail[0]._id}})
-
-//           }else{
-//               res.send({success:false,error:"Email not found",info:null})
-//           }
-//        })
-//       }else{
-//           res.send({success:false,error:"Email not valid",info:null})
-//       }
-// })
 
 router.post('/createUser', (req, res) => {
 
     const { name, email, role, password } = req.body;
     let table = [];
-
     if (validator.validate(email)) {
         UserModel.find({ "userInfo.employeeEmail": email }).then(async (checkEmail) => {
             if (checkEmail.length > 0) {
@@ -200,10 +170,11 @@ router.post('/createUser', (req, res) => {
 
 
             else {
-                await UserModel.insertMany({ userInfo: { employeeName: name, employeeEmail: email, employeeRole: role, password: password }, active: 1 })
+                const salt = await bcrypt.genSalt(saltRounds)
+                const hashpassword = await bcrypt.hash(password,salt)
+                await UserModel.insertMany({ userInfo: { employeeName: name, employeeEmail: email, employeeRole: role, password: hashpassword }, active: 1 })
 
                 await UserModel.find({ active: 1 }).then(users => {
-                    console.log(users)
                     if (users.length > 0) {
 
                         for (let index = 0; index < users.length; index++) {
@@ -214,7 +185,7 @@ router.post('/createUser', (req, res) => {
                         var mailOptions = {
                             from: 'servicetest468@gmail.com',
                             to: email,
-                            subject: 'Reset Password',
+                            subject: 'Welcome To Jiraph!!',
                             text: `Hello ${name.charAt(0).toUpperCase() + name.slice(1)},Welcome to your new Jiraph Account. 
 
                             Sign in to your Jiraph Account to access Jira tasks and Analysis. 
@@ -226,12 +197,11 @@ router.post('/createUser', (req, res) => {
 
                         transporter.sendMail(mailOptions, function (err, info) {
                             if (err) {
-                                console.log(err);
+                                return (res.send({ success: false, error: err, info: null }))
                             } else {
                                 console.log('Email sent: ' + info.response);
                             }
                         });
-                        console.log(table)
                         res.send({ success: true, error: null, info: { table } })
                     }
                 })
@@ -248,22 +218,17 @@ router.post('/checkSendedPassword', (req, res) => {
     const { email, key } = req.body;
     KeyModel.find({ employeeEmail: email, key: key }).then(docs => {
         docs.map((item, index) => {
-            console.log("this is item :" + item)
             if (item.employeeEmail == email) {
                 if (item.key == key) {
                     if ((Date.now() - item.keyTime) <= 1800000) {
-                        console.log("okay")
                         return (res.send({ success: true, error: null, info: null }))
                     } else {
-                        console.log("true")
                         res.send({ success: false, error: 'time expired', info: null })
                     }
                 } else {
-                    console.log("incorrect")
                     res.send({ success: false, error: 'key is incorrect', info: null })
                 }
             } else {
-                console.log('ss')
             }
         })
     })
@@ -272,12 +237,14 @@ router.post('/checkSendedPassword', (req, res) => {
 
 router.put('/updatePassword', (req, res) => {
     const { email, password } = req.body;
-    UserModel.findOne({ "userInfo.employeeEmail": email }).then(docs => {
+    UserModel.findOne({ "userInfo.employeeEmail": email }).then(async docs => {
         if (docs) {
             // const name = docs.userInfo.employeeName
             // const role = docs.userInfo.employeeRole
             // const id = docs._id
-            docs.userInfo.password = password
+            const salt = await bcrypt.genSalt(saltRounds)
+            const hashpassword = await bcrypt.hash(password,salt)
+            docs.userInfo.password = hashpassword
             docs.save();
             res.send({ success: true, error: null, info: null })
             // UserModel.updateOne({ _id: id }, { $set: { userInfo: { employeeName: name, employeeEmail: email, employeeRole: role, password: password } } }).then(doc => {
@@ -302,7 +269,9 @@ router.put('/editUser', (req, res) => {
             if(doc.length>0){
             if (email == doc[0].userInfo.employeeEmail) {
                 if (password.length > 0) {
-                    doc[0].userInfo.password = password;
+                    const salt = await bcrypt.genSalt(saltRounds)
+                    const hashpassword = await bcrypt.hash(password,salt)
+                    doc[0].userInfo.password = hashpassword;
                 }
                 doc[0].userInfo.employeeName = name
                 doc[0].userInfo.employeeRole = role
@@ -318,7 +287,9 @@ router.put('/editUser', (req, res) => {
                     }
                     else {
                         if (password.length > 0) {
-                            doc[0].userInfo.password = password;
+                            const salt = await bcrypt.genSalt(saltRounds)
+                            const hashpassword = await bcrypt.hash(password,salt)
+                            doc[0].userInfo.password = hashpassword;
                         }
                         doc[0].userInfo.employeeEmail = email
                         doc[0].userInfo.employeeName = name
@@ -332,67 +303,6 @@ router.put('/editUser', (req, res) => {
             res.send({ success: false, error: 'User Not Found', info: null })
         }
         })
-        
-
-        // UserModel.find({ "userInfo.employeeEmail": email }).then(checkEmail => {
-        //     if (checkEmail.length > 0) {
-        //         UserModel.find({ "userInfo.employeeEmail": email }).then(checkUserEmail => {
-        //             if (checkUserEmail.length > 0) {
-        //                 if (checkUserEmail[0]._id == id) {
-        //                     if (password.length > 0) {
-        //                         checkUserEmail[0].userInfo.employeeEmail = email
-        //                         checkUserEmail[0].userInfo.employeeName = name
-        //                         checkUserEmail[0].userInfo.employeeRole = role
-        //                         checkUserEmail[0].userInfo.password = password
-
-        //                         checkUserEmail[0].save();
-        //                         res.send({ success: true, error: null, info: null })
-        //                     }
-        //                     else {
-        //                         checkUserEmail[0].userInfo.employeeEmail = email
-        //                         checkUserEmail[0].userInfo.employeeName = name
-        //                         checkUserEmail[0].userInfo.employeeRole = role
-
-        //                         checkUserEmail[0].save();
-        //                         res.send({ success: true, error: null, info: null })
-        //                     }
-        //                 }
-        //                 else {
-        //                     return res.send({ success: false, error: "Email is already in use", info: null })
-        //                 }
-        //             }
-        //             else {
-
-        //             }
-        //         })
-        //     } else {
-        //         UserModel.find({ _id: id }).then(checkUserId => {
-        //             if (checkUserId.length > 0) {
-        //                 if (password.length > 0) {
-        //                     checkUserId[0].userInfo.employeeEmail = email
-        //                     checkUserId[0].userInfo.employeeName = name
-        //                     checkUserId[0].userInfo.employeeRole = role
-        //                     checkUserId[0].userInfo.password = password
-
-        //                     checkUserId[0].save();
-        //                     res.send({ success: true, error: null, info: null })
-        //                 }
-        //                 else {
-        //                     checkUserId[0].userInfo.employeeEmail = email
-        //                     checkUserId[0].userInfo.employeeName = name
-        //                     checkUserId[0].userInfo.employeeRole = role
-
-        //                     checkUserId[0].save();
-        //                     res.send({ success: true, error: null, info: null })
-        //                 }
-        //             }
-        //             else {
-        //                 res.send({ success: false, error: 'User Not Found', info: null })
-        //             }
-        //         })
-        //     }
-
-        // })
     } else {
         res.send({ success: false, error: "Email not valid", info: null })
     }
