@@ -226,7 +226,6 @@ function DelaysInDelivery() {
           placeholder="fix Version "
           className="DelaysInDelivery__Filter"
           onChange={HandlefixVersionChange}
-          isClearable={true}
 
         />
 
