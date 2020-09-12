@@ -116,10 +116,10 @@ function ModificationByField(props) {
   const [valueOptions, setValueOptions] = useState([]);//Values of certain FieldName options for filtering
   const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([]);//Qa Representative options for filtering
   const labelOptions = [ //Labels for Displaying the Chart 
-    { label: "daily" },
-    { label: "weekly" },
-    { label: "monthly" },
-    { label: "yearly" }];
+    { value:"daily" , label: "daily" },
+    { value:"weekly" , label: "weekly" },
+    { value:"monthly" , label: "monthly" },
+    { value:"yearly" , label: "yearly" }];
 
 
   //Filters Changes Handlers
@@ -128,7 +128,7 @@ function ModificationByField(props) {
 
   //Label
   const handleChangeLabel = (change => {
-    serverFilters.label = [change.label];
+    serverFilters.label = [change.value];
     render(serverFilters);
   })
 
