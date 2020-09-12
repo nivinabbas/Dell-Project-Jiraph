@@ -63,10 +63,10 @@ export default props => {
         })
             .then(response => response.json())
             .then(data => {
-                if (data.success = true) {
+                if (data.success == true) {
                     alert('update sucsses');
                 }
-                else if (data.success = false) {
+                else if (data.success == false) {
                     alert(data.error)
                 }
             })
@@ -89,7 +89,7 @@ export default props => {
             return;
         }
         fetch('/api/users/deleteUser', {
-            method: 'Delete',
+            method: 'PUT',
             body: JSON.stringify({ id }),
             headers: {
                 "Content-Type": "application/json"

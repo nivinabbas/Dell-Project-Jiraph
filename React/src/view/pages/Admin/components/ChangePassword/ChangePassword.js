@@ -34,6 +34,7 @@ function ChangePassword(props) {
                 .then((data) => {
                     const { success } = data;
                     const { error } = data;
+                    console.log(success)
                     if (success) {
                         history.push("/")
                     }

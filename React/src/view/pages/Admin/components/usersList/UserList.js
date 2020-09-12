@@ -98,12 +98,12 @@ function UserList() {
         })
             .then(response => response.json())
             .then(data => {
-
-                if (data.success = true) {
+                console.log(data)
+                if (data.success == true) {
                     setUsers(data.info.table)
                     return (alert('created sucsses'))
                 }
-                else if (data = false) {
+                else if (data.success == false) {
                     return (alert(data.error))
                 }
 

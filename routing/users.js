@@ -49,7 +49,11 @@ router.post('/login', (req, res) => {
             if (checkEmail.length > 0) {
                 UserModel.find({ "userInfo.employeeEmail": email, "userInfo.password": password }).then(checkPassword => {
                     if (checkPassword.length > 0) {
-                        res.send({ success: true, error: null, info: { role: checkPassword[0].userInfo.employeeRole , id:checkPassword[0]._id} })
+                        if (checkPassword[0].active == 1) {
+                            res.send({ success: true, error: null, info: { role: checkPassword[0].userInfo.employeeRole, id: checkPassword[0]._id } })
+                        } else {
+                            res.send({ success: false, error: "User is deleted from the system", info: null })
+                        }
                     } else {
                         res.send({ success: false, error: "Password incorrect", info: null })
                     }
@@ -65,7 +69,7 @@ router.post('/login', (req, res) => {
 })
 
 router.get('/getUsersList', (req, res) => {
-    UserModel.find({}).then(users => {
+    UserModel.find({ active: 1 }).then(users => {
         if (users.length > 0) {
             let table = [];
             for (let index = 0; index < users.length; index++) {
@@ -77,26 +81,47 @@ router.get('/getUsersList', (req, res) => {
     })
 })
 
-router.delete('/deleteUser', (req, res) => {
+router.put('/deleteUser', (req, res) => {
 
     const { id } = req.body;
-    console.log(id)
     let table = [];
-    UserModel.remove({ _id: id }, async function (err) {
+    UserModel.findOne({ _id: id }, async function (err, docs) {
         if (err) {
-            res.send({ success: false, error: err, info: null })
-        } else {
-            await UserModel.find({}).then(users => {
-                if (users.length > 0) {
+            return (res.send({ success: false, error: err, info: null }))
+        }
+        else {
+            if (docs) {
+                docs.active = 0;
+                await docs.save();
+                await UserModel.find({ active: 1 }).then(users => {
+                    if (users.length > 0) {
 
-                    for (let index = 0; index < users.length; index++) {
-                        table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id })
+                        for (let index = 0; index < users.length; index++) {
+                            table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id })
+                        }
+                        res.send({ success: true, error: null, info: { table } })
                     }
-                    res.send({ success: true, error: null, info: { table } })
-                }
-            })
+                })
+            } else {
+                return (res.send({ success: false, error: 'user not found', info: null }))
+            }
         }
     })
+    // UserModel.remove({ _id: id }, async function (err) {
+    //     if (err) {
+    //         res.send({ success: false, error: err, info: null })
+    //     } else {
+    //         await UserModel.find({}).then(users => {
+    //             if (users.length > 0) {
+
+    //                 for (let index = 0; index < users.length; index++) {
+    //                     table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id })
+    //                 }
+    //                 res.send({ success: true, error: null, info: { table } })
+    //             }
+    //         })
+    //     }
+    // })
 
 })
 
@@ -106,7 +131,7 @@ router.delete('/deleteUser', (req, res) => {
 router.post('/forgotPassword', (req, res) => {
     const { email } = req.body;
     if (validator.validate(email)) {
-        UserModel.find({ "userInfo.employeeEmail": email }).then(checkEmail => {
+        UserModel.find({ "userInfo.employeeEmail": email, active: 1 }).then(checkEmail => {
             if (checkEmail.length > 0) {
                 const key = makeid(10)
 
@@ -170,14 +195,15 @@ router.post('/createUser', (req, res) => {
     if (validator.validate(email)) {
         UserModel.find({ "userInfo.employeeEmail": email }).then(async (checkEmail) => {
             if (checkEmail.length > 0) {
-                res.send({ success: false, error: "Email is already in use", info: null })
+                return (res.send({ success: false, error: "Email is already in use", info: null }))
             }
 
 
             else {
-                await UserModel.insertMany({ userInfo: { employeeName: name, employeeEmail: email, employeeRole: role, password: password } })
+                await UserModel.insertMany({ userInfo: { employeeName: name, employeeEmail: email, employeeRole: role, password: password }, active: 1 })
 
-                await UserModel.find({}).then(users => {
+                await UserModel.find({ active: 1 }).then(users => {
+                    console.log(users)
                     if (users.length > 0) {
 
                         for (let index = 0; index < users.length; index++) {
@@ -205,6 +231,7 @@ router.post('/createUser', (req, res) => {
                                 console.log('Email sent: ' + info.response);
                             }
                         });
+                        console.log(table)
                         res.send({ success: true, error: null, info: { table } })
                     }
                 })
@@ -219,17 +246,14 @@ router.post('/createUser', (req, res) => {
 
 router.post('/checkSendedPassword', (req, res) => {
     const { email, key } = req.body;
-    console.log(key, email)
     KeyModel.find({ employeeEmail: email, key: key }).then(docs => {
-        console.log(docs)
         docs.map((item, index) => {
             console.log("this is item :" + item)
             if (item.employeeEmail == email) {
-                console.log("email is good")
                 if (item.key == key) {
                     if ((Date.now() - item.keyTime) <= 1800000) {
                         console.log("okay")
-                        return res.send({ success: true, error: null, info: null })
+                        return (res.send({ success: true, error: null, info: null }))
                     } else {
                         console.log("true")
                         res.send({ success: false, error: 'time expired', info: null })
@@ -255,6 +279,7 @@ router.put('/updatePassword', (req, res) => {
             // const id = docs._id
             docs.userInfo.password = password
             docs.save();
+            res.send({ success: true, error: null, info: null })
             // UserModel.updateOne({ _id: id }, { $set: { userInfo: { employeeName: name, employeeEmail: email, employeeRole: role, password: password } } }).then(doc => {
             //     if (doc.n > 0) {
             //         res.send({ success: true, error: null, info: null })
@@ -273,62 +298,101 @@ router.put('/updatePassword', (req, res) => {
 router.put('/editUser', (req, res) => {
     const { id, name, email, role, password } = req.body;
     if (validator.validate(email)) {
-        UserModel.find({ "userInfo.employeeEmail": email }).then(checkEmail => {
-            if (checkEmail.length > 0) {
-                UserModel.find({ "userInfo.employeeEmail": email }).then(checkUserEmail => {
-                    if (checkUserEmail.length > 0) {
-                        if (checkUserEmail[0]._id == id) {
-                            if (password.length > 0) {
-                                checkUserEmail[0].userInfo.employeeEmail = email
-                                checkUserEmail[0].userInfo.employeeName = name
-                                checkUserEmail[0].userInfo.employeeRole = role
-                                checkUserEmail[0].userInfo.password = password
+        UserModel.find({ _id: id }).then(async doc => {
+            if(doc.length>0){
+            if (email == doc[0].userInfo.employeeEmail) {
+                if (password.length > 0) {
+                    doc[0].userInfo.password = password;
+                }
+                doc[0].userInfo.employeeName = name
+                doc[0].userInfo.employeeRole = role
+                await doc[0].save();
 
-                                checkUserEmail[0].save();
-                                res.send({ success: true, error: null, info: null })
-                            }
-                            else {
-                                checkUserEmail[0].userInfo.employeeEmail = email
-                                checkUserEmail[0].userInfo.employeeName = name
-                                checkUserEmail[0].userInfo.employeeRole = role
-
-                                checkUserEmail[0].save();
-                                res.send({ success: true, error: null, info: null })
-                            }
-                        }
-                        else {
-                            return (res.send({ success: false, error: "Email is already in use", info: null }))
-                        }
-                    }
-                })
-            } else {
-                UserModel.find({ _id: id }).then(checkUserId => {
-                    if (checkUserId.length > 0) {
-                        if (password.length > 0) {
-                            checkUserId[0].userInfo.employeeEmail = email
-                            checkUserId[0].userInfo.employeeName = name
-                            checkUserId[0].userInfo.employeeRole = role
-                            checkUserId[0].userInfo.password = password
-
-                            checkUserId[0].save();
-                            res.send({ success: true, error: null, info: null })
-                        }
-                        else {
-                            checkUserId[0].userInfo.employeeEmail = email
-                            checkUserId[0].userInfo.employeeName = name
-                            checkUserId[0].userInfo.employeeRole = role
-
-                            checkUserId[0].save();
-                            res.send({ success: true, error: null, info: null })
-                        }
+                return (res.send({ success: true, error: null, info: null }))
+            
+            }
+            else {
+                UserModel.find({ "userInfo.employeeEmail": email }).then(async docs => {
+                    if (docs.length>0) {
+                        return (res.send({ success: false, error: "Email is already in use", info: null }))
                     }
                     else {
-                        res.send({ success: false, error: 'User Not Found', info: null })
+                        if (password.length > 0) {
+                            doc[0].userInfo.password = password;
+                        }
+                        doc[0].userInfo.employeeEmail = email
+                        doc[0].userInfo.employeeName = name
+                        doc[0].userInfo.employeeRole = role
+                        await doc[0].save();
+                        res.send({ success: true, error: null, info: null })
                     }
                 })
             }
-
+        }else{
+            res.send({ success: false, error: 'User Not Found', info: null })
+        }
         })
+        
+
+        // UserModel.find({ "userInfo.employeeEmail": email }).then(checkEmail => {
+        //     if (checkEmail.length > 0) {
+        //         UserModel.find({ "userInfo.employeeEmail": email }).then(checkUserEmail => {
+        //             if (checkUserEmail.length > 0) {
+        //                 if (checkUserEmail[0]._id == id) {
+        //                     if (password.length > 0) {
+        //                         checkUserEmail[0].userInfo.employeeEmail = email
+        //                         checkUserEmail[0].userInfo.employeeName = name
+        //                         checkUserEmail[0].userInfo.employeeRole = role
+        //                         checkUserEmail[0].userInfo.password = password
+
+        //                         checkUserEmail[0].save();
+        //                         res.send({ success: true, error: null, info: null })
+        //                     }
+        //                     else {
+        //                         checkUserEmail[0].userInfo.employeeEmail = email
+        //                         checkUserEmail[0].userInfo.employeeName = name
+        //                         checkUserEmail[0].userInfo.employeeRole = role
+
+        //                         checkUserEmail[0].save();
+        //                         res.send({ success: true, error: null, info: null })
+        //                     }
+        //                 }
+        //                 else {
+        //                     return res.send({ success: false, error: "Email is already in use", info: null })
+        //                 }
+        //             }
+        //             else {
+
+        //             }
+        //         })
+        //     } else {
+        //         UserModel.find({ _id: id }).then(checkUserId => {
+        //             if (checkUserId.length > 0) {
+        //                 if (password.length > 0) {
+        //                     checkUserId[0].userInfo.employeeEmail = email
+        //                     checkUserId[0].userInfo.employeeName = name
+        //                     checkUserId[0].userInfo.employeeRole = role
+        //                     checkUserId[0].userInfo.password = password
+
+        //                     checkUserId[0].save();
+        //                     res.send({ success: true, error: null, info: null })
+        //                 }
+        //                 else {
+        //                     checkUserId[0].userInfo.employeeEmail = email
+        //                     checkUserId[0].userInfo.employeeName = name
+        //                     checkUserId[0].userInfo.employeeRole = role
+
+        //                     checkUserId[0].save();
+        //                     res.send({ success: true, error: null, info: null })
+        //                 }
+        //             }
+        //             else {
+        //                 res.send({ success: false, error: 'User Not Found', info: null })
+        //             }
+        //         })
+        //     }
+
+        // })
     } else {
         res.send({ success: false, error: "Email not valid", info: null })
     }
