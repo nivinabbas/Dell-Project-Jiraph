@@ -2,7 +2,7 @@ import React from 'react';
 import "./DeletedJiraTickets.css";
 import Chart from "../charts/Chart";
 import Select from 'react-select';
-import { useState, useEffect } from 'react';
+import { useState, useRef ,useEffect } from 'react';
 
 //Server Filters to receive Data
 let serverFilters = { priority: [], functionalTest: [], label: [], qaRepresentative: [], startDate: "", endDate: "" };
@@ -105,13 +105,17 @@ function DeletedJiraTickets() {
   const HandlePriorityChange = (change => {
     serverFilters.functionalTest = [];
     serverFilters.qaRepresentative = [];
-    serverFilters.priority = [];
-    if (change != null) (
+    if (change != null) {
       change.map((item) => {
         return (
           serverFilters.priority.push(item.value)
         )
-      }))
+      })}
+      else {
+        serverFilters.priority=[];
+        functionalTestInput.current.state.value = ""; 
+        qaInput.current.state.value = ""
+      }
     render(serverFilters);
   })
   //functionaltest
@@ -151,6 +155,9 @@ function DeletedJiraTickets() {
     serverFilters.label = [label.value];
     render(serverFilters);
   })
+
+  const functionalTestInput = useRef("")
+  const qaInput = useRef("")
   return (
     <div className='DeletedJiraTicketsWrapper'>
       <div className="DeletedJiraTickets__Chart"> {UiObjs && <Chart UiObjs={UiObjs} />}</div>
@@ -161,6 +168,7 @@ function DeletedJiraTickets() {
 
         <Select
           name="priority"
+          onInputChange={() => { functionalTestInput.current.state.value = ""; qaInput.current.state.value = "" }}
           isMulti
           options={priorityOptions}
           placeholder="priority "
@@ -171,6 +179,7 @@ function DeletedJiraTickets() {
         <Select
           name="functional test"
           isMulti
+          ref={functionalTestInput}
           options={functionalTestOptions}
           placeholder="functional-Test "
           className="DeletedJiraTickets__Filter"
@@ -180,6 +189,7 @@ function DeletedJiraTickets() {
         <Select
           name="qaRepresentative"
           isMulti
+          ref={qaInput}
           options={qaRepresentativeOptions}
           placeholder="Qa Representative"
           className="DeletedJiraTickets__Filter"

@@ -138,7 +138,9 @@ function ChangesInJiraTickets() {
       serverFilters.values = [change.value]
     }
     else {
-      serverFilters.values = []
+      serverFilters.values = [];
+      statusInput.current.state.value = ""; 
+      qaInput.current.state.value = ""
     }
     render(serverFilters);
   })
