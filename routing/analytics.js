@@ -494,7 +494,7 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
 
     filtersArray.push({ 'diffItem.type': 'Update' })
     filtersArray.push({ 'diffItem.updatedField.fieldName': 'status' })
-    // filtersArray.push({ "diffItem.updatedTime": { $gte: startDate } }, { "diffItem.updatedTime": { $lte: endDate } })
+    filtersArray.push({ "diffItem.updatedTime": { $gte: startDate } }, { "diffItem.updatedTime": { $lte: endDate } })
 
     //multiselect status
     if (filterStatus[0] != undefined && filterValue[0] != undefined) {
@@ -639,7 +639,157 @@ router.post('/changeOfJIRATicketsStatusFilters', async (req, res) => {
 
 // --------------------------------------------------------------- delays in delivery ---------------------------------------------------------------------
 
-router.post('/delaysInDelivery', (req, res) => {
+router.post('/delaysInDelivery', async (req, res) => {
+
+    console.log("DELAYSAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+
+    const fixVersion = req.body.fixVersion[0]
+    const jiraTypeFilter = req.body.jiraType
+    const label = req.body.label
+    const qaRepresentativeFilter = req.body.qaRepresentative
+    let startDate = req.body.startDate
+    let endDate = req.body.endDate
+    startDate = new Date(startDate)
+    endDate = new Date(endDate)
+
+
+    console.log(fixVersion,jiraTypeFilter,label,qaRepresentativeFilter)
+
+    let dateFormat = '';
+
+    if (label[0] == 'daily') {
+        dateFormat = "%Y-%m-%d"
+        console.log("yousef")
+    }
+    else if (label[0] == 'yearly') {
+        dateFormat = "%Y"
+    }
+    else {
+        dateFormat = "%Y-%m"
+    }
+
+    console.log(fixVersion)
+
+
+    let filtersArray = [];
+    let matchFilterValue = { "$and": [] };
+
+
+    filtersArray.push({
+        "$or": [
+            { "diffItem.type": "Create" },
+            { "diffItem.type": "Delete" },
+            { "diffItem.type": "Update" }
+        ]
+    })
+    filtersArray.push({
+        "$or": [
+            {
+                "diffItem.updatedField.fieldName": "fixVersion",
+                "$or": [
+                    { "diffItem.updatedField.newValue": fixVersion },
+                    { "diffItem.updatedField.oldValue": fixVersion }
+                ]
+            },
+            { "diffItem.updatedField.fieldName": "functionalTest" }
+        ]
+    })
+
+    filtersArray.push({ "diffItem.updatedTime": { $gte: startDate } }, { "diffItem.updatedTime": { $lte: endDate } })
+    
+    if(jiraTypeFilter[0] != undefined && jiraTypeFilter.length != 0){
+        let typesArray = []
+        jiraTypeFilter.map((item,index) => {
+            typesArray.push({'diffItem.type' : item})
+        })
+        filtersArray.push({"$or": typesArray})
+    }
+
+    // multiselect QA REP
+    if (qaRepresentativeFilter[0] != undefined) {
+        if (qaRepresentativeFilter.length != 0) {
+            let qaArray = []
+            qaRepresentativeFilter.map(item => {
+                qaArray.push({ 'jiraItem.qaRepresentative': item })
+            })
+            // orArray.push(qaArray)
+            filtersArray.push({ "$or": qaArray })
+        }
+    }
+
+    matchFilterValue["$and"] = filtersArray
+
+    const tasks = await TaskModel.aggregate([
+        {
+            $match: matchFilterValue
+            
+        },
+        {
+            $group: {
+                _id: {
+                    date: { $dateToString: { format: dateFormat, date: "$diffItem.updatedTime" } },
+                    value: "$diffItem.updatedField.fieldName",
+                    type: "$diffItem.type"
+                },
+                tasks: { $push: "$$ROOT" },
+            }
+
+        },
+        {
+            $group: {
+
+                _id: "$_id.date",
+                arr: {
+                    $push: {
+                        value:
+                        {
+                            $cond: {
+                                if: { $eq: ["$_id.value", "functionalTest"] },
+                                then: "$_id.value",
+                                else: "$_id.type"
+                            }
+                        },
+                        type: {
+                            $cond: {
+                                if: { $eq: ["$_id.value", "functionalTest"] },
+                                then: "$_id.type",
+                                else: "$_id.value"
+                            }
+                        },
+                        tasks: "$tasks", size: { $size: "$tasks" }
+                    }
+                },
+            }
+        }
+
+    ])
+
+    if (tasks.length != 0) {
+        tasks.map((item, index) => {
+            item.arr.sort((a, b) => (a.value > b.value) ? 1 : -1);
+        })
+        tasks.sort((a, b) => (a._id > b._id) ? 1 : -1);
+        let maxLength = -1;
+        tasks.map((task, index) => {
+            let sum = 0;
+            task.arr.forEach(element => {
+                sum += element.size
+                if (element.size > maxLength)
+                    maxLength = element.size
+            })
+            tasks[index].sum = sum
+        })
+
+        tasks.map((task, index) => {
+            tasks[index].maxLength = maxLength
+        })
+
+    }
+
+    console.log("DELAYSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
+    // console.log(tasks)
+    res.send(tasks)
+
 
 })
 
