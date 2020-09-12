@@ -107,14 +107,14 @@ function ChangesByParentId() {
           onChange={HandlefixVersionChange}
         />
 
-
+        From
         <input
           className="ChangesByParentId__Filter"
           type="date"
           name="startDate"
           onChange={HandleStartDateChange}
         />
-
+        To
         <input
           className="ChangesByParentId__Filter"
           type="date"

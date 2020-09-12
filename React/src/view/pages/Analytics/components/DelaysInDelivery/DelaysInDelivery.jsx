@@ -226,6 +226,7 @@ function DelaysInDelivery() {
           placeholder="fix Version "
           className="DelaysInDelivery__Filter"
           onChange={HandlefixVersionChange}
+          
 
         />
 
@@ -248,14 +249,14 @@ function DelaysInDelivery() {
           className="DelaysInDelivery__Filter"
           onChange={HandleqaRepresentativeChange}
         />
-
+        From
         <input
           className="DelaysInDelivery__Filter__date"
           type="date"
           name="startDate"
           onChange={HandleStartDateChange}
         />
-
+        To
         <input
           className="DelaysInDelivery__Filter__date"
           type="date"

@@ -239,14 +239,14 @@ function ChangesInJiraTickets() {
           className="DelaysInDelivery__Filter"
           onChange={HandleqaRepresentativeChange}
         />
-
+        From
         <input
           className="ChangeOfJiraTicket__Filter__date"
           type="date"
           name="startDate"
           onChange={HandleStartDateChange}
         />
-
+        To
         <input
           className="ChangeOfJiraTicket__Filter__date"
           type="date"
