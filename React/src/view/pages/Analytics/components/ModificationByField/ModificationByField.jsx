@@ -101,7 +101,9 @@ function ModificationByField(props) {
           if (data.length > 0)
             setValueOptions(data[0].Values);
           else {
-            alert("No Available FieldName Values received From The Server (Check Coonection /Pick another fieldName)")
+            if(serverFilters.fieldName!=""){
+              alert("No Available FieldName Values received From The Server (Check Coonection /Pick another fieldName)")
+            }
             setValueOptions([]);
           }
         }
@@ -135,7 +137,9 @@ function ModificationByField(props) {
     serverFilters.values = [];
     serverFilters.qaRepresentative = [];
     if (change != null) { serverFilters.fieldName = [change.value]; }
-    else { serverFilters.fieldName = []; }
+    else { serverFilters.fieldName = [];
+      valueInput.current.state.value = ""; 
+      qaInput.current.state.value = "" }
     render(serverFilters);
     renderFilters(serverFilters);
   })

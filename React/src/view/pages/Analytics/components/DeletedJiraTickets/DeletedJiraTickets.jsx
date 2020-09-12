@@ -185,7 +185,7 @@ function DeletedJiraTickets() {
           className="DeletedJiraTickets__Filter"
           onChange={HandleqaRepresentativeChange}
         />
-
+        From
         <input
           className="DeletedJiraTickets__Filter__date"
           type="date"
@@ -193,7 +193,7 @@ function DeletedJiraTickets() {
           onChange={HandleStartDateChange}
         />
 
-
+        To
         <input
           className="DeletedJiraTickets__Filter__date"
           type="date"
