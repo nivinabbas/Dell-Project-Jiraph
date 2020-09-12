@@ -9,7 +9,7 @@ import Nav from './components/Nav/Nav';
 import Login from "./view/pages/Admin/components/Login/Login"
 import ForgetPassword from "./view/pages/Admin/components/ForgetPassword/ForgetPassword";
 import StatusPage from "./view/pages/Status/components/StatusPage/StatusPage";
-import MainPage from "./view/pages/Analytics/components/MainPage/MainPage";
+import MainPage from "./view/pages/Analytics/components/MainPage/MainPage"
 import ChangePassword from "./view/pages/Admin/components/ChangePassword/ChangePassword";
 import KeyPassword from "./view/pages/Admin/components/KeyPassword/KeyPassword";
 import UserList from "./view/pages/Admin/components/usersList/UserList";
