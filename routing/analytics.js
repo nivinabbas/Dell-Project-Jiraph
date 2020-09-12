@@ -99,7 +99,6 @@ router.post('/modificationByField', async (req, res) => {
     let { fieldName, values, qaRepresentative, startDate, endDate, label } = serverFilters;
     startDate = new Date(startDate)
     endDate = new Date(endDate)
-    console.log("anatare5",startDate,endDate)
 
     let dateFormat = '';
     if (label[0] == 'yearly') {
@@ -257,7 +256,6 @@ router.post('/deletedJiraTickets', async (req, res) => {
     let { priority, qaRepresentative, functionalTest, startDate, endDate, label } = serverFilters;
     startDate = new Date(startDate)
     endDate = new Date(endDate)
-    console.log(priority, qaRepresentative, functionalTest, startDate, endDate, label)
     let dateFormat = '';
     if (label[0] == 'yearly') {
         dateFormat = "%Y"
@@ -325,7 +323,6 @@ router.post('/deletedJiraTickets', async (req, res) => {
         { $sort: { _id: 1 } }
     ])
     if (label[0] === "weekly") {
-        console.log("b3rde wselet")
         tasks=weeklyLabel(startDate,endDate,tasks);
     }
     let maxLength = 0;
@@ -489,15 +486,14 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
 
 
     let dateFormat = '';
-    if (label[0] == 'daily') {
-        dateFormat = "%Y-%m-%d"
-        console.log("yousef")
+    if (label[0] == 'monthly') {
+        dateFormat =  "%Y-%m"
     }
     else if (label[0] == 'yearly') {
         dateFormat = "%Y"
     }
     else {
-        dateFormat = "%Y-%m"
+        dateFormat ="%Y-%m-%d"
     }
 
 
@@ -512,7 +508,6 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
         filterValue[0] = "newValue"
     }
 
-    console.log(filterValue, filterStatus, filterQaRep, endDate, startDate, label)
 
     let filtersArray = [];
 
@@ -561,7 +556,7 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
     if (filterValue.length == 0) {
         matchFilterValue = {}
     }
-    const tasks = await TaskModel.aggregate([
+    let tasks = await TaskModel.aggregate([
         {
             $match: matchFilterValue
         },
@@ -581,17 +576,27 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
                 _id: "$_id.date",
                 arr: { $push: { value: "$_id.Val", tasks: "$tasks", size: { $size: "$tasks" } } },
             }
+        },
+        { 
+            $sort: { _id: 1 } 
         }
     ])
+
+    if(label[0] == 'weekly'){
+        tasks = weeklyLabel(startDate,endDate,tasks)
+    }
+
     if (tasks.length != 0) {
         tasks.map((item, index) => {
             item.arr.sort((a, b) => (a.value > b.value) ? 1 : -1);
         })
-        tasks.sort((a, b) => (a._id > b._id) ? 1 : -1);
         let maxLength = -1;
         tasks.map((task, index) => {
             let sum = 0;
             task.arr.forEach(element => {
+                element.tasks.map((task=>{
+                    task.diffItem.updatedTime = formatDate(task.diffItem.updatedTime)
+                }))
                 sum += element.size
                 if (element.size > maxLength)
                     maxLength = element.size
@@ -667,7 +672,6 @@ router.post('/changeOfJIRATicketsStatusFilters', async (req, res) => {
 
 router.post('/delaysInDelivery', async (req, res) => {
 
-    console.log("DELAYSAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 
     const fixVersion = req.body.fixVersion[0]
     const jiraTypeFilter = req.body.jiraType
@@ -679,22 +683,19 @@ router.post('/delaysInDelivery', async (req, res) => {
     endDate = new Date(endDate)
 
 
-    console.log(fixVersion, jiraTypeFilter, label, qaRepresentativeFilter)
 
     let dateFormat = '';
 
-    if (label[0] == 'daily') {
-        dateFormat = "%Y-%m-%d"
-        console.log("yousef")
+    if (label[0] == 'monthly') {
+        dateFormat = "%Y-%m"
     }
     else if (label[0] == 'yearly') {
         dateFormat = "%Y"
     }
     else {
-        dateFormat = "%Y-%m"
+        dateFormat = "%Y-%m-%d"
     }
 
-    console.log(fixVersion)
 
 
     let filtersArray = [];
@@ -745,7 +746,7 @@ router.post('/delaysInDelivery', async (req, res) => {
 
     matchFilterValue["$and"] = filtersArray
 
-    const tasks = await TaskModel.aggregate([
+    let tasks = await TaskModel.aggregate([
         {
             $match: matchFilterValue
 
@@ -786,19 +787,28 @@ router.post('/delaysInDelivery', async (req, res) => {
                     }
                 },
             }
+        },
+        { 
+            $sort: { _id: 1 } 
         }
 
     ])
+
+    if(label[0] == 'weekly'){
+        tasks = weeklyLabel(startDate,endDate,tasks)
+    }
 
     if (tasks.length != 0) {
         tasks.map((item, index) => {
             item.arr.sort((a, b) => (a.value > b.value) ? 1 : -1);
         })
-        tasks.sort((a, b) => (a._id > b._id) ? 1 : -1);
         let maxLength = -1;
         tasks.map((task, index) => {
             let sum = 0;
             task.arr.forEach(element => {
+                element.tasks.map((task=>{
+                    task.diffItem.updatedTime = formatDate(task.diffItem.updatedTime)
+                }))
                 sum += element.size
                 if (element.size > maxLength)
                     maxLength = element.size
@@ -812,8 +822,6 @@ router.post('/delaysInDelivery', async (req, res) => {
 
     }
 
-    console.log("DELAYSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
-    // console.log(tasks)
     res.send(tasks)
 
 
@@ -840,7 +848,6 @@ router.post('/delaysInDeliveryFilters', async (req, res) => {
     })
 
 
-    // console.log(filters)
     res.send(filters)
 
 })
