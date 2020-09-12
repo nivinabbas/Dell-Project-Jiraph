@@ -89,41 +89,41 @@ router.post('/modificationByField', async (req, res) => {
         function addDays(date, days) {
             var result = new Date(date);
             result.setDate(result.getDate() + days);
-            return result;} 
-        
-        
+            return result;
+        }
+
+
         const diffTime = Math.abs(endDate - startDate);
-        let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+        let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
         console.log(diffDays + " days");
-            // console.log(tasks)
-            let weeklyStartDate=startDate;
-            let weeklyEndDate = addDays(weeklyStartDate,7)
-            let currentWeek=0;
-            let arrayForWeeks=[];
+        // console.log(tasks)
+        let weeklyStartDate = startDate;
+        let weeklyEndDate = addDays(weeklyStartDate, 7)
+        let currentWeek = 0;
+        let arrayForWeeks = [];
 
-            while(diffDays>0){
-                arrayForWeeks.push(
-                    {_id:`${weeklyStartDate.getDate()+1}/${weeklyStartDate.getMonth()+1}-${weeklyEndDate.getDate()+1}/${weeklyEndDate.getMonth()+1}`,arr:[]})
-                    diffDays=diffDays-7;
-                    weeklyStartDate=addDays(weeklyEndDate,1);
-                    weeklyEndDate=addDays(weeklyStartDate,7);
+        while (diffDays > 0) {
+            arrayForWeeks.push(
+                { _id: `${weeklyStartDate.getDate() + 1}/${weeklyStartDate.getMonth() + 1}-${weeklyEndDate.getDate() + 1}/${weeklyEndDate.getMonth() + 1}`, arr: [] })
+            diffDays = diffDays - 7;
+            weeklyStartDate = addDays(weeklyEndDate, 1);
+            weeklyEndDate = addDays(weeklyStartDate, 7);
+        }
+
+        weeklyEndDate = addDays(startDate, 7);
+        // console.log(tasks)
+        for (i = 0; i < tasks.length; i++) {
+            // console.log(tasks[i].arr)
+            if (new Date(tasks[i]._id) < weeklyEndDate) {
+                arrayForWeeks[currentWeek].arr = arrayForWeeks[currentWeek].arr.concat(tasks[i].arr)
             }
-            
-            weeklyEndDate=addDays(startDate,7);
-            // console.log(tasks)
-            for(i=0;i<tasks.length;i++){
-                // console.log(tasks[i].arr)
-                if(new Date(tasks[i]._id)<weeklyEndDate){
-                    arrayForWeeks[currentWeek].arr=arrayForWeeks[currentWeek].arr.concat(tasks[i].arr)
-                }
-                else if(tasks[i].id>weeklyEndDate){
-                    weeklyEndDate=addDays(weeklyEndDate,7);
-                    currentWeek++;
-                }
+            else if (tasks[i].id > weeklyEndDate) {
+                weeklyEndDate = addDays(weeklyEndDate, 7);
+                currentWeek++;
             }
-            tasks=arrayForWeeks;
-            console.log(arrayForWeeks)
-        
+        }
+        tasks = arrayForWeeks;
+        console.log(arrayForWeeks)
 
 
 
@@ -137,11 +137,12 @@ router.post('/modificationByField', async (req, res) => {
 
 
 
-            // while(weekEndDate<endDate){
-            //     weekEndDate = addDays(weekEndDate,7)
-          
-            //     console.log(weekEndDate)
-            // }
+
+        // while(weekEndDate<endDate){
+        //     weekEndDate = addDays(weekEndDate,7)
+
+        //     console.log(weekEndDate)
+        // }
     }
 
     let maxLength = 0;
@@ -358,17 +359,27 @@ router.post('/changesByParentIdFilters', async (req, res) => {
                 $group: {
                     _id: null,
                     fixVersions: { $addToSet: { "label": "$jiraItem.fixVersion", "value": "$jiraItem.fixVersion" } },
-                    // QA: { $addToSet: { "label": "$jiraItem.qaRepresentative", "value": "$jiraItem.qaRepresentative" } }
                 },
             }
         ])
         tasks.map((item, index) => {
             item.fixVersions.sort((a, b) => (a.label > b.label) ? 1 : -1);
-            //item.QA.sort((a, b) => (a.label > b.label) ? 1 : -1);
         })
     }
     else {
         const version = fixVersion[0];
+        function formatDate(date) {
+            month = '' + (date.getMonth() + 1),
+                day = '' + date.getDate(),
+                year = date.getFullYear();
+
+            if (month.length < 2)
+                month = '0' + month;
+            if (day.length < 2)
+                day = '0' + day;
+
+            return [year, month, day].join('-');
+        }
 
         tasks = await TaskModel.aggregate([
             {
@@ -379,7 +390,6 @@ router.post('/changesByParentIdFilters', async (req, res) => {
             },
             {
                 $group: {
-                    //type: "$diffItem.type", 
                     _id: "$jiraItem.parentId",
                     tasks: { $push: "$$ROOT" },
                     TotalChanges: {
@@ -394,6 +404,7 @@ router.post('/changesByParentIdFilters', async (req, res) => {
             let createCounter = 0;
             let tasksArray = item.tasks
             tasksArray.map((task, index) => {
+                task.diffItem.updatedTime = formatDate(task.diffItem.updatedTime)
                 if (task.diffItem.type === "Update") {
                     updateCounter++
                 }
