@@ -17,13 +17,13 @@ function DeletedJiraTickets() {
     startDate.setMonth(endDate.getMonth() - 1)
     const timeZone = startDate.getTimezoneOffset() / 60
     startDate.setHours(0 - timeZone, 0, 0, 0)
-    endDate.setHours(0 - timeZone, 0, 0, 0)
+    endDate.setHours(0 - timeZone+23, 59, 59, 59);
 
     //Default Server Filters to receive Data
     serverFilters = {
       priority: [],
       functionalTest: [],
-      label: ["daily"],
+      label: ["weekly"],
       qaRepresentative: [],
       startDate: startDate,
       endDate: endDate
@@ -143,7 +143,10 @@ function DeletedJiraTickets() {
   })
   //End Date:
   const HandleEndDateChange = (change => {
-    serverFilters.endDate = new Date(change.target.value);
+    let endDate =new Date(change.target.value)
+    const timeZone = (endDate.getTimezoneOffset() / 60);
+    endDate.setHours((0 - timeZone)+(23), 59, 59, 59);
+    serverFilters.endDate = endDate;
     render(serverFilters);
   })
   //Label:

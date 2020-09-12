@@ -22,36 +22,36 @@ function weeklyLabel(startDate, endDate, tasks) {
     //function to get number of days between 2 date range
     const diffTime = Math.abs(endDate - startDate);
     let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    console.log(diffDays);
     let weeklyStartDate = startDate;//variable for starting date of each week
     let weeklyEndDate = addDays(weeklyStartDate, 6)//variable for ending date of each week
     let currentWeek = 0;//counter for weeks
     let arrayForWeeks = [];//array that will contain the UiObj
     while (diffDays > 6) {
         arrayForWeeks.push(
-            { _id: `${weeklyStartDate.getDate()}/${weeklyStartDate.getMonth() + 1}-${weeklyEndDate.getDate()}/${weeklyEndDate.getMonth() + 1}`, arr: [] })
+            { _id: `${weeklyStartDate.getDate()}/${weeklyStartDate.getMonth() + 1}/${weeklyStartDate.getFullYear()} - ${weeklyEndDate.getDate()}/${weeklyEndDate.getMonth() + 1}/${weeklyEndDate.getFullYear()}`, arr: [] })
         diffDays = diffDays - 7;
         weeklyStartDate = addDays(weeklyEndDate, 1);
         weeklyEndDate = addDays(weeklyStartDate, 6);
     }
-    console.log(arrayForWeeks)
-    console.log("ana diff",diffDays)
-    console.log("ana start",weeklyStartDate)
-    console.log("ana end",weeklyEndDate)
     if (diffDays > 0) {//add the days as a range
-        weeklyEndDate = addDays(weeklyStartDate, diffDays);
+        weeklyEndDate = addDays(weeklyStartDate, diffDays-1);
         arrayForWeeks.push(
-            { _id: `${weeklyStartDate.getDate()}/${weeklyStartDate.getMonth() + 1}-${weeklyEndDate.getDate()}/${weeklyEndDate.getMonth() + 1}`, arr: [] })
+            { _id: `${weeklyStartDate.getDate()}/${weeklyStartDate.getMonth() + 1}/${weeklyStartDate.getFullYear()} - ${weeklyEndDate.getDate()}/${weeklyEndDate.getMonth() + 1}/${weeklyEndDate.getFullYear()}`, arr: [] })
+
     }
-    
     weeklyEndDate = addDays(startDate, 6);
+    
     for (i = 0; i < tasks.length; i++) {
         if (new Date(tasks[i]._id) <= weeklyEndDate) {
             arrayForWeeks[currentWeek].arr = arrayForWeeks[currentWeek].arr.concat(tasks[i].arr)
         }
-        else if (new Date(tasks[i]._id) > weeklyEndDate) {
+        else {
+            while(weeklyEndDate<(new Date(tasks[i]._id))){
             weeklyEndDate = addDays(weeklyEndDate, 7);
             currentWeek++;
+            }
+            arrayForWeeks[currentWeek].arr = arrayForWeeks[currentWeek].arr.concat(tasks[i].arr)
+            
         }
     }
 
@@ -78,6 +78,20 @@ function weeklyLabel(startDate, endDate, tasks) {
     return result;
 }
 
+
+//Date format function
+function formatDate(date) {
+    month = '' + (date.getMonth() + 1),
+        day = '' + date.getDate(),
+        year = date.getFullYear();
+
+    if (month.length < 2)
+        month = '0' + month;
+    if (day.length < 2)
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
 
 router.post('/modificationByField', async (req, res) => {
     let tasks = []
@@ -166,6 +180,10 @@ router.post('/modificationByField', async (req, res) => {
         tasks.map((item, index) => {
             let myArray = item.arr;
             myArray.forEach(element => {
+                element.tasks.map((task=>{
+                    task.diffItem.updatedTime = formatDate(task.diffItem.updatedTime)
+                }))
+              
                 if (element.size > maxLength) {
                     maxLength = element.size
                 }
@@ -241,14 +259,14 @@ router.post('/deletedJiraTickets', async (req, res) => {
     endDate = new Date(endDate)
     console.log(priority, qaRepresentative, functionalTest, startDate, endDate, label)
     let dateFormat = '';
-    if (label[0] == 'daily') {
-        dateFormat = "%Y-%m-%d"
-    }
-    else if (label[0] == 'yearly') {
+    if (label[0] == 'yearly') {
         dateFormat = "%Y"
     }
-    else {
+    else if (label[0] == 'monthly') {
         dateFormat = "%Y-%m"
+    }
+    else {
+        dateFormat = "%Y-%m-%d"
     }
 
 
@@ -307,6 +325,7 @@ router.post('/deletedJiraTickets', async (req, res) => {
         { $sort: { _id: 1 } }
     ])
     if (label[0] === "weekly") {
+        console.log("b3rde wselet")
         tasks=weeklyLabel(startDate,endDate,tasks);
     }
     let maxLength = 0;
@@ -315,6 +334,9 @@ router.post('/deletedJiraTickets', async (req, res) => {
         tasks.map((item, index) => {
             let myArray = item.arr;
             myArray.forEach(element => {
+                element.tasks.map((task=>{
+                    task.diffItem.updatedTime = formatDate(task.diffItem.updatedTime)
+                }))
                 if (element.size > maxLength) {
                     maxLength = element.size
                 }
@@ -383,18 +405,7 @@ router.post('/changesByParentIdFilters', async (req, res) => {
     }
     else {
         const version = fixVersion[0];
-        function formatDate(date) {
-            month = '' + (date.getMonth() + 1),
-                day = '' + date.getDate(),
-                year = date.getFullYear();
-
-            if (month.length < 2)
-                month = '0' + month;
-            if (day.length < 2)
-                day = '0' + day;
-
-            return [year, month, day].join('-');
-        }
+        
 
         tasks = await TaskModel.aggregate([
             {

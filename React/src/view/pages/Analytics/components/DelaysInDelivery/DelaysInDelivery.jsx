@@ -30,7 +30,7 @@ function DelaysInDelivery() {
     startDate.setMonth(endDate.getMonth() - 1)
     const timeZone = startDate.getTimezoneOffset() / 60
     startDate.setHours(0 - timeZone, 0, 0, 0)
-    endDate.setHours(0 - timeZone, 0, 0, 0)
+    endDate.setHours(0 - timeZone+23, 59, 59, 59);
 
     //Default Server Filters to receive Data
     serverFilters = {
@@ -187,7 +187,10 @@ function DelaysInDelivery() {
 
   // End Date 
   const HandleEndDateChange = (date => {
-    serverFilters.endDate = (date.target.value);
+    let endDate =new Date(date.target.value)
+    const timeZone = (endDate.getTimezoneOffset() / 60);
+    endDate.setHours((0 - timeZone)+(23), 59, 59, 59);
+    serverFilters.endDate = endDate;
     render(serverFilters);
   })
 
