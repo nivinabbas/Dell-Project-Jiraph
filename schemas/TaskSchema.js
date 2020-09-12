@@ -22,9 +22,9 @@ const TaskModel = mongoose.model('TaskModel', {
         type: { type: String }, // type: Update/Create/Delete
         updatedTime: Date, // change from updateTime to updatedTime , the date we recieve is in milliseconds and all the dates are in 1970!!!
         updatedField: {
-            fieldName: String, // in case fieldName is part of JiraItem please use the same name
-            oldValue: String, // in case  fieldName is part of JiraItem please make sure that oldValue and newValue use the same format like in jiraItem,
-                              // for example, now it is like jiraParentId TRIF-123 and oldValue is 123 and should be oldValue TRIF-123
+            fieldName: String,//  in case fieldName is part of JiraItem please use the same name
+            oldValue: String, //  in case fieldName is part of JiraItem please make sure that oldValue and newValue use the same format like in jiraItem,
+                              //  for example, now it is like jiraParentId TRIF-123 and oldValue is 123 and should be oldValue TRIF-123
             newValue: String
         }
     },

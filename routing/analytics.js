@@ -14,19 +14,20 @@ router.post('/modificationByField', async (req, res) => {
     let tasks = []
     const { serverFilters } = req.body
     let { fieldName, values, qaRepresentative, startDate, endDate, label } = serverFilters;
-    console.log(fieldName, values, label, qaRepresentative)
     startDate = new Date(startDate)
     endDate = new Date(endDate)
+
     let dateFormat = '';
-    if (label[0] == 'daily') {
-        dateFormat = "%Y-%m-%d"
-    }
-    else if (label[0] == 'yearly') {
+    if (label[0] == 'yearly') {
         dateFormat = "%Y"
     }
-    else {
+    else if (label[0] == 'monthly') {
         dateFormat = "%Y-%m"
     }
+    else {
+        dateFormat = "%Y-%m-%d"
+    }
+
 
     //here we build the match expression according to the user's filters.
 
@@ -84,6 +85,65 @@ router.post('/modificationByField', async (req, res) => {
 
     matchFilterValue["$and"] = filtersArray
     tasks = await TaskModel.aggregate(aggregateArray)
+    if (label[0] === "weekly") {
+        function addDays(date, days) {
+            var result = new Date(date);
+            result.setDate(result.getDate() + days);
+            return result;} 
+        
+        
+        const diffTime = Math.abs(endDate - startDate);
+        let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+        console.log(diffDays + " days");
+            // console.log(tasks)
+            let weeklyStartDate=startDate;
+            let weeklyEndDate = addDays(weeklyStartDate,7)
+            let currentWeek=0;
+            let arrayForWeeks=[];
+
+            while(diffDays>0){
+                arrayForWeeks.push(
+                    {_id:`${weeklyStartDate.getDate()+1}/${weeklyStartDate.getMonth()+1}-${weeklyEndDate.getDate()+1}/${weeklyEndDate.getMonth()+1}`,arr:[]})
+                    diffDays=diffDays-7;
+                    weeklyStartDate=addDays(weeklyEndDate,1);
+                    weeklyEndDate=addDays(weeklyStartDate,7);
+            }
+            
+            weeklyEndDate=addDays(startDate,7);
+            // console.log(tasks)
+            for(i=0;i<tasks.length;i++){
+                // console.log(tasks[i].arr)
+                if(new Date(tasks[i]._id)<weeklyEndDate){
+                    arrayForWeeks[currentWeek].arr=arrayForWeeks[currentWeek].arr.concat(tasks[i].arr)
+                }
+                else if(tasks[i].id>weeklyEndDate){
+                    weeklyEndDate=addDays(weeklyEndDate,7);
+                    currentWeek++;
+                }
+            }
+            tasks=arrayForWeeks;
+            console.log(arrayForWeeks)
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+            // while(weekEndDate<endDate){
+            //     weekEndDate = addDays(weekEndDate,7)
+          
+            //     console.log(weekEndDate)
+            // }
+    }
+
     let maxLength = 0;
     let sumLength = 0;
     if (tasks.length > 0) {
@@ -309,9 +369,13 @@ router.post('/changesByParentIdFilters', async (req, res) => {
     }
     else {
         const version = fixVersion[0];
+
         tasks = await TaskModel.aggregate([
             {
-                $match: { "jiraItem.fixVersion": version, "jiraItem.type": "Epic" }
+                $match: {
+                    "jiraItem.fixVersion": version, "jiraItem.type": "Epic", "diffItem.updatedTime": { $gte: startDate, $lte: endDate },
+
+                }
             },
             {
                 $group: {
@@ -372,38 +436,25 @@ router.post('/changesByParentIdFilters', async (req, res) => {
     res.send(tasks)
 })
 
+// ---------------------------------------------------------- changes in jira tickets ----------------------------------------------------------
 
 
 
-// {featureID,TotalChanges,Tasks,update,create,delete}
-
-
-/*
-
- [
-    {Id:red , features:[{ id: featureId, arr : {type:create}, tasks}]}
-    {Id:Green , }
-    {Id:Yellow , }
-
-
-
-
-
-
- ]
-
-*/
 router.post('/changeOfJIRATicketsStatus', async (req, res) => {
     const filterValue = req.body.values
     const filterStatus = req.body.status
     const filterQaRep = req.body.qaRepresentative
-    const label = req.body
-    let { startDate, endDate } = req.body
+    const label = req.body.label
+    let startDate = req.body.startDate
+    let endDate = req.body.endDate
     startDate = new Date(startDate)
     endDate = new Date(endDate)
+
+
     let dateFormat = '';
     if (label[0] == 'daily') {
         dateFormat = "%Y-%m-%d"
+        console.log("yousef")
     }
     else if (label[0] == 'yearly') {
         dateFormat = "%Y"
@@ -414,10 +465,17 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
 
 
     //here we build the match expression according to the user's filters.
-    console.log(filterValue, filterStatus, filterQaRep, endDate, startDate)
+
 
     let matchFilterValue = { "$and": [] };
-    let ValToAgg = filterValue.length == 0 ? "$diffItem.updatedField.newValue" : `$diffItem.updatedField.${filterValue}`
+
+    let ValToAgg = filterValue.length == 0 ? "$diffItem.updatedField.newValue" : `$diffItem.updatedField.${filterValue[0]}`
+
+    if (filterValue.length == 0) {
+        filterValue[0] = "newValue"
+    }
+
+    console.log(filterValue, filterStatus, filterQaRep, endDate, startDate, label)
 
     let filtersArray = [];
 
@@ -425,6 +483,8 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
 
     filtersArray.push({ 'diffItem.type': 'Update' })
     filtersArray.push({ 'diffItem.updatedField.fieldName': 'status' })
+    // filtersArray.push({ "diffItem.updatedTime": { $gte: startDate } }, { "diffItem.updatedTime": { $lte: endDate } })
+
     //multiselect status
     if (filterStatus[0] != undefined && filterValue[0] != undefined) {
         if (filterStatus.length != 0) {
@@ -441,6 +501,7 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
             filtersArray.push({ "$or": statusArray })
         }
     }
+
     // multiselect QA REP
     if (filterQaRep[0] != undefined && filterValue[0] != undefined) {
         if (filterQaRep.length != 0) {
@@ -452,6 +513,8 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
             filtersArray.push({ "$or": qaArray })
         }
     }
+
+
     if (filtersArray.length == 0) {
         delete matchFilterValue.$and;
     }
@@ -470,7 +533,6 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
                 _id: {
                     date: { $dateToString: { format: dateFormat, date: "$diffItem.updatedTime" } },
                     Val: ValToAgg
-                    // Val: `$diffItem.updatedField.${filterValue}`
 
                 },
                 tasks: { $push: "$$ROOT" },
@@ -562,6 +624,10 @@ router.post('/changeOfJIRATicketsStatusFilters', async (req, res) => {
 
 
 
+
+
+// --------------------------------------------------------------- delays in delivery ---------------------------------------------------------------------
+
 router.post('/delaysInDelivery', (req, res) => {
 
 })
@@ -591,4 +657,8 @@ router.post('/delaysInDeliveryFilters', async (req, res) => {
     res.send(filters)
 
 })
+
+
+
+
 module.exports = router;
