@@ -39,7 +39,7 @@ function DelaysInDelivery() {
       qaRepresentative: [],
       startDate: startDate,
       endDate: endDate,
-      label: ["daily"]
+      label: ["weekly"]
     };
 
     //fetch to receive Available Filters options from server by date

@@ -9,7 +9,7 @@ import Chart from "../charts/Chart"
 
 // Filters To Send To Server 
 let serverFilters = {
-  values: ["newValue"],
+  values: [],
   status: [],
   qaRepresentative: [],
   startDate: "",
@@ -40,7 +40,7 @@ function ChangesInJiraTickets() {
       qaRepresentative: [],
       startDate: startDate,
       endDate: endDate,
-      label: ["daily"]
+      label: ["weekly"]
     };
 
     //fetch to receive Available Filters options from server by date
