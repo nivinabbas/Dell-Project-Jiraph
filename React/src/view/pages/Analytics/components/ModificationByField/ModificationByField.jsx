@@ -16,7 +16,7 @@ function ModificationByField(props) {
     startDate.setMonth(endDate.getMonth() - 1);
     const timeZone = (startDate.getTimezoneOffset() / 60);
     startDate.setHours(0 - timeZone, 0, 0, 0);
-    endDate.setHours(0 - timeZone, 0, 0, 0);
+    endDate.setHours(0 - timeZone+23, 59, 59, 59);
 
     //Default Server Filters to receive Data
     serverFilters = {
@@ -25,7 +25,7 @@ function ModificationByField(props) {
       qaRepresentative: [],
       startDate: (startDate),
       endDate: (endDate),
-      label: ["daily"]
+      label: ["weekly"]
     };
 
     //fetch to receive Available Filters options from server by date
@@ -101,7 +101,9 @@ function ModificationByField(props) {
           if (data.length > 0)
             setValueOptions(data[0].Values);
           else {
-            alert("No Available FieldName Values received From The Server (Check Coonection /Pick another fieldName)")
+            if(serverFilters.fieldName!=""){
+              alert("No Available FieldName Values received From The Server (Check Coonection /Pick another fieldName)")
+            }
             setValueOptions([]);
           }
         }
@@ -135,7 +137,9 @@ function ModificationByField(props) {
     serverFilters.values = [];
     serverFilters.qaRepresentative = [];
     if (change != null) { serverFilters.fieldName = [change.value]; }
-    else { serverFilters.fieldName = []; }
+    else { serverFilters.fieldName = [];
+      valueInput.current.state.value = ""; 
+      qaInput.current.state.value = "" }
     render(serverFilters);
     renderFilters(serverFilters);
   })
@@ -163,7 +167,10 @@ function ModificationByField(props) {
   })
   //End Date
   const handleChangeEndDate = (change => {
-    serverFilters.endDate = new Date(change.target.value);
+    let endDate =new Date(change.target.value)
+    const timeZone = (endDate.getTimezoneOffset() / 60);
+    endDate.setHours((0 - timeZone)+(23), 59, 59, 59);
+    serverFilters.endDate = endDate;
     render(serverFilters);
   })
 
