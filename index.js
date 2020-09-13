@@ -40,6 +40,8 @@ app.use("/api/analytics", analyticsRouter);
 const bellaRouting = require("./routing/bellaRouting");
 app.use("/api/PostBellaData", bellaRouting);
 
+const statistics = require("./routing/statistics");
+app.use("/api/statistics", statistics);
 //updateSaleh()
 //updating the time in diffitem
 function updateSaleh() {
