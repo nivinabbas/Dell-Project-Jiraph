@@ -48,6 +48,7 @@ export default function StackedChart({ data = [], onDataSelected }) {
     { name: "Done", data: data.map((d) => d.done) },
     { name: "NotDone", data: data.map((d) => d.notDone) },
   ];
+  console.log("series StackedChart " ,series)
 
   const categories = data.map((d) => d.date);
 

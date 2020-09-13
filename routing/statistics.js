@@ -61,11 +61,11 @@ router.post("/getStatistics", async function (req, res) {
       completedTasks.forEach(element => {
         objIndex = arrayToClint.findIndex((obj => obj.day == element.DifferenceInDays));
         if (objIndex>=0){
-              arrayToClint[objIndex].date =   arrayToClint[objIndex].date+1;
+              arrayToClint[objIndex].date =   arrayToClint[objIndex].date+"1";
               tasksCount+=1
          }
         else{
-            arrayToClint.push({ done: element.DifferenceInDays, date: 1 })
+            arrayToClint.push({ done: element.DifferenceInDays, date: "1" })
             avg+= element.DifferenceInDays;
             tasksCount+=1
          
@@ -116,7 +116,7 @@ router.post("/getStatistics", async function (req, res) {
     //  result.push({
     //     notDone:arrayToClintNotCompleted})
      result.push({
-        done:arrayToClint})
+        arrayToClint})
         // result.push({
         //     avg:(tasksCount/avg).toFixed(2)})
 
