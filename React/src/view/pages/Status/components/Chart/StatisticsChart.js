@@ -65,7 +65,7 @@ export default function StatisticsChart( {data = [] ,onDataSelected}) {
       ) {
         let status = series[seriesIndex].name;
         let date = categories[dataPointIndex];
-  
+        
         return onDataSelected(date, status);
       },
     };

@@ -44,8 +44,7 @@ const options = {
 };
 
 export default function StackedChart({ data = [], onDataSelected }) {
-  console.log("data StackedChart: ",data)
-
+  
   const series = [
     { name: "Done", data: data.map((d) => d.done) },
     { name: "NotDone", data: data.map((d) => d.notDone) },
