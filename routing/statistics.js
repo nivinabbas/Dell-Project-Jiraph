@@ -43,7 +43,6 @@ router.post("/getStatistics", async function (req, res) {
                 "taskItem.isDone": true
             }
         },
-
         {
             $project: {
                 DifferenceInDays: { $round: { $divide: [{ $subtract: ["$taskItem.updatedTime", "$taskItem.createdTime"] }, 86400000] } }
@@ -56,23 +55,23 @@ router.post("/getStatistics", async function (req, res) {
         }
     ]);
     let arrayToClint = [];
-    let tasksCount=0;
-    let avg=0;
-      completedTasks.forEach(element => {
+    let tasksCount = 0;
+    let avg = 0;
+    completedTasks.forEach(element => {
         objIndex = arrayToClint.findIndex((obj => obj.date == element.DifferenceInDays));
-        if (objIndex>=0){
-              arrayToClint[objIndex].Done =   arrayToClint[objIndex].Done+=1;
-              tasksCount+=1;
-         }
-        else{
-            arrayToClint.push({ date: element.DifferenceInDays, Done: 1})
-            avg+= element.DifferenceInDays;
-            tasksCount+=1;
-         }
+        if (objIndex >= 0) {
+            arrayToClint[objIndex].Done = arrayToClint[objIndex].Done += 1;
+            tasksCount += 1;
+        }
+        else {
+            arrayToClint.push({ date: element.DifferenceInDays, Done: 1 })
+            avg += element.DifferenceInDays;
+            tasksCount += 1;
+        }
 
-     });
-     console.log(arrayToClint)
-     let noTcompletedTasks = await TaskModel.aggregate([
+    });
+    console.log(arrayToClint)
+    let noTcompletedTasks = await TaskModel.aggregate([
         {
             "$match": {
                 "diffItem.updatedTime": {
@@ -97,16 +96,16 @@ router.post("/getStatistics", async function (req, res) {
     let arrayToClintNotCompleted = [];
     noTcompletedTasks.forEach(element => {
         objIndex = arrayToClintNotCompleted.findIndex((obj => obj.day == element.DifferenceInDays));
-        if (objIndex>=0){
-             arrayToClintNotCompleted[objIndex].cunt =   arrayToClintNotCompleted[objIndex].cunt+1;
-         }
-        else{
+        if (objIndex >= 0) {
+            arrayToClintNotCompleted[objIndex].cunt = arrayToClintNotCompleted[objIndex].cunt + 1;
+        }
+        else {
             arrayToClintNotCompleted.push({ day: element.DifferenceInDays, cunt: 1 })
-         }
+        }
 
-     });
-      let result = [];
-      
+    });
+    let result = [];
+
     //   result.push({
     //     completed: arrayToClint,
     //     notCompleted: arrayToClintNotCompleted,
@@ -116,13 +115,64 @@ router.post("/getStatistics", async function (req, res) {
     //     notDone:arrayToClintNotCompleted})
     //  result.push({
     //     arrayToClint})
-        // result.push({
-        //     avg:(tasksCount/avg).toFixed(2)})
+    // result.push({
+    //     avg:(tasksCount/avg).toFixed(2)})
 
-     res.send({
+
+    let completedTasks123 = await TaskModel.aggregate([
+        {
+            "$match": {
+                "diffItem.updatedTime": {
+                    $gte: startDate,
+                    $lte: endDate,
+                },
+                "taskItem.isDone": true
+            }
+        },
+        {
+            $group: {
+                _id: {
+                    "diffdate": { $round: { $divide: [{ $subtract: ["$taskItem.updatedTime", "$taskItem.createdTime"] }, 86400000] } }
+                },
+                tasks: { $push: '$$ROOT' },
+                count: {
+                    $sum: 1,
+                },
+            },
+
+        },
+
+
+
+    ]);
+    let resultArray = [];
+    completedTasks123.forEach(element => {
+        objIndex = resultArray.findIndex((obj => obj.date == element._id));
+        console.log("element ", element.count)
+        resultArray.push({
+            date: element._id.diffdate,
+            Done: element.count,
+            tasks: element.tasks
+        })
+
+    });
+
+    function compare( a, b ) {
+        if ( a.date < b.date ){
+          return -1;
+        }
+        if ( a.date > b.date ){
+          return 1;
+        }
+        return 0;
+      }
+      
+      resultArray.sort( compare );
+
+    res.send({
         success: true,
         error: null,
-        info: arrayToClint
+        info: resultArray
     });
 });
 
