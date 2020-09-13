@@ -1,171 +1,206 @@
 import React, { useEffect } from 'react';
 import "./ModificationByField.css";
-import { useState , useRef} from 'react';
-//import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
+import { useState, useRef } from 'react';
 import Select from "react-select"
 import Chart from "../charts/Chart"
 
-
-
-const serverFilters = { fieldName: [], values: [], qaRepresentative: [], startDate: (new Date("2020-08-1")), endDate: new Date("2020-09-1"), label: ["weekly"] };
-
-
-
+//Server Filters to receive Data
+let serverFilters = { fieldName: [], values: [], qaRepresentative: [], startDate: "", endDate: "", label: [] };
 
 function ModificationByField(props) {
-
-
+  //On Page Opening
   useEffect(() => {
+    //Building Start and End date for last month (Default)
+    let startDate = new Date();
+    let endDate = new Date();
+    startDate.setMonth(endDate.getMonth() - 1);
+    const timeZone = (startDate.getTimezoneOffset() / 60);
+    startDate.setHours(0 - timeZone, 0, 0, 0);
+    endDate.setHours(0 - timeZone+23, 59, 59, 59);
 
+    //Default Server Filters to receive Data
+    serverFilters = {
+      fieldName: [],
+      values: [],
+      qaRepresentative: [],
+      startDate: (startDate),
+      endDate: (endDate),
+      label: ["weekly"]
+    };
+
+    //fetch to receive Available Filters options from server by date
     fetch('/api/analytics/modificationByFieldFilters', {
       method: 'POST',
-      body: JSON.stringify({ fieldName: serverFilters.fieldName, startDate:serverFilters.startDate, endDate:serverFilters.endDate  }),
+      body: JSON.stringify({
+        fieldName: serverFilters.fieldName,
+        startDate: serverFilters.startDate,
+        endDate: serverFilters.endDate
+      }),
       headers: {
         "Content-Type": "application/json"
       }
     })
       .then(res => res.json())
       .then(data => {
-        setFieldNameOptions(data[0].labels)
-        setQaRepresentativeOptions(data[0].QA);
-      })
-
-      fetch('/api/analytics/modificationByField', {
-        method: 'POST',
-        body: JSON.stringify({ serverFilters }),
-        headers: {
-          "Content-Type": "application/json"
+        if (data.length > 0) {
+          setFieldNameOptions(data[0].labels);
+          setQaRepresentativeOptions(data[0].QA);
+        }
+        else {
+          alert("No Available Filters From The Server Check The connection / Change date")
         }
       })
-        .then(res => res.json())
-        .then(data => {
-          console.log(data)
-          setUiObjs(data)
-        })
 
+    //fetch to receive Data (UiObj) from the server
+    fetch('/api/analytics/modificationByField', {
+      method: 'POST',
+      body: JSON.stringify({ serverFilters }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data != null) { setUiObjs(data); }
+        else { setUiObjs([]); }
+      })
   }, [])
 
-
-
+  //fetch to receive Data (UiObj) from server after every filter Change
   const render = (serverFilters) => {
     fetch('/api/analytics/modificationByField', {
       method: 'POST',
-      body: JSON.stringify({serverFilters}),
+      body: JSON.stringify({ serverFilters }),
       headers: {
         "Content-Type": "application/json"
       }
     })
       .then((res) => res.json())
       .then((data) => {
-        setUiObjs(data)
+        if (data != null) {
+          setUiObjs(data);
+        }
+        else {
+          setUiObjs([]);
+        }
       })
   }
 
-
+  //fetch to get values after picking certain fieldName 
   const renderFilters = (serverFilters) => {
     fetch('/api/analytics/modificationByFieldFilters', {
       method: 'POST',
-      body: JSON.stringify({ fieldName: serverFilters.fieldName}),
+      body: JSON.stringify({ fieldName: serverFilters.fieldName }),
       headers: {
         "Content-Type": "application/json"
       }
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
-        if (data!=null) {
-          if(data.length>0)
+        if (data != null) {
+          if (data.length > 0)
             setValueOptions(data[0].Values);
-          
-          else{
-            setValueOptions(data);
-
+          else {
+            if(serverFilters.fieldName!=""){
+              alert("No Available FieldName Values received From The Server (Check Coonection /Pick another fieldName)")
+            }
+            setValueOptions([]);
           }
         }
-
       })
   }
 
+  //Modification By Field Variables
+  const [UiObjs, setUiObjs] = useState([]); //UiObject from the server
+  const [fieldNameOptions, setFieldNameOptions] = useState([]); //FieldName options for filtering
+  const [valueOptions, setValueOptions] = useState([]);//Values of certain FieldName options for filtering
+  const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([]);//Qa Representative options for filtering
+  const labelOptions = [ //Labels for Displaying the Chart 
+    { value:"daily" , label: "daily" },
+    { value:"weekly" , label: "weekly" },
+    { value:"monthly" , label: "monthly" },
+    { value:"yearly" , label: "yearly" }];
 
-  const [UiObjs, setUiObjs] = useState([]);
-  const [fieldNameOptions, setFieldNameOptions] = useState([]);
-  const [valueOptions, setValueOptions] = useState([]);
-  const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([]);
-  const labelOptions = [
-    { label: "daily" },
-    { label: "weekly" },
-    { label: "monthly" },
-    { label: "yearly" }
-  ];
 
+  //Filters Changes Handlers
+  // for each Filter we have a handler
+  // to update serverFilters that we send to server to receive data according to our picks
 
+  //Label
   const handleChangeLabel = (change => {
-    
-    serverFilters.label=[change.label];
+    serverFilters.label = [change.value];
     render(serverFilters);
   })
 
+  //Field Name
   const handleChangeFieldName = (change => {
-    serverFilters.values=[]
-    serverFilters.qaRepresentative=[]
-   serverFilters.fieldName=[change.value];
-   
-    render(serverFilters)
+    serverFilters.values = [];
+    serverFilters.qaRepresentative = [];
+    if (change != null) { serverFilters.fieldName = [change.value]; }
+    else { serverFilters.fieldName = [];
+      valueInput.current.state.value = ""; 
+      qaInput.current.state.value = "" }
+    render(serverFilters);
     renderFilters(serverFilters);
   })
 
+  //Values
   const handleChangeValues = (change => {
-    serverFilters.values = []
+    serverFilters.values = [];
     if (change != null) {
-      change.map((item)=>{
-        return(
-        serverFilters.values.push(item.value)
-        )
-      })
+      change.map((item) => { return (serverFilters.values.push(item.value)) })
     }
-    else {
-      serverFilters.values = [];
-    }
+    else { serverFilters.values = []; }
     render(serverFilters);
   })
 
+  //Qa Representative
   const handleChangeQaRepresentative = (change => {
-
-    serverFilters.qaRepresentative=[change.value];
+    serverFilters.qaRepresentative = [change.value];
     render(serverFilters);
   })
 
+  //Start Date
   const handleChangeStartDate = (change => {
-    console.log(change.target.value)
     serverFilters.startDate = new Date(change.target.value);
     render(serverFilters);
   })
-
+  //End Date
   const handleChangeEndDate = (change => {
-    serverFilters.endDate = new Date(change.target.value);
+    let endDate =new Date(change.target.value)
+    const timeZone = (endDate.getTimezoneOffset() / 60);
+    endDate.setHours((0 - timeZone)+(23), 59, 59, 59);
+    serverFilters.endDate = endDate;
     render(serverFilters);
   })
 
-  const valueInput=useRef("")
-  const qaInput=useRef("")
+  //We Use UseRef to clear other filters when we pick Main Filter
+  const valueInput = useRef("")
+  const qaInput = useRef("")
+
 
   return (
     <div className='ModificationByField__Wrapper'>
       <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
-      <div className="ModificationByField__Chart"> {UiObjs.length > 0 && <Chart UiObjs={UiObjs} />}</div>
+      <div className="ModificationByField__Chart">
+        {UiObjs && <Chart UiObjs={UiObjs} />}
+      </div>
       <div className="ModificationByField__MainTitle">Modification By Field</div>
-
       <div className="ModificationByField__Filters">
 
+        
 
+        
         <Select
           name="fieldName"
-          onInputChange={()=> {valueInput.current.state.value="";qaInput.current.state.value=""}}
+          onInputChange={() => { valueInput.current.state.value = ""; qaInput.current.state.value = "" }}
           onChange={handleChangeFieldName}
-          placeholder="fieldName"
+          placeholder="All"
           className="ModificationByField__Filter"
-          options={fieldNameOptions} />
+          options={fieldNameOptions}
+          isClearable={true} />
 
+        
         <Select
           name="value"
           onChange={handleChangeValues}
@@ -175,6 +210,7 @@ function ModificationByField(props) {
           className="ModificationByField__Filter"
           options={valueOptions} />
 
+        
         <Select
           name="qaRepresentative"
           ref={qaInput}
@@ -183,6 +219,7 @@ function ModificationByField(props) {
           className="ModificationByField__Filter"
           options={qaRepresentativeOptions} />
 
+        From
         <input
           className="ModificationByField__Filter__date"
           type="date"
@@ -190,7 +227,7 @@ function ModificationByField(props) {
           onChange={handleChangeStartDate}
         />
 
-
+        To
         <input
           className="ModificationByField__Filter__date"
           type="date"
@@ -198,18 +235,14 @@ function ModificationByField(props) {
           onChange={handleChangeEndDate}
         />
 
-
+        
         <Select
           name="label"
           onChange={handleChangeLabel}
-          placeholder="Label"
+          placeholder="Weekly"
           className="ModificationByField__Filter"
           options={labelOptions} />
-
       </div>
-
-
-
     </div>
   )
 

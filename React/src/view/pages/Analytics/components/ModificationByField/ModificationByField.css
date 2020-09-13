@@ -1,46 +1,38 @@
-.ModificationByField__Wrapper{
+.ModificationByField__Wrapper {
   display: grid;
-  grid-template-columns: 2vw 82vw 2vw;
+  grid-template-columns: 2vw 82vw 4vw;
   grid-template-rows: 10vh 15vh 5vh auto;
-  grid-template-areas: 
-  "header header header "
-  
-  ". filterButtons ."
-  ". . ."
-  "chartColors chart .";
-  
-  background-color: #C8C9C7;
+  grid-template-areas:
+    "header header header "
+    ". filterButtons ."
+    ". . ."
+    "chartColors chart .";
+  background-color: #c8c9c7;
 }
-.ModificationByField__Table{
+.ModificationByField__Table {
   grid-area: chart;
 }
-
-
-.ModificationByField__MainTitle{
+.ModificationByField__MainTitle {
   font-weight: 500;
   grid-area: header;
   text-align: center;
-  color: #00447C;
+  color: #00447c;
   background-color: white;
   height: 100%;
-  font-family: 'Roboto Slab', serif;
+  font-family: "Roboto Slab", serif;
   font-size: 26px;
   padding-top: 3vh;
 }
-.ModificationByField__Chart{
+.ModificationByField__Chart {
   grid-area: chart;
 }
-
-
-
-
-.ModificationByField__Filters{
+.ModificationByField__Filters {
   margin-top: 1rem;
   /* padding-top: 2vh; */
   grid-area: filterButtons;
   display: flex;
   justify-content: space-between;
-  background-color: #EEEEEE;
+  background-color: #eeeeee;
   align-items: center;
   text-align: center;
   height: 5rem;
@@ -48,25 +40,19 @@
   padding-right: 1rem;
   border-radius: 3px;
   box-shadow: 0px 0.3px 0.3px rgba(0, 0, 0, 0.2);
-
 }
-
-
 .ModificationByField__Filter{
  width: 13rem;
- /* border: 0.1px solid black; */
  box-sizing: border-box;
  background-color:   #EEEEEE;
-
  color: black;
  box-shadow: 0px 0.1px 0.3px rgba(0, 0, 0, 0.8);
  padding-top:0.5rem;
  padding-bottom:0.5rem;
 }
-.Select{
-  background-color:  #0076CE;
+.Select {
+  background-color: #0076ce;
 }
-
 .ModificationByField__Filter__date{
   box-shadow: 0px 0.1px 0.3px rgba(0, 0, 0, 0.8);
   border: .1px solid rgba(0, 0, 0, 0.2);
@@ -77,50 +63,45 @@
   text-align: center;
   font-size: 15px;
 }
-
-
 .ModificationByField__Submit{
   width: 15%;
   border-radius: 15px;
   /* box-shadow: 0px 0.1px 0.3px rgba(0, 0, 0, 0.2); */
   border: rgba(0, 0, 0, 0.1);
-  background-color:#EEEEEE;
+  background-color: #eeeeee;
 }
-
-
-.chart_Colors{
+.chart_Colors {
   margin-left: 10px;
-  /* display: flex; */
   grid-area: chartColors;
   justify-content: center;
   justify-content: space-around;
 }
-.chart_Colors_Status{
-  margin-bottom: 5px;
-  font:bolder;
-  font-size: 20px;
-  color:white;
-  background-color: #D9514EFF;
-  width: fit-content;
-  height: fit-content;
-  border-radius: 5px;
-}
-.chart_Colors_Priority{
+.chart_Colors_Status {
   margin-bottom: 5px;
   font: bolder;
   font-size: 20px;
   color: white;
-  background-color: #2A2B2DFF;
+  background-color: #d9514eff;
   width: fit-content;
   height: fit-content;
   border-radius: 5px;
 }
-.chart_Colors_QaRepresentative{
+.chart_Colors_Priority {
   margin-bottom: 5px;
   font: bolder;
   font-size: 20px;
   color: white;
-  background-color: #2DA8D8FF;
+  background-color: #2a2b2dff;
+  width: fit-content;
+  height: fit-content;
+  border-radius: 5px;
+}
+.chart_Colors_QaRepresentative {
+  margin-bottom: 5px;
+  font: bolder;
+  font-size: 20px;
+  color: white;
+  background-color: #2da8d8ff;
   width: fit-content;
   height: fit-content;
   border-radius: 5px;

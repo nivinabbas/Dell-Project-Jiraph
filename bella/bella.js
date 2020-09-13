@@ -5,394 +5,350 @@
 
 const fetch = require('node-fetch');
 
-// const Data = [
-//     {
-//         "diffItem": {
-//             "updateTime": 1568309401000,
-//             "type": "Update",
-//             "updatedField":
-//             {
-//                 "fieldName": "status",
-//                 "newValue": "In Progress",
-//                 "oldValue": "Done"
-//             }
-
-//         },
-//         "jiraItem": {
-//             "priority": "P00",
-//             "status": "Backlog",
-//             "jiraType": "Epic",
-//             "jiraName": "PSI 41: SAR Support for FSCK/Recovery",
-//             "qaRepresentative": null,
-//             "functionalTest": "Yes",
-//             "fixVersion": "PSI_41",
-//             "jiraId": "TRIES-41773",
-//             "jiraParentId": "TRIF-842"
-//         },
-//         "qcItem": {
-//             "status": "Backlog",
-//             "requirementType": "Epic",
-//             "requirementId": "2164"
-//         }
-//     },
-//     {
-//         "diffItem": {
-//             "updateTime": 1568395801000,
-//             "type": "Update",
-//             "updatedField":
-//             {
-//                 "fieldName": "status",
-//                 "newValue": "In Progress",
-//                 "oldValue": "Done"
-//             }
-
-//         },
-//         "jiraItem": {
-//             "priority": "P00",
-//             "status": "Implementing",
-//             "jiraType": "Epic",
-//             "jiraName": "PSI 41: FSCK Support for Late Dedup and VLB Defrag Phase 1 & 2",
-//             "qaRepresentative": null,
-//             "functionalTest": "Yes",
-//             "fixVersion": "PSI_41",
-//             "jiraId": "TRIES-37201",
-//             "jiraParentId": "TRIF-842"
-//         },
-//         "qcItem": {
-//             "status": "In Progress",
-//             "requirementType": "Epic",
-//             "requirementId": "2011"
-//         }
-//     },
-//     {
-//         "diffItem": {
-//             "updateTime": 1568482201000,
-//             "type": "Update",
-//             "updatedField":
-//             {
-//                 "fieldName": "status",
-//                 "newValue": "In Progress",
-//                 "oldValue": "Done"
-//             }
-
-//         },
-//         "jiraItem": {
-//             "priority": "P01",
-//             "status": "Done",
-//             "jiraType": "Epic",
-//             "jiraName": "PSI 39: RAID fsck - Infrastructure update and validation rules expansion",
-//             "qaRepresentative": null,
-//             "functionalTest": "Yes",
-//             "fixVersion": "PSI_39",
-//             "jiraId": "TRIES-36948",
-//             "jiraParentId": "TRIF-842"
-//         },
-//         "qcItem": {
-//             "status": "Done",
-//             "requirementType": "Epic",
-//             "requirementId": "2008"
-//         }
-//     },
-//     {
-//         "diffItem": {
-//             "updateTime": 1568568601000,
-//             "type": "Update",
-//             "updatedField":
-//             {
-//                 "fieldName": "status",
-//                 "newValue": "In Progress",
-//                 "oldValue": "Done"
-//             }
-
-//         },
-//         "jiraItem": {
-//             "priority": "P00",
-//             "status": "Backlog",
-//             "jiraType": "Epic",
-//             "jiraName": "PSI 40: Fault Containment - FSCK support",
-//             "qaRepresentative": null,
-//             "functionalTest": "Yes",
-//             "fixVersion": "PSI_41",
-//             "jiraId": "TRIES-34825",
-//             "jiraParentId": "TRIF-842"
-//         },
-//         "qcItem": {
-//             "status": "Backlog",
-//             "requirementType": "Epic",
-//             "requirementId": "2009"
-//         }
-//     },
-//     {
-//         "diffItem": {
-//             "updateTime": 1568655001000,
-//             "type": "Update",
-//             "updatedField":
-//             {
-//                 "fieldName": "status",
-//                 "newValue": "In Progress",
-//                 "oldValue": "Done"
-//             }
-
-//         },
-//         "jiraItem": {
-//             "priority": "P00",
-//             "status": "Implementing",
-//             "jiraType": "Epic",
-//             "jiraName": "PSI 41: RAID fsck - Support V2 new features",
-//             "qaRepresentative": null,
-//             "functionalTest": "Yes",
-//             "fixVersion": "PSI_41",
-//             "jiraId": "TRIES-34722",
-//             "jiraParentId": "TRIF-842"
-//         },
-//         "qcItem": {
-//             "status": "In Progress",
-//             "requirementType": "Epic",
-//             "requirementId": "1956"
-//         }
-//     },
-//     {
-//         "diffItem": {
-//             "updateTime": 1568741401000,
-//             "type": "Update",
-//             "updatedField":
-//             {
-//                 "fieldName": "priority",
-//                 "newValue": "Low",
-//                 "oldValue": "High"
-//             }
-//         },
-//         "jiraItem": {
-//             "priority": "P01",
-//             "status": "Done",
-//             "jiraType": "Epic",
-//             "jiraName": "PSI 40: RAID fsck - Infrastructure update and validation rules expansion",
-//             "qaRepresentative": null,
-//             "functionalTest": "Yes",
-//             "fixVersion": "PSI_40",
-//             "jiraId": "TRIES-32895",
-//             "jiraParentId": "TRIF-842"
-//         },
-//         "qcItem": {
-//             "status": "Done",
-//             "requirementType": "Epic",
-//             "requirementId": "1892"
-//         }
-//     },
-//     {
-//         "diffItem": {
-//             "updateTime": 1568827801000,
-//             "type": "Update",
-//             "updatedField":
-//             {
-//                 "fieldName": "priority",
-//                 "newValue": "Low",
-//                 "oldValue": "High"
-//             }
-
-//         },
-//         "jiraItem": {
-//             "priority": "P00",
-//             "status": "Backlog",
-//             "jiraType": "Epic",
-//             "jiraName": "Quality: PSI 41: FSCK Test Support for FH-C DP Features",
-//             "qaRepresentative": null,
-//             "functionalTest": "Yes",
-//             "fixVersion": "PSI_41",
-//             "jiraId": "TRIES-28531",
-//             "jiraParentId": "TRIF-842"
-//         },
-//         "qcItem": {
-//             "status": "Backlog",
-//             "requirementType": "Epic",
-//             "requirementId": "2171"
-//         }
-//     },
-//     {
-//         "diffItem": {
-//             "updateTime": 1568914201000,
-//             "type": "Update",
-//             "updatedField":
-//             {
-//                 "fieldName": "priority",
-//                 "newValue": "Low",
-//                 "oldValue": "High"
-//             }
-
-//         },
-//         "jiraItem": {
-//             "priority": "P00",
-//             "status": "Done",
-//             "jiraType": "Feature",
-//             "jiraName": "Display cluster time in GUI and Resync when NTP between nodes are out of sync",
-//             "qaRepresentative": "rajasekaran.rajagopal@emc.com",
-//             "functionalTest": "Yes",
-//             "fixVersion": "Foothills",
-//             "jiraId": "TRIF-789",
-//             "jiraParentId": "TRII-67"
-//         },
-//         "qcItem": {
-//             "status": "N/A",
-//             "requirementType": "Feature",
-//             "requirementId": "1765"
-//         }
-//     },
-//     {
-//         "diffItem": {
-//             "updateTime": 1569000601000,
-//             "type": "Update",
-//             "updatedField":
-//             {
-//                 "fieldName": "priority",
-//                 "newValue": "Low",
-//                 "oldValue": "High"
-//             }
-
-//         },
-//         "jiraItem": {
-//             "priority": "P00",
-//             "status": "Implementing",
-//             "jiraType": "Feature",
-//             "jiraName": "Warning State for Job Steps  is not intuitively available for users",
-//             "qaRepresentative": "bjack@emc.com",
-//             "functionalTest": "Yes",
-//             "fixVersion": "Foothills",
-//             "jiraId": "TRIF-761",
-//             "jiraParentId": "TRII-23"
-//         },
-//         "qcItem": {
-//             "status": "N/A",
-//             "requirementType": "Feature",
-//             "requirementId": "1918"
-//         }
-//     },
-//     {
-//         "diffItem": {
-//             "updateTime": 1569087001000,
-//             "type": "Update",
-//             "updatedField":
-//             {
-//                 "fieldName": "priority",
-//                 "newValue": "Low",
-//                 "oldValue": "High"
-//             }
-
-//         },
-//         "jiraItem": {
-//             "priority": "P01",
-//             "status": "Done",
-//             "jiraType": "Epic",
-//             "jiraName": "GUI  implementation, testing for TRIF-575: Add node's CPU stats to historical performance metrics",
-//             "qaRepresentative": null,
-//             "functionalTest": "Yes",
-//             "fixVersion": "PSI_38",
-//             "jiraId": "TRIES-15409",
-//             "jiraParentId": "TRIF-575"
-//         },
-//         "qcItem": {
-//             "status": "Done",
-//             "requirementType": "Epic",
-//             "requirementId": "1915"
-//         }
-//     },
-//     {
-//         "diffItem": {
-//             "updateTime": 1569173401000,
-//             "type": "Update",
-//             "updatedField":
-//             {
-//                 "fieldName": "priority",
-//                 "newValue": "Low",
-//                 "oldValue": "High"
-//             }
-
-//         },
-//         "jiraItem": {
-//             "priority": "P00",
-//             "status": "Done",
-//             "jiraType": "Epic",
-//             "jiraName": "TMA Implementation & Test : TRIF-575 - Node Affinity",
-//             "qaRepresentative": null,
-//             "functionalTest": "Yes",
-//             "fixVersion": "PSI_39",
-//             "jiraId": "TRIES-15217",
-//             "jiraParentId": "TRIF-575"
-//         },
-//         "qcItem": {
-//             "status": "Done",
-//             "requirementType": "Epic",
-//             "requirementId": "1916"
-//         }
-//     }
-// ]
-
 const Data = [
     {
         "diffItem": {
-            "updatedTime": 1598488460, 
-            "type": "Update", 
-            "updatedField": 
+            "updateTime": 1599794743, 
+            "type": "Create", 
+            "updatedFields": [
                 {
-                    "fieldName": "jiraParentId", 
-                    "newValue": "2337", 
-                    "oldValue": "1963"
+                    "fieldName": "plannedPsi", 
+                    "newValue": "PSI 42", 
+                    "oldValue": null
+                }, 
+                {
+                    "fieldName": "typeId", 
+                    "newValue": 101, 
+                    "oldValue": null
+                }, 
+                {
+                    "fieldName": "rally/JiraId", 
+                    "newValue": "TRIF-1328", 
+                    "oldValue": null
+                }, 
+                {
+                    "fieldName": "name", 
+                    "newValue": "TRIF-1328 PSTX: Display ESX version for each node", 
+                    "oldValue": null
+                }, 
+                {
+                    "fieldName": "reqPriority", 
+                    "newValue": "P01", 
+                    "oldValue": null
+                }, 
+                {
+                    "fieldName": "status", 
+                    "newValue": "In Progress", 
+                    "oldValue": null
+                }, 
+                {
+                    "fieldName": "parentId", 
+                    "newValue": "2329", 
+                    "oldValue": null
+                }, 
+                {
+                    "fieldName": "targetRel", 
+                    "newValue": "1066", 
+                    "oldValue": null
+                }, 
+                {
+                    "fieldName": "qaFeatureOwner", 
+                    "newValue": null, 
+                    "oldValue": null
                 }
+            ]
         }, 
         "jiraItem": {
-            "priority": "P00", 
+            "priority": "P01", 
             "status": "Implementing", 
-            "jiraType": "Feature", 
-            "jiraName": "File Migration Support from VNX to Trident (via IMT)", 
-            "qaRepresentative": "Vinod.GK@emc.com", 
-            "functionalTest": true, 
-            "fixVersion": "Foothills Prime", 
-            "jiraId": "TRIF-322", 
-            "jiraParentId": null
+            "qaRepresentative": null, 
+            "name": "PSTX: Display ESX version for each node", 
+            "parentId": null, 
+            "functionalTest": false, 
+            "type": "Feature", 
+            "id": "TRIF-1328", 
+            "fixVersion": "Foothills"
         }, 
         "qcItem": {
             "status": "N/A", 
             "requirementType": "Feature", 
-            "requirementId": "2074"
+            "requirementId": "2369"
         }
     }, 
     {
         "diffItem": {
-            "updatedTime": 1598488487, 
-            "type": "Update", 
-            "updatedField": 
+            "updateTime": 1599794761, 
+            "type": "Updated", 
+            "updatedFields": [
                 {
-                    "fieldName": "jiraParentId", 
-                    "newValue": "2337", 
-                    "oldValue": "1963"
+                    "fieldName": "qaFeatureOwner", 
+                    "newValue": null, 
+                    "oldValue": "rajagr2"
                 }
-            
+            ]
         }, 
         "jiraItem": {
             "priority": "P00", 
-            "status": "Implementing", 
-            "jiraType": "Feature", 
-            "jiraName": "NAS Async Replication support between two Trident Unified clusters for DR and Archiving use case", 
-            "qaRepresentative": "Vinod.GK@emc.com", 
-            "functionalTest": true, 
-            "fixVersion": "Foothills Prime", 
-            "jiraId": "TRIF-31", 
-            "jiraParentId": null
+            "status": "Done", 
+            "qaRepresentative": "rajasekaran.rajagopal@emc.com", 
+            "name": "Display cluster time in GUI and Resync when NTP between nodes are out of sync", 
+            "parentId": "TRII-67", 
+            "functionalTest": false, 
+            "type": "Feature", 
+            "id": "TRIF-789", 
+            "fixVersion": "Foothills"
         }, 
         "qcItem": {
             "status": "N/A", 
             "requirementType": "Feature", 
-            "requirementId": "1965"
+            "requirementId": "1765"
+        }
+    }, 
+    {
+        "diffItem": {
+            "updateTime": 1599794763, 
+            "type": "Updated", 
+            "updatedFields": [
+                {
+                    "fieldName": "qaFeatureOwner", 
+                    "newValue": null, 
+                    "oldValue": "jbird"
+                }
+            ]
+        }, 
+        "jiraItem": {
+            "priority": "P00", 
+            "status": "Implementing", 
+            "qaRepresentative": "bjack@emc.com", 
+            "name": "Warning State for Job Steps  is not intuitively available for users", 
+            "parentId": "TRII-23", 
+            "functionalTest": false, 
+            "type": "Feature", 
+            "id": "TRIF-761", 
+            "fixVersion": "Foothills"
+        }, 
+        "qcItem": {
+            "status": "N/A", 
+            "requirementType": "Feature", 
+            "requirementId": "1918"
+        }
+    }, 
+    {
+        "diffItem": {
+            "updateTime": 1599794770, 
+            "type": "Updated", 
+            "updatedFields": [
+                {
+                    "fieldName": "qaFeatureOwner", 
+                    "newValue": null, 
+                    "oldValue": "rajagr2"
+                }
+            ]
+        }, 
+        "jiraItem": {
+            "priority": "P01", 
+            "status": "Done", 
+            "qaRepresentative": "rajasekaran.rajagopal@emc.com", 
+            "name": "Add iSCSI storage performance metrics per ip_port on REST and TMA", 
+            "parentId": "TRII-105", 
+            "functionalTest": false, 
+            "type": "Feature", 
+            "id": "TRIF-534", 
+            "fixVersion": "Foothills"
+        }, 
+        "qcItem": {
+            "status": "N/A", 
+            "requirementType": "Feature", 
+            "requirementId": "1726"
+        }
+    }, 
+    {
+        "diffItem": {
+            "updateTime": 1599794776, 
+            "type": "Updated", 
+            "updatedFields": [
+                {
+                    "fieldName": "qaFeatureOwner", 
+                    "newValue": null, 
+                    "oldValue": "jbird"
+                }
+            ]
+        }, 
+        "jiraItem": {
+            "priority": "P00", 
+            "status": "Done", 
+            "qaRepresentative": "bjack@emc.com", 
+            "name": "CPDM GUI Infrastructure (Foothills) - Not Customer Facing", 
+            "parentId": "TRII-106", 
+            "functionalTest": false, 
+            "type": "Feature", 
+            "id": "TRIF-465", 
+            "fixVersion": "Foothills"
+        }, 
+        "qcItem": {
+            "status": "N/A", 
+            "requirementType": "Feature", 
+            "requirementId": "1920"
+        }
+    }, 
+    {
+        "diffItem": {
+            "updateTime": 1599794781, 
+            "type": "Updated", 
+            "updatedFields": [
+                {
+                    "fieldName": "qaFeatureOwner", 
+                    "newValue": null, 
+                    "oldValue": "jbird"
+                }
+            ]
+        }, 
+        "jiraItem": {
+            "priority": "P00", 
+            "status": "Done", 
+            "qaRepresentative": "bjack@emc.com", 
+            "name": " Independent System Health check ", 
+            "parentId": "TRII-91", 
+            "functionalTest": false, 
+            "type": "Feature", 
+            "id": "TRIF-460", 
+            "fixVersion": "Foothills"
+        }, 
+        "qcItem": {
+            "status": "N/A", 
+            "requirementType": "Feature", 
+            "requirementId": "1806"
+        }
+    }, 
+    {
+        "diffItem": {
+            "updateTime": 1599794784, 
+            "type": "Updated", 
+            "updatedFields": [
+                {
+                    "fieldName": "qaFeatureOwner", 
+                    "newValue": null, 
+                    "oldValue": "jbird"
+                }
+            ]
+        }, 
+        "jiraItem": {
+            "priority": "P01", 
+            "status": "Done", 
+            "qaRepresentative": "bjack@emc.com", 
+            "name": "CloudIQ Integrations from Trident back-end engineering data/metrics (Post SN GA MVP)", 
+            "parentId": "TRII-1", 
+            "functionalTest": false, 
+            "type": "Feature", 
+            "id": "TRIF-360", 
+            "fixVersion": "Foothills"
+        }, 
+        "qcItem": {
+            "status": "N/A", 
+            "requirementType": "Feature", 
+            "requirementId": "1789"
+        }
+    }, 
+    {
+        "diffItem": {
+            "updateTime": 1599794786, 
+            "type": "Updated", 
+            "updatedFields": [
+                {
+                    "fieldName": "qaFeatureOwner", 
+                    "newValue": null, 
+                    "oldValue": "rajagr2"
+                }
+            ]
+        }, 
+        "jiraItem": {
+            "priority": "P01", 
+            "status": "Done", 
+            "qaRepresentative": "rajasekaran.rajagopal@emc.com", 
+            "name": "SAN Replication - Support DR testing of a Volume or VG", 
+            "parentId": "TRII-64", 
+            "functionalTest": false, 
+            "type": "Feature", 
+            "id": "TRIF-349", 
+            "fixVersion": "Foothills"
+        }, 
+        "qcItem": {
+            "status": "Not Covered", 
+            "requirementType": "Feature", 
+            "requirementId": "1402"
+        }
+    }, 
+    {
+        "diffItem": {
+            "updateTime": 1599794833, 
+            "type": "Updated", 
+            "updatedFields": [
+                {
+                    "fieldName": "qaFeatureOwner", 
+                    "newValue": null, 
+                    "oldValue": "rajagr2"
+                }
+            ]
+        }, 
+        "jiraItem": {
+            "priority": "P01", 
+            "status": "Done", 
+            "qaRepresentative": "rajasekaran.rajagopal@emc.com", 
+            "name": "DM - GUI Enhancements", 
+            "parentId": "TRII-73", 
+            "functionalTest": false, 
+            "type": "Feature", 
+            "id": "TRIF-306", 
+            "fixVersion": "Foothills"
+        }, 
+        "qcItem": {
+            "status": "N/A", 
+            "requirementType": "Feature", 
+            "requirementId": "1768"
+        }
+    }, 
+    {
+        "diffItem": {
+            "updateTime": 1599794850, 
+            "type": "Updated", 
+            "updatedFields": [
+                {
+                    "fieldName": "qaFeatureOwner", 
+                    "newValue": null, 
+                    "oldValue": "bashs"
+                }
+            ]
+        }, 
+        "jiraItem": {
+            "priority": "P01", 
+            "status": "Done", 
+            "qaRepresentative": "bjack@emc.com", 
+            "name": "TMA Foothills - UX feedback & GUI enhancements", 
+            "parentId": "TRII-23", 
+            "functionalTest": false, 
+            "type": "Feature", 
+            "id": "TRIF-128", 
+            "fixVersion": "Foothills"
+        }, 
+        "qcItem": {
+            "status": "Not Covered", 
+            "requirementType": "Feature", 
+            "requirementId": "772"
         }
     }
+    
 ]
-const key="QYZNRVlzTAzJjWJLxobY24hGYcoclsaf4ZX5BLhGSi0Xa4cMC1APBoN";
- 
-fetch('http://localhost:4000/api/PostBellaData/GetBellaData', {
-    method: 'post',
-    body: JSON.stringify({
-        key,Data
-    }),
-    headers: { 'Content-Type': 'application/json' },
-})
-    .then(res => res.json())
-    .then(json => console.log(json));
+
+const key = "QYZNRVlzTAzJjWJLxobY24hGYcoclsaf4ZX5BLhGSi0Xa4cMC1APBoN";
+async function sendbellaData() {
+    await fetch('http://localhost:4000/api/PostBellaData/GetBellaData', {
+        method: 'post',
+        body: JSON.stringify({
+            key, Data
+        }),
+        headers: { 'Content-Type': 'application/json' },
+    })
+        .then(res => res.json())
+        .then(json => console.log("answer :", json));
+}
+sendbellaData(); 
