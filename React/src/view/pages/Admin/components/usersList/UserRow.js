@@ -6,8 +6,16 @@ export default props => {
 
     const { user, setUsers } = props;
 
-    const [edit, setEdit] = useState(false)
+    const [edit, setEdit] = useState(false);
 
+    const [checkActive, setCheckActive] = useState(true);
+
+    //------------------------
+    if (user.active == true) {
+        setCheckActive(true);
+    }
+    else setCheckActive(false);
+    //-------------------------
 
     return (
 
@@ -31,6 +39,17 @@ export default props => {
                     :
                     <button className="save__Btn" type='submit'>Save</button>
                 }
+
+                <div className="item1" >
+                    {checkActive ?
+                       <button onClick={e => { deleteUser(e, user.id) }}>Delete</button>
+                        :
+                        <button onClick={e => { activeUser(e,user.id) }}>Activate</button>
+                    }
+
+                </div>
+
+
                 <button onClick={e => { deleteUser(e, user.id) }}>Delete</button>
             </div>
         </form>
@@ -38,6 +57,27 @@ export default props => {
 
 
     )
+
+
+    function activeUser(e, id){
+        e.preventDefault();
+        if (!window.confirm('Are you sure you want to Active this User?')) {
+            alert("Not Activated")
+            return;
+        }
+        fetch('/api/users/getDeactivatedList')   
+        .then(res => res.json({id}))
+        .then(data => {
+            const tempData = data.info.table;
+            if (data.success == true) {
+                setUsers(data.info.table);
+                }
+            else {
+                alert(data.error)
+            }
+        })
+
+    }
 
 
     function onSave(e, id) {

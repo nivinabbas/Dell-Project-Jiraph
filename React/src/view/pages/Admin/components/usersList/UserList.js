@@ -14,17 +14,18 @@ import UserRow from './UserRow';
 
 function UserList() {
     const [users, setUsers] = useState([]);
+    const [acivePage, setAcivePage] = useState(false)
+
     const history = useHistory();
 
 
     //-------------------------------------
 
-
+    
     useEffect(() => {
         fetch('/api/users/getUsersList')
             .then(res => res.json())
             .then(data => {
-
                 if (data.success == true) {
                     setUsers(data.info.table);
                 }
@@ -34,14 +35,23 @@ function UserList() {
             })
     }, []);
 
-    
-    
+
+
     return (
 
 
         <div className='adminpage'>
-            
 
+            <div >
+                {!acivePage ?
+                   <button onClick={e=>{notActive(e)}}>Show Not Active</button>
+                   :
+                   <button onClick={e=>{activeUsers(e)}}>Show Active</button>
+                }
+               
+            </div>
+
+            
             <form id='Names'>
                 <h1>Name</h1>
                 <h2>Email</h2>
@@ -69,8 +79,37 @@ function UserList() {
     )
 
 
-    
+    function activeUsers() {
+        fetch('/api/users/getUsersList')
+        .then(res => res.json())
+        .then(data => {
+            if (data.success == true) {
+                setUsers(data.info.table);
+            }
+            else {
+                alert(data.error)
+            }
+        })
+            setAcivePage(false);
+    }
 
+
+
+    function notActive() {
+        fetch('/api/users/getDeactivatedList')   
+            .then(res => res.json())
+            .then(data => {
+                const tempData = data.info.table;
+                if (data.success == true) {
+                    setUsers(data.info.table);
+                    }
+                else {
+                    alert(data.error)
+                }
+            })
+            setAcivePage(true);
+
+    }
 
     function goToAudit(e) {
         history.push("/Audit");
