@@ -7,13 +7,11 @@
     ". filterButtons ."
     ". . ."
     "chartColors chart .";
-
   background-color: #c8c9c7;
 }
 .ModificationByField__Table {
   grid-area: chart;
 }
-
 .ModificationByField__MainTitle {
   font-weight: 500;
   grid-area: header;
@@ -28,7 +26,6 @@
 .ModificationByField__Chart {
   grid-area: chart;
 }
-
 .ModificationByField__Filters {
   margin-top: 1rem;
   grid-area: filterButtons;
@@ -43,11 +40,8 @@
   border-radius: 3px;
   box-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.2);
 }
-
-
 .ModificationByField__Filter{
  width: 13rem;
- /* border: 0.1px solid black; */
  box-sizing: border-box;
  background-color:   #EEEEEE;
  color: black;
@@ -56,7 +50,6 @@
 .Select {
   background-color: #0076ce;
 }
-
 .ModificationByField__Filter__date{
   box-shadow: inset 0 .1rem .3rem rgba(0, 0, 0, 0.2);
   height:2.25rem;
@@ -67,8 +60,6 @@
   text-align: center;
   font-size: 15px;
 }
-
-
 .ModificationByField__Submit{
   width: 15%;
   border-radius: 15px;
@@ -76,10 +67,8 @@
   border: rgba(0, 0, 0, 0.1);
   background-color: #eeeeee;
 }
-
 .chart_Colors {
   margin-left: 10px;
-  /* display: flex; */
   grid-area: chartColors;
   justify-content: center;
   justify-content: space-around;

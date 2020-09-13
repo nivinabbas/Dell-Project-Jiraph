@@ -17,7 +17,8 @@ font-weight: bold;
   display: table-header-group;
   background-color: #EEEEEE;
   font-weight: 300;
-  font-size:10px; 
+  font-size:10px;
+  
 }
 
 .MainTable__Cell {
@@ -26,10 +27,13 @@ padding: .3rem;
 padding-top: .5rem;
 text-align: center;
 color: white;
-font-weight: 400;
-background-color:  #00447c;
-border: 1px solid #C8C9C7;
-font-size: 18px;
+font-weight: bold;
+/* background-color: #1C4E80; */
+/* background-color: #1F3F49; */
+background-color: #253666;
+border: grey solid 1px;
+
+font-size: 15px;
 }
 .MainTable__Body{
   
