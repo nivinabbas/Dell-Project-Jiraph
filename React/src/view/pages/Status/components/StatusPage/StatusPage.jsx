@@ -318,6 +318,7 @@ const StatusPage = () => {
   };
 
   return (
+<<<<<<< HEAD
     <div className="statusPageContainer">
       <div className="statusPage__dashboard">
         <DailyAlerts cardsContent={cardsContent} />
@@ -363,43 +364,91 @@ const StatusPage = () => {
               onDataSelected={handleSegmentClick}
             />
           )}
+=======
+    <div>
+      <div className="status__header">Status</div>
+      <div className="statusPageContainer">
+        <div className="statusPage__dashboard">
+          <h3>Daily Alerts</h3>
+          <DailyAlerts cardsContent={cardsContent} />
+>>>>>>> devStatus
         </div>
 
-        <div className="statusPage__pieCharts">
-          <div className="statusPage__pieChart">
-            <Select
-              options={modificationTypeOptions}
-              onChange={(filter, name) =>
-                handlePieChartsFilters(filter, "pieChartModificationType")
-              }
-              className="filterSelect filterSelect-pie"
-              placeholder="Type"
-            />
-            <PieChart dataPieChart={typePieChart} name="pie1" />
+        <h3>Task History</h3>
+        <div className="statusPage__charts">
+          <div className="statusPage__barChart">
+            <div className="statusPage__barChart__filters">
+              <DatePicker
+                onDateClick={handleDateClick}
+                name="startDate"
+                label="From:"
+              />
+              <DatePicker
+                onDateClick={handleDateClick}
+                name="endDate"
+                label="To:"
+              />
+              <Select
+                options={timeLabelOptions}
+                onChange={(filter) => setTimeLabel(filter)}
+                className="filterSelect"
+                placeholder="Time Label"
+                isDisabled={!startDate || !endDate}
+              />
+            </div>
+            {stackedChart.length === 0 && (
+              <div className="statupPage__circularProgress">
+                <CircularProgress disableShrink />
+              </div>
+            )}
+            {stackedChart.length != 0 && (
+              <StackedChart
+                data={stackedChart}
+                onDataSelected={handleSegmentClick}
+              />
+            )}
           </div>
-          <div className="statusPage__pieChart">
-            <Select
-              options={modificationNamePieOptions}
-              onChange={(filter, name) =>
-                handlePieChartsFilters(filter, "pieChartModificationField")
-              }
-              className="filterSelect filterSelect-pie"
-              placeholder="Field"
-            />
-            <PieChart dataPieChart={fieldPieChart} name="pie2" />
+
+          <div className="statusPage__pieCharts">
+            <div className="statusPage__pieChart">
+              <Select
+                options={modificationTypeOptions}
+                onChange={(filter, name) =>
+                  handlePieChartsFilters(filter, "pieChartModificationType")
+                }
+                className="filterSelect filterSelect-pie"
+                placeholder="Type"
+              />
+              <PieChart dataPieChart={typePieChart} name="pie1" />
+            </div>
+            <div className="statusPage__pieChart">
+              <Select
+                options={modificationNamePieOptions}
+                onChange={(filter, name) =>
+                  handlePieChartsFilters(filter, "pieChartModificationField")
+                }
+                className="filterSelect filterSelect-pie"
+                placeholder="Field"
+              />
+              <PieChart dataPieChart={fieldPieChart} name="pie2" />
+            </div>
           </div>
         </div>
-      </div>
-      <div className="statusPage__table">
-        <Table
-          modificationFieldValueOptions={modificationFieldValueOptions}
-          modificationFieldOptions={modificationFieldOptions}
-          modificationTypeOptions={modificationTypeOptions}
-          openTasks={openTasks}
-          onDoneClick={handleDoneClick}
-          onSelect={handleSelect}
-          tableFilters={tableFilters}
-        />
+        <div>
+          <h3>Tasks statistics</h3>
+          {/* <StackedChart/> */}
+        </div>
+        <div className="statusPage__table">
+          <Table
+            modificationFieldValueOptions={modificationFieldValueOptions}
+            modificationFieldOptions={modificationFieldOptions}
+            modificationTypeOptions={modificationTypeOptions}
+            openTasks={openTasks}
+            onDoneClick={handleDoneClick}
+            onSelect={handleSelect}
+            tableFilters={tableFilters}
+          />
+        </div>
       </div>
     </div>
   );

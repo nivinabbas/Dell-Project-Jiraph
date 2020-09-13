@@ -34,59 +34,36 @@ function UserList() {
             })
     }, []);
 
-
-
+    
+    
     return (
-
 
 
         <div className='adminpage'>
             <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
-            <div id="header">
-            </div>
-            <div className='AdminTable'>
-                <button onClick={goToAudit}>Audit</button>
-                <div className="TableColHeeader">
-                    <h4>Username</h4>
-                    <h4>E-Mail</h4>
-                    <h4>Business Role</h4>
-                    <h4>Password</h4>
-                </div>
-                <form name='create' onSubmit={createUser} className='TableCreateRow' >
+            <div className='header__Admin'>Admin</div>
 
-                    <div className='AdminTable'>
-                        <div className="TableColHeeader">
-                            <div className="TableColHeeaderi">Email</div>
-                            <div className="TableColHeeaderi">Business Role</div>
-                            <div className="TableColHeeaderi">Password</div>
-                        </div>
-                        <div name='create' onSubmit={createUser} className='TableCreateRow' >
-                            <div>
-                                <input name="inputEmail" type="email" placeholder='Enter Email' required ></input>
-                            </div>
-                            <div>
-                                <select className="opt-wrapper" name="inputRole" required  >
-                                    <option className="opt" value="Admin">Admin</option>
-                                    <option className="opt" value="QA manager">QA Manager</option>
-                                    <option className="opt" value="TOP manager">TOP Manager</option>
-                                </select>
-                            </div>
-                            <div>
-                                <input name="inputPassword" type="password" placeholder='Enter password' required ></input>
-                            </div>
-                        </div>
-                        <div>
-                            <button id="createBtn" type='submit' > Create</button>
-                        </div>
-                    </div>
+            <form className="filters" name='create' onSubmit={createUser} >
 
-                    {users.map(user => <UserRow setUsers={setUsers} key={user.id} user={user} />)}
+                <input className="filter" name="inputName" type="text" placeholder='Enter the contact name' required ></input>
+                <input className="filter" name="inputEmail" type="email" placeholder='Enter the contact Email' required ></input>
+                <select className="filter" name="inputRole" required>
+                    <option value="Admin">Admin</option>
+                    <option value="QA manager">QA manager</option>
+                    <option value="TOP manager">TOP manager</option>
+                </select>
+                <input className="filter" name="inputPassword" type="password" placeholder='Enter password' required ></input>
+                <button type='submit'>CREATE</button>
+            </form>
 
-                </form>
+            {users.map(user => <UserRow setUsers={setUsers} key={user.id} user={user} />)}
 
-            </div>
+
         </div>
     )
+
+
+    
 
 
     function goToAudit(e) {
@@ -116,12 +93,12 @@ function UserList() {
         })
             .then(response => response.json())
             .then(data => {
-
-                if (data.success = true) {
+                console.log(data)
+                if (data.success == true) {
                     setUsers(data.info.table)
                     return (alert('created sucsses'))
                 }
-                else if (data = false) {
+                else if (data.success == false) {
                     return (alert(data.error))
                 }
 
