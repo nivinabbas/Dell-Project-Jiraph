@@ -9,7 +9,7 @@ import Chart from "../charts/Chart"
 
 // Filters To Send To Server 
 let serverFilters = {
-  values: ["newValue"],
+  values: [],
   status: [],
   qaRepresentative: [],
   startDate: "",
@@ -40,7 +40,7 @@ function ChangesInJiraTickets() {
       qaRepresentative: [],
       startDate: startDate,
       endDate: endDate,
-      label: ["daily"]
+      label: ["weekly"]
     };
 
     //fetch to receive Available Filters options from server by date
@@ -138,7 +138,9 @@ function ChangesInJiraTickets() {
       serverFilters.values = [change.value]
     }
     else {
-      serverFilters.values = []
+      serverFilters.values = [];
+      statusInput.current.state.value = ""; 
+      qaInput.current.state.value = ""
     }
     render(serverFilters);
   })
@@ -217,7 +219,7 @@ function ChangesInJiraTickets() {
           onInputChange={() => { statusInput.current.state.value = ""; qaInput.current.state.value = "" }}
           name="oldNew"
           options={valueOptions}
-          placeholder="old/new "
+          placeholder="New value"
           className="ChangeOfJiraTicket__Filter"
           onChange={HandleValuesChange}
           isClearable={true}
@@ -260,7 +262,7 @@ function ChangesInJiraTickets() {
         <Select
           name="labels"
           options={labelOptions}
-          placeholder="Label"
+          placeholder="Weekly"
           className="ChangeOfJiraTicket__Filter"
           onChange={HandleLabelChange}
         />
