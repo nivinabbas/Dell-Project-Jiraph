@@ -22,7 +22,7 @@ return(
       <div>
       <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
         <nav>
-          <ul>
+          {/* <ul>
 
           <li>
               <Link className="MainForm__status--btn" to="/ModificationByField">ModificationByField</Link>
@@ -32,7 +32,7 @@ return(
             {/* <li>
               <Link className="MainForm__status--btn" to="/DeletedJiraTickets">Deleted Jiras</Link>
             </li>*/}
-            <li>
+            {/* <li>
               <Link className="MainForm__status--btn" to="/ChangesInJiraTickets">Changes In Jira Tickets</Link>
             </li> 
             <li>
@@ -42,7 +42,7 @@ return(
               <Link className="MainForm__status--btn" to="/DelaysInDelivery">Delays In Delivery</Link>
             </li>
 
-          </ul>
+          </ul> */} 
         </nav>
         <Switch>
         <Route path="/ModificationByField">

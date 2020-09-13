@@ -56,14 +56,15 @@ function Login(props) {
     }
     return (
         <div className='login-wrapper'>
-            <div className="block"></div>
-            <div className="login">
             <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@200;300;400;500;531;600;700;800&display=swap" rel="stylesheet"></link>
-            <h3 className="header">Welcome to Jiraph System</h3>
+            <div className="header__login">           
+                Welcome to Jiraph System
+            </div>
+            <div className="login">
             <form id="loginForm" onSubmit={handleLogin} >
                 <input id="userEmail-Inp" name="userEmailInp" placeholder="Enter your Email Adress"></input>
                 <input  id="userPsw-Inp" type="password" name="userPswInp" placeholder="Enter your Password"></input>
-                <button type="submit">LOGIN</button>
+                <button className="loginForm__btn" type="submit">LOGIN</button>
             </form>
             <Link className="forgetPassword" to="/forgotPassword">Forgot Password?</Link>
             </div>
