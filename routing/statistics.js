@@ -16,7 +16,6 @@ router.post("/getStatistics", async function (req, res) {
     let {
         startDate,
         endDate,
-           
     } = req.body; // 4 , 7,10 
     let formatLabel = "%Y-%m-%d";
     let NewArray = [];
@@ -34,8 +33,6 @@ router.post("/getStatistics", async function (req, res) {
         endDate = new Date();
     }
 
-
-    
     let completedTasks = await TaskModel.aggregate([
         {
             "$match": {
@@ -59,20 +56,23 @@ router.post("/getStatistics", async function (req, res) {
         }
     ]);
     let arrayToClint = [];
-     completedTasks.forEach(element => {
+    let tasksCount=0;
+    let avg=0;
+      completedTasks.forEach(element => {
         objIndex = arrayToClint.findIndex((obj => obj.day == element.DifferenceInDays));
         if (objIndex>=0){
-            console.log("objIndex",objIndex)
-             arrayToClint[objIndex].cunt =   arrayToClint[objIndex].cunt+1;
-
-            console.log("adding day")
-        }
+              arrayToClint[objIndex].cunt =   arrayToClint[objIndex].cunt+1;
+              tasksCount+=1
+         }
         else{
             arrayToClint.push({ day: element.DifferenceInDays, cunt: 1 })
+            avg+= element.DifferenceInDays;
+            tasksCount+=1
+         
          }
 
      });
-
+     console.log(tasksCount,avg,"avg: ",(tasksCount/avg).toFixed(2))
      let noTcompletedTasks = await TaskModel.aggregate([
         {
             "$match": {
@@ -107,10 +107,18 @@ router.post("/getStatistics", async function (req, res) {
 
      });
       let result = [];
-     result.push({
-        noTcompleterd:arrayToClintNotCompleted})
+      
+    //   result.push({
+    //     completed: arrayToClint,
+    //     notCompleted: arrayToClintNotCompleted,
+    //     avgCompleted: (tasksCount/avg).toFixed(2),
+    //   });
+    //  result.push({
+    //     noTcompleterd:arrayToClintNotCompleted})
      result.push({
         completed:arrayToClint})
+        result.push({
+            avg:(tasksCount/avg).toFixed(2)})
 
      res.send({
         success: true,
