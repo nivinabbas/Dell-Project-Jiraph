@@ -1,17 +1,14 @@
 import React from "react";
-import "./style.css";
 import Select from "react-select";
-import { isEmpty } from "../../../../../service/utils";
+import "./style.css";
 
 export default function TasksTable({
   openTasks,
-  selectOptions,
   modificationFieldOptions,
   modificationTypeOptions,
   modificationFieldValueOptions,
   onDoneClick,
   onSelect,
-  onTableFilterClick,
   tableFilters,
 }) {
   const disableSelect = () => {
@@ -61,8 +58,8 @@ export default function TasksTable({
             {openTasks.map((task, index) => (
               <tr key={index}>
                 <th scope="row"> {++index} </th>
-                <td> {task.jiraItem.jiraId} </td>
-                <td> {task.jiraItem.jiraName} </td>
+                <td> {task.jiraItem.id} </td>
+                <td> {task.jiraItem.name} </td>
                 <td> {task.diffItem.type} </td>
                 <td>
                   {task.diffItem.updatedField &&
@@ -79,9 +76,11 @@ export default function TasksTable({
                 <td>
                   <input
                     type="checkbox"
-                    onClick={() => onDoneClick(task.jiraItem.jiraId)}
+                    onClick={() => onDoneClick(task._id)}
                     key={task._id}
                     checked={task.taskItem.isDone}
+                    disabled={task.taskItem.isDone}
+                    onChange={(e) => {}}
                   />
                 </td>
               </tr>
