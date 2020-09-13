@@ -366,6 +366,9 @@ const StatusPage = (props) => {
           </div>
         </div>
       </div>
+      {/* <div>
+        <StackedChart/>
+      </div> */}
       <div className="statusPage__table">
         <Table
           modificationFieldValueOptions={modificationFieldValueOptions}
