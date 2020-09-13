@@ -174,7 +174,7 @@ function DeletedJiraTickets() {
           onInputChange={() => { functionalTestInput.current.state.value = ""; qaInput.current.state.value = "" }}
           isMulti
           options={priorityOptions}
-          placeholder="priority "
+          placeholder="All"
           className="DeletedJiraTickets__Filter"
           onChange={HandlePriorityChange}
         />
@@ -217,7 +217,7 @@ function DeletedJiraTickets() {
         <Select
           name="labels"
           options={labelOptions}
-          placeholder="Label"
+          placeholder="Weekly"
           className="DeletedJiraTickets__Filter"
           onChange={HandleLabelChange}
         />

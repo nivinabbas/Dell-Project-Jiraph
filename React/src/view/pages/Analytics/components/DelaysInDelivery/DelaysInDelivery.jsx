@@ -270,7 +270,7 @@ function DelaysInDelivery() {
         <Select
           name="labels"
           options={labelOptions}
-          placeholder="Label"
+          placeholder="Weekly"
           className="DelaysInDelivery__Filter"
           onChange={HandleLabelChange}
         />
