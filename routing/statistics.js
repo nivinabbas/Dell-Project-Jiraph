@@ -11,7 +11,6 @@ const { obj } = require("../schemas/UserSchema");
 
 
 
-//getType start
 router.post("/getStatistics", async function (req, res) {
     console.log("aa")
     let {
@@ -108,10 +107,6 @@ router.post("/getStatistics", async function (req, res) {
 
      });
       let result = [];
-    //   {
-    //      completed: "",
-    //      noTcompleterd:""
-    //   };
      result.push({
         noTcompleterd:arrayToClintNotCompleted})
      result.push({
@@ -124,7 +119,6 @@ router.post("/getStatistics", async function (req, res) {
     });
 });
 
-//getType end
 
 
 
