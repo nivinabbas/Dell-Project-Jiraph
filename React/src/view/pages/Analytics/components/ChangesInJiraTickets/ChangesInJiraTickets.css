@@ -1,7 +1,7 @@
 .ChangeOfJiraTicketWrapper{
   display: grid;
   grid-template-columns: 2vw 82vw auto;
-  grid-template-rows: 10vh 15vh 5vh auto;
+  grid-template-rows: 7vh 15vh 5vh auto;
   grid-template-areas: 
   "header header header "
   ". filterButtons ."
@@ -60,7 +60,7 @@
     height: 100%;
     font-family: 'Roboto Slab', serif;
     font-size: 26px;
-    padding-top: 3vh;
+    padding-top: 2vh;
   }
   .ChangeOfJiraTicket__Filters__wrapper {
     

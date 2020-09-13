@@ -4,11 +4,11 @@ nav {
   font-family: "Roboto Slab", serif;
 }
 .sidebar__header-wrapper {
-  height: 10vh;
+  height: 7vh;
   grid-area: header;
   background-color:white;
   text-align: center;
-  padding-top: 3vh;
+  padding-top: 1.7vh;
   color: #00447C;
   font-weight: 800;
   font-size: 29px;
@@ -21,7 +21,7 @@ nav {
 
 .menu__wrapper {
   padding-top: 1rem;
-  height: 85vh;
+  height: 88vh;
   grid-area: menu;
   background-color: #EEEEEE;
 }
@@ -513,11 +513,11 @@ nav {
               font-family: "Roboto Slab", serif;
             }
             .sidebar__header-wrapper {
-              height: 10vh;
+              height: 7vh;
               grid-area: header;
               background-color:white;
               text-align: center;
-              padding-top: 3vh;
+              padding-top: 1.8vh;
               color: transparent;
               font-weight: 800;
               font-size: 0px;
@@ -530,7 +530,7 @@ nav {
             
             .menu__wrapper {
               padding-top: 1rem;
-              height: 85vh;
+              height: 88vh;
               grid-area: menu;
               /* background-color: #EEEEEE; */
               background-color: #00447C;
