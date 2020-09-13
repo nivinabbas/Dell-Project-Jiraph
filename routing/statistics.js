@@ -59,20 +59,19 @@ router.post("/getStatistics", async function (req, res) {
     let tasksCount=0;
     let avg=0;
       completedTasks.forEach(element => {
-        objIndex = arrayToClint.findIndex((obj => obj.day == element.DifferenceInDays));
+        objIndex = arrayToClint.findIndex((obj => obj.date == element.DifferenceInDays));
         if (objIndex>=0){
-              arrayToClint[objIndex].date =   arrayToClint[objIndex].date+"1";
-              tasksCount+=1
+              arrayToClint[objIndex].Done =   arrayToClint[objIndex].Done+=1;
+              tasksCount+=1;
          }
         else{
-            arrayToClint.push({ done: element.DifferenceInDays, date: "1" })
+            arrayToClint.push({ date: element.DifferenceInDays, Done: 1})
             avg+= element.DifferenceInDays;
-            tasksCount+=1
-         
+            tasksCount+=1;
          }
 
      });
-     console.log(tasksCount,avg,"avg: ",(tasksCount/avg).toFixed(2))
+     console.log(arrayToClint)
      let noTcompletedTasks = await TaskModel.aggregate([
         {
             "$match": {
@@ -115,15 +114,15 @@ router.post("/getStatistics", async function (req, res) {
     //   });
     //  result.push({
     //     notDone:arrayToClintNotCompleted})
-     result.push({
-        arrayToClint})
+    //  result.push({
+    //     arrayToClint})
         // result.push({
         //     avg:(tasksCount/avg).toFixed(2)})
 
      res.send({
         success: true,
         error: null,
-        info: result
+        info: arrayToClint
     });
 });
 

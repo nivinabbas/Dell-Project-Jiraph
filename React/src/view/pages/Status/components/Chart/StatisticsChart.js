@@ -42,37 +42,38 @@ const options = {
     },
   },
 };
-export default function StatisticsChart( {data = [] }) {
+export default function StatisticsChart( {data = [] ,onDataSelected}) {
     console.log("test ")
-    console.log("data: ",data[0])
+    console.log("data: ",data)
     const series = [
-      { name: "done", data: data[0] },
+      { name: "Done", data: data.map((d) => d.Done) },
      ];
   
      console.log("series",series)
-    // const categories = data.map((d) => d.date);
+    const categories = data.map((d) => d.date);
+    console.log("categories",categories)
+
+    const xaxis = {
+      categories: categories,
+    };
   
-    // const xaxis = {
-    //   categories: categories,
-    // };
+    options.chart.events = {
+      dataPointSelection: function (
+        event,
+        chartContext,
+        { dataPointIndex, seriesIndex }
+      ) {
+        let status = series[seriesIndex].name;
+        let date = categories[dataPointIndex];
   
-    // options.chart.events = {
-    //   dataPointSelection: function (
-    //     event,
-    //     chartContext,
-    //     { dataPointIndex, seriesIndex }
-    //   ) {
-    //     let status = series[seriesIndex].name;
-    //     let date = categories[dataPointIndex];
-  
-        // return onDataSelected(date, status);
-    // //   },
-    // };
+        return onDataSelected(date, status);
+      },
+    };
   
     return (
       <div id="daily_chart" style={{ width: "100%" }}>
         <Chart
-          options={{ ...options }}
+          options={{ ...options ,xaxis}}
           height="450"
           series={series}
           type="bar"
