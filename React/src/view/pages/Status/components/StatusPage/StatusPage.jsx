@@ -60,7 +60,7 @@ const StatusPage = () => {
     const filters = {
       startDate,
       endDate,
-     };
+    };
     fetch("/api/statistics/getStatistics", {
       method: "POST",
       headers: {
@@ -71,7 +71,7 @@ const StatusPage = () => {
       .then((res) => res.json())
       .then((data) => {
         let { success, error, info } = data;
-        console.log("info ",info)
+        console.log("info ", info);
         if (success) {
           setStatisticsChart(info);
         } else {
@@ -125,7 +125,7 @@ const StatusPage = () => {
       .then((res) => res.json())
       .then((data) => {
         let { success, error, info } = data;
-        console.log("128 :", info)
+        console.log("128 :", info);
         if (success) {
           setStackedChart(info);
         } else {
@@ -229,8 +229,10 @@ const StatusPage = () => {
   const handleDoneClick = async (jiraId, isDone) => {
     console.log(isDone);
     confirmAlert({
-      title: "Confirm to done",
-      message: "Are you sure to go this task to done?",
+      title: `Confirm to ${isDone ? "Not Done" : "Done"} `,
+      message: `Are you sure to modify this task to ${
+        isDone ? "Not Done" : "Done"
+      }?`,
       buttons: [
         {
           label: "Yes",
@@ -248,12 +250,12 @@ const StatusPage = () => {
                   "Content-Type": "application/json",
                 },
               });
-            } catch (error) { }
+            } catch (error) {}
           },
         },
         {
           label: "No",
-          onClick: () => { },
+          onClick: () => {},
         },
       ],
     });
@@ -341,6 +343,11 @@ const StatusPage = () => {
       });
   };
 
+  const handleStaticsClick = (date, tasks) => {
+    console.log(tasks, date);
+    setOpenTasks(tasks);
+  };
+
   const handleAddTaskClick = () => {
     history.push("/NewTask");
   };
@@ -376,11 +383,12 @@ const StatusPage = () => {
                 name="endDate"
                 label="To:"
               />
+              <h3>Time Range</h3>
               <Select
                 options={timeLabelOptions}
                 onChange={(filter) => setTimeLabel(filter)}
                 className="filterSelect"
-                placeholder="Time Label"
+                placeholder="Time Range"
                 isDisabled={!startDate || !endDate}
               />
             </div>
@@ -399,6 +407,7 @@ const StatusPage = () => {
 
           <div className="statusPage__pieCharts">
             <div className="statusPage__pieChart">
+              <h3>Type:</h3>
               <Select
                 options={modificationTypeOptions}
                 onChange={(filter, name) =>
@@ -410,6 +419,7 @@ const StatusPage = () => {
               <PieChart dataPieChart={typePieChart} name="pie1" />
             </div>
             <div className="statusPage__pieChart">
+              <h3>Field:</h3>
               <Select
                 options={modificationNamePieOptions}
                 onChange={(filter, name) =>
@@ -424,8 +434,12 @@ const StatusPage = () => {
         </div>
         <div>
           <h3>Tasks statistics</h3>
-          {StatisticsChart.length != 0 && 
-          <StatisticsChart data={statisticsChart} onDataSelected={handleSegmentClick} />}
+          {StatisticsChart.length != 0 && (
+            <StatisticsChart
+              data={statisticsChart}
+              onDataSelected={handleStaticsClick}
+            />
+          )}
         </div>
         <div className="statusPage__table">
           <Table
