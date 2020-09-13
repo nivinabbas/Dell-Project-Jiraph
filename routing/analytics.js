@@ -704,8 +704,16 @@ router.post('/delaysInDelivery', async (req, res) => {
 
     filtersArray.push({
         "$or": [
-            { "diffItem.type": "Create", "jiraItem.fixVersion": fixVersion },
-            { "diffItem.type": "Delete", "jiraItem.fixVersion": fixVersion },
+            {
+                "diffItem.type": "Create",
+                "jiraItem.fixVersion": fixVersion,
+                "diffItem.updatedField.newValue": fixVersion
+            },
+            {
+                "diffItem.type": "Delete",
+                "jiraItem.fixVersion": fixVersion,
+                "diffItem.updatedField.newValue": fixVersion
+            },
             {
                 "diffItem.type": "Update",
                 "$or": [
@@ -721,7 +729,7 @@ router.post('/delaysInDelivery', async (req, res) => {
             }
         ]
     })
-    
+
 
     filtersArray.push({ "diffItem.updatedTime": { $gte: startDate } }, { "diffItem.updatedTime": { $lte: endDate } })
 
@@ -774,7 +782,14 @@ router.post('/delaysInDelivery', async (req, res) => {
                             $cond: {
                                 if: { $eq: ["$_id.value", "functionalTest"] },
                                 then: "$_id.value",
-                                else: "$_id.type"
+                                else:
+                                {
+                                    $cond: {
+                                        if: { $eq: ["$_id.type", "Update"] },
+                                        then: "$_id.value",
+                                        else: "$_id.type"
+                                    }
+                                }
                             }
                         },
                         type: {
