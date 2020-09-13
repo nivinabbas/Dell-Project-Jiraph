@@ -5,6 +5,7 @@ import AddTask from "../../img/add.png";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import Table from "../Table/Table.jsx";
 import StackedChart from "../Chart/StackedChart";
+import StatisticsChart from "../Chart/StatisticsChart";
 import PieChart from "../Chart/PieChart.js";
 import DatePicker from "../DatePicker/DatePicker";
 import DailyAlerts from "../DailyAlerts/index";
@@ -35,6 +36,7 @@ const StatusPage = () => {
   const [cardsContent, setCardsContent] = useState([]);
   const [openTasks, setOpenTasks] = useState([]);
   const [stackedChart, setStackedChart] = useState([]);
+  const [statisticsChart, setStatisticsChart] = useState([]);
   const [typePieChart, setTypePieChart] = useState({});
   const [fieldPieChart, setFieldPieChart] = useState({});
   const [modificationTypeOptions, setModificationTypeOptions] = useState({});
@@ -53,7 +55,32 @@ const StatusPage = () => {
     initialPieChartsFilters
   );
   const [tableFilters, setTableFilters] = useState(initialTableFilters);
+  //statistics
+  useEffect(() => {
+    const filters = {
+      startDate,
+      endDate,
+     };
+    fetch("/api/statistics/getStatistics", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(filters),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        let { success, error, info } = data;
+        console.log("info ",info)
+        if (success) {
+          setStatisticsChart(info);
+        } else {
+          alert(error);
+        }
+      });
+  }, [startDate, endDate]);
 
+  //statistics
   useEffect(() => {
     fetch("/api/status/dailyalerts")
       .then((res) => res.json())
@@ -98,6 +125,7 @@ const StatusPage = () => {
       .then((res) => res.json())
       .then((data) => {
         let { success, error, info } = data;
+        console.log("128 :", info)
         if (success) {
           setStackedChart(info);
         } else {
@@ -222,12 +250,12 @@ const StatusPage = () => {
                   "Content-Type": "application/json",
                 },
               });
-            } catch (error) {}
+            } catch (error) { }
           },
         },
         {
           label: "No",
-          onClick: () => {},
+          onClick: () => { },
         },
       ],
     });
@@ -398,7 +426,8 @@ const StatusPage = () => {
         </div>
         <div>
           <h3>Tasks statistics</h3>
-          {/* <StackedChart/> */}
+          {StatisticsChart.length != 0 && 
+          <StatisticsChart data={statisticsChart} onDataSelected={handleSegmentClick} />}
         </div>
         <div className="statusPage__table">
           <Table

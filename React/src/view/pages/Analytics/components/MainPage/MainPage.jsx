@@ -16,29 +16,16 @@ function MainPage(props) {
           rel="stylesheet"
         ></link>
         <nav>
-<<<<<<< HEAD:React/src/view/pages/Analytics/components/MainPage/MainPage.jsx
-          {/* <ul>
-
-          <li>
-              <Link className="MainForm__status--btn" to="/ModificationByField">ModificationByField</Link>
-
-=======
           <ul>
             <li>
               <Link className="MainForm__status--btn" to="/ModificationByField">
                 ModificationByField
               </Link>
->>>>>>> devStatus:React/src/view/pages/Analytics/components/mainPage/MainPage.jsx
             </li>
 
             {/* <li>
               <Link className="MainForm__status--btn" to="/DeletedJiraTickets">Deleted Jiras</Link>
             </li>*/}
-<<<<<<< HEAD:React/src/view/pages/Analytics/components/MainPage/MainPage.jsx
-            {/* <li>
-              <Link className="MainForm__status--btn" to="/ChangesInJiraTickets">Changes In Jira Tickets</Link>
-            </li> 
-=======
             <li>
               <Link
                 className="MainForm__status--btn"
@@ -47,7 +34,6 @@ function MainPage(props) {
                 Changes In Jira Tickets
               </Link>
             </li>
->>>>>>> devStatus:React/src/view/pages/Analytics/components/mainPage/MainPage.jsx
             <li>
               <Link className="MainForm__status--btn" to="/ChangesInParentID">
                 Changes In Parent ID
@@ -58,12 +44,7 @@ function MainPage(props) {
                 Delays In Delivery
               </Link>
             </li>
-<<<<<<< HEAD:React/src/view/pages/Analytics/components/MainPage/MainPage.jsx
-
-          </ul> */} 
-=======
           </ul>
->>>>>>> devStatus:React/src/view/pages/Analytics/components/mainPage/MainPage.jsx
         </nav>
         <Switch>
           <Route path="/ModificationByField">
