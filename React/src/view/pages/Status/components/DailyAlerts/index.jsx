@@ -1,6 +1,7 @@
 import React from "react";
 import "./style.css";
 import shadows from "@material-ui/core/styles/shadows";
+import {isEmpty } from '../../../../../service/utils';
 
 const DailyAlerts = ({ cardsContent }) => {
   return (
