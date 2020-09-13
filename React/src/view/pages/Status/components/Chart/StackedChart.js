@@ -88,3 +88,4 @@ export default function StackedChart({ data = [], onDataSelected }) {
     </div>
   );
 }
+
