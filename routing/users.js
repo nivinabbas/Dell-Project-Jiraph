@@ -71,7 +71,20 @@ router.post('/login', (req, res) => {
 })
 
 router.get('/getUsersList', (req, res) => {
-    UserModel.find({}).then(users => {
+    UserModel.find({active:true}).then(users => {
+        if (users.length > 0) {
+            let table = [];
+            for (let index = 0; index < users.length; index++) {
+                table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id , active:users[index].active })
+            }
+
+            res.send({ success: true, error: null, info: { table } })
+        }
+    })
+})
+
+router.get('/getDeactivatedList', (req, res) => {
+    UserModel.find({active:false}).then(users => {
         if (users.length > 0) {
             let table = [];
             for (let index = 0; index < users.length; index++) {
@@ -320,6 +333,28 @@ function makeid(length) {
     return result;
 }
 
+router.put('/activeUser', (req, res) => {
+    const {id} = req.body
+    let table =[]
+    UserModel.find({_id:id}).then(async doc=>{
+        if(doc.length>0){
+            doc[0].active = true
+            await doc[0].save();
+            await UserModel.find({ active:false }).then(users => { 
+                if (users.length > 0) {
+
+                    for (let index = 0; index < users.length; index++) {
+                        table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id , active:users[index].active })
+                    }
+                }
+            })
+            return (res.send({ success: true, error: null, info: { table } }))
+        }
+        else{
+            return (res.send({success: false, error: 'User Not Found in DB', info: null}))
+        }
+    })
+})
 
 module.exports = router;
 
