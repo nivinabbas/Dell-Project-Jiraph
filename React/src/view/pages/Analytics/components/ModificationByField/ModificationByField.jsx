@@ -195,7 +195,7 @@ function ModificationByField(props) {
           name="fieldName"
           onInputChange={() => { valueInput.current.state.value = ""; qaInput.current.state.value = "" }}
           onChange={handleChangeFieldName}
-          placeholder="fieldName"
+          placeholder="All"
           className="ModificationByField__Filter"
           options={fieldNameOptions}
           isClearable={true} />
@@ -239,7 +239,7 @@ function ModificationByField(props) {
         <Select
           name="label"
           onChange={handleChangeLabel}
-          placeholder="Label"
+          placeholder="Weekly"
           className="ModificationByField__Filter"
           options={labelOptions} />
       </div>

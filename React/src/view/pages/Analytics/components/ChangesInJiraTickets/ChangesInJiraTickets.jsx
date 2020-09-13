@@ -219,7 +219,7 @@ function ChangesInJiraTickets() {
           onInputChange={() => { statusInput.current.state.value = ""; qaInput.current.state.value = "" }}
           name="oldNew"
           options={valueOptions}
-          placeholder="old/new "
+          placeholder="New value"
           className="ChangeOfJiraTicket__Filter"
           onChange={HandleValuesChange}
           isClearable={true}
@@ -262,7 +262,7 @@ function ChangesInJiraTickets() {
         <Select
           name="labels"
           options={labelOptions}
-          placeholder="Label"
+          placeholder="Weekly"
           className="ChangeOfJiraTicket__Filter"
           onChange={HandleLabelChange}
         />
