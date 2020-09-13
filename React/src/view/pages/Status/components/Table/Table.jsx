@@ -23,6 +23,7 @@ export default function TasksTable({
     <div className="open-tasks">
       <div className="open-tasks-title">OPEN TASKS</div>
       <div className="container__filterSelect">
+        <h3>Type:</h3>
         <Select
           options={modificationTypeOptions}
           className="filterSelectB"
@@ -33,6 +34,7 @@ export default function TasksTable({
             modValue.current.state.value = "";
           }}
         />
+        <h3>Field:</h3>
         <Select
           options={modificationFieldOptions}
           className="filterSelectB"
@@ -44,6 +46,7 @@ export default function TasksTable({
           ref={modField}
           onInputChange={() => (modValue.current.state.value = "")}
         />
+        <h3>Value:</h3>
         <Select
           options={modificationFieldValueOptions}
           className="filterSelectB"
