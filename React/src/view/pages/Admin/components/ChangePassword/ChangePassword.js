@@ -34,6 +34,7 @@ function ChangePassword(props) {
                 .then((data) => {
                     const { success } = data;
                     const { error } = data;
+                    console.log(success)
                     if (success) {
                         history.push("/")
                     }
@@ -43,14 +44,15 @@ function ChangePassword(props) {
                 })
         }
         else {
-            console.log("Password doesn't match")
+            alert("Password doesn't match")
         }
     }
     return (
         <div className='forgotpassword'>
+            <h3 className="header">Enter the new password</h3>
             <form id="resetPasswordForm" onSubmit={onResetPassword} >
-                <input id="resetNPswInp" name="resetNPswInp" placeholder="Choose a new Password"></input>
-                <input id="confirmNPswInp" name="confirmNPswInp" placeholder="confirm the new Password"></input>
+                <input id="resetNPswInp" type="password" name="resetNPswInp" placeholder="Choose a new Password"></input>
+                <input id="confirmNPswInp" type="password" name="confirmNPswInp" placeholder="confirm the new Password"></input>
                 <button type="submit">Save</button>
             </form>
         </div>
