@@ -13,6 +13,7 @@ const AuditModel = mongoose.model("AuditModel", AuditSchema);
 var nodemailer = require('nodemailer')
 var validator = require("email-validator");
 const { find } = require("../schemas/TaskSchema");
+const e = require("express");
 const saltRounds = 10
  
 
@@ -79,6 +80,9 @@ router.get('/getUsersList', (req, res) => {
             }
 
             res.send({ success: true, error: null, info: { table } })
+        }
+        else{
+            res.send({ success: false, error: "No Users found", info: null })
         }
     })
 })
