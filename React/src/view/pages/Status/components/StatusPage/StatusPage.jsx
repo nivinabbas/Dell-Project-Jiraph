@@ -73,7 +73,7 @@ const StatusPage = () => {
         let { success, error, info } = data;
         console.log("info ",info)
         if (success) {
-          setStatisticsChart(info[0].done);
+          setStatisticsChart(info[0]);
         } else {
           alert(error);
         }

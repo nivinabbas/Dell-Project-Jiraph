@@ -45,11 +45,11 @@ const options = {
 export default function StatisticsChart({ data = [] }) {
     console.log("data: ",data)
     const series = [
-      { name: "done", data:  data.done },
+      { name: "done", data: data.map((d) => data.done) },
      ];
   
      console.log("series",series)
-    const categories = data.day;
+    const categories = data.map((d) => d.day);
   
     const xaxis = {
       categories: categories,
