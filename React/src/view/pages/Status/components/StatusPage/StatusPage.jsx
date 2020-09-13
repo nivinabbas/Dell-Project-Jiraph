@@ -318,62 +318,22 @@ const StatusPage = () => {
   };
 
   return (
-<<<<<<< HEAD
-    <div className="statusPageContainer">
-      <div className="statusPage__dashboard">
-        <DailyAlerts cardsContent={cardsContent} />
-      </div>
-      <div className="AddNewTask">
-        <h3> New Tasks </h3>
-        <img
-          onClick={handleAddTaskClick}
-          src={AddTask}
-          alt="addtask"
-          id="NewTaskLogo"
-        />
-      </div>
-      <div className="statusPage__charts">
-        <div className="statusPage__barChart">
-          <div className="statusPage__barChart__filters">
-            <DatePicker
-              onDateClick={handleDateClick}
-              name="startDate"
-              label="From:"
-            />
-            <DatePicker
-              onDateClick={handleDateClick}
-              name="endDate"
-              label="To:"
-            />
-            <Select
-              options={timeLabelOptions}
-              onChange={(filter) => setTimeLabel(filter)}
-              className="filterSelect"
-              placeholder="Time Label"
-              isDisabled={!startDate || !endDate}
-            />
-          </div>
-          {stackedChart.length === 0 && (
-            <div className="statupPage__circularProgress">
-              <CircularProgress disableShrink />
-            </div>
-          )}
-          {stackedChart.length != 0 && (
-            <StackedChart
-              data={stackedChart}
-              onDataSelected={handleSegmentClick}
-            />
-          )}
-=======
     <div>
       <div className="status__header">Status</div>
       <div className="statusPageContainer">
         <div className="statusPage__dashboard">
           <h3>Daily Alerts</h3>
           <DailyAlerts cardsContent={cardsContent} />
->>>>>>> devStatus
         </div>
-
+        <div className="statusPage__AddNewTask">
+          <h3>New Task</h3>
+          <img
+            src={AddTask}
+            alt="AddTask"
+            onClick={handleAddTaskClick}
+            id="NewTaskLogo"
+          />
+        </div>
         <h3>Task History</h3>
         <div className="statusPage__charts">
           <div className="statusPage__barChart">
