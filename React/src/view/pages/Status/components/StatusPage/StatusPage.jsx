@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { confirmAlert } from "react-confirm-alert";
+import AddTask from "../../img/add.png";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import Table from "../Table/Table.jsx";
 import StackedChart from "../Chart/StackedChart";
@@ -14,13 +15,23 @@ import {
   initialPieChartsFilters,
 } from "../../../../../service/statusService";
 import "./StatusPage.css";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+  Link,
+  useLocation,
+  useHistory,
+} from "react-router-dom";
 
 const timeLabelOptions = [
   { value: "daily", label: "Daily" },
   { value: "weekly", label: "Weekly" },
   { value: "monthly", label: "Monthly" },
 ];
-const StatusPage = (props) => {
+const StatusPage = () => {
+  let history = useHistory();
   const [cardsContent, setCardsContent] = useState([]);
   const [openTasks, setOpenTasks] = useState([]);
   const [stackedChart, setStackedChart] = useState([]);
@@ -302,10 +313,23 @@ const StatusPage = (props) => {
       });
   };
 
+  const handleAddTaskClick = () => {
+    history.push("/NewTask");
+  };
+
   return (
     <div className="statusPageContainer">
       <div className="statusPage__dashboard">
         <DailyAlerts cardsContent={cardsContent} />
+      </div>
+      <div className="AddNewTask">
+        <h3> New Tasks </h3>
+        <img
+          onClick={handleAddTaskClick}
+          src={AddTask}
+          alt="addtask"
+          id="NewTaskLogo"
+        />
       </div>
       <div className="statusPage__charts">
         <div className="statusPage__barChart">
