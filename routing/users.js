@@ -52,7 +52,7 @@ router.post('/login', (req, res) => {
             if (checkEmail.length > 0) {
                 const isMatch = await bcrypt.compare(password,checkEmail[0].userInfo.password)
                 if(isMatch){
-                    if(checkEmail[0].active == 1){
+                    if(checkEmail[0].active == true){
                         return (res.send({ success: true, error: null, info: { role: checkEmail[0].userInfo.employeeRole, id: checkEmail[0]._id } }))
                     }else{
                         return (res.send({ success: false, error: "User is deleted from the system", info: null }))
@@ -71,11 +71,11 @@ router.post('/login', (req, res) => {
 })
 
 router.get('/getUsersList', (req, res) => {
-    UserModel.find({ active: 1 }).then(users => {
+    UserModel.find({}).then(users => {
         if (users.length > 0) {
             let table = [];
             for (let index = 0; index < users.length; index++) {
-                table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id })
+                table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id , active:users[index].active })
             }
 
             res.send({ success: true, error: null, info: { table } })
@@ -93,13 +93,13 @@ router.put('/deleteUser', (req, res) => {
         }
         else {
             if (docs) {
-                docs.active = 0;
+                docs.active = false;
                 await docs.save();
-                await UserModel.find({ active: 1 }).then(users => {
+                await UserModel.find({ }).then(users => {
                     if (users.length > 0) {
 
                         for (let index = 0; index < users.length; index++) {
-                            table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id })
+                            table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id , active:users[index].active })
                         }
                         res.send({ success: true, error: null, info: { table } })
                     }
@@ -118,7 +118,7 @@ router.put('/deleteUser', (req, res) => {
 router.post('/forgotPassword', (req, res) => {
     const { email } = req.body;
     if (validator.validate(email)) {
-        UserModel.find({ "userInfo.employeeEmail": email, active: 1 }).then(checkEmail => {
+        UserModel.find({ "userInfo.employeeEmail": email, active: true }).then(checkEmail => {
             if (checkEmail.length > 0) {
                 const key = makeid(10)
 
@@ -172,13 +172,13 @@ router.post('/createUser', (req, res) => {
             else {
                 const salt = await bcrypt.genSalt(saltRounds)
                 const hashpassword = await bcrypt.hash(password,salt)
-                await UserModel.insertMany({ userInfo: { employeeName: name, employeeEmail: email, employeeRole: role, password: hashpassword }, active: 1 })
+                await UserModel.insertMany({ userInfo: { employeeName: name, employeeEmail: email, employeeRole: role, password: hashpassword }, active: true })
 
-                await UserModel.find({ active: 1 }).then(users => {
+                await UserModel.find({  }).then(users => {
                     if (users.length > 0) {
 
                         for (let index = 0; index < users.length; index++) {
-                            table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id })
+                            table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id , active:users[index].active })
                         }
 
 
