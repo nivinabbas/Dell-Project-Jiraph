@@ -31,6 +31,7 @@ function Login(props) {
                 const { error } = data;
                 if (success) {
                     const { info } = data;
+                    sessionStorage.setItem("ID", info.id);
                     if (info.role === 'Admin') {
                         history.push("/Admin")
                     }
