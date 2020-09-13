@@ -8,14 +8,19 @@
     grid-template-columns: 23vw 41vw auto;
     grid-template-rows: 10vh 70vh auto;
     grid-template-areas: 
-    "header header header"
+    "header1 header1 header1"
     ". box ."
     ". . .";
 }
-.header_login{
-    grid-area: header;
-    font-size: 30px;
-    background-color: #0f7932;
+.header__login{
+    font-weight: 500;
+    grid-area: header1;
+    text-align: center;
+    color: #00447c;
+    background-color: white;
+    font-family: "Roboto Slab", serif;
+    font-size: 26px;
+    padding-top: 3vh;
 }
 
 
@@ -55,7 +60,15 @@
     border:none;
 }
 
-#loginForm button {
+
+.forgetPassword{
+    padding: 5px;
+    font-size: 16px;
+    color: black;
+}
+
+
+.loginForm__btn {
     width:98%;
     height:2.5rem;
     font-size: 24px;
@@ -68,12 +81,960 @@
     box-shadow:0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
 }
 
-.forgetPassword{
-    padding: 5px;
-    font-size: 16px;
-    box-shadow:0 0.1rem 0.3rem rgba(0, 0, 0, 0.1);
-    color: black;
+@media(max-width: 1400px){
+
+    #loginForm input {
+        align-items: center;
+        text-align: center;
+        position: inherit;
+        width: 95%;
+        height: 2.5rem;
+        font-size: 17px;
+        font-family: 'Roboto Slab', serif;
+        margin-bottom: 1.5rem;
+        box-shadow:inset 0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+        border:none;
+    }
+    .forgetPassword{
+        padding: 5px;
+        font-size: 14px;
+        color: black;
+    }
+    
+    
+    .loginForm__btn {
+        width:95%;
+        height: 2.5rem;
+        font-size: 23px;
+        font-family: 'Roboto Slab', serif;
+        letter-spacing: 3px;
+        margin-bottom: 1.5rem;
+        background-color: #808080;
+        border: none;
+        color:#FFFFFF;
+        box-shadow:0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+    }
 }
+
+@media(max-width: 1300px){
+
+    #loginForm input {
+        align-items: center;
+        text-align: center;
+        position: inherit;
+        width: 87%;
+        height: 2.3rem;
+        font-size: 16px;
+        font-family: 'Roboto Slab', serif;
+        margin-bottom: 1.5rem;
+        box-shadow:inset 0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+        border:none;
+    }
+    .forgetPassword{
+        padding: 5px;
+        font-size: 13px;
+        color: black;
+    }
+    
+    
+    .loginForm__btn {
+        width:87%;
+        height:2.3rem;
+        font-size: 23px;
+        font-family: 'Roboto Slab', serif;
+        letter-spacing: 3px;
+        margin-bottom: 1.5rem;
+        background-color: #808080;
+        border: none;
+        color:#FFFFFF;
+        box-shadow:0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+    }
+}
+
+@media(max-width: 1280px){
+
+    #loginForm input {
+        align-items: center;
+        text-align: center;
+        position: inherit;
+        margin-right: 1.5rem;
+        width: 85%;
+        height:2.2rem;
+        font-size: 16px;
+        font-family: 'Roboto Slab', serif;
+        margin-bottom: 1.5rem;
+        box-shadow:inset 0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+        border:none;
+    }
+    .forgetPassword{
+        padding: 5px;
+        font-size: 13px;
+        color: black;
+    }
+    
+    
+    .loginForm__btn {
+        width:85%;
+        height:2.2rem;
+        font-size: 19px;
+        margin-right: 1.5rem;
+        font-family: 'Roboto Slab', serif;
+        letter-spacing: 3px;
+        margin-bottom: 1.5rem;
+        background-color: #808080;
+        border: none;
+        color:#FFFFFF;
+        box-shadow:0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+    }
+}
+@media(max-width: 1250px){
+
+    #loginForm input {
+        align-items: center;
+        text-align: center;
+        position: inherit;
+        width: 80%;
+        height: 2.1rem;
+        font-size: 16px;
+        font-family: 'Roboto Slab', serif;
+        margin-bottom: 1.5rem;
+        box-shadow:inset 0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+        border:none;
+    }
+    .forgetPassword{
+        padding: 5px;
+        font-size: 13px;
+        color: black;
+    }
+    
+    
+    .loginForm__btn {
+        width:80%;
+        height: 2.1rem;
+        font-size: 16px;
+        font-family: 'Roboto Slab', serif;
+        letter-spacing: 3px;
+        margin-bottom: 1.5rem;
+        background-color: #808080;
+        border: none;
+        color:#FFFFFF;
+        box-shadow:0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+    }
+}
+
+@media(max-width: 1230px){
+
+    #loginForm input {
+        align-items: center;
+        margin-right: 2rem;
+        text-align: center;
+        position: inherit;
+        width: 77%;
+        height: 2rem;
+        font-size: 15px;
+        font-family: 'Roboto Slab', serif;
+        margin-bottom: 1.3rem;
+        box-shadow:inset 0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+        border:none;
+    }
+    .forgetPassword{
+        padding: 5px;
+        font-size: 12px;
+        color: black;
+    }
+    
+    
+    .loginForm__btn {
+        margin-right: 2rem;
+        width: 77%;
+        height:2rem;
+        font-size: 17px;
+        font-family: 'Roboto Slab', serif;
+        letter-spacing: 3px;
+        margin-bottom: 1.5rem;
+        background-color: #808080;
+        border: none;
+        color:#FFFFFF;
+        box-shadow:0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+    }
+}
+
+@media(max-width: 1200px){
+
+    #loginForm input {
+        align-items: center;
+        margin-right: 2.7rem;
+        text-align: center;
+        position: inherit;
+        width: 77%;
+        height: 2rem;
+        font-size: 15px;
+        font-family: 'Roboto Slab', serif;
+        margin-bottom: 1.3rem;
+        box-shadow:inset 0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+        border:none;
+    }
+    .forgetPassword{
+        padding: 5px;
+        font-size: 12px;
+        color: black;
+    }
+    
+    
+    .loginForm__btn {
+        margin-right: 2.7rem;
+        width: 77%;
+        height:2rem;
+        font-size: 17px;
+        font-family: 'Roboto Slab', serif;
+        letter-spacing: 3px;
+        margin-bottom: 1.5rem;
+        background-color: #808080;
+        border: none;
+        color:#FFFFFF;
+        box-shadow:0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+    }
+}
+
+
+@media(max-width: 1180px){
+
+    #loginForm input {
+        align-items: center;
+        margin-right: 2.7rem;
+        text-align: center;
+        position: inherit;
+        width: 72%;
+        height: 2rem;
+        font-size: 15px;
+        font-family: 'Roboto Slab', serif;
+        margin-bottom: 1.1rem;
+        box-shadow:inset 0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+        border:none;
+    }
+    .forgetPassword{
+        padding: 5px;
+        font-size: 11px;
+        color: black;
+        margin-left: 1rem;
+    }
+    
+    
+    .loginForm__btn {
+        margin-right: 2.7rem;
+        width: 72%;
+        height:2rem;
+        font-size: 17px;
+        font-family: 'Roboto Slab', serif;
+        letter-spacing: 3px;
+        margin-bottom: 1rem;
+        background-color: #808080;
+        border: none;
+        color:#FFFFFF;
+        box-shadow:0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+    }
+}
+@media(max-width: 1160px){
+
+    #loginForm input {
+        align-items: center;
+        margin-right: 3.7rem;
+        text-align: center;
+        position: inherit;
+        width: 69%;
+        height: 2rem;
+        font-size: 15px;
+        font-family: 'Roboto Slab', serif;
+        margin-bottom: 1.1rem;
+        box-shadow:inset 0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+        border:none;
+    }
+    .forgetPassword{
+        padding: 5px;
+        font-size: 11px;
+        color: black;
+        margin-left: 1rem;
+    }
+    
+    
+    .loginForm__btn {
+        margin-right: 3.7rem;
+        width: 69%;
+        height:2rem;
+        font-size: 17px;
+        font-family: 'Roboto Slab', serif;
+        letter-spacing: 3px;
+        margin-bottom: 1rem;
+        background-color: #808080;
+        border: none;
+        color:#FFFFFF;
+        box-shadow:0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+    }
+}
+
+@media(max-width: 1140px){
+
+    #loginForm input {
+        align-items: center;
+        margin-right: 4.8rem;
+        text-align: center;
+        position: inherit;
+        width: 66%;
+        height: 2rem;
+        font-size: 15px;
+        font-family: 'Roboto Slab', serif;
+        margin-bottom: 1.1rem;
+        box-shadow:inset 0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+        border:none;
+    }
+    .forgetPassword{
+        padding: 5px;
+        font-size: 11px;
+        color: black;
+        margin-left: .5rem;
+    }
+    
+    
+    .loginForm__btn {
+        margin-right: 4.8rem;
+        width: 66%;
+        height:2rem;
+        font-size: 17px;
+        font-family: 'Roboto Slab', serif;
+        letter-spacing: 3px;
+        margin-bottom: 1rem;
+        background-color: #808080;
+        border: none;
+        color:#FFFFFF;
+        box-shadow:0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+    }
+}
+
+
+
+@media(max-width: 1110px){
+
+    #loginForm input {
+        align-items: center;
+        margin-right: 4rem;
+        text-align: center;
+        position: inherit;
+        width: 65%;
+        height: 2rem;
+        font-size: 15px;
+        font-family: 'Roboto Slab', serif;
+        margin-bottom: 1.1rem;
+        box-shadow:inset 0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+        border:none;
+    }
+    .forgetPassword{
+        padding: 5px;
+        font-size: 11px;
+        color: black;
+        margin-left: 1rem;
+    }
+    
+    
+    .loginForm__btn {
+        margin-right: 4rem;
+        width: 65%;
+        height:2rem;
+        font-size: 17px;
+        font-family: 'Roboto Slab', serif;
+        letter-spacing: 3px;
+        margin-bottom: 1rem;
+        background-color: #808080;
+        border: none;
+        color:#FFFFFF;
+        box-shadow:0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+    }
+}
+
+
+
+
+@media(max-width: 1100px){
+
+    #loginForm input {
+        align-items: center;
+        margin-right: 5.5rem;
+        text-align: center;
+        position: inherit;
+        width: 66%;
+        height: 2rem;
+        font-size: 15px;
+        font-family: 'Roboto Slab', serif;
+        margin-bottom: 1.1rem;
+        box-shadow:inset 0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+        border:none;
+    }
+    .forgetPassword{
+        padding: 5px;
+        font-size: 11px;
+        color: black;
+        margin-left: 1rem;
+    }
+    
+    
+    .loginForm__btn {
+        margin-right: 5.5rem;
+        width: 65%;
+        height:2rem;
+        font-size: 17px;
+        font-family: 'Roboto Slab', serif;
+        letter-spacing: 3px;
+        margin-bottom: 1rem;
+        background-color: #808080;
+        border: none;
+        color:#FFFFFF;
+        box-shadow:0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+    }
+}
+
+@media(max-width: 1070px){
+
+    #loginForm input {
+        align-items: center;
+        margin-right: 7rem;
+        text-align: center;
+        position: inherit;
+        width: 65%;
+        height: 2rem;
+        font-size: 15px;
+        font-family: 'Roboto Slab', serif;
+        margin-bottom: 1.1rem;
+        box-shadow:inset 0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+        border:none;
+    }
+    .forgetPassword{
+        padding: 5px;
+        font-size: 11px;
+        color: black;
+        margin-left: 1rem;
+    }
+    
+    
+    .loginForm__btn {
+        margin-right: 7rem;
+        width: 64%;
+        height:2rem;
+        font-size: 17px;
+        font-family: 'Roboto Slab', serif;
+        letter-spacing: 3px;
+        margin-bottom: 1rem;
+        background-color: #808080;
+        border: none;
+        color:#FFFFFF;
+        box-shadow:0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+    }
+}
+
+
+@media(max-width: 1040px){
+
+    #loginForm input {
+        align-items: center;
+        margin-right: 8rem;
+        text-align: center;
+        position: inherit;
+        width: 64%;
+        height: 2rem;
+        font-size: 15px;
+        font-family: 'Roboto Slab', serif;
+        margin-bottom: 1.1rem;
+        box-shadow:inset 0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+        border:none;
+    }
+    .forgetPassword{
+        padding: 5px;
+        font-size: 11px;
+        color: black;
+        margin-left: 1rem;
+    }
+    
+    
+    .loginForm__btn {
+        margin-right: 8rem;
+        width: 63%;
+        height:2rem;
+        font-size: 17px;
+        font-family: 'Roboto Slab', serif;
+        letter-spacing: 3px;
+        margin-bottom: 1rem;
+        background-color: #808080;
+        border: none;
+        color:#FFFFFF;
+        box-shadow:0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+    }
+}
+
+
+
+@media(max-width: 1000px){
+
+    #loginForm input {
+        align-items: center;
+        margin-right: 8rem;
+        text-align: center;
+        position: inherit;
+        width: 63%;
+        height: 2rem;
+        font-size: 14px;
+        font-family: 'Roboto Slab', serif;
+        margin-bottom: 1.1rem;
+        box-shadow:inset 0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+        border:none;
+    }
+    .forgetPassword{
+        padding: 5px;
+        font-size: 11px;
+        color: black;
+        margin-left: 1rem;
+    }
+    
+    
+    .loginForm__btn {
+        margin-right: 8rem;
+        width: 62%;
+        height:2rem;
+        font-size: 17px;
+        font-family: 'Roboto Slab', serif;
+        letter-spacing: 3px;
+        margin-bottom: 1rem;
+        background-color: #808080;
+        border: none;
+        color:#FFFFFF;
+        box-shadow:0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+    }
+}
+
+
+@media(max-width: 980px){
+
+    #loginForm input {
+        align-items: center;
+        margin-right: 9rem;
+        text-align: center;
+        position: inherit;
+        width: 62%;
+        height: 2rem;
+        font-size: 14px;
+        font-family: 'Roboto Slab', serif;
+        margin-bottom: 1.1rem;
+        box-shadow:inset 0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+        border:none;
+    }
+    .forgetPassword{
+        padding: 5px;
+        font-size: 11px;
+        color: black;
+        margin-left: 1rem;
+    }
+    
+    
+    .loginForm__btn {
+        margin-right: 9rem;
+        width: 61%;
+        height:2rem;
+        font-size: 17px;
+        font-family: 'Roboto Slab', serif;
+        letter-spacing: 3px;
+        margin-bottom: 1rem;
+        background-color: #808080;
+        border: none;
+        color:#FFFFFF;
+        box-shadow:0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+    }
+}
+
+
+@media(max-width: 950px){
+
+    #loginForm input {
+        align-items: center;
+        margin-right: 9.5rem;
+        text-align: center;
+        position: inherit;
+        width: 61%;
+        height: 2rem;
+        font-size: 14px;
+        font-family: 'Roboto Slab', serif;
+        margin-bottom: 1.1rem;
+        box-shadow:inset 0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+        border:none;
+    }
+    .forgetPassword{
+        padding: 5px;
+        font-size: 11px;
+        color: black;
+        margin-left: 1rem;
+    }
+    
+    
+    .loginForm__btn {
+        margin-right: 9.5rem;
+        width: 60%;
+        height:2rem;
+        font-size: 17px;
+        font-family: 'Roboto Slab', serif;
+        letter-spacing: 3px;
+        margin-bottom: 1rem;
+        background-color: #808080;
+        border: none;
+        color:#FFFFFF;
+        box-shadow:0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+    }
+}
+
+
+@media(max-width: 920px){
+
+    #loginForm input {
+        align-items: center;
+        margin-right: 10rem;
+        text-align: center;
+        position: inherit;
+        width: 60%;
+        height: 2rem;
+        font-size: 14px;
+        font-family: 'Roboto Slab', serif;
+        margin-bottom: 1.1rem;
+        box-shadow:inset 0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+        border:none;
+    }
+    .forgetPassword{
+        padding: 5px;
+        font-size: 11px;
+        color: black;
+        margin-left: 1rem;
+    }
+    
+    
+    .loginForm__btn {
+        margin-right: 10rem;
+        width: 59%;
+        height:2rem;
+        font-size: 17px;
+        font-family: 'Roboto Slab', serif;
+        letter-spacing: 3px;
+        margin-bottom: 1rem;
+        background-color: #808080;
+        border: none;
+        color:#FFFFFF;
+        box-shadow:0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+    }
+}
+
+@media(max-width: 900px){
+
+    #loginForm input {
+        align-items: center;
+        margin-right: 11rem;
+        text-align: center;
+        position: inherit;
+        width: 59%;
+        height: 2rem;
+        font-size: 14px;
+        font-family: 'Roboto Slab', serif;
+        margin-bottom: 1.1rem;
+        box-shadow:inset 0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+        border:none;
+    }
+    .forgetPassword{
+        padding: 5px;
+        font-size: 11px;
+        color: black;
+        margin-left: 1rem;
+    }
+    
+    
+    .loginForm__btn {
+        margin-right: 11rem;
+        width: 58%;
+        height:2rem;
+        font-size: 17px;
+        font-family: 'Roboto Slab', serif;
+        letter-spacing: 3px;
+        margin-bottom: 1rem;
+        background-color: #808080;
+        border: none;
+        color:#FFFFFF;
+        box-shadow:0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+    }
+}
+
+@media(max-width: 880px){
+
+    #loginForm input {
+        align-items: center;
+        margin-right: 12rem;
+        text-align: center;
+        position: inherit;
+        width: 57%;
+        height: 1.9rem;
+        font-size: 14px;
+        font-family: 'Roboto Slab', serif;
+        margin-bottom: 1.1rem;
+        box-shadow:inset 0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+        border:none;
+    }
+    .forgetPassword{
+        padding: 5px;
+        font-size: 11px;
+        color: black;
+        margin-right: 1rem;
+    }
+    
+    
+    .loginForm__btn {
+        margin-right: 12rem;
+        width: 56%;
+        height:1.9rem;
+        font-size: 17px;
+        font-family: 'Roboto Slab', serif;
+        letter-spacing: 3px;
+        margin-bottom: 1rem;
+        background-color: #808080;
+        border: none;
+        color:#FFFFFF;
+        box-shadow:0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+    }
+}
+
+
+@media(max-width: 840px){
+
+    #loginForm input {
+        align-items: center;
+        margin-right: 13rem;
+        text-align: center;
+        position: inherit;
+        width: 55%;
+        height: 1.9rem;
+        font-size: 13px;
+        font-family: 'Roboto Slab', serif;
+        margin-bottom: 1.1rem;
+        box-shadow:inset 0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+        border:none;
+    }
+    .forgetPassword{
+        padding: 5px;
+        font-size: 11px;
+        color: black;
+        margin-right: 1rem;
+    }
+    
+    
+    .loginForm__btn {
+        margin-right: 13rem;
+        width: 54%;
+        height:1.9rem;
+        font-size: 14px;
+        font-family: 'Roboto Slab', serif;
+        letter-spacing: 3px;
+        margin-bottom: 1rem;
+        background-color: #808080;
+        border: none;
+        color:#FFFFFF;
+        box-shadow:0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+    }
+}
+
+
+@media(max-width: 800px){
+
+    #loginForm input {
+        align-items: center;
+        margin-right: 14rem;
+        text-align: center;
+        position: inherit;
+        width: 53%;
+        height: 1.9rem;
+        font-size: 14px;
+        font-family: 'Roboto Slab', serif;
+        margin-bottom: 1.1rem;
+        box-shadow:inset 0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+        border:none;
+    }
+    .forgetPassword{
+        padding: 5px;
+        font-size: 11px;
+        color: black;
+        margin-right: 1rem;
+    }
+    
+    
+    .loginForm__btn {
+        margin-right: 14rem;
+        width: 52%;
+        height:1.9rem;
+        font-size: 17px;
+        font-family: 'Roboto Slab', serif;
+        letter-spacing: 3px;
+        margin-bottom: 1rem;
+        background-color: #808080;
+        border: none;
+        color:#FFFFFF;
+        box-shadow:0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+    }
+}
+
+
+@media(max-width: 760px){
+
+    #loginForm input {
+        align-items: center;
+        margin-right: 15rem;
+        text-align: center;
+        position: inherit;
+        width: 51%;
+        height: 1.9rem;
+        font-size: 14px;
+        font-family: 'Roboto Slab', serif;
+        margin-bottom: 1.1rem;
+        box-shadow:inset 0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+        border:none;
+    }
+    .forgetPassword{
+        padding: 5px;
+        font-size: 11px;
+        color: black;
+        margin-right: 1rem;
+    }
+    
+    
+    .loginForm__btn {
+        margin-right: 15rem;
+        width: 50%;
+        height:1.9rem;
+        font-size: 17px;
+        font-family: 'Roboto Slab', serif;
+        letter-spacing: 3px;
+        margin-bottom: 1rem;
+        background-color: #808080;
+        border: none;
+        color:#FFFFFF;
+        box-shadow:0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+    }
+}
+
+
+@media(max-width: 730px){
+
+    #loginForm input {
+        align-items: center;
+        margin-right: 16rem;
+        text-align: center;
+        position: inherit;
+        width: 49%;
+        height: 1.8rem;
+        font-size: 14px;
+        font-family: 'Roboto Slab', serif;
+        margin-bottom: 1.1rem;
+        box-shadow:inset 0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+        border:none;
+    }
+    .forgetPassword{
+        padding: 5px;
+        font-size: 11px;
+        color: black;
+        margin-right: 1rem;
+    }
+    
+    
+    .loginForm__btn {
+        margin-right: 16rem;
+        width: 48%;
+        height:1.8rem;
+        font-size: 17px;
+        font-family: 'Roboto Slab', serif;
+        letter-spacing: 3px;
+        margin-bottom: 1rem;
+        background-color: #808080;
+        border: none;
+        color:#FFFFFF;
+        box-shadow:0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+    }
+}
+
+
+@media(max-width: 700px){
+
+    #loginForm input {
+        align-items: center;
+        margin-right: 17rem;
+        text-align: center;
+        position: inherit;
+        width: 47%;
+        height: 1.8rem;
+        font-size: 14px;
+        font-family: 'Roboto Slab', serif;
+        margin-bottom: 1.1rem;
+        box-shadow:inset 0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+        border:none;
+    }
+    .forgetPassword{
+        padding: 5px;
+        font-size: 11px;
+        color: black;
+        margin-right: 1rem;
+    }
+    
+    
+    .loginForm__btn {
+        margin-right: 17rem;
+        width: 46%;
+        height:1.8rem;
+        font-size: 17px;
+        font-family: 'Roboto Slab', serif;
+        letter-spacing: 3px;
+        margin-bottom: 1rem;
+        background-color: #808080;
+        border: none;
+        color:#FFFFFF;
+        box-shadow:0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+    }
+}
+
+@media(max-width: 670px){
+
+    #loginForm input {
+        align-items: center;
+        margin-right: 18rem;
+        text-align: center;
+        position: inherit;
+        width: 45%;
+        height: 1.7rem;
+        font-size: 14px;
+        font-family: 'Roboto Slab', serif;
+        margin-bottom: 1.1rem;
+        box-shadow:inset 0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+        border:none;
+    }
+    .forgetPassword{
+        padding: 5px;
+        font-size: 10px;
+        color: black;
+        margin-right: 1rem;
+    }
+    
+    
+    .loginForm__btn {
+        margin-right: 18rem;
+        width: 44%;
+        height:1.7rem;
+        font-size: 17px;
+        font-family: 'Roboto Slab', serif;
+        letter-spacing: 3px;
+        margin-bottom: 1rem;
+        background-color: #808080;
+        border: none;
+        color:#FFFFFF;
+        box-shadow:0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+    }
+}
+
+
 
 
 

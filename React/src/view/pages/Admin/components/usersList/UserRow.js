@@ -14,25 +14,22 @@ export default props => {
 
         <form id={user.id} className="TableBody" onSubmit={(e => onSave(e, user.id))} >
 
-            <input name="name" disabled={!edit} type="text" defaultValue={user.name} ></input>
-            <input disabled={!edit} type="email" name='email' defaultValue={user.email}></input>
-            <select disabled={!edit} type="text" name='role' defaultValue={user.role}>
+            <input id="item" name="name" disabled={!edit} type="text" defaultValue={user.name} ></input>
+            <input id="item" disabled={!edit} type="email" name='email' defaultValue={user.email}></input>
+            <select id="item__slt" disabled={!edit} type="text" name='role' defaultValue={user.role}>
                 <option value="Admin">Admin</option>
                 <option value="QA manager">QA manager</option>
                 <option value="TOP manager">TOP manager</option>
             </select>
+                <input id="item" disabled={!edit} className={edit ? 'inset' : ''} name='password' type="password" placeholder='Password'></input>
 
-            <div className="item">
-                <input disabled={!edit} className={edit ? 'inset' : ''} name='password' type="password" placeholder='Password'></input>
-            </div>
-            <div className="item">
                 {!edit ?
-                    <button className="edit__Btn" onClick={e => { onEdit(e, user.id) }}>Edit</button>
+                    <button id="item__btn__edit" className="edit__Btn" onClick={e => { onEdit(e, user.id) }}>EDIT</button>
                     :
-                    <button className="save__Btn" type='submit'>Save</button>
+                    <button id="item__btn__save" className="save__Btn" type='submit'>SAVE</button>
                 }
-                <button onClick={e => { deleteUser(e, user.id) }}>Delete</button>
-            </div>
+                <button id="item__btn__delete" onClick={e => { deleteUser(e, user.id) }}>DELETE</button>
+
         </form>
 
 

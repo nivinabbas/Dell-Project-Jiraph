@@ -1,5 +1,6 @@
 import React from "react";
 import Chart from "react-apexcharts";
+import "./StackedChart.css";
 
 const options = {
   chart: {

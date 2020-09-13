@@ -373,7 +373,10 @@ const StatusPage = (props) => {
   // };
 
   return (
+    <div>
+    <div className="status__header">Status</div>
     <div className="statusPageContainer">
+     
       <div className="statusPage__dashboard">
         <DashBoard cardsContent={cardsContent} />
       </div>
@@ -445,6 +448,7 @@ const StatusPage = (props) => {
           tableFilters={tableFilters}
         />
       </div>
+    </div>
     </div>
   );
 };

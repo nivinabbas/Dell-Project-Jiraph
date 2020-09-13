@@ -58,6 +58,10 @@ body {
   width: 25vw;
   height: 25vh;
 }
+/* .MainForm__status--btn{
+  background-color: violet;
+} */
+
 .MainForm__ModificationByField--btn {
   background-color: #20283e;
   border-radius: 10px;
