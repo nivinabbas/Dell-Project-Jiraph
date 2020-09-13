@@ -195,7 +195,6 @@ const StatusPage = (props) => {
         {
           label: "Yes",
           onClick: () => {
-            console.log("yes");
             try {
               const userId = null;
               const result = openTasks.filter(
@@ -305,7 +304,6 @@ const StatusPage = (props) => {
   return (
     <div className="statusPageContainer">
       <div className="statusPage__dashboard">
-        {console.log(cardsContent)}
         <DailyAlerts cardsContent={cardsContent} />
       </div>
       <div className="statusPage__charts">
