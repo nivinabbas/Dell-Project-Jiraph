@@ -1,6 +1,7 @@
 import { useHistory } from "react-router-dom";
 import React from 'react';
 import './Login.css';
+// import Cookies from "js-cookie";
 import {
     Link
 } from "react-router-dom";
@@ -31,14 +32,16 @@ function Login(props) {
                 const { error } = data;
                 if (success) {
                     const { info } = data;
+                    // const obj = Cookies.get("token");
+
                     if (info.role === 'Admin') {
-                        history.push("/Admin")
+                        history.replace("/Admin")
                     }
                     if (info.role === 'QA manager') {
-                        history.push("/status")
+                        history.replace("/status")
                     }
                     if (info.role === 'TOP manager') {
-                        history.push("/analysis")
+                        history.replace("/analysis")
                     }
             
                 }
