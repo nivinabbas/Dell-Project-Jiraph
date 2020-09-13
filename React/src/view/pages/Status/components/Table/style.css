@@ -1,0 +1,82 @@
+.container {
+  text-align: center;
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  border: .1px solid #C8C9C7;
+  width: 100%;
+  color:#444444;
+}
+.open-tasks-title {
+  text-align: center;
+  margin-top: 4rem;
+  font-size: 26px;
+  font-weight: 500;
+}
+.container td,
+.container th {
+  border: .1px solid #C8C9C7;
+  padding: .5rem;
+  font-size: 16px;
+  font-weight: 300;
+}
+
+.container tr:nth-child(even) {
+  background-color: #EEEEEE;
+}
+
+.container tr:nth-child(odd) {
+  background-color: #EEEEEE;
+}
+
+.container tr:hover {
+  background-color: white;
+}
+
+.container th {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  text-align: center;
+  background-color:  #00447C;
+  color: white;
+  font-size: 19px;
+  font-weight: 300;
+}
+
+.filtersContainer {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+}
+
+.submitButton {
+  width: 80px;
+  height: 39px;
+  min-height: 39px;
+  background-color: white;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  margin: 4px;
+  outline: none;
+  cursor: pointer;
+}
+
+.header__table {
+  position: sticky;
+}
+
+.filterSelectB {
+  width: 22em;
+  margin-right: 1rem;
+}
+
+.container__filterSelect {
+  display: flex;
+  justify-items: center;
+  /* background-color: white; */
+  margin: 2rem 15rem 2rem 15rem;
+  justify-content: space-between;
+}
+
+.container{
+  margin-bottom: 5vh;
+}

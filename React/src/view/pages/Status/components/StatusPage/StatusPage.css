@@ -1,0 +1,88 @@
+.status__header{
+  font-weight: 500;
+text-align: center;
+color: #00447c;
+background-color: white;
+font-family: "Roboto Slab", serif;
+font-size: 26px;
+padding-top: 3vh;
+height: 10vh;
+}
+
+
+.statusPageContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  min-height: 100vh;
+}
+
+.statusPage__charts {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+  justify-content: space-between;
+  width: 70%;
+}
+
+.statusPage__barChart {
+  flex: 1;
+  background-color: #fff;
+  padding: 1rem;
+  margin-right: 1rem;
+  border-radius: 5px;
+}
+
+.filterSelect{
+  color: black;
+  margin-top: 1rem;
+  margin-left: .6rem;
+  margin-right: -.5rem;
+}
+.statusPage__barChart__filters {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.statusPage__pieCharts {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 5px;
+}
+
+.statusPage__pieChart {
+  display: flex;
+  flex-direction: column;
+}
+
+.statusPage__pieChart:first-child {
+  margin-right: 4rem;
+}
+
+.filterSelect-pie {
+  width: 15rem;
+  margin-left: 2rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 .1rem .3rem rgba(0,0,0,.2);
+  border: none;
+  height: 2rem;
+}
+
+.statusPage__table {
+  width: 100%;
+  height: 500px;
+  margin: auto;
+}
+
+.statupPage__circularProgress {
+  height: 50%;
+  text-align: center;
+  margin-top: 2rem;
+}

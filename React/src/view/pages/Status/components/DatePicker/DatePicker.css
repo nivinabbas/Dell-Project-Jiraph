@@ -1,0 +1,28 @@
+.datePicker {
+  display: flex;
+  margin-top:1rem;
+  font-weight: 500;  
+  font-size: 18px;
+
+}
+
+.datePicker__label {
+  margin-top:.4rem;
+  padding-right: .4rem;
+}
+
+.datePicker__input {
+  font-size: 1rem;
+  display: block;
+  padding:.3rem;
+  border-color: #cccccc;
+  outline: none;
+  border-radius: 4px;
+  border-width: 1px;
+  border-style: solid;
+}
+
+.datePicker__input:focus {
+  border: 2px solid #808080;
+
+}

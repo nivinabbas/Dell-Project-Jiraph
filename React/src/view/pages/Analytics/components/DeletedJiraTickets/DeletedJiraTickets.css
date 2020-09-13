@@ -1,0 +1,64 @@
+.DeletedJiraTicketsWrapper {
+  display: grid;
+  grid-template-columns: 2vw 82vw auto;
+  grid-template-rows: 10vh 15vh 5vh auto;
+  grid-template-areas: "header header header " ". filterButtons ." ". . ." "chartColors chart .";
+  background-color: #C8C9C7;
+}
+
+.DeletedJiraTickets__Table {
+  grid-area: table;
+}
+
+.DeletedJiraTickets__Title {
+  font-weight: 500;
+  grid-area: header;
+  text-align: center;
+  color: #00447C;
+  background-color: white;
+  height: 100%;
+  font-family: 'Roboto Slab', serif;
+  font-size: 26px;
+  padding-top: 3vh;
+}
+
+.DeletedJiraTickets__Filters {
+  grid-area: filterButtons;
+}
+
+.DeletedJiraTickets__Filter__date{
+  box-shadow: inset 0 .1rem .3rem rgba(0, 0, 0, 0.2);
+  height:2.25rem;
+  width: 13rem;
+  border-radius: 3px;
+  color: rgba(0, 0, 0, 0.7);
+  text-align: center;
+  font-size: 15px;
+  border: none;
+}
+.DeletedJiraTickets__Filters {
+  margin-top: 1rem;
+  grid-area: filterButtons;
+  display: flex;
+  justify-content: space-between;
+  background-color: #EEEEEE;
+  align-items: center;
+  text-align: center;
+  height: 5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-radius: 3px;
+  box-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.2);
+}
+
+.DeletedJiraTickets__Filter {
+  width: 13rem;
+  box-sizing: border-box;
+  background-color: #EEEEEE;
+  color: black;
+  box-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.2);
+}
+
+.DeletedJiraTickets__Chart {
+  grid-area: chart;
+}

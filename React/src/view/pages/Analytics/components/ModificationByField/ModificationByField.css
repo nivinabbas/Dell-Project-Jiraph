@@ -1,0 +1,438 @@
+.ModificationByField__Wrapper {
+  display: grid;
+  grid-template-columns: .8vw 84vw auto;
+  grid-template-rows: 10vh 8vh 5vh auto;
+  grid-template-areas:
+    "header header header "
+    ". filterButtons ."
+    ". . ."
+    "chartColors chart .";
+  background-color: #c8c9c7;
+}
+.ModificationByField__Table {
+  grid-area: chart;
+}
+.ModificationByField__MainTitle {
+  font-weight: 500;
+  grid-area: header;
+  text-align: center;
+  color: #00447c;
+  background-color: white;
+  height: 100%;
+  font-family: "Roboto Slab", serif;
+  font-size: 26px;
+  padding-top: 3vh;
+}
+.ModificationByField__Chart {
+  grid-area: chart;
+}
+.ModificationByField__Filters {
+  margin-top: 1rem;
+  grid-area: filterButtons;
+  display: flex;
+  justify-content: space-between;
+  background-color: #eeeeee;
+  align-items: center;
+  text-align: center;
+  height: 5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-radius: 3px;
+  box-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.2);
+}
+.ModificationByField__Filter{
+ width: 13rem;
+ box-sizing: border-box;
+ background-color:   #EEEEEE;
+ color: black;
+ box-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.2);
+}
+.Select {
+  background-color: #0076ce;
+}
+.ModificationByField__Filter__date{
+  box-shadow: inset 0 .1rem .3rem rgba(0, 0, 0, 0.2);
+  height:2.25rem;
+  width: 13rem;
+  border: none;
+  border-radius: 3px;
+  color: rgba(0, 0, 0, 0.7);
+  text-align: center;
+  font-size: 15px;
+}
+.ModificationByField__Submit{
+  width: 15%;
+  border-radius: 15px;
+  /* box-shadow: 0px 0.1px 0.3px rgba(0, 0, 0, 0.2); */
+  border: rgba(0, 0, 0, 0.1);
+  background-color: #eeeeee;
+}
+.chart_Colors {
+  margin-left: 10px;
+  grid-area: chartColors;
+  justify-content: center;
+  justify-content: space-around;
+}
+.chart_Colors_Status {
+  margin-bottom: 5px;
+  font: bolder;
+  font-size: 20px;
+  color: white;
+  background-color: #d9514eff;
+  width: fit-content;
+  height: fit-content;
+  border-radius: 5px;
+}
+.chart_Colors_Priority {
+  margin-bottom: 5px;
+  font: bolder;
+  font-size: 20px;
+  color: white;
+  background-color: #2a2b2dff;
+  width: fit-content;
+  height: fit-content;
+  border-radius: 5px;
+}
+.chart_Colors_QaRepresentative {
+  margin-bottom: 5px;
+  font: bolder;
+  font-size: 20px;
+  color: white;
+  background-color: #2da8d8ff;
+  width: fit-content;
+  height: fit-content;
+  border-radius: 5px;
+}
+
+@media screen and (max-width: 1700px){
+  .ModificationByField__Filter{
+    width: 12rem;
+   }
+   
+.ModificationByField__Filter__date{
+  height:2.25rem;
+  width: 12rem;
+  font-size: 15px;
+}
+}
+
+@media screen and (max-width: 1650px){
+  .ModificationByField__Filter{
+    width: 11.5rem;
+   }
+   .ModificationByField__Filter__date{
+    height:2.25rem;
+    width: 11rem;
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 1600px){
+  .ModificationByField__Filter{
+    width: 11rem;
+   }
+   .ModificationByField__Filter__date{
+    height:2.25rem;
+    width: 11rem;
+    font-size: 14px;
+  }
+}
+@media screen and (max-width: 1450px){
+  .ModificationByField__Filter{
+    width: 10.5rem;
+   }
+   .ModificationByField__Filter__date{
+    height:2.25rem;
+    width: 10.5rem;
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 1300px){
+  .ModificationByField__Filter{
+    width: 10rem;
+   }
+   .ModificationByField__Filter__date{
+    height:2.25rem;
+    width: 10rem;
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 1260px){
+  .ModificationByField__Filter{
+    width: 9.8rem;
+   }
+   .ModificationByField__Filter__date{
+    height:2.25rem;
+    width: 9.8rem;
+    font-size: 13px;
+  }
+}
+@media screen and (max-width: 1200px){
+  .ModificationByField__Filter{
+    width: 9.6rem;
+   }
+   .ModificationByField__Filter__date{
+    height:2.25rem;
+    width: 9.6rem;
+    font-size: 13px;
+  }
+}
+
+@media screen and (max-width: 1190px){
+  .ModificationByField__Filter{
+    width: 10.3rem;
+   }
+   .ModificationByField__Filter__date{
+    height:2.25rem;
+    width: 10.3rem;
+    font-size: 13px;
+  }
+  .ModificationByField__Wrapper {
+    display: grid;
+    grid-template-columns: 1vw 93vw auto;
+    grid-template-rows: 10vh 8vh 5vh auto;
+    grid-template-areas:
+      "header header header "
+      ". filterButtons ."
+      ". . ."
+      "chartColors chart .";
+  
+    background-color: #c8c9c7;
+  }
+}
+
+@media screen and (max-width: 1150px){
+  .ModificationByField__Filter{
+    width: 10rem;
+   }
+   .ModificationByField__Filter__date{
+    height: 2.25rem;
+    width: 10rem;
+    font-size: 13px;
+    padding-right: 5px;
+    padding-left: 5px;
+  }
+}
+
+@media screen and (max-width: 1110px){
+  .ModificationByField__Filter{
+    width: 9.7rem;
+   }
+   .ModificationByField__Filter__date{
+    height: 2.25rem;
+    width: 9.7rem;
+    font-size: 13px;
+    padding-right: 5px;
+    padding-left: 5px;
+  }
+
+  .ModificationByField__Filters {
+    padding-left: .9rem;
+    padding-right: .9rem;
+  }
+}
+
+@media screen and (max-width: 1085px){
+  .ModificationByField__Filter{
+    width: 9.4rem;
+    font-size: 14px;
+   }
+   .ModificationByField__Filter__date{
+    height: 2.25rem;
+    width: 9.4rem;
+    font-size: 13px;
+    padding-right: 5px;
+    padding-left: 5px;
+  }
+  .ModificationByField__Filters {
+    padding-left: .8rem;
+    padding-right: .8rem;
+  }
+}
+
+@media screen and (max-width: 1040px){
+  .ModificationByField__Filter{
+    width: 9.2rem;
+    font-size: 13.5px;
+   }
+   .ModificationByField__Filter__date{
+    height: 2.25rem;
+    width: 9.2rem;
+    font-size: 13px;
+    padding-right: 5px;
+    padding-left: 5px;
+  }
+  .ModificationByField__Filters {
+    padding-left: .5rem;
+    padding-right: .5rem;
+  }
+}
+
+@media screen and (max-width: 1040px){
+  .ModificationByField__Filter{
+    width: 9rem;
+    font-size: 13.5px;
+   }
+   .ModificationByField__Filter__date{
+    height: 2.25rem;
+    width: 9rem;
+    font-size: 13px;
+    padding-right: 5px;
+    padding-left: 5px;
+  }
+  .ModificationByField__Filters {
+    padding-left: .4rem;
+    padding-right: .4rem;
+  }
+}
+
+@media screen and (max-width: 980px){
+  .ModificationByField__Filter{
+    width: 8.8rem;
+    font-size: 13px;
+   }
+   .ModificationByField__Filter__date{
+    height: 2.25rem;
+    width: 8.8rem;
+    font-size: 13px;
+    padding-right: 5px;
+    padding-left: 5px;
+  }
+  .ModificationByField__Filters {
+    padding-left: .4rem;
+    padding-right: .4rem;
+  }
+}
+
+@media screen and (max-width: 950px){
+  .ModificationByField__Filter{
+    width: 8.6rem;
+    font-size: 13px;
+   }
+   .ModificationByField__Filter__date{
+    height: 2.25rem;
+    width: 8.6rem;
+    font-size: 13px;
+    padding-right: 5px;
+    padding-left: 5px;
+  }
+  .ModificationByField__Filters {
+    padding-left: .3rem;
+    padding-right: .3rem;
+  }
+}
+
+@media screen and (max-width: 920px){
+  .ModificationByField__Filter{
+    width: 8.2rem;
+    font-size: 13px;
+   }
+   .ModificationByField__Filter__date{
+    height: 2.25rem;
+    width: 8.2rem;
+    font-size: 12px;
+    padding-right: 5px;
+    padding-left: 5px;
+  }
+  .ModificationByField__Filters {
+    padding-left: .25rem;
+    padding-right: .25rem;
+  }
+}
+
+@media screen and (max-width: 895px){
+  .ModificationByField__Filter{
+    width: 7.9rem;
+    font-size: 13px;
+   }
+   .ModificationByField__Filter__date{
+    height: 2.25rem;
+    width: 7.9rem;
+    font-size: 12px;
+    padding-right: 5px;
+    padding-left: 5px;
+  }
+  .ModificationByField__Filters {
+    padding-left: .25rem;
+    padding-right: .25rem;
+  }
+}
+@media screen and (max-width: 850px){
+  .ModificationByField__Filter{
+    width: 7.6rem;
+    font-size: 12px;
+   }
+   .ModificationByField__Filter__date{
+    height: 2.25rem;
+    width: 7.6rem;
+    font-size: 12px;
+  }
+  .ModificationByField__Filters {
+    padding-left: .25rem;
+    padding-right: .25rem;
+  }
+}
+
+@media screen and (max-width: 830px){
+  .ModificationByField__Filter{
+    width: 7.2rem;
+    font-size: 12px;
+   }
+   .ModificationByField__Filter__date{
+    height: 2.25rem;
+    width: 7.2rem;
+    font-size: 12px;
+    padding-right: 7px;
+    color: transparent;
+  }
+  .ModificationByField__Filters {
+    padding-left: .25rem;
+    padding-right: .25rem;
+  }
+}
+
+@media screen and (max-width: 805px){
+  .ModificationByField__Filter{
+    width: 7rem;
+    font-size: 12px;
+   }
+   .ModificationByField__Filter__date{
+    height: 2.25rem;
+    width: 7rem;
+    font-size: 12px;
+    padding-right: 7px;
+    color: transparent;
+  }
+  .ModificationByField__Filters {
+    padding-left: .25rem;
+    padding-right: .25rem;
+  }
+}
+
+@media screen and (max-width: 770px){
+  .ModificationByField__Filter{
+    width: 6.7rem;
+    font-size: 12px;
+   }
+   .ModificationByField__Filter__date{
+    height: 2.25rem;
+    width: 6.7rem;
+    font-size: 12px;
+    padding-right: 7px;
+    color: transparent;
+  }
+  .ModificationByField__Filters {
+    padding-left: .25rem;
+    padding-right: .25rem;
+  }
+}
+
+
+
+
+
+
+
+
