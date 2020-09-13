@@ -15,9 +15,9 @@ const TaskModel = require("./schemas/TaskSchema");
 
 app.use(express.static("public"));
 
-//const url = "mongodb+srv://nimer:N1N1N1N1@cluster0.tejcy.mongodb.net/server";
-const url =
-  "mongodb+srv://Marshood:raMHdQuDOBxwrcss@cluster0.ifcjp.mongodb.net/jira";
+const url = "mongodb+srv://nimer:N1N1N1N1@cluster0.tejcy.mongodb.net/server";
+// const url =
+//   "mongodb+srv://Marshood:raMHdQuDOBxwrcss@cluster0.ifcjp.mongodb.net/jira";
 const mongoose = require("mongoose");
 mongoose.connect(url, {
   useNewUrlParser: true,
@@ -49,15 +49,18 @@ function updateSaleh() {
 
       let date = randomDate(new Date("08/15/2020"), new Date("08/31/2020"));
       console.log(item.diffItem.updatedTime);
-      TaskModel.updateOne(
-        { _id: id },
-        { $set: { "diffItem.updatedTime": date } }
-      );
+      TaskModel.updateOne({
+        _id: id
+      }, {
+        $set: {
+          "diffItem.updatedTime": date
+        }
+      });
     });
   });
 }
 
-function randomDate(start, end /*, startHour, endHour*/) {
+function randomDate(start, end /*, startHour, endHour*/ ) {
   var date = new Date(+start + Math.random() * (end - start));
   // var hour = startHour + Math.random() * (endHour - startHour) | 0;
   // date.setHours(hour);
