@@ -34,24 +34,24 @@ function weeklyLabel(startDate, endDate, tasks) {
         weeklyEndDate = addDays(weeklyStartDate, 6);
     }
     if (diffDays > 0) {//add the days as a range
-        weeklyEndDate = addDays(weeklyStartDate, diffDays-1);
+        weeklyEndDate = addDays(weeklyStartDate, diffDays - 1);
         arrayForWeeks.push(
             { _id: `${weeklyStartDate.getDate()}/${weeklyStartDate.getMonth() + 1}/${weeklyStartDate.getFullYear()} - ${weeklyEndDate.getDate()}/${weeklyEndDate.getMonth() + 1}/${weeklyEndDate.getFullYear()}`, arr: [] })
 
     }
     weeklyEndDate = addDays(startDate, 6);
-    
+
     for (i = 0; i < tasks.length; i++) {
         if (new Date(tasks[i]._id) <= weeklyEndDate) {
             arrayForWeeks[currentWeek].arr = arrayForWeeks[currentWeek].arr.concat(tasks[i].arr)
         }
         else {
-            while(weeklyEndDate<(new Date(tasks[i]._id))){
-            weeklyEndDate = addDays(weeklyEndDate, 7);
-            currentWeek++;
+            while (weeklyEndDate < (new Date(tasks[i]._id))) {
+                weeklyEndDate = addDays(weeklyEndDate, 7);
+                currentWeek++;
             }
             arrayForWeeks[currentWeek].arr = arrayForWeeks[currentWeek].arr.concat(tasks[i].arr)
-            
+
         }
     }
 
@@ -170,7 +170,7 @@ router.post('/modificationByField', async (req, res) => {
     tasks = await TaskModel.aggregate(aggregateArray)
 
     if (label[0] === "weekly") {
-        tasks=weeklyLabel(startDate,endDate,tasks);
+        tasks = weeklyLabel(startDate, endDate, tasks);
     }
 
     let maxLength = 0;
@@ -179,10 +179,10 @@ router.post('/modificationByField', async (req, res) => {
         tasks.map((item, index) => {
             let myArray = item.arr;
             myArray.forEach(element => {
-                element.tasks.map((task=>{
+                element.tasks.map((task => {
                     task.diffItem.updatedTime = formatDate(task.diffItem.updatedTime)
                 }))
-              
+
                 if (element.size > maxLength) {
                     maxLength = element.size
                 }
@@ -323,7 +323,7 @@ router.post('/deletedJiraTickets', async (req, res) => {
         { $sort: { _id: 1 } }
     ])
     if (label[0] === "weekly") {
-        tasks=weeklyLabel(startDate,endDate,tasks);
+        tasks = weeklyLabel(startDate, endDate, tasks);
     }
     let maxLength = 0;
     let sumLength = 0;
@@ -331,7 +331,7 @@ router.post('/deletedJiraTickets', async (req, res) => {
         tasks.map((item, index) => {
             let myArray = item.arr;
             myArray.forEach(element => {
-                element.tasks.map((task=>{
+                element.tasks.map((task => {
                     task.diffItem.updatedTime = formatDate(task.diffItem.updatedTime)
                 }))
                 if (element.size > maxLength) {
@@ -402,7 +402,7 @@ router.post('/changesByParentIdFilters', async (req, res) => {
     }
     else {
         const version = fixVersion[0];
-        
+
 
         tasks = await TaskModel.aggregate([
             {
@@ -487,13 +487,13 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
 
     let dateFormat = '';
     if (label[0] == 'monthly') {
-        dateFormat =  "%Y-%m"
+        dateFormat = "%Y-%m"
     }
     else if (label[0] == 'yearly') {
         dateFormat = "%Y"
     }
     else {
-        dateFormat ="%Y-%m-%d"
+        dateFormat = "%Y-%m-%d"
     }
 
 
@@ -577,13 +577,13 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
                 arr: { $push: { value: "$_id.Val", tasks: "$tasks", size: { $size: "$tasks" } } },
             }
         },
-        { 
-            $sort: { _id: 1 } 
+        {
+            $sort: { _id: 1 }
         }
     ])
 
-    if(label[0] == 'weekly'){
-        tasks = weeklyLabel(startDate,endDate,tasks)
+    if (label[0] == 'weekly') {
+        tasks = weeklyLabel(startDate, endDate, tasks)
     }
 
     if (tasks.length != 0) {
@@ -594,7 +594,7 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
         tasks.map((task, index) => {
             let sum = 0;
             task.arr.forEach(element => {
-                element.tasks.map((task=>{
+                element.tasks.map((task => {
                     task.diffItem.updatedTime = formatDate(task.diffItem.updatedTime)
                 }))
                 sum += element.size
@@ -704,23 +704,32 @@ router.post('/delaysInDelivery', async (req, res) => {
 
     filtersArray.push({
         "$or": [
-            { "diffItem.type": "Create" },
-            { "diffItem.type": "Delete" },
-            { "diffItem.type": "Update" }
-        ]
-    })
-    filtersArray.push({
-        "$or": [
             {
-                "diffItem.updatedField.fieldName": "fixVersion",
-                "$or": [
-                    { "diffItem.updatedField.newValue": fixVersion },
-                    { "diffItem.updatedField.oldValue": fixVersion }
-                ]
+                "diffItem.type": "Create",
+                "jiraItem.fixVersion": fixVersion,
+                "diffItem.updatedField.newValue": fixVersion
             },
-            { "diffItem.updatedField.fieldName": "functionalTest" }
+            {
+                "diffItem.type": "Delete",
+                "jiraItem.fixVersion": fixVersion,
+                "diffItem.updatedField.newValue": fixVersion
+            },
+            {
+                "diffItem.type": "Update",
+                "$or": [
+                    {
+                        "diffItem.updatedField.fieldName": "fixVersion",
+                        "$or": [
+                            { "diffItem.updatedField.newValue": fixVersion },
+                            { "diffItem.updatedField.oldValue": fixVersion }
+                        ]
+                    },
+                    { "diffItem.updatedField.fieldName": "functionalTest" }
+                ]
+            }
         ]
     })
+
 
     filtersArray.push({ "diffItem.updatedTime": { $gte: startDate } }, { "diffItem.updatedTime": { $lte: endDate } })
 
@@ -773,7 +782,14 @@ router.post('/delaysInDelivery', async (req, res) => {
                             $cond: {
                                 if: { $eq: ["$_id.value", "functionalTest"] },
                                 then: "$_id.value",
-                                else: "$_id.type"
+                                else:
+                                {
+                                    $cond: {
+                                        if: { $eq: ["$_id.type", "Update"] },
+                                        then: "$_id.value",
+                                        else: "$_id.type"
+                                    }
+                                }
                             }
                         },
                         type: {
@@ -788,14 +804,14 @@ router.post('/delaysInDelivery', async (req, res) => {
                 },
             }
         },
-        { 
-            $sort: { _id: 1 } 
+        {
+            $sort: { _id: 1 }
         }
 
     ])
 
-    if(label[0] == 'weekly'){
-        tasks = weeklyLabel(startDate,endDate,tasks)
+    if (label[0] == 'weekly') {
+        tasks = weeklyLabel(startDate, endDate, tasks)
     }
 
     if (tasks.length != 0) {
@@ -806,7 +822,7 @@ router.post('/delaysInDelivery', async (req, res) => {
         tasks.map((task, index) => {
             let sum = 0;
             task.arr.forEach(element => {
-                element.tasks.map((task=>{
+                element.tasks.map((task => {
                     task.diffItem.updatedTime = formatDate(task.diffItem.updatedTime)
                 }))
                 sum += element.size
