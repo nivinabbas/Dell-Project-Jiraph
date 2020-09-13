@@ -305,11 +305,19 @@ const StatusPage = (props) => {
   return (
     <div className="statusPageContainer">
       <div className="statusPage__dashboard">
+        <h3>Daily Alerts</h3>
         <DailyAlerts cardsContent={cardsContent} />
       </div>
+     
+      <h3>
+     Task History
+      </h3>
       <div className="statusPage__charts">
+      
         <div className="statusPage__barChart">
+       
           <div className="statusPage__barChart__filters">
+            
             <DatePicker
               onDateClick={handleDateClick}
               name="startDate"
@@ -327,6 +335,7 @@ const StatusPage = (props) => {
               placeholder="Time Label"
               isDisabled={!startDate || !endDate}
             />
+            
           </div>
           {stackedChart.length === 0 && (
             <div className="statupPage__circularProgress">
@@ -334,6 +343,7 @@ const StatusPage = (props) => {
             </div>
           )}
           {stackedChart.length != 0 && (
+            
             <StackedChart
               data={stackedChart}
               onDataSelected={handleSegmentClick}
@@ -366,9 +376,12 @@ const StatusPage = (props) => {
           </div>
         </div>
       </div>
-      {/* <div>
+      <div>
+      <h3>
+     Tasks statistics
+      </h3>
         <StackedChart/>
-      </div> */}
+      </div>
       <div className="statusPage__table">
         <Table
           modificationFieldValueOptions={modificationFieldValueOptions}
