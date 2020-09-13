@@ -1,17 +1,18 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import DashBoard from "../DashBoard/DashBoard";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 import Table from "../Table/Table.jsx";
 import StackedChart from "../Chart/StackedChart";
 import PieChart from "../Chart/PieChart.js";
 import DatePicker from "../DatePicker/DatePicker";
+import DailyAlerts from "../DailyAlerts/index";
 import Select from "react-select";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {
   initialTableFilters,
   initialPieChartsFilters,
 } from "../../../../../service/statusService";
-import { isEmpty } from "../../../../../service/utils";
 import "./StatusPage.css";
 
 const timeLabelOptions = [
@@ -22,7 +23,6 @@ const timeLabelOptions = [
 const StatusPage = (props) => {
   const [cardsContent, setCardsContent] = useState([]);
   const [openTasks, setOpenTasks] = useState([]);
-  const [barChart, setBarChart] = useState({});
   const [stackedChart, setStackedChart] = useState([]);
   const [typePieChart, setTypePieChart] = useState({});
   const [fieldPieChart, setFieldPieChart] = useState({});
@@ -35,7 +35,7 @@ const StatusPage = (props) => {
     modificationFieldValueOptions,
     setModificationFieldValueOptions,
   ] = useState({});
-  const [startDate, setStartDate] = useState(""); // choose the default value, with marshood
+  const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [timeLabel, setTimeLabel] = useState("");
   const [pieChartsFilters, setPieChartsFilters] = useState(
@@ -54,8 +54,9 @@ const StatusPage = (props) => {
           alert(error);
         }
       });
-  }, []);
+  }, [openTasks]);
 
+  /** Load open tasks */
   useEffect(() => {
     fetch("/api/status/openTasks")
       .then((res) => res.json())
@@ -69,7 +70,7 @@ const StatusPage = (props) => {
       });
   }, []);
 
-  //main bar chart convert to post method and pass in the body startDate, timeLabel
+  /** Main bar chart */
   useEffect(() => {
     const filters = {
       startDate,
@@ -87,43 +88,14 @@ const StatusPage = (props) => {
       .then((data) => {
         let { success, error, info } = data;
         if (success) {
-          console.log("bar chart", info);
-          const dataFromServer = [
-            {
-              done: 5,
-              notDone: 9,
-              date: "01/09/2020",
-            },
-            {
-              done: 5,
-              notDone: 9,
-              date: "02/09/2020",
-            },
-            {
-              done: 7,
-              notDone: 0,
-              date: "03/09/2020",
-            },
-            {
-              done: 7,
-              notDone: 89,
-              date: "04/09/2020",
-            },
-          ];
-          setStackedChart(dataFromServer);
+          setStackedChart(info);
         } else {
           alert(error);
         }
       });
-  }, [startDate, endDate, timeLabel]);
-  //left pie ==> convert to post method and pass in the body startDate, endDate,pieChartsFilters[0]
-  // add conditions to the array startDate, endDate, pieChartsFilters[0]
-  const onStachChartDataSelect = (date, status) => {
-    console.log(date, status);
-    // send date and status to server
-    // get the tickets
-    // set the table data with the received tickets.
-  };
+  }, [startDate, endDate, timeLabel, openTasks]);
+
+  /** type pie  */
   useEffect(() => {
     const filters = {
       startDate,
@@ -141,16 +113,14 @@ const StatusPage = (props) => {
       .then((data) => {
         let { success, error, info } = data;
         if (success) {
-          console.log("ss", info);
           setTypePieChart(info);
         } else {
           alert(error);
         }
       });
-  }, [startDate, endDate, pieChartsFilters]);
+  }, [startDate, endDate, pieChartsFilters, openTasks]);
 
-  //right pie ==> convert to post method and pass in the body startDate, endDate,pieChartsFilters[1]
-  // add conditions to the array startDate, endDate, pieChartsFilters[1]
+  /** Right Pie */
   useEffect(() => {
     const filters = {
       startDate,
@@ -173,12 +143,10 @@ const StatusPage = (props) => {
           alert(error);
         }
       });
-  }, [startDate, endDate, pieChartsFilters]);
+  }, [startDate, endDate, pieChartsFilters, openTasks]);
 
-  // table select option ==> based on "update" select
+  /** table select option ==> based on "update" select */
   useEffect(() => {
-    // const newFilters =
-    //   filters[0].value === "Update" ? [...filters] : [{ ...filters[0] }];
     fetch("/api/status/modificationTypeOptions")
       .then((res) => res.json())
       .then((data) => {
@@ -219,22 +187,37 @@ const StatusPage = (props) => {
       });
   }, []);
 
-  // setFieldPieChart(pieTypeDummyData);
-  const handleDoneClick = async (jiraId) => {
-    // try {
-    //   const userId = null;
-    //   const result = openTasks.filter(
-    //     (openTask) => openTask.jiraItem.jiraId !== jiraId
-    //   );
-    //   setOpenTasks(result);
-    //   await fetch("/api/status/updateTasks", {
-    //     method: "POST",
-    //     body: JSON.stringify({ jiraId, userId }),
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //   });
-    // } catch (error) {}
+  const handleDoneClick = async (jiraId, isDone) => {
+    console.log(isDone);
+    confirmAlert({
+      title: "Confirm to done",
+      message: "Are you sure to go this task to done?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => {
+            try {
+              const userId = null;
+              const result = openTasks.filter(
+                (openTask) => openTask._id !== jiraId
+              );
+              setOpenTasks(result);
+              fetch("/api/status/updateTasks", {
+                method: "POST",
+                body: JSON.stringify({ jiraId, userId, isDone }),
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              });
+            } catch (error) {}
+          },
+        },
+        {
+          label: "No",
+          onClick: () => {},
+        },
+      ],
+    });
   };
   const handlePieChartsFilters = (filter, name) => {
     const newPieFilters = [...pieChartsFilters].map((f) => {
@@ -249,70 +232,6 @@ const StatusPage = (props) => {
   const handleDateClick = (date) => {
     const { name, value } = date;
     name === "startDate" ? setStartDate(value) : setEndDate(value);
-    // console.log("label",tableFilters);
-    //typechart ---> RAWAD
-    // await fetch("/api/status/typePieChartFilter", {
-    //   method: "POST",
-    //   body: JSON.stringify({
-    //     filterTypePie,
-    //     CurrentstartDate,
-    //     CurrentEndtDate,
-    //   }),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     let { success, error, info } = data;
-    //     if (success) {
-    //       setBarChart(info);
-    //     } else {
-    //       alert(error);
-    //     }
-    //   });
-    // // fieldpiechart
-    // await fetch("/api/status/fieldPieChart", {
-    //   method: "POST",
-    //   body: JSON.stringify({
-    //     filterFieldPie,
-    //     CurrentstartDate,
-    //     CurrentEndtDate,
-    //   }),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     let { success, error, info } = data;
-    //     if (success) {
-    //       setBarChart(info);
-    //     } else {
-    //       alert(error);
-    //     }
-    //   });
-    // //first barchart
-    // await fetch("/api/status/filterStackedChart", {
-    //   method: "POST",
-    //   body: JSON.stringify({
-    //     label: "daily",
-    //     datefrom: CurrentstartDate,
-    //     dateTo: CurrentEndtDate,
-    //   }),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     let { success, error, info } = data;
-    //     if (success) {
-    //       // setStackedChart(info);
-    //     } else {
-    //       alert(error);
-    //     }
-    //   });
   };
 
   const handleSelect = (filter, name) => {
@@ -364,13 +283,24 @@ const StatusPage = (props) => {
         }
       });
   };
-
-  // const handelTableFilterClick = () => {
-  //   const newFilters =
-  //     filters[0].value === "Update" ? [...filters] : [{ ...filters[0] }];
-
-  //   //fetch
-  // };
+  const handleSegmentClick = (date, status) => {
+    fetch("/api/status/segmentData", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ date, status }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        let { success, error, info } = data;
+        if (success) {
+          setOpenTasks(info);
+        } else {
+          alert(error);
+        }
+      });
+  };
 
   return (
     <div>
@@ -378,7 +308,7 @@ const StatusPage = (props) => {
     <div className="statusPageContainer">
      
       <div className="statusPage__dashboard">
-        <DashBoard cardsContent={cardsContent} />
+        <DailyAlerts cardsContent={cardsContent} />
       </div>
       <div className="statusPage__charts">
         <div className="statusPage__barChart">
@@ -401,15 +331,17 @@ const StatusPage = (props) => {
               isDisabled={!startDate || !endDate}
             />
           </div>
-          {isEmpty(stackedChart) && (
+          {stackedChart.length === 0 && (
             <div className="statupPage__circularProgress">
-              <CircularProgress disableShrink color="primary" />
+              <CircularProgress disableShrink />
             </div>
           )}
-          <StackedChart
-            data={stackedChart}
-            onDataSelected={onStachChartDataSelect}
-          />
+          {stackedChart.length != 0 && (
+            <StackedChart
+              data={stackedChart}
+              onDataSelected={handleSegmentClick}
+            />
+          )}
         </div>
 
         <div className="statusPage__pieCharts">
