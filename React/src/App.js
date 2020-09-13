@@ -11,7 +11,7 @@ import ChangePassword from "./view/pages/Admin/components/ChangePassword/ChangeP
 import KeyPassword from "./view/pages/Admin/components/KeyPassword/KeyPassword";
 import UserList from "./view/pages/Admin/components/usersList/UserList";
 import Audit from "./view/pages/Admin/components/Audit/Audit";
-
+import NewTask from "./view/pages/Status/components/NewTask/NewTask"
 import ModificationByField from "./view/pages/Analytics/components/ModificationByField/ModificationByField";
 import DeletedJiraTickets from "./view/pages/Analytics/components/DeletedJiraTickets/DeletedJiraTickets";
 import ChangesInJiraTickets from "./view/pages/Analytics/components/ChangesInJiraTickets/ChangesInJiraTickets";
@@ -75,7 +75,9 @@ function App() {
             <Route path="/analysis">
             <ModificationByField />
             </Route>
-
+            <Route path="/NewTask">
+              <NewTask />
+            </Route>
             <Route path="/ModificationByField">
               <ModificationByField />
             </Route>
