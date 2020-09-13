@@ -1,34 +1,36 @@
 .MainTable{
   width: 100%;
   display: table;
-  
+  margin-top: .5rem; 
+  margin-bottom: 5vh;
+  box-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.4);
   }
+
 .ModificationByFieldTable__Caption{
   display: table-caption;
 text-align: center;
-font-size: 30px;
+font-size: 20px;
 font-weight: bold;
 
 }
 .MainTable__Header{
   display: table-header-group;
-  background-color: gray;
+  background-color: #EEEEEE;
   font-weight: 300;
   font-size:10px;
-
   
 }
 
-.MainTable__Cell{
-
+.MainTable__Cell {
 display: table-cell;
-padding: 3px;
+padding: .3rem;
+padding-top: .5rem;
 text-align: center;
 color: white;
 font-weight: bold;
 /* background-color: #1C4E80; */
 /* background-color: #1F3F49; */
-background-color: #20283E;
+background-color: #253666;
 border: grey solid 1px;
 
 font-size: 15px;
@@ -45,10 +47,11 @@ font-size: 15px;
 }
 
 .MainTable__Body__Cell{
-  
-  border: grey solid 1px;
+  background-color: white;
+  border: 1px solid #C8C9C7;
+  padding: .2rem;
   text-align: justify;
   display: table-cell;
-  font-size: 15px;
+  font-size: 16px;
 }
 

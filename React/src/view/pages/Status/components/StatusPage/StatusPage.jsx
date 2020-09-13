@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { confirmAlert } from "react-confirm-alert";
+import AddTask from "../../img/add.png";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import Table from "../Table/Table.jsx";
 import StackedChart from "../Chart/StackedChart";
@@ -14,13 +15,23 @@ import {
   initialPieChartsFilters,
 } from "../../../../../service/statusService";
 import "./StatusPage.css";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+  Link,
+  useLocation,
+  useHistory,
+} from "react-router-dom";
 
 const timeLabelOptions = [
   { value: "daily", label: "Daily" },
   { value: "weekly", label: "Weekly" },
   { value: "monthly", label: "Monthly" },
 ];
-const StatusPage = (props) => {
+const StatusPage = () => {
+  let history = useHistory();
   const [cardsContent, setCardsContent] = useState([]);
   const [openTasks, setOpenTasks] = useState([]);
   const [stackedChart, setStackedChart] = useState([]);
@@ -187,7 +198,8 @@ const StatusPage = (props) => {
       });
   }, []);
 
-  const handleDoneClick = async (jiraId) => {
+  const handleDoneClick = async (jiraId, isDone) => {
+    console.log(isDone);
     confirmAlert({
       title: "Confirm to done",
       message: "Are you sure to go this task to done?",
@@ -203,7 +215,7 @@ const StatusPage = (props) => {
               setOpenTasks(result);
               fetch("/api/status/updateTasks", {
                 method: "POST",
-                body: JSON.stringify({ jiraId, userId }),
+                body: JSON.stringify({ jiraId, userId, isDone }),
                 headers: {
                   "Content-Type": "application/json",
                 },
@@ -301,80 +313,102 @@ const StatusPage = (props) => {
       });
   };
 
-  return (
-    <div className="statusPageContainer">
-      <div className="statusPage__dashboard">
-        <DailyAlerts cardsContent={cardsContent} />
-      </div>
-      <div className="statusPage__charts">
-        <div className="statusPage__barChart">
-          <div className="statusPage__barChart__filters">
-            <DatePicker
-              onDateClick={handleDateClick}
-              name="startDate"
-              label="From:"
-            />
-            <DatePicker
-              onDateClick={handleDateClick}
-              name="endDate"
-              label="To:"
-            />
-            <Select
-              options={timeLabelOptions}
-              onChange={(filter) => setTimeLabel(filter)}
-              className="filterSelect"
-              placeholder="Time Label"
-              isDisabled={!startDate || !endDate}
-            />
-          </div>
-          {stackedChart.length === 0 && (
-            <div className="statupPage__circularProgress">
-              <CircularProgress disableShrink />
-            </div>
-          )}
-          {stackedChart.length != 0 && (
-            <StackedChart
-              data={stackedChart}
-              onDataSelected={handleSegmentClick}
-            />
-          )}
-        </div>
+  const handleAddTaskClick = () => {
+    history.push("/NewTask");
+  };
 
-        <div className="statusPage__pieCharts">
-          <div className="statusPage__pieChart">
-            <Select
-              options={modificationTypeOptions}
-              onChange={(filter, name) =>
-                handlePieChartsFilters(filter, "pieChartModificationType")
-              }
-              className="filterSelect filterSelect-pie"
-              placeholder="Type"
-            />
-            <PieChart dataPieChart={typePieChart} name="pie1" />
+  return (
+    <div>
+      <div className="status__header">Status</div>
+      <div className="statusPageContainer">
+        <div className="statusPage__dashboard">
+          <h3>Daily Alerts</h3>
+          <DailyAlerts cardsContent={cardsContent} />
+        </div>
+        <div className="statusPage__AddNewTask">
+          <h3>New Task</h3>
+          <img
+            src={AddTask}
+            alt="AddTask"
+            onClick={handleAddTaskClick}
+            id="NewTaskLogo"
+          />
+        </div>
+        <h3>Task History</h3>
+        <div className="statusPage__charts">
+          <div className="statusPage__barChart">
+            <div className="statusPage__barChart__filters">
+              <DatePicker
+                onDateClick={handleDateClick}
+                name="startDate"
+                label="From:"
+              />
+              <DatePicker
+                onDateClick={handleDateClick}
+                name="endDate"
+                label="To:"
+              />
+              <Select
+                options={timeLabelOptions}
+                onChange={(filter) => setTimeLabel(filter)}
+                className="filterSelect"
+                placeholder="Time Label"
+                isDisabled={!startDate || !endDate}
+              />
+            </div>
+            {stackedChart.length === 0 && (
+              <div className="statupPage__circularProgress">
+                <CircularProgress disableShrink />
+              </div>
+            )}
+            {stackedChart.length != 0 && (
+              <StackedChart
+                data={stackedChart}
+                onDataSelected={handleSegmentClick}
+              />
+            )}
           </div>
-          <div className="statusPage__pieChart">
-            <Select
-              options={modificationNamePieOptions}
-              onChange={(filter, name) =>
-                handlePieChartsFilters(filter, "pieChartModificationField")
-              }
-              className="filterSelect filterSelect-pie"
-              placeholder="Field"
-            />
-            <PieChart dataPieChart={fieldPieChart} name="pie2" />
+
+          <div className="statusPage__pieCharts">
+            <div className="statusPage__pieChart">
+              <Select
+                options={modificationTypeOptions}
+                onChange={(filter, name) =>
+                  handlePieChartsFilters(filter, "pieChartModificationType")
+                }
+                className="filterSelect filterSelect-pie"
+                placeholder="Type"
+              />
+              <PieChart dataPieChart={typePieChart} name="pie1" />
+            </div>
+            <div className="statusPage__pieChart">
+              <Select
+                options={modificationNamePieOptions}
+                onChange={(filter, name) =>
+                  handlePieChartsFilters(filter, "pieChartModificationField")
+                }
+                className="filterSelect filterSelect-pie"
+                placeholder="Field"
+              />
+              <PieChart dataPieChart={fieldPieChart} name="pie2" />
+            </div>
           </div>
         </div>
-      </div>
-      <div className="statusPage__table">
-        <Table
-          modificationFieldValueOptions={modificationFieldValueOptions}
-          modificationFieldOptions={modificationFieldOptions}
-          modificationTypeOptions={modificationTypeOptions}
-          openTasks={openTasks}
-          onDoneClick={handleDoneClick}
-          onSelect={handleSelect}
-          tableFilters={tableFilters}
-        />
+        <div>
+          <h3>Tasks statistics</h3>
+          {/* <StackedChart/> */}
+        </div>
+        <div className="statusPage__table">
+          <Table
+            modificationFieldValueOptions={modificationFieldValueOptions}
+            modificationFieldOptions={modificationFieldOptions}
+            modificationTypeOptions={modificationTypeOptions}
+            openTasks={openTasks}
+            onDoneClick={handleDoneClick}
+            onSelect={handleSelect}
+            tableFilters={tableFilters}
+          />
+        </div>
       </div>
     </div>
   );

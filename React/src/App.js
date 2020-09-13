@@ -12,7 +12,7 @@ import ChangePassword from "./view/pages/Admin/components/ChangePassword/ChangeP
 import KeyPassword from "./view/pages/Admin/components/KeyPassword/KeyPassword";
 import UserList from "./view/pages/Admin/components/usersList/UserList";
 import Audit from "./view/pages/Admin/components/Audit/Audit";
-
+import NewTask from "./view/pages/Status/components/NewTask/NewTask"
 import ModificationByField from "./view/pages/Analytics/components/ModificationByField/ModificationByField";
 import DeletedJiraTickets from "./view/pages/Analytics/components/DeletedJiraTickets/DeletedJiraTickets";
 import ChangesInJiraTickets from "./view/pages/Analytics/components/ChangesInJiraTickets/ChangesInJiraTickets";
@@ -28,6 +28,7 @@ import {
   Redirect,
   Link,
   useLocation,
+  useParams
 } from "react-router-dom";
 
 function App() {
@@ -51,18 +52,19 @@ function App() {
             <Route exact={true} path="/">
               <Login />
             </Route>
-            <Route path="/changePassword">
-              <ChangePassword />
-            </Route>
+          
             <Route path="/register"></Route>
             <Route path="/forgotPassword">
               <ForgetPassword />
             </Route>
-            <Route path="/keyPassword">
-              <KeyPassword />
-            </Route>
+           
+
+            <Route path="/KeyPassword/:email" children={<KeyPassword  />} />
+
+              <Route path="/ChangePassword/:email" children={<ChangePassword  />} />
+
+
             <Route path="/Admin">
-              <h1>Admin</h1>
               <UserList />
             </Route>
             <Route path="/Audit">
@@ -72,9 +74,11 @@ function App() {
               <StatusPage />
             </Route>
             <Route path="/analysis">
-              <MainPage />
+            <ModificationByField />
             </Route>
-
+            <Route path="/NewTask">
+              <NewTask />
+            </Route>
             <Route path="/ModificationByField">
               <ModificationByField />
             </Route>

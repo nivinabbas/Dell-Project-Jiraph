@@ -60,3 +60,7 @@
   text-align: center;
   margin-top: 2rem;
 }
+#NewTaskLogo {
+  cursor: pointer;
+  margin: 1%;
+}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import Select from "react-select";
 import "./style.css";
 
@@ -15,33 +15,42 @@ export default function TasksTable({
     return tableFilters[0].value !== "Update" ? true : false;
   };
 
+  /* Select inputs refs */
+  const modField = useRef("");
+  const modValue = useRef("");
+
   return (
     <div className="open-tasks">
-      <div className="open-tasks-title">
-        <h3> Open Tasks </h3>
-      </div>
+      <div className="open-tasks-title">OPEN TASKS</div>
       <div className="container__filterSelect">
         <Select
           options={modificationTypeOptions}
-          className="filterSelect"
+          className="filterSelectB"
           onChange={(filter, name) => onSelect(filter, "modificationType")}
           placeholder="Type"
+          onInputChange={() => {
+            modField.current.state.value = "";
+            modValue.current.state.value = "";
+          }}
         />
         <Select
           options={modificationFieldOptions}
-          className="filterSelect"
+          className="filterSelectB"
           onChange={(filterObj, name) =>
             onSelect(filterObj, "modificationField")
           }
           isDisabled={disableSelect()}
           placeholder="Field"
+          ref={modField}
+          onInputChange={() => (modValue.current.state.value = "")}
         />
         <Select
           options={modificationFieldValueOptions}
-          className="filterSelect"
+          className="filterSelectB"
           onChange={(filter, name) => onSelect(filter, "modificationValue")}
           isDisabled={disableSelect()}
           placeholder="Value"
+          ref={modValue}
         />
       </div>
       <div className="open-tasks-table">
@@ -54,7 +63,7 @@ export default function TasksTable({
               <th scope="col"> New Val </th> <th scope="col"> Done </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="body">
             {openTasks.map((task, index) => (
               <tr key={index}>
                 <th scope="row"> {++index} </th>
@@ -76,11 +85,9 @@ export default function TasksTable({
                 <td>
                   <input
                     type="checkbox"
-                    onClick={() => onDoneClick(task._id)}
+                    onClick={() => onDoneClick(task._id, task.taskItem.isDone)}
                     key={task._id}
                     checked={task.taskItem.isDone}
-                    disabled={task.taskItem.isDone}
-                    onChange={(e) => {}}
                   />
                 </td>
               </tr>
