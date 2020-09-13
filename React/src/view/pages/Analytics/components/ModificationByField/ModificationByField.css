@@ -1,7 +1,7 @@
 .ModificationByField__Wrapper {
   display: grid;
   grid-template-columns: .8vw 84vw auto;
-  grid-template-rows: 10vh 8vh 5vh auto;
+  grid-template-rows: 10vh 11vh 5vh auto;
   grid-template-areas:
     "header header header "
     ". filterButtons ."
@@ -28,20 +28,39 @@
 .ModificationByField__Chart {
   grid-area: chart;
 }
-
-.ModificationByField__Filters {
-  margin-top: 1rem;
+.ModificationByField__Filters__wrapper {
+  
   grid-area: filterButtons;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  height: 7rem;
   background-color: #eeeeee;
   align-items: center;
   text-align: center;
-  height: 5rem;
   padding-left: 1rem;
   padding-right: 1rem;
   border-radius: 3px;
-  box-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.2);
+  margin-top: 1rem;
+  padding-bottom: 1rem;
+  padding-top: 1rem;
+}
+
+.ModificationByField__Filters__headers{
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+  color: #0076ce;
+  text-shadow: 0 .1rem .3rem#00447c28;
+}
+
+.filter__header__item{
+  justify-content: space-between;
+  width: 12rem;
+  /* background-color: red; */
+}
+
+.ModificationByField__Filters__fields {
+  display: flex;
+  justify-content: space-between;
 }
 
 

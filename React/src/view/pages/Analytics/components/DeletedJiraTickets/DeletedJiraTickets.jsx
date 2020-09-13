@@ -158,10 +158,18 @@ function DeletedJiraTickets() {
       <div className="DeletedJiraTickets__Chart"> {UiObjs.length > 0 && <Chart UiObjs={UiObjs} />}</div>
       <div className="DeletedJiraTickets__Title">Deleted Jira Tickets</div>
 
-      {/* Select Filters */}
+      <div className="DeletedJiraTickets__Filters__wrapper">
+        <div className="DeletedJiraTickets__Filters__headers">
+          <p className="filter__header__item">Field Name</p>
+          <p className="filter__header__item">Value</p>
+          <p className="filter__header__item">QA Representative</p>
+          <p className="filter__header__item">Start date</p>
+          <p className="filter__header__item">End date</p>
+          <p className="filter__header__item">Dates aggregation</p>
+        </div>
 
-      <form className="DeletedJiraTickets__Filters">
-        {/* select */}
+      <form className="DeletedJiraTickets__Filters__fields">
+        
         <Select        
           name="priority"
           isMulti
@@ -213,6 +221,7 @@ function DeletedJiraTickets() {
         />
 
       </form>
+    </div>
     </div>
   )
 }

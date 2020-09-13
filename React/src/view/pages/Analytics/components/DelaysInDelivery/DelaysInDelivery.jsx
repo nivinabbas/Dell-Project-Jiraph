@@ -133,8 +133,18 @@ function DelaysInDelivery() {
       <div className="DelaysInDelivery__Title">Delays in Delivery</div>
 
       {/* Select Filters */}
+      
+      <div className="DelaysInDelivery__Filters__wrapper">
+        <div className="DelaysInDelivery__Filters__headers">
+          <p className="filter__header__item">Fix Version</p>
+          <p className="filter__header__item">Jira Type</p>
+          <p className="filter__header__item">QA Representative</p>
+          <p className="filter__header__item">Start date</p>
+          <p className="filter__header__item">End date</p>
+          <p className="filter__header__item">Dates aggregation</p>
+        </div>
 
-      <form className="DelaysInDelivery__Filters">
+      <form className="DelaysInDelivery__Filters__fields">
 
         <Select
           name="fixVersion"
@@ -186,6 +196,7 @@ function DelaysInDelivery() {
         />
 
       </form>
+    </div>
     </div>
   )
 

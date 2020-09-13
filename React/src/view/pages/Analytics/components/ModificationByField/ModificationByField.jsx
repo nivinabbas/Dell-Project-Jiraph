@@ -156,9 +156,16 @@ function ModificationByField(props) {
       <div className="ModificationByField__Chart"> {UiObjs.length > 0 && <Chart UiObjs={UiObjs} />}</div>
       <div className="ModificationByField__MainTitle">Modification By Field</div>
 
-      <div className="ModificationByField__Filters">
-
-
+      <div className="ModificationByField__Filters__wrapper">
+        <div className="ModificationByField__Filters__headers">
+          <p className="filter__header__item">Priority</p>
+          <p className="filter__header__item">Functional Test</p>
+          <p className="filter__header__item">QA Representative</p>
+          <p className="filter__header__item">Start date</p>
+          <p className="filter__header__item">End date</p>
+          <p className="filter__header__item">Dates aggregation</p>
+        </div>
+        <div className="ModificationByField__Filters__fields">
         <Select
           name="fieldName"
           onInputChange={()=> {valueInput.current.state.value="";qaInput.current.state.value=""}}
@@ -206,7 +213,7 @@ function ModificationByField(props) {
           placeholder="Label"
           className="ModificationByField__Filter"
           options={labelOptions} />
-
+        </div>
       </div>
 
 
