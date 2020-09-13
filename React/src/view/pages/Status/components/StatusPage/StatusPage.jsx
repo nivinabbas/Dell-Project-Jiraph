@@ -187,7 +187,8 @@ const StatusPage = (props) => {
       });
   }, []);
 
-  const handleDoneClick = async (jiraId) => {
+  const handleDoneClick = async (jiraId, isDone) => {
+    console.log(isDone);
     confirmAlert({
       title: "Confirm to done",
       message: "Are you sure to go this task to done?",
@@ -203,7 +204,7 @@ const StatusPage = (props) => {
               setOpenTasks(result);
               fetch("/api/status/updateTasks", {
                 method: "POST",
-                body: JSON.stringify({ jiraId, userId }),
+                body: JSON.stringify({ jiraId, userId, isDone }),
                 headers: {
                   "Content-Type": "application/json",
                 },
