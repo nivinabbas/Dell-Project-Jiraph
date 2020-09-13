@@ -201,8 +201,10 @@ const StatusPage = () => {
   const handleDoneClick = async (jiraId, isDone) => {
     console.log(isDone);
     confirmAlert({
-      title: "Confirm to done",
-      message: "Are you sure to go this task to done?",
+      title: `Confirm to ${isDone ? "Not Done" : "Done"} `,
+      message: `Are you sure to modify this task to ${
+        isDone ? "Not Done" : "Done"
+      }?`,
       buttons: [
         {
           label: "Yes",
