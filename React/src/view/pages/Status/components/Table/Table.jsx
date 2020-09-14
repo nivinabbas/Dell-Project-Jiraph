@@ -1,6 +1,7 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import Select from "react-select";
 import "./style.css";
+import TablePagination from "@material-ui/core/TablePagination";
 
 export default function TasksTable({
   openTasks,
@@ -15,9 +16,20 @@ export default function TasksTable({
     return tableFilters[0].value !== "Update" ? true : false;
   };
 
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   /* Select inputs refs */
   const modField = useRef("");
   const modValue = useRef("");
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   return (
     <div className="open-tasks">
@@ -55,6 +67,7 @@ export default function TasksTable({
           placeholder="Value"
           ref={modValue}
         />
+        <button>Update</button>
       </div>
       <div className="open-tasks-table">
         <table className="container">
@@ -97,6 +110,15 @@ export default function TasksTable({
             ))}
           </tbody>
         </table>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={10}
+          rowsPerPage={1}
+          page={page}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+        />
       </div>
     </div>
   );
