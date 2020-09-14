@@ -12,12 +12,13 @@ const { obj } = require("../schemas/UserSchema");
 
 
 router.post("/getStatistics", async function (req, res) {
-    console.log("getStatistics")
+    console.log("aa")
     let {
         startDate,
         endDate,
     } = req.body; // 4 , 7,10 
     let formatLabel = "%Y-%m-%d";
+    let NewArray = [];
     if (startDate === "" && endDate === "") {
         startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
         endDate = new Date();
@@ -32,10 +33,10 @@ router.post("/getStatistics", async function (req, res) {
         endDate = new Date();
     }
 
-    let completedTaskstest = await TaskModel.aggregate([
+    let completedTasks22 = await TaskModel.aggregate([
         {
             "$match": {
-                "taskItem.updatedTime": {
+                "diffItem.updatedTime": {
                     $gte: startDate,
                     $lte: endDate,
                 },
@@ -44,7 +45,7 @@ router.post("/getStatistics", async function (req, res) {
         },
         {
             $project: {
-                DifferenceInDays: { $floor: { $divide: [{ $subtract: ["$taskItem.updatedTime", "$taskItem.createdTime"] }, 86400000] } }
+                DifferenceInDays: { $round: { $divide: [{ $subtract: ["$taskItem.updatedTime", "$taskItem.createdTime"] }, 86400000] } }
             }
         }
         , {
@@ -53,99 +54,23 @@ router.post("/getStatistics", async function (req, res) {
             },
         }
     ]);
-    let completedTasks = await TaskModel.aggregate([
-        {
-            "$match": {
-                "taskItem.updatedTime": {
-                    $gte: startDate,
-                    $lte: endDate,
-                }, "taskItem.createdTime": {
-                    $gte: startDate,
-                    $lte: endDate,
-                },
-                "taskItem.isDone": true,
-             }
-        },
-        {
-            $group: {
-                _id: {
-                    "diffdate":   { $floor: {$divide: [{ $subtract: ["$taskItem.updatedTime", "$taskItem.createdTime"] }, 86400000] } }
-                },
-                tasks: { $push: '$$ROOT' },
-                count: {
-                    $sum: 1,
-                },
-            },
-        },
-    ]);
-    let resultArray = [];
-    completedTasks.forEach(element => {
-        objIndex = resultArray.findIndex((obj => obj.date == element._id));
-        console.log("element ", element.count,"element._id.diffdate ",element._id.diffdate)
-        if( element._id.diffdate>=0){
-        resultArray.push({
-            date: element._id.diffdate,
-            Done: element.count,
-            tasks: element.tasks
-        })}
-        else if( element._id.diffdate>=-1&& element._id.diffdate<0){
-         let   objIndexNew=resultArray.findIndex((obj => obj.date == 0))
-            resultArray[objIndexNew].Done+=element.count;
-            resultArray[objIndexNew].tasks+=element.tasks;
+    let arrayToClint = [];
+    let tasksCount = 0;
+    let avg = 0;
+    completedTasks22.forEach(element => {
+        objIndex = arrayToClint.findIndex((obj => obj.date == element.DifferenceInDays));
+        if (objIndex >= 0) {
+            arrayToClint[objIndex].Done = arrayToClint[objIndex].Done += 1;
+            tasksCount += 1;
+        }
+        else {
+            arrayToClint.push({ date: element.DifferenceInDays, Done: 1 })
+            avg += element.DifferenceInDays;
+            tasksCount += 1;
         }
 
     });
-    console.log("resultArray",resultArray)
-    let numOfDays = 0, numoftakss = 0, avg = 0;
-    resultArray.forEach(element => {
-        numOfDays += element.date
-        numoftakss += element.Done
-    });
-    avg = (numoftakss / numOfDays);
-    resultArray.push({
-        avg: avg.toFixed(2)
-    })
-    function compare(a, b) {
-        if (a.date < b.date) {
-            return -1;
-        }
-        if (a.date > b.date) {
-            return 1;
-        }
-        return 0;
-    }
-
-    resultArray.sort(compare);
-
-    res.send({
-        success: true,
-        error: null,
-        info: resultArray
-    });
-});
-
-
-
-
-router.post("/getStatisticsNotDone", async function (req, res) {
-    console.log("aa")
-    let {
-        startDate,
-        endDate,
-    } = req.body; // 4 , 7,10 
-    if (startDate === "" && endDate === "") {
-        startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
-        endDate = new Date();
-    } else if (startDate != "" && endDate != "") {
-        startDate = new Date(startDate + "T00:00:00.00Z");
-        endDate = new Date(endDate + "T23:59:59.0099Z");
-    } else if (startDate != "" && endDate === "") {
-        startDate = new Date(startDate + "T00:00:00.00Z");
-        endDate = new Date();
-    } else {
-        startDate = new Date(0);
-        endDate = new Date();
-    }
+    console.log(arrayToClint)
     let noTcompletedTasks = await TaskModel.aggregate([
         {
             "$match": {
@@ -156,54 +81,102 @@ router.post("/getStatisticsNotDone", async function (req, res) {
                 "taskItem.isDone": false
             }
         },
+
+        {
+            $project: {
+                DifferenceInDays: { $round: { $divide: [{ $subtract: [new Date(), "$taskItem.createdTime"] }, 86400000] } }
+            }
+        }
+        , {
+            $sort: {
+                DifferenceInDays: 1,
+            },
+        }
+    ]);
+    let arrayToClintNotCompleted = [];
+    noTcompletedTasks.forEach(element => {
+        objIndex = arrayToClintNotCompleted.findIndex((obj => obj.day == element.DifferenceInDays));
+        if (objIndex >= 0) {
+            arrayToClintNotCompleted[objIndex].cunt = arrayToClintNotCompleted[objIndex].cunt + 1;
+        }
+        else {
+            arrayToClintNotCompleted.push({ day: element.DifferenceInDays, cunt: 1 })
+        }
+
+    });
+ 
+ 
+
+
+    let completedTasks = await TaskModel.aggregate([
+        {
+            "$match": {
+                "diffItem.updatedTime": {
+                    $gte: startDate,
+                    $lte: endDate,
+                },"taskItem.createdTime": {
+                    $gte: startDate,
+                    $lte: endDate,
+                },
+                "taskItem.isDone": true
+            }
+        },
         {
             $group: {
                 _id: {
-                    "diffdate": { $round: { $divide: [{ $subtract: [new Date(), "$taskItem.createdTime"] }, 86400000] } }
+                    "diffdate": { $round: { $divide: [{ $subtract: ["$taskItem.updatedTime", "$taskItem.createdTime"] }, 86400000] } }
                 },
                 tasks: { $push: '$$ROOT' },
                 count: {
                     $sum: 1,
                 },
             },
+
         },
+
+
+
     ]);
     let resultArray = [];
-    noTcompletedTasks.forEach(element => {
-        objIndex = resultArray.findIndex((obj => obj.date == element._id));
-        console.log("element ", element.count)
+    completedTasks.forEach(element => {
+         objIndex = resultArray.findIndex((obj => obj.date == element._id));
+         console.log("element ", element.count)
         resultArray.push({
             date: element._id.diffdate,
             Done: element.count,
-            tasks: element.tasks
+            tasks: element.tasks,
+            avg:(tasksCount/avg).toFixed(2)
         })
 
     });
-    let numOfDays = 0, numoftakss = 0, avg = 0;
+    let numOfDays=0,numoftakss=0;
     resultArray.forEach(element => {
-        numOfDays += element.date
-        numoftakss += element.Done
+        numOfDays+=element.date
+        numoftakss+=element.Done
     });
-    avg = (numoftakss / numOfDays);
-    resultArray.push({
-        avg: avg.toFixed(2)
-    })
-    function compare(a, b) {
-        if (a.date < b.date) {
-            return -1;
+    avg=(numoftakss/numOfDays);
+    resultArray[0].avg=avg;
+    // resultArray.push({
+    //     avg:(tasksCount/avg).toFixed(2)})
+    function compare( a, b ) {
+        if ( a.date < b.date ){
+          return -1;
         }
-        if (a.date > b.date) {
-            return 1;
+        if ( a.date > b.date ){
+          return 1;
         }
         return 0;
-    }
-    resultArray.sort(compare);
+      }
+      
+      resultArray.sort( compare );
+
     res.send({
         success: true,
         error: null,
         info: resultArray
     });
 });
+
 
 
 
