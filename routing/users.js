@@ -13,8 +13,13 @@ const AuditModel = mongoose.model("AuditModel", AuditSchema);
 var nodemailer = require('nodemailer')
 var validator = require("email-validator");
 const { find } = require("../schemas/TaskSchema");
+const e = require("express");
+
+var secret = require("../index")
+
+console.log(secret)
+
 const saltRounds = 10
- 
 
 var transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -24,27 +29,8 @@ var transporter = nodemailer.createTransport({
     }
 });
 
-AuditModel.insertMany(
-    {
-        employeeName: 'rami',
-        employeeEmail: 'rami@gmail.com',
-        employeeRole: 'Admin',
-        change: 'Login',
-        timeChange: '1'
-    }
-)
 
 
-const u = new UserModel({
-    userInfo: {
-        employeeName: "yousef",
-        employeeEmail: "yousef@gmail.com",
-        employeeRole: "admin",
-        password: "111"
-    }
-})
-
-//app.get/post/put/delete => router.get/post/put/delete
 router.post('/login', (req, res) => {
     const { email, password } = req.body;
     if (validator.validate(email)) {
@@ -82,8 +68,9 @@ router.get('/getUsersList', (req, res) => {
 
             res.send({ success: true, error: null, info: { table } })
         }
-        else {res.send({ success: false, error: "Not Found", info: null })}
-
+        else{
+            res.send({ success: false, error: "No Users found", info: null })
+        }
     })
 })
 
@@ -112,7 +99,7 @@ router.put('/deleteUser', (req, res) => {
             if (docs) {
                 docs.active = false;
                 await docs.save();
-                await UserModel.find({ }).then(users => {
+                await UserModel.find({ active:true }).then(users => {
                     if (users.length > 0) {
 
                         for (let index = 0; index < users.length; index++) {
@@ -191,7 +178,7 @@ router.post('/createUser', (req, res) => {
                 const hashpassword = await bcrypt.hash(password,salt)
                 await UserModel.insertMany({ userInfo: { employeeName: name, employeeEmail: email, employeeRole: role, password: hashpassword }, active: true })
 
-                await UserModel.find({  }).then(users => {
+                await UserModel.find({ active:true }).then(users => {
                     if (users.length > 0) {
 
                         for (let index = 0; index < users.length; index++) {
