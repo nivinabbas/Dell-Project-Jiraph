@@ -18,7 +18,7 @@ router.post("/getStatistics", async function (req, res) {
         endDate,
     } = req.body; // 4 , 7,10 
     let formatLabel = "%Y-%m-%d";
-    let NewArray = [];
+ 
     if (startDate === "" && endDate === "") {
         startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
         endDate = new Date();
@@ -33,7 +33,7 @@ router.post("/getStatistics", async function (req, res) {
         endDate = new Date();
     }
 
-    let completedTasks = await TaskModel.aggregate([
+    let completedTaskstest = await TaskModel.aggregate([
         {
             "$match": {
                 "diffItem.updatedTime": {
@@ -54,72 +54,11 @@ router.post("/getStatistics", async function (req, res) {
             },
         }
     ]);
-    let arrayToClint = [];
-    let tasksCount = 0;
-    let avg = 0;
-    completedTasks.forEach(element => {
-        objIndex = arrayToClint.findIndex((obj => obj.date == element.DifferenceInDays));
-        if (objIndex >= 0) {
-            arrayToClint[objIndex].Done = arrayToClint[objIndex].Done += 1;
-            tasksCount += 1;
-        }
-        else {
-            arrayToClint.push({ date: element.DifferenceInDays, Done: 1 })
-            avg += element.DifferenceInDays;
-            tasksCount += 1;
-        }
+   
+  
+   
 
-    });
-    console.log(arrayToClint)
-    let noTcompletedTasks = await TaskModel.aggregate([
-        {
-            "$match": {
-                "diffItem.updatedTime": {
-                    $gte: startDate,
-                    $lte: endDate,
-                },
-                "taskItem.isDone": false
-            }
-        },
-
-        {
-            $project: {
-                DifferenceInDays: { $round: { $divide: [{ $subtract: [new Date(), "$taskItem.createdTime"] }, 86400000] } }
-            }
-        }
-        , {
-            $sort: {
-                DifferenceInDays: 1,
-            },
-        }
-    ]);
-    let arrayToClintNotCompleted = [];
-    noTcompletedTasks.forEach(element => {
-        objIndex = arrayToClintNotCompleted.findIndex((obj => obj.day == element.DifferenceInDays));
-        if (objIndex >= 0) {
-            arrayToClintNotCompleted[objIndex].cunt = arrayToClintNotCompleted[objIndex].cunt + 1;
-        }
-        else {
-            arrayToClintNotCompleted.push({ day: element.DifferenceInDays, cunt: 1 })
-        }
-
-    });
-    let result = [];
-
-    //   result.push({
-    //     completed: arrayToClint,
-    //     notCompleted: arrayToClintNotCompleted,
-    //     avgCompleted: (tasksCount/avg).toFixed(2),
-    //   });
-    //  result.push({
-    //     notDone:arrayToClintNotCompleted})
-    //  result.push({
-    //     arrayToClint})
-    // result.push({
-    //     avg:(tasksCount/avg).toFixed(2)})
-
-
-    let completedTasks123 = await TaskModel.aggregate([
+    let completedTasks = await TaskModel.aggregate([
         {
             "$match": {
                 "diffItem.updatedTime": {
@@ -146,9 +85,9 @@ router.post("/getStatistics", async function (req, res) {
 
     ]);
     let resultArray = [];
-    completedTasks123.forEach(element => {
-        objIndex = resultArray.findIndex((obj => obj.date == element._id));
-        console.log("element ", element.count)
+    completedTasks.forEach(element => {
+         objIndex = resultArray.findIndex((obj => obj.date == element._id));
+         console.log("element ", element.count)
         resultArray.push({
             date: element._id.diffdate,
             Done: element.count,
@@ -156,7 +95,14 @@ router.post("/getStatistics", async function (req, res) {
         })
 
     });
-
+    let numOfDays=0,numoftakss=0,avg=0;
+    resultArray.forEach(element => {
+        numOfDays+=element.date
+        numoftakss+=element.Done
+    });
+    avg=(numoftakss/numOfDays);
+     resultArray.push({
+        avg:avg.toFixed(2)})
     function compare( a, b ) {
         if ( a.date < b.date ){
           return -1;
@@ -175,6 +121,87 @@ router.post("/getStatistics", async function (req, res) {
         info: resultArray
     });
 });
+
+
+
+
+router.post("/getStatisticsNotDone", async function (req, res) {
+    console.log("aa")
+    let {
+        startDate,
+        endDate,
+    } = req.body; // 4 , 7,10 
+      if (startDate === "" && endDate === "") {
+        startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
+        endDate = new Date();
+    } else if (startDate != "" && endDate != "") {
+        startDate = new Date(startDate + "T00:00:00.00Z");
+        endDate = new Date(endDate + "T23:59:59.0099Z");
+    } else if (startDate != "" && endDate === "") {
+        startDate = new Date(startDate + "T00:00:00.00Z");
+        endDate = new Date();
+    } else {
+        startDate = new Date(0);
+        endDate = new Date();
+    }
+    let noTcompletedTasks = await TaskModel.aggregate([
+        {
+            "$match": {
+                "diffItem.updatedTime": {
+                    $gte: startDate,
+                    $lte: endDate,
+                },
+                "taskItem.isDone": false
+            }
+        },
+        {
+            $group: {
+                _id: {
+                    "diffdate": { $round: { $divide: [{ $subtract: [new Date(), "$taskItem.createdTime"] }, 86400000] } }
+                },
+                tasks: { $push: '$$ROOT' },
+                count: {
+                    $sum: 1,
+                },
+            },
+        },
+    ]);
+    let resultArray = [];
+    noTcompletedTasks.forEach(element => {
+         objIndex = resultArray.findIndex((obj => obj.date == element._id));
+         console.log("element ", element.count)
+        resultArray.push({
+            date: element._id.diffdate,
+            Done: element.count,
+            tasks: element.tasks
+        })
+
+    });
+    let numOfDays=0,numoftakss=0,avg=0;
+    resultArray.forEach(element => {
+        numOfDays+=element.date
+        numoftakss+=element.Done
+    });
+    avg=(numoftakss/numOfDays);
+     resultArray.push({
+        avg:avg.toFixed(2)})
+    function compare( a, b ) {
+        if ( a.date < b.date ){
+          return -1;
+        }
+        if ( a.date > b.date ){
+          return 1;
+        }
+        return 0;
+      }
+      resultArray.sort( compare );
+    res.send({
+        success: true,
+        error: null,
+        info: resultArray
+    });
+});
+
 
 
 
