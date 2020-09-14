@@ -145,8 +145,7 @@ router.post("/getStatistics", async function (req, res) {
             date: element._id.diffdate,
             Done: element.count,
             tasks: element.tasks,
-            avg:(tasksCount/avg).toFixed(2)
-        })
+         })
 
     });
     let numOfDays=0,numoftakss=0;
@@ -154,8 +153,9 @@ router.post("/getStatistics", async function (req, res) {
         numOfDays+=element.date
         numoftakss+=element.Done
     });
-    avg=(numoftakss/numOfDays);
-    resultArray[0].avg=avg;
+//    let avg1=(numoftakss/numOfDays);
+//     console.log(avg1,"asd")
+//     resultArray[0].avg=avg1;
     // resultArray.push({
     //     avg:(tasksCount/avg).toFixed(2)})
     function compare( a, b ) {
