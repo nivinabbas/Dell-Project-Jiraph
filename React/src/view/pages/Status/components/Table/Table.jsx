@@ -28,7 +28,7 @@ export default function TasksTable({
           options={modificationTypeOptions}
           className="filterSelectB"
           onChange={(filter, name) => onSelect(filter, "modificationType")}
-          placeholder="Type"
+          placeholder="All"
           onInputChange={() => {
             modField.current.state.value = "";
             modValue.current.state.value = "";

@@ -1,18 +1,23 @@
 import React from "react";
 import "./DatePicker.css";
-
-export default function DatePicker({ onDateClick, name, label }) {
+import { isEmpty } from "../../../../../service/utils";
+import StackedChart from "../Chart/StackedChart";
+export default function DatePicker({ onDateClick, name, label, value }) {
+  console.log("dddddddddddddddddddddddddddddddd", value);
   return (
     <div className="datePicker">
       <label htmlFor={name} className="datePicker__label">
         {label}
       </label>
-      <input
-        type="date"
-        name={name}
-        onChange={(e) => onDateClick(e.currentTarget)}
-        className="datePicker__input"
-      />
+      {!isEmpty(value) && (
+        <input
+          type="date"
+          name={name}
+          onChange={(e) => onDateClick(e.currentTarget)}
+          className="datePicker__input"
+          value={value}
+        />
+      )}
     </div>
   );
 }
