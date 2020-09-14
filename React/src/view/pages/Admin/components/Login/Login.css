@@ -6,7 +6,7 @@
     /* background-color: #C8C9C7; */
     display: grid;
     grid-template-columns: 23vw 41vw auto;
-    grid-template-rows: 10vh 70vh auto;
+    grid-template-rows: 7vh 70vh auto;
     grid-template-areas: 
     "header1 header1 header1"
     ". box ."
@@ -20,7 +20,7 @@
     background-color: white;
     font-family: "Roboto Slab", serif;
     font-size: 26px;
-    padding-top: 3vh;
+    padding-top: 2vh;
 }
 
 
