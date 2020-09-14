@@ -682,29 +682,28 @@ router.post("/stackedChart", async function (req, res) {
       objIndex = ResultWeeks.findIndex((obj => obj.weekID == weeknumber));
       if (objIndex > -1)// 
       {
+ 
         ResultWeeks[objIndex].data = ({
-          "count": ResultWeeks[objIndex].data.count + element.count,
           "done": ResultWeeks[objIndex].data.done + element.done,
           "notDone": ResultWeeks[objIndex].data.notDone + element.notDone
         }
-        )
-      } else {
-        ResultWeeks.push(
+        )         
+       } else {
+         ResultWeeks.push(
           {
             "weekID": weeknumber,
             "DataRange": getDateRangeOfWeek(weeknumber),
             data: {
-              "count": element.count,
               "done": element.done,
               "notDone": element.notDone
             }
           }
         )
-
+ 
+ 
       }
     });
-
-    let resultWeek = [];
+     let resultWeek = [];
     ResultWeeks.forEach(element => {
       resultWeek.push(
         {
@@ -714,8 +713,7 @@ router.post("/stackedChart", async function (req, res) {
         }
       )
     });
-    console.log("stackedChartDone", stackedChartDone)
-    res.send({
+     res.send({
       success: true,
       error: null,
       info: resultWeek,
@@ -927,7 +925,7 @@ router.post("/TypePie", async function (req, res) {
   if (modificationType != "" && modificationType != "All") {
     TypePieOb = await TaskModel.aggregate([{
       $match: {
-        "diffItem.updatedTime": {
+        "taskItem.createdTime": {
           $gte: startDate,
           $lte: endDate,
         },
@@ -938,7 +936,7 @@ router.post("/TypePie", async function (req, res) {
       $group: {
         _id: {
           $dateToString: {
-            date: "$diffItem.updatedTime",
+            date: "$taskItem.createdTime",
             format: formatLabel, //"%Y-%m-%d",
           },
         },
@@ -976,7 +974,7 @@ router.post("/TypePie", async function (req, res) {
   } else {
     TypePieOb = await TaskModel.aggregate([{
       $match: {
-        "diffItem.updatedTime": {
+        "taskItem.createdTime": {
           $gte: startDate,
           $lte: endDate,
         },
@@ -987,7 +985,7 @@ router.post("/TypePie", async function (req, res) {
       $group: {
         _id: {
           $dateToString: {
-            date: "$diffItem.updatedTime",
+            date: "$taskItem.createdTime",
             format: formatLabel, //"%Y-%m-%d",
           },
         },
@@ -1172,7 +1170,7 @@ router.post("/fieldPie", async function (req, res) {
   if (modificationField != "" && modificationField != "All") {
     TypePieOb = await TaskModel.aggregate([{
       $match: {
-        "diffItem.updatedTime": {
+        "taskItem.createdTime": {
           $gte: startDate,
           $lte: endDate,
         },
@@ -1183,7 +1181,7 @@ router.post("/fieldPie", async function (req, res) {
       $group: {
         _id: {
           $dateToString: {
-            date: "$diffItem.updatedTime",
+            date: "$taskItem.createdTime",
             format: formatLabel, //"%Y-%m-%d",
           },
         },
@@ -1221,7 +1219,7 @@ router.post("/fieldPie", async function (req, res) {
   } else {
     TypePieOb = await TaskModel.aggregate([{
       $match: {
-        "diffItem.updatedTime": {
+        "taskItem.createdTime": {
           $gte: startDate,
           $lte: endDate,
         },
@@ -1231,7 +1229,7 @@ router.post("/fieldPie", async function (req, res) {
       $group: {
         _id: {
           $dateToString: {
-            date: "$diffItem.updatedTime",
+            date: "$taskItem.createdTime",
             format: formatLabel, //"%Y-%m-%d",
           },
         },
@@ -1537,13 +1535,13 @@ router.post("/segmentData", async function (req, res) {
     startDate = new Date(startNewDate + "T00:00:00.00Z");
     endDate = new Date(endNewDate + "T23:59:59.0099Z");
   } else {
-     let n = date.indexOf("to");
-    let fromDate = date.substr(0, n-1).split(" ");;
-    let toDate = date.substr(n + 3).split(" ");;
-    console.log("fromDatefromDate", fromDate.length, "  ", fromDate)
-    startDate = new Date(fromDate + "T00:00:00.00Z");
-    endDate = new Date(toDate + "T23:59:59.0099Z");
-    console.log("startDate", startDate, "endDate", endDate);
+    let n = date.indexOf("to");
+    let fromDate = date.substr(0, n - 1).split(" ");
+    let toDate = date.substr(n + 3).split(" ");
+    console.log("fromDatefromDate", fromDate[0].length, "  ", fromDate)
+    startDate = new Date(fromDate[0].split(" ") + "T00:00:00.0000Z");
+    endDate = new Date(toDate[0].split(" ") + "T23:59:59.0099Z");
+    console.log("startDate1546 ", startDate, "endDate", endDate);
   }
 
   if (status === "Done") {
@@ -1551,7 +1549,17 @@ router.post("/segmentData", async function (req, res) {
   } else if (status === "NotDone") {
     status = false;
   }
+
   console.log("startDate", startDate, "endDate", endDate);
+  let stackedChartDone1211111 = await TaskModel.aggregate([{
+    $match: {
+      "taskItem.createdTime": {
+        $gte: new Date("2020-09-14" + "T00:00:00.00Z"),
+        $lte: new Date("2020-09-16" + "T23:59:59.0099Z")
+      }, "taskItem.isDone": status,
+    },
+  }]);
+  console.log("test st ", stackedChartDone1211111.length)
   let stackedChartDone = await TaskModel.aggregate([{
     $match: {
       "taskItem.createdTime": {

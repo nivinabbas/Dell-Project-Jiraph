@@ -151,6 +151,7 @@ const StatusPage = () => {
       .then((res) => res.json())
       .then((data) => {
         let { success, error, info } = data;
+        console.log("type Pie info: ",info)
         if (success) {
           setTypePieChart(info);
         } else {
