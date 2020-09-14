@@ -1,3 +1,15 @@
+.status__header{
+  font-weight: 500;
+text-align: center;
+color: #00447c;
+background-color: white;
+font-family: "Roboto Slab", serif;
+font-size: 26px;
+padding-top: 3vh;
+height: 10vh;
+}
+
+
 .statusPageContainer {
   display: flex;
   flex-direction: column;
@@ -5,14 +17,12 @@
   min-height: 100vh;
 }
 
-.statusPage__dashboard {
-  /* display: flex; */
-}
-
 .statusPage__charts {
   display: flex;
   justify-content: center;
   margin-bottom: 2rem;
+  justify-content: space-between;
+  width: 70%;
 }
 
 .statusPage__barChart {
@@ -23,6 +33,12 @@
   border-radius: 5px;
 }
 
+.filterSelect{
+  color: black;
+  margin-top: 1rem;
+  margin-left: .6rem;
+  margin-right: -.5rem;
+}
 .statusPage__barChart__filters {
   display: flex;
   justify-content: space-around;
@@ -50,7 +66,13 @@
 }
 
 .filterSelect-pie {
-  margin-bottom: 3rem;
+  width: 15rem;
+  margin-left: 2rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 .1rem .3rem rgba(0,0,0,.2);
+  border: none;
+  height: 2rem;
 }
 
 .statusPage__table {
