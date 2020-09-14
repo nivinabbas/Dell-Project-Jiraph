@@ -295,9 +295,6 @@ router.post("/stackedChart", async function (req, res) {
   } else {
     formatLabel = "%Y";
   }
-
-
-
   if (formatLabel != "weekly") {
     if (startDate == "" && endDate == "") {
       //default, label daily
@@ -365,7 +362,141 @@ router.post("/stackedChart", async function (req, res) {
         error: null,
         info: dataFromServer,
       });
-    } else {
+    } else if (startDate != "" && endDate == "") {
+      //default, label daily
+      startDate = new Date(startDate + "T00:00:00.00Z"); //new Date("2020-08-01T00:00:00.00Z");
+      endDate = new Date(dateFormat() + "T23:59:59.59Z");
+      let stackedChartDone = await TaskModel.aggregate([{
+        $match: {
+          "taskItem.createdTime": {
+            $gte: startDate,
+            $lte: endDate,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: {
+              date: "$taskItem.createdTime",
+              format: formatLabel,
+            },
+          },
+          count: {
+            $sum: 1,
+          },
+          done: {
+            $sum: {
+              $cond: [{
+                $eq: ["$taskItem.isDone", true],
+              },
+                1,
+                0,
+              ],
+            },
+          },
+          notDone: {
+            $sum: {
+              $cond: [{
+                $eq: ["$taskItem.isDone", false],
+              },
+                1,
+                0,
+              ],
+            },
+          },
+        },
+      },
+      {
+        $sort: {
+          _id: 1,
+        },
+      },
+      ]);
+      // adding to Done Array
+      stackedChartDone.forEach((element) => {
+        //load data
+        dataFromServer.push({
+          done: element.done,
+          notDone: element.notDone,
+          date: element._id,
+        });
+      });
+
+      res.send({
+        success: true,
+        error: null,
+        info: dataFromServer,
+      });
+    }
+    else if (startDate == "" && endDate != "") {
+      //default, label daily
+      startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
+      endDate = new Date(dateFormat() + "T23:59:59.59Z");
+      let stackedChartDone = await TaskModel.aggregate([{
+        $match: {
+          "taskItem.createdTime": {
+            $gte: startDate,
+            $lte: endDate,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: {
+              date: "$taskItem.createdTime",
+              format: formatLabel,
+            },
+          },
+          count: {
+            $sum: 1,
+          },
+          done: {
+            $sum: {
+              $cond: [{
+                $eq: ["$taskItem.isDone", true],
+              },
+                1,
+                0,
+              ],
+            },
+          },
+          notDone: {
+            $sum: {
+              $cond: [{
+                $eq: ["$taskItem.isDone", false],
+              },
+                1,
+                0,
+              ],
+            },
+          },
+        },
+      },
+      {
+        $sort: {
+          _id: 1,
+        },
+      },
+      ]);
+      // adding to Done Array
+      stackedChartDone.forEach((element) => {
+        //load data
+        dataFromServer.push({
+          done: element.done,
+          notDone: element.notDone,
+          date: element._id,
+        });
+      });
+
+      res.send({
+        success: true,
+        error: null,
+        info: dataFromServer,
+      });
+    }
+    else {
       startDate = new Date(startDate + "T00:00:00.00Z");
       endDate = new Date(endDate + "T23:59:59.0099Z");
 
@@ -436,7 +567,7 @@ router.post("/stackedChart", async function (req, res) {
     }
   } else {
     if (startDate == "" && endDate == "") {
-       startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
+      startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
       endDate = new Date(dateFormat() + "T23:59:59.59Z");
     } else {
       startDate = new Date(startDate + "T00:00:00.00Z");
