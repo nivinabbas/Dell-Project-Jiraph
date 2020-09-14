@@ -335,6 +335,7 @@ const StatusPage = () => {
       .then((data) => {
         let { success, error, info } = data;
         if (success) {
+          console.log("rawaddddddddddddddddddddddddddddddddddddd", info);
           setOpenTasks(info);
         } else {
           alert(error);
