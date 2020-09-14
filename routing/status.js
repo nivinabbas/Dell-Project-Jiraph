@@ -1505,6 +1505,7 @@ router.post("/segmentData", async function (req, res) {
     date,
     status
   } = req.body; // 4 , 7,10 
+  console.log("date,status",date,status)
   let formatLabel;
   let startNewDate = date,
     endNewDate = date;
@@ -1517,11 +1518,10 @@ router.post("/segmentData", async function (req, res) {
     formatLabel = "%Y-%m"
     startNewDate = date + "-01"
     endNewDate = date + "-31"
-  }
-
+  }else{
   startDate = new Date(startNewDate + "T00:00:00.00Z");
   endDate = new Date(endNewDate + "T23:59:59.0099Z");
-
+  }
   if (status === "Done") {
     status = true;
   } else if (status === "NotDone") {
@@ -1530,7 +1530,7 @@ router.post("/segmentData", async function (req, res) {
   let stackedChartDone = await TaskModel.aggregate([{
     $match: {
 
-      "diffItem.updatedTime": {
+      "taskItem.createdTime": {
         $gte: startDate,
         $lte: endDate,
       },
