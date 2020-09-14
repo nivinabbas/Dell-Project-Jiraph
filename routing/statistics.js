@@ -27,7 +27,6 @@ router.post("/getStatistics", async function (req, res) {
     startDate = new Date(0);
     endDate = new Date();
   }
-
   let completedTasks22 = await TaskModel.aggregate([
     {
       $match: {
@@ -83,7 +82,6 @@ router.post("/getStatistics", async function (req, res) {
         "taskItem.isDone": false,
       },
     },
-
     {
       $project: {
         DifferenceInDays: {
@@ -114,7 +112,6 @@ router.post("/getStatistics", async function (req, res) {
       arrayToClintNotCompleted.push({ day: element.DifferenceInDays, cunt: 1 });
     }
   });
-
   let completedTasks = await TaskModel.aggregate([
     {
       $match: {
@@ -158,7 +155,6 @@ router.post("/getStatistics", async function (req, res) {
       date: element._id.diffdate,
       Done: element.count,
       tasks: element.tasks,
-      // avg:(tasksCount/avg).toFixed(2)
     });
   });
   let numOfDays = 0,
@@ -167,8 +163,9 @@ router.post("/getStatistics", async function (req, res) {
     numOfDays += element.date;
     numoftakss += element.Done;
   });
-  // avg=(numoftakss/numOfDays);
-  // resultArray[0].avg=avg;
+  //    let avg1=(numoftakss/numOfDays);
+  //     console.log(avg1,"asd")
+  //     resultArray[0].avg=avg1;
   // resultArray.push({
   //     avg:(tasksCount/avg).toFixed(2)})
   function compare(a, b) {
@@ -180,9 +177,7 @@ router.post("/getStatistics", async function (req, res) {
     }
     return 0;
   }
-
   resultArray.sort(compare);
-
   res.send({
     success: true,
     error: null,
