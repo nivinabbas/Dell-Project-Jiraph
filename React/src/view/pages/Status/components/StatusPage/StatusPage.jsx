@@ -390,7 +390,6 @@ const StatusPage = () => {
                 onChange={(filter) => setTimeLabel(filter)}
                 className="filterSelect"
                 placeholder="Time Range"
-                isDisabled={!startDate || !endDate}
               />
             </div>
             {stackedChart.length === 0 && (
