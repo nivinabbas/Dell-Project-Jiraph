@@ -69,10 +69,10 @@ export default function StatisticsChart({ data = [], onDataSelected }) {
     ) {
       //console.log("series.tasks", series[0].tasks);
       console.log(seriesIndex);
-      let tasks = series[seriesIndex].tasks[dataPointIndex];
-      let date = categories[dataPointIndex];
+      // let tasks = series[seriesIndex].tasks[dataPointIndex];
+      // let date = categories[dataPointIndex];
 
-      return onDataSelected(date, tasks);
+      //return onDataSelected(date, tasks);
     },
   };
 

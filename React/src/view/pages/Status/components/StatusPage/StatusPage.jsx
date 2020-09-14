@@ -361,18 +361,21 @@ const StatusPage = () => {
           <h3>Daily Alerts</h3>
           <DailyAlerts cardsContent={cardsContent} />
         </div>
-        <div className="statusPage__AddNewTask">
-          <h3>New Task</h3>
-          <img
-            src={AddTask}
-            alt="AddTask"
-            onClick={handleAddTaskClick}
-            id="NewTaskLogo"
-          />
+        <div>
+          <div className="statusPage__barChart">
+            <h3>Tasks statistics</h3>
+            {StatisticsChart.length != 0 && (
+              <StatisticsChart
+                data={statisticsChart}
+                onDataSelected={handleStaticsClick}
+              />
+            )}
+          </div>
         </div>
-        <h3>Task History</h3>
+
         <div className="statusPage__charts">
           <div className="statusPage__barChart">
+            <h3>Task History</h3>
             <div className="statusPage__barChart__filters">
               <DatePicker
                 onDateClick={handleDateClick}
@@ -432,15 +435,7 @@ const StatusPage = () => {
             </div>
           </div>
         </div>
-        <div>
-          <h3>Tasks statistics</h3>
-          {StatisticsChart.length != 0 && (
-            <StatisticsChart
-              data={statisticsChart}
-              onDataSelected={handleStaticsClick}
-            />
-          )}
-        </div>
+
         <div className="statusPage__table">
           <Table
             modificationFieldValueOptions={modificationFieldValueOptions}
