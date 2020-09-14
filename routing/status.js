@@ -565,11 +565,20 @@ router.post("/stackedChart", async function (req, res) {
         info: dataFromServer,
       });
     }
-  } else {
+  } else {//weekly 
     if (startDate == "" && endDate == "") {
       startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
       endDate = new Date(dateFormat() + "T23:59:59.59Z");
-    } else {
+    }else if(startDate != "" && endDate == ""){
+      startDate = new Date(startDate + "T00:00:00.00Z"); //new Date("2020-08-01T00:00:00.00Z");
+      endDate = new Date(dateFormat() + "T23:59:59.59Z");
+
+    }else if(startDate == "" && endDate != "")
+    {
+      startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
+      endDate = new Date(endDate + "T23:59:59.59Z");
+    }
+     else {
       startDate = new Date(startDate + "T00:00:00.00Z");
       endDate = new Date(endDate + "T23:59:59.0099Z");
     }
@@ -675,9 +684,8 @@ router.post("/stackedChart", async function (req, res) {
     ResultWeeks.forEach(element => {
       resultWeek.push(
         {
-          _id: element.DataRange,
-          count: element.data.count,
-          done: element.data.done,
+          date: element.DataRange,
+           done: element.data.done,
           notDone: element.data.notDone
         }
       )
