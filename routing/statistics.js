@@ -104,17 +104,13 @@ router.post("/getStatistics", async function (req, res) {
         }
 
     });
- 
- 
-
-
     let completedTasks = await TaskModel.aggregate([
         {
             "$match": {
-                "diffItem.updatedTime": {
+                "taskItem.updatedTime":{
                     $gte: startDate,
                     $lte: endDate,
-                },"taskItem.createdTime": {
+                },"taskItem.createdTime":{
                     $gte: startDate,
                     $lte: endDate,
                 },
