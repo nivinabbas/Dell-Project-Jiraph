@@ -290,143 +290,272 @@ router.post("/stackedChart", async function (req, res) {
     formatLabel = "%Y-%m-%d";
   } else if (label == "monthly") {
     formatLabel = "%Y-%m";
-  } 
-  else {
+  } else if (label == "weekly") {
+    formatLabel = "weekly"
+  } else {
     formatLabel = "%Y";
   }
-  if (startDate == "" && endDate == "") {
-    //default, label daily
-    startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
-    endDate = new Date(dateFormat() + "T23:59:59.59Z");
-    let stackedChartDone = await TaskModel.aggregate([{
-      $match: {
-        "taskItem.createdTime": {
-          $gte: startDate,
-          $lte: endDate,
-        },
-      },
-    },
-    {
-      $group: {
-        _id: {
-          $dateToString: {
-            date: "$taskItem.createdTime",
-            format: formatLabel,
-          },
-        },
-        count: {
-          $sum: 1,
-        },
-        done: {
-          $sum: {
-            $cond: [{
-              $eq: ["$taskItem.isDone", true],
-            },
-              1,
-              0,
-            ],
-          },
-        },
-        notDone: {
-          $sum: {
-            $cond: [{
-              $eq: ["$taskItem.isDone", false],
-            },
-              1,
-              0,
-            ],
-          },
-        },
-      },
-    },
-    {
-      $sort: {
-        _id: 1,
-      },
-    },
-    ]);
-    // adding to Done Array
-    stackedChartDone.forEach((element) => {
-      //load data
-      dataFromServer.push({
-        done: element.done,
-        notDone: element.notDone,
-        date: element._id,
-      });
-    });
 
-    res.send({
-      success: true,
-      error: null,
-      info: dataFromServer,
-    });
+
+
+  if (formatLabel != "weekly") {
+    if (startDate == "" && endDate == "") {
+      //default, label daily
+      startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
+      endDate = new Date(dateFormat() + "T23:59:59.59Z");
+      let stackedChartDone = await TaskModel.aggregate([{
+        $match: {
+          "taskItem.createdTime": {
+            $gte: startDate,
+            $lte: endDate,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: {
+              date: "$taskItem.createdTime",
+              format: formatLabel,
+            },
+          },
+          count: {
+            $sum: 1,
+          },
+          done: {
+            $sum: {
+              $cond: [{
+                $eq: ["$taskItem.isDone", true],
+              },
+                1,
+                0,
+              ],
+            },
+          },
+          notDone: {
+            $sum: {
+              $cond: [{
+                $eq: ["$taskItem.isDone", false],
+              },
+                1,
+                0,
+              ],
+            },
+          },
+        },
+      },
+      {
+        $sort: {
+          _id: 1,
+        },
+      },
+      ]);
+      // adding to Done Array
+      stackedChartDone.forEach((element) => {
+        //load data
+        dataFromServer.push({
+          done: element.done,
+          notDone: element.notDone,
+          date: element._id,
+        });
+      });
+
+      res.send({
+        success: true,
+        error: null,
+        info: dataFromServer,
+      });
+    } else {
+      startDate = new Date(startDate + "T00:00:00.00Z");
+      endDate = new Date(endDate + "T23:59:59.0099Z");
+
+      let stackedChartDone = await TaskModel.aggregate([{
+        $match: {
+          "taskItem.createdTime": {
+            $gte: startDate,
+            $lte: endDate,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: {
+              date: "$taskItem.createdTime",
+              format: formatLabel, //"%Y-%m-%d",
+            },
+          },
+          count: {
+            $sum: 1,
+          },
+          done: {
+            $sum: {
+              $cond: [{
+                $eq: ["$taskItem.isDone", true],
+              },
+                1,
+                0,
+              ],
+            },
+          },
+          notDone: {
+            $sum: {
+              $cond: [{
+                $eq: ["$taskItem.isDone", false],
+              },
+                1,
+                0,
+              ],
+            },
+          },
+        },
+      },
+      {
+        $sort: {
+          _id: 1,
+        },
+      },
+      ]);
+
+      // adding to Done Array
+      let dataFromServer = [];
+
+      stackedChartDone.forEach((element) => {
+        dataFromServer.push({
+          done: element.done,
+          notDone: element.notDone,
+          date: element._id,
+        });
+      });
+
+      res.send({
+        success: true,
+        error: null,
+        info: dataFromServer,
+      });
+    }
   } else {
-    startDate = new Date(startDate + "T00:00:00.00Z");
-    endDate = new Date(endDate + "T23:59:59.0099Z");
+    if (startDate == "" && endDate == "") {
+       startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
+      endDate = new Date(dateFormat() + "T23:59:59.59Z");
+    } else {
+      startDate = new Date(startDate + "T00:00:00.00Z");
+      endDate = new Date(endDate + "T23:59:59.0099Z");
+    }
+    let stackedChartDone = await TaskModel.aggregate([
+      {
+        $match: {
+          "taskItem.createdTime": {
+            $gte: startDate,
+            $lte: endDate,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: {
+              date: "$taskItem.createdTime",
+              format: "%Y-%m-%d",
+            },
 
-    let stackedChartDone = await TaskModel.aggregate([{
-      $match: {
-        "taskItem.createdTime": {
-          $gte: startDate,
-          $lte: endDate,
-        },
-      },
-    },
-    {
-      $group: {
-        _id: {
-          $dateToString: {
-            date: "$taskItem.createdTime",
-            format: formatLabel, //"%Y-%m-%d",
           },
-        },
-        count: {
-          $sum: 1,
-        },
-        done: {
-          $sum: {
-            $cond: [{
-              $eq: ["$taskItem.isDone", true],
+          count: {
+            $sum: 1,
+          },
+          done: {
+            $sum: {
+              $cond: [{
+                $eq: ["$taskItem.isDone", true],
+              },
+                1,
+                0,
+              ],
             },
-              1,
-              0,
-            ],
           },
-        },
-        notDone: {
-          $sum: {
-            $cond: [{
-              $eq: ["$taskItem.isDone", false],
+          notDone: {
+            $sum: {
+              $cond: [{
+                $eq: ["$taskItem.isDone", false],
+              },
+                1,
+                0,
+              ],
             },
-              1,
-              0,
-            ],
           },
         },
       },
-    },
-    {
-      $sort: {
-        _id: 1,
+      {
+        $sort: {
+          _id: 1,
+        },
       },
-    },
     ]);
 
-    // adding to Done Array
-    let dataFromServer = [];
+    Date.prototype.getWeek = function () {
+      var onejan = new Date(this.getFullYear(), 0, 1);
+      return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
+    };
+    function getDateRangeOfWeek(weekNo) {
+      var d1 = new Date();
+      numOfdaysPastSinceLastMonday = eval(d1.getDay() - 1);
+      d1.setDate(d1.getDate() - numOfdaysPastSinceLastMonday);
+      var weekNoToday = d1.getWeek();
+      var weeksInTheFuture = eval(weekNo - weekNoToday);
+      d1.setDate(d1.getDate() + eval(7 * weeksInTheFuture));
+      var rangeIsFrom = eval(d1.getMonth() + 1) + "/" + d1.getDate() + "/" + d1.getFullYear();
+      d1.setDate(d1.getDate() + 6);
+      var rangeIsTo = eval(d1.getMonth() + 1) + "/" + d1.getDate() + "/" + d1.getFullYear();
+      return rangeIsFrom + " to " + rangeIsTo;
+    };
+    let DateWeek;
+    let objIndex, weeknumber;
+    let ResultWeeks = [];
+    stackedChartDone.forEach(element => {
+      weekID = element._id;
+      DateWeek = new Date(weekID + "T23:59:59.59Z");
+      weeknumber = DateWeek.getWeek();
+      objIndex = ResultWeeks.findIndex((obj => obj.weekID == weeknumber));
+      if (objIndex > -1)// 
+      {
+        ResultWeeks[objIndex].data = ({
+          "count": ResultWeeks[objIndex].data.count + element.count,
+          "done": ResultWeeks[objIndex].data.done + element.done,
+          "notDone": ResultWeeks[objIndex].data.notDone + element.notDone
+        }
+        )
+      } else {
+        ResultWeeks.push(
+          {
+            "weekID": weeknumber,
+            "DataRange": getDateRangeOfWeek(weeknumber),
+            data: {
+              "count": element.count,
+              "done": element.done,
+              "notDone": element.notDone
+            }
+          }
+        )
 
-    stackedChartDone.forEach((element) => {
-      dataFromServer.push({
-        done: element.done,
-        notDone: element.notDone,
-        date: element._id,
-      });
+      }
     });
 
+    let resultWeek = [];
+    ResultWeeks.forEach(element => {
+      resultWeek.push(
+        {
+          _id: element.DataRange,
+          count: element.data.count,
+          done: element.data.done,
+          notDone: element.data.notDone
+        }
+      )
+    });
+    console.log("stackedChartDone", stackedChartDone)
     res.send({
       success: true,
       error: null,
-      info: dataFromServer,
+      info: resultWeek,
     });
   }
   // res.send({ success: false, error: null, info: null });
@@ -1330,75 +1459,126 @@ router.get("/getType", async function (req, res) {
 
 
 
+router.get("/test122", async function (req, res) {
+  let startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
+  let endDate = new Date(dateFormat() + "T23:59:59.59Z");
+  //weekly
+  let stackedChartDone = await TaskModel.aggregate([
+    {
+      $match: {
+        "taskItem.createdTime": {
+          $gte: startDate,
+          $lte: endDate,
+        },
+      },
+    },
+    {
+      $group: {
+        _id: {
+          $dateToString: {
+            date: "$taskItem.createdTime",
+            format: "%Y-%m-%d",
+          },
 
-//Weekly Label Function===> 
-function weeklyLabel(startDate, endDate, tasks) {
+        },
+        count: {
+          $sum: 1,
+        },
+        done: {
+          $sum: {
+            $cond: [{
+              $eq: ["$taskItem.isDone", true],
+            },
+              1,
+              0,
+            ],
+          },
+        },
+        notDone: {
+          $sum: {
+            $cond: [{
+              $eq: ["$taskItem.isDone", false],
+            },
+              1,
+              0,
+            ],
+          },
+        },
+      },
+    },
+    {
+      $sort: {
+        _id: 1,
+      },
+    },
+  ]);
 
-  //function to get certain date after adding amount of days
-  function addDays(date, days) {
-      var result = new Date(date);
-      result.setDate(result.getDate() + days);
-      return result;
-  }
-
-  //function to get number of days between 2 date range
-  const diffTime = Math.abs(endDate - startDate);
-  let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  let weeklyStartDate = startDate;//variable for starting date of each week
-  let weeklyEndDate = addDays(weeklyStartDate, 6)//variable for ending date of each week
-  let currentWeek = 0;//counter for weeks
-  let arrayForWeeks = [];//array that will contain the UiObj
-  while (diffDays > 6) {
-      arrayForWeeks.push(
-          { _id: `${weeklyStartDate.getDate()}/${weeklyStartDate.getMonth() + 1}/${weeklyStartDate.getFullYear()} - ${weeklyEndDate.getDate()}/${weeklyEndDate.getMonth() + 1}/${weeklyEndDate.getFullYear()}`, arr: [] })
-      diffDays = diffDays - 7;
-      weeklyStartDate = addDays(weeklyEndDate, 1);
-      weeklyEndDate = addDays(weeklyStartDate, 6);
-  }
-  if (diffDays > 0) {//add the days as a range
-      weeklyEndDate = addDays(weeklyStartDate, diffDays-1);
-      arrayForWeeks.push(
-          { _id: `${weeklyStartDate.getDate()}/${weeklyStartDate.getMonth() + 1}/${weeklyStartDate.getFullYear()} - ${weeklyEndDate.getDate()}/${weeklyEndDate.getMonth() + 1}/${weeklyEndDate.getFullYear()}`, arr: [] })
-
-  }
-  weeklyEndDate = addDays(startDate, 6);
-  
-  for (i = 0; i < tasks.length; i++) {
-      if (new Date(tasks[i]._id) <= weeklyEndDate) {
-          arrayForWeeks[currentWeek].arr = arrayForWeeks[currentWeek].arr.concat(tasks[i].arr)
+  Date.prototype.getWeek = function () {
+    var onejan = new Date(this.getFullYear(), 0, 1);
+    return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
+  };
+  function getDateRangeOfWeek(weekNo) {
+    var d1 = new Date();
+    numOfdaysPastSinceLastMonday = eval(d1.getDay() - 1);
+    d1.setDate(d1.getDate() - numOfdaysPastSinceLastMonday);
+    var weekNoToday = d1.getWeek();
+    var weeksInTheFuture = eval(weekNo - weekNoToday);
+    d1.setDate(d1.getDate() + eval(7 * weeksInTheFuture));
+    var rangeIsFrom = eval(d1.getMonth() + 1) + "/" + d1.getDate() + "/" + d1.getFullYear();
+    d1.setDate(d1.getDate() + 6);
+    var rangeIsTo = eval(d1.getMonth() + 1) + "/" + d1.getDate() + "/" + d1.getFullYear();
+    return rangeIsFrom + " to " + rangeIsTo;
+  };
+  let DateWeek;
+  let objIndex, weeknumber;
+  let ResultWeeks = [];
+  stackedChartDone.forEach(element => {
+    weekID = element._id;
+    DateWeek = new Date(weekID + "T23:59:59.59Z");
+    weeknumber = DateWeek.getWeek();
+    objIndex = ResultWeeks.findIndex((obj => obj.weekID == weeknumber));
+    if (objIndex > -1)// 
+    {
+      ResultWeeks[objIndex].data = ({
+        "count": ResultWeeks[objIndex].data.count + element.count,
+        "done": ResultWeeks[objIndex].data.done + element.done,
+        "notDone": ResultWeeks[objIndex].data.notDone + element.notDone
       }
-      else {
-          while(weeklyEndDate<(new Date(tasks[i]._id))){
-          weeklyEndDate = addDays(weeklyEndDate, 7);
-          currentWeek++;
+      )
+    } else {
+      ResultWeeks.push(
+        {
+          "weekID": weeknumber,
+          "DataRange": getDateRangeOfWeek(weeknumber),
+          data: {
+            "count": element.count,
+            "done": element.done,
+            "notDone": element.notDone
           }
-          arrayForWeeks[currentWeek].arr = arrayForWeeks[currentWeek].arr.concat(tasks[i].arr)
-          
-      }
-  }
+        }
+      )
 
-  //function to remove all the weeks that contains 0 tasks
-  let filtered = arrayForWeeks.filter(function (el) { return el.arr.length > 0; });
-  let result = [];
-  filtered.map((element => {
-      let result2 = { _id: element._id, arr: [] };
-      element.arr.map((task => {
-          let obj = result2.arr.find(obj => obj.value === task.value);
-          if (obj != undefined) {
-              obj.tasks = obj.tasks.concat(task.tasks);
-              obj.size = obj.tasks.length;
-          }
-          else {
-              result2.arr.push({ value: task.value, tasks: task.tasks, size: task.tasks.length })
-          }
-      }))
-      result.push(result2);
-  }))
-  result.map((week => {
-      week.arr.sort((a, b) => a.value > b.value ? -1 : 1)
-  }))
-  return result;
-}
+    }
+  });
+
+  let resultWeek = [];
+  ResultWeeks.forEach(element => {
+    resultWeek.push(
+      {
+        _id: element.DataRange,
+        count: element.data.count,
+        done: element.data.done,
+        notDone: element.data.notDone
+      }
+    )
+  });
+  console.log("stackedChartDone", stackedChartDone)
+  res.send({
+    success: true,
+    error: null,
+    info: resultWeek,
+  });
+})
 
 
 
