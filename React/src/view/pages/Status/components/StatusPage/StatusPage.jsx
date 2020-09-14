@@ -45,7 +45,7 @@ const StatusPage = () => {
     initialPieChartsFilters
   );
   const [tableFilters, setTableFilters] = useState(initialTableFilters);
-  const [rawad, setRawad] = useState("");
+  const [tasksId, setTasksId] = useState([]);
   //statistics
   useEffect(() => {
     const filters = {
@@ -217,30 +217,51 @@ const StatusPage = () => {
       });
   }, []);
 
-  const handleDoneClick = async (jiraId, isDone) => {
+  const handleDoneClick = (jiraId) => {
+    const cloned = [...tasksId];
+    const index = tasksId.indexOf(jiraId);
+    index != -1 ? cloned.splice(index, 1) : cloned.push(jiraId);
+
+    setTasksId(cloned);
+  };
+
+  const handleUpdateClick = () => {
     confirmAlert({
-      title: `Confirm to ${isDone ? "Not Done" : "Done"} `,
-      message: `Are you sure to modify this task to ${
-        isDone ? "Not Done" : "Done"
-      }?`,
+      // title: `Confirm to ${isDone ? "Not Done" : "Done"} `,
+      // message: `Are you sure to modify this task to ${
+      //   isDone ? "Not Done" : "Done"
+      // }?`,
       buttons: [
         {
           label: "Yes",
           onClick: () => {
+            const originalTasksID = [...openTasks];
             try {
               const userId = null;
-              const result = openTasks.filter(
-                (openTask) => openTask._id !== jiraId
-              );
-              setOpenTasks(result);
+              //   var countriesFound = countries.filter(function(country) {
+              //     return ["Spain","Greece"].indexOf(country.key) != -1
+              // });
+
               fetch("/api/status/updateTasks", {
                 method: "POST",
-                body: JSON.stringify({ jiraId, userId, isDone }),
+                body: JSON.stringify({ tasksId, userId }),
                 headers: {
                   "Content-Type": "application/json",
                 },
-              });
-            } catch (error) {}
+              })
+                .then((res) => res.json())
+                .then((res) => {
+                  let { success, error, info } = res;
+                  if (success) {
+                    console.log(info);
+                    setOpenTasks(info);
+                  } else {
+                    alert(error);
+                  }
+                });
+            } catch (error) {
+              setOpenTasks(originalTasksID);
+            }
           },
         },
         {
@@ -250,6 +271,7 @@ const StatusPage = () => {
       ],
     });
   };
+  ////////////////////////////
   const handlePieChartsFilters = (filter, name) => {
     const newPieFilters = [...pieChartsFilters].map((f) => {
       if (f.name === name) {
@@ -435,6 +457,7 @@ const StatusPage = () => {
             onDoneClick={handleDoneClick}
             onSelect={handleSelect}
             tableFilters={tableFilters}
+            onUpdateClick={handleUpdateClick}
           />
         </div>
       </div>

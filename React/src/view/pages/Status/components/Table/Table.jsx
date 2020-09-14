@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import Select from "react-select";
 import "./style.css";
 import TablePagination from "@material-ui/core/TablePagination";
+import { Checkbox } from "@material-ui/core";
 
 export default function TasksTable({
   openTasks,
@@ -11,6 +12,7 @@ export default function TasksTable({
   onDoneClick,
   onSelect,
   tableFilters,
+  onUpdateClick,
 }) {
   const disableSelect = () => {
     return tableFilters[0].value !== "Update" ? true : false;
@@ -67,7 +69,7 @@ export default function TasksTable({
           placeholder="Value"
           ref={modValue}
         />
-        <button>Update</button>
+        <button onClick={() => onUpdateClick()}>Update</button>
       </div>
       <div className="open-tasks-table">
         <table className="container">
@@ -101,9 +103,9 @@ export default function TasksTable({
                 <td>
                   <input
                     type="checkbox"
-                    onClick={() => onDoneClick(task._id, task.taskItem.isDone)}
+                    onClick={() => onDoneClick(task._id)}
                     key={task._id}
-                    checked={task.taskItem.isDone}
+                    //checked={task.taskItem.isDone}
                     onChange={() => {}}
                   />
                 </td>
