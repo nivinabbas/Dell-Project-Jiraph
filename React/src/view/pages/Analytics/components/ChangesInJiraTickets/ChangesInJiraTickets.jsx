@@ -211,9 +211,17 @@ function ChangesInJiraTickets() {
 
       <div className="ChangeOfJiraTicket__Title">Changes Of Jira Tickets</div>
 
+      <div className="ModificationByField__Filters__wrapper">
+        <div className="ModificationByField__Filters__headers">
+          <p className="filter__header__item">Old/New</p>
+          <p className="filter__header__item">Status</p>
+          <p className="filter__header__item">QA Representative</p>
+          <p className="filter__header__item">Start date</p>
+          <p className="filter__header__item">End date</p>
+          <p className="filter__header__item">Dates aggregation</p>
+        </div>
 
-      {/* Select Filters */}
-      <form className="ChangeOfJiraTicket__Filters">
+      <form className="ChangeOfJiraTicket__Filters__fields">
 
         <Select
           onInputChange={() => { statusInput.current.state.value = ""; qaInput.current.state.value = "" }}
@@ -270,6 +278,7 @@ function ChangesInJiraTickets() {
         />
 
       </form>
+    </div>
     </div>
   )
 

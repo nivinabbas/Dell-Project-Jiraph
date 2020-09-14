@@ -170,11 +170,20 @@ function DeletedJiraTickets() {
     <div className='DeletedJiraTicketsWrapper'>
       <div className="DeletedJiraTickets__Chart"> {UiObjs && <Chart UiObjs={UiObjs} />}</div>
       <div className="DeletedJiraTickets__Title">Deleted Jira Tickets</div>
-      {/* Select Filters */}
-      <form className="DeletedJiraTickets__Filters">
-        {/* select */}
 
-        <Select
+      <div className="DeletedJiraTickets__Filters__wrapper">
+        <div className="DeletedJiraTickets__Filters__headers">
+          <p className="filter__header__item">Field Name</p>
+          <p className="filter__header__item">Value</p>
+          <p className="filter__header__item">QA Representative</p>
+          <p className="filter__header__item">Start date</p>
+          <p className="filter__header__item">End date</p>
+          <p className="filter__header__item">Dates aggregation</p>
+        </div>
+
+      <form className="DeletedJiraTickets__Filters__fields">
+        
+        <Select        
           name="priority"
           onInputChange={() => { functionalTestInput.current.state.value = ""; qaInput.current.state.value = "" }}
           isMulti
@@ -229,6 +238,7 @@ function DeletedJiraTickets() {
           onChange={HandleLabelChange}
         />
       </form>
+    </div>
     </div>
   )
 }
