@@ -156,7 +156,11 @@ function ModificationByField(props) {
 
   //Qa Representative
   const handleChangeQaRepresentative = (change => {
-    serverFilters.qaRepresentative = [change.value];
+    if(change!=null){
+    serverFilters.qaRepresentative = [change.value];}
+    else {
+      serverFilters.qaRepresentative = [];
+    }
     render(serverFilters);
   })
 
@@ -217,7 +221,9 @@ function ModificationByField(props) {
           onChange={handleChangeQaRepresentative}
           placeholder="Qa Rep"
           className="ModificationByField__Filter"
+          isClearable={true}
           options={qaRepresentativeOptions} />
+          
 
         From
         <input
