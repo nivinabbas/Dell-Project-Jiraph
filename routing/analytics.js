@@ -149,7 +149,15 @@ router.post('/modificationByField', async (req, res) => {
                 $group: {
                     _id: {
                         date: { $dateToString: { format: dateFormat, date: "$diffItem.updatedTime" } },
-                        fieldName: "$diffItem.updatedField.newValue"
+                        fieldName: {
+                                $cond: {
+                                    if: { $eq: ["$diffItem.updatedField.fieldName", "functionalTest"] },
+
+                                    then: { $toString: "$diffItem.updatedField.newValue" },
+
+                                    else: "$diffItem.updatedField.newValue"
+                                }  
+                        }
                     },
                     tasks: { $push: "$$ROOT" },
                 }
@@ -231,6 +239,7 @@ router.post('/modificationByFieldFilters', async (req, res) => {
     }
     else { // bring all the Values for the fieldName
         const name = fieldName[0];
+
         tasks = await TaskModel.aggregate([
             {
                 $match: { "diffItem.updatedField.fieldName": name, "diffItem.type": "Update" }
@@ -238,7 +247,18 @@ router.post('/modificationByFieldFilters', async (req, res) => {
             {
                 $group: {
                     _id: null,
-                    Values: { $addToSet: { "label": "$diffItem.updatedField.newValue", "value": "$diffItem.updatedField.newValue" } },
+
+                    Values: {
+                        $addToSet: {
+                            $cond: {
+                                if: { $eq: ["$diffItem.updatedField.fieldName", "functionalTest"] },
+
+                                then: { "label": { $toString: "$diffItem.updatedField.newValue" }, "value": { $toString: "$diffItem.updatedField.newValue" } },
+
+                                else: { "label": "$diffItem.updatedField.newValue", "value": "$diffItem.updatedField.newValue" }
+                            }
+                        }
+                    }
                 }
             },
         ])

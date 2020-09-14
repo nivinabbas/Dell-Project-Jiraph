@@ -14,6 +14,10 @@ function ChangesByParentId() {
     let startDate = new Date()
     let endDate = new Date()
     startDate.setMonth(endDate.getMonth() - 1)
+    let endMonth = endDate.getMonth() + 1 < 10 ? `0${endDate.getMonth() + 1}` : endDate.getMonth() + 1;
+    let startMonth = startDate.getMonth() + 1 < 10 ? `0${startDate.getMonth() + 1}` : startDate.getMonth() + 1;
+    setStartDate(`${startDate.getFullYear()}-${startMonth}-${startDate.getDate()}`)
+    setEndDate(`${endDate.getFullYear()}-${endMonth}-${endDate.getDate()}`)
     const timeZone = startDate.getTimezoneOffset() / 60
     startDate.setHours(0 - timeZone, 0, 0, 0)
     endDate.setHours(0 - timeZone+23, 59, 59, 59);
@@ -47,6 +51,8 @@ function ChangesByParentId() {
 
   const [UiObjs,setUiObjs]=useState([]);
   const [fixVersionOptions,setfixVersionOptions] = useState([]);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
 
   //fetch to receive Data (UiObj) from server after every filter Change
@@ -99,8 +105,14 @@ function ChangesByParentId() {
         {UiObjs.length > 0 && <PieChartAnalysis UiObjs={UiObjs} />}
       </div>
       {/* Select Filters */}
-
-      <form className="ChangesByParentId__Filters">
+      
+      <div className="ChangesByParentId__Filters__wrapper">
+        <div className="ChangesByParentId__Filters__headers">
+          <p className="filter__header__item">Old/New</p>
+          <p className="filter__header__item">Start date</p>
+          <p className="filter__header__item">End date</p>
+        </div>
+      <form className="ChangesByParentId__Filters__fields">
 
         <Select
           name="fixVersion"
@@ -115,6 +127,7 @@ function ChangesByParentId() {
           className="ChangesByParentId__DateFilter"
           type="date"
           name="startDate"
+          value={startDate}
           onChange={HandleStartDateChange}
         />
         To
@@ -122,6 +135,7 @@ function ChangesByParentId() {
           className="ChangesByParentId__DateFilter"
           type="date"
           name="endDate"
+          value={endDate}
           onChange={HandleEndDateChange}
         />
 

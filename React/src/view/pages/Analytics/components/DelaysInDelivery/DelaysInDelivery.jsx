@@ -28,6 +28,10 @@ function DelaysInDelivery() {
     let startDate = new Date()
     let endDate = new Date()
     startDate.setMonth(endDate.getMonth() - 1)
+    let endMonth = endDate.getMonth() + 1 < 10 ? `0${endDate.getMonth() + 1}` : endDate.getMonth() + 1;
+    let startMonth = startDate.getMonth() + 1 < 10 ? `0${startDate.getMonth() + 1}` : startDate.getMonth() + 1;
+    setStartDate(`${startDate.getFullYear()}-${startMonth}-${startDate.getDate()}`)
+    setEndDate(`${endDate.getFullYear()}-${endMonth}-${endDate.getDate()}`)
     const timeZone = startDate.getTimezoneOffset() / 60
     startDate.setHours(0 - timeZone, 0, 0, 0)
     endDate.setHours(0 - timeZone+23, 59, 59, 59);
@@ -107,7 +111,8 @@ function DelaysInDelivery() {
 
   // To set UiObj from the filtered Data we recieved from server 
   const [UiObjs, setUiObjs] = useState([]);
-
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   // Options To get From Server 
   const [fixVersionOptions, setfixVersionOptions] = useState([])
   const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([])
@@ -220,7 +225,18 @@ function DelaysInDelivery() {
 
 
       {/* Select Filters */}
-      <form className="DelaysInDelivery__Filters">
+      
+      <div className="DelaysInDelivery__Filters__wrapper">
+        <div className="DelaysInDelivery__Filters__headers">
+          <p className="filter__header__item">Fix Version</p>
+          <p className="filter__header__item">Jira Type</p>
+          <p className="filter__header__item">QA Representative</p>
+          <p className="filter__header__item">Start date</p>
+          <p className="filter__header__item">End date</p>
+          <p className="filter__header__item">Dates aggregation</p>
+        </div>
+
+      <form className="DelaysInDelivery__Filters__fields">
 
         <Select
           name="fixVersion"
@@ -257,6 +273,7 @@ function DelaysInDelivery() {
           className="DelaysInDelivery__Filter__date"
           type="date"
           name="startDate"
+          value={startDate}
           onChange={HandleStartDateChange}
         />
         To
@@ -264,6 +281,7 @@ function DelaysInDelivery() {
           className="DelaysInDelivery__Filter__date"
           type="date"
           name="endDate"
+          value={endDate}
           onChange={HandleEndDateChange}
         />
 
@@ -276,6 +294,7 @@ function DelaysInDelivery() {
         />
 
       </form>
+    </div>
     </div>
   )
 

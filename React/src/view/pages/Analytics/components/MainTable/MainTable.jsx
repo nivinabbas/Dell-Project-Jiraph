@@ -9,19 +9,25 @@ import Clear from '@material-ui/icons/Clear';
 import FilterList from '@material-ui/icons/FilterList';
 import FirstPage from '@material-ui/icons/FirstPage';
 import LastPage from '@material-ui/icons/LastPage';
+import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import MaterialTable from 'material-table';
+import ViewColumn from '@material-ui/icons/ViewColumn';
+
 
 function MainTable(props) {
   const { tasks } = props
+  const {title}=props;
   const tableIcons = {
     Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
     FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
     LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
+    Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
     NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
     PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
     ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
     Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
+    ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
     SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
   };
   const columns = [
@@ -213,11 +219,16 @@ function MainTable(props) {
   
   return (
         <MaterialTable
-          title='Analysis'
+          title={title}
           icons={tableIcons}
           columns={columns}
           data={data}
           options={{
+            exportButton: true,
+            pageSizeOptions:[5,20,50],
+            exportAllData:true,
+            doubleHorizontalScroll:true,
+            columnsButton:true,
             headerStyle: {
               backgroundColor: '#00447C',
               color: '#FFF',
