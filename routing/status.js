@@ -39,7 +39,7 @@ router.get("/dailyalerts", async function (req, res) {
           Today,
           {
             $dateToString: {
-              date: "$diffItem.updatedTime",
+              date: "$taskItem.createdTime",
               format: "%Y-%m-%d",
             },
           },
