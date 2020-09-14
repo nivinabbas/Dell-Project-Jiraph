@@ -25,6 +25,7 @@ import {
   useLocation,
   useHistory,
 } from "react-router-dom";
+import { isEmpty } from "../../../../../service/utils";
 
 const timeLabelOptions = [
   { value: "daily", label: "Daily" },
@@ -71,7 +72,6 @@ const StatusPage = () => {
       .then((res) => res.json())
       .then((data) => {
         let { success, error, info } = data;
-        console.log("info ", info);
         if (success) {
           setStatisticsChart(info);
         } else {
@@ -125,7 +125,7 @@ const StatusPage = () => {
       .then((res) => res.json())
       .then((data) => {
         let { success, error, info } = data;
-        console.log("128 :", info);
+
         if (success) {
           setStackedChart(info);
         } else {
@@ -227,7 +227,6 @@ const StatusPage = () => {
   }, []);
 
   const handleDoneClick = async (jiraId, isDone) => {
-    console.log(isDone);
     confirmAlert({
       title: `Confirm to ${isDone ? "Not Done" : "Done"} `,
       message: `Are you sure to modify this task to ${
@@ -274,7 +273,7 @@ const StatusPage = () => {
     const { name, value } = date;
     name === "startDate" ? setStartDate(value) : setEndDate(value);
   };
-
+  console.log("dateeeeeeee", startDate, endDate);
   const handleSelect = (filter, name) => {
     const newFilters = [...tableFilters].map((f) => {
       if (f.name === name) {
@@ -336,6 +335,7 @@ const StatusPage = () => {
       .then((data) => {
         let { success, error, info } = data;
         if (success) {
+          console.log("rawaddddddddddddddddddddddddddddddddddddd", info);
           setOpenTasks(info);
         } else {
           alert(error);
@@ -344,7 +344,6 @@ const StatusPage = () => {
   };
 
   const handleStaticsClick = (date, tasks) => {
-    console.log(tasks, date);
     setOpenTasks(tasks);
   };
 
@@ -361,19 +360,22 @@ const StatusPage = () => {
           <h3>Daily Alerts</h3>
           <DailyAlerts cardsContent={cardsContent} />
         </div>
-        <div className="statusPage__AddNewTask">
-          <h3>New Task</h3>
-          <img
-            src={AddTask}
-            alt="AddTask"
-            onClick={handleAddTaskClick}
-            id="NewTaskLogo"
-          />
+        <div>
+          <div className="statusPage__barChart">
+            <h3>Tasks statistics</h3>
+            {StatisticsChart.length != 0 && (
+              <StatisticsChart
+                data={statisticsChart}
+                onDataSelected={handleStaticsClick}
+              />
+            )}
+          </div>
         </div>
-        <h3>Task History</h3>
+
         <div className="statusPage__charts">
           <div className="statusPage__barChart">
-            <div className="statusPage__barChart__filters">
+            <h3>Task History</h3>
+            {/* <div className="statusPage__barChart__filters">
               <DatePicker
                 onDateClick={handleDateClick}
                 name="startDate"
@@ -391,7 +393,31 @@ const StatusPage = () => {
                 className="filterSelect"
                 placeholder="Time Range"
               />
-            </div>
+            </div> */}
+            {!isEmpty(stackedChart) && (
+              <div className="statusPage__barChart__filters">
+                <DatePicker
+                  onDateClick={handleDateClick}
+                  name="startDate"
+                  label="From:"
+                  value={stackedChart[0].date}
+                />
+                <DatePicker
+                  onDateClick={handleDateClick}
+                  name="endDate"
+                  label="To:"
+                  value={stackedChart[stackedChart.length - 1].date}
+                />
+
+                <h3>Time Range</h3>
+                <Select
+                  options={timeLabelOptions}
+                  onChange={(filter) => setTimeLabel(filter)}
+                  className="filterSelect"
+                  placeholder="Daily"
+                />
+              </div>
+            )}
             {stackedChart.length === 0 && (
               <div className="statupPage__circularProgress">
                 <CircularProgress disableShrink />
@@ -414,7 +440,7 @@ const StatusPage = () => {
                   handlePieChartsFilters(filter, "pieChartModificationType")
                 }
                 className="filterSelect filterSelect-pie"
-                placeholder="Type"
+                placeholder="All"
               />
               <PieChart dataPieChart={typePieChart} name="pie1" />
             </div>
@@ -426,21 +452,13 @@ const StatusPage = () => {
                   handlePieChartsFilters(filter, "pieChartModificationField")
                 }
                 className="filterSelect filterSelect-pie"
-                placeholder="Field"
+                placeholder="All"
               />
               <PieChart dataPieChart={fieldPieChart} name="pie2" />
             </div>
           </div>
         </div>
-        <div>
-          <h3>Tasks statistics</h3>
-          {StatisticsChart.length != 0 && (
-            <StatisticsChart
-              data={statisticsChart}
-              onDataSelected={handleStaticsClick}
-            />
-          )}
-        </div>
+
         <div className="statusPage__table">
           <Table
             modificationFieldValueOptions={modificationFieldValueOptions}

@@ -43,8 +43,7 @@ const options = {
   },
 };
 export default function StatisticsChart({ data = [], onDataSelected }) {
-  console.log("test ");
-  console.log("data: ", data);
+
   const series = [
     {
       name: "Done",
@@ -53,9 +52,9 @@ export default function StatisticsChart({ data = [], onDataSelected }) {
     },
   ];
 
-  console.log("series", series);
+
   const categories = data.map((d) => d.date);
-  console.log("categories", categories);
+
 
   const xaxis = {
     categories: categories,
