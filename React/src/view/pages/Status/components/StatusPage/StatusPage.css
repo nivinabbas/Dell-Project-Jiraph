@@ -12,9 +12,19 @@
 }
 
 .statusPage__barChart {
-  flex: 1;
+  /* flex: 1; */
   background-color: #fff;
   padding: 1rem;
+
+  /* margin-right: 1rem; */
+  border-radius: 5px;
+}
+
+.statusPage__barChart2 {
+  /* flex: 1; */
+  background-color: #fff;
+  padding: 1rem;
+  width: 500px;
   /* margin-right: 1rem; */
   border-radius: 5px;
 }
@@ -27,12 +37,13 @@
 }
 
 .statusPage__pieCharts {
-  flex: 1;
+  /* flex: 1; */
   display: flex;
   justify-content: center;
   align-items: flex-start;
   background-color: #fff;
   padding: 1rem;
+
   border-radius: 5px;
 }
 

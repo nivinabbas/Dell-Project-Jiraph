@@ -10,36 +10,35 @@ const options = {
     toolbar: {
       show: false,
     },
-
-    responsive: [
-      {
-        breakpoint: 480,
-        options: {
-          legend: {
-            position: "bottom",
-            offsetX: -2,
-            offsetY: 0,
-          },
-        },
-      },
-    ],
   },
   plotOptions: {
     bar: {
-      horizontal: true,
+      horizontal: false,
     },
   },
+  labels: {
+    formatter: (value) => {
+      return value + "per day";
+    },
+  },
+  title: {
+    text: "/day",
+    align: "center",
+    margin: 10,
+    offsetX: -10,
+    offsetY: 425,
+  },
 
-  series: { colors: ["#F44336", "#E91E63"] },
   fill: {
     opacity: 1,
-    colors: "#388E3C",
+    colors: ["#388E3C"],
   },
+  colors: ["#388E3C"],
 };
 export default function StatisticsChart({ data = [], onDataSelected }) {
   const series = [
     {
-      name: "Done",
+      name: "Number of tasks",
       data: data.map((d) => d.Done),
       tasks: data.map((d) => d.tasks),
     },

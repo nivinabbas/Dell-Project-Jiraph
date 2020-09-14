@@ -382,7 +382,7 @@ const StatusPage = () => {
         </div>
 
         <div className="statusPage__charts">
-          <div className="statusPage__barChart">
+          <div className="statusPage__barChart2">
             <h3>Task History</h3>
 
             {stackedChart.length === 0 && (
