@@ -26,7 +26,13 @@ function dateFormat() {
 
   return `${ye}-${mo}-${da}`;
 }
-
+function lastMonth(date) {
+  let d = new Date(date);
+  d.setDate(1);
+  d.setMonth(d.getMonth() - 1);
+  console.log("*************", d)
+  return d;
+}
 //////////////////////////////////////
 
 // Start daily status alert !
@@ -298,7 +304,8 @@ router.post("/stackedChart", async function (req, res) {
   if (formatLabel != "weekly") {
     if (startDate == "" && endDate == "") {
       //default, label daily
-      startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
+      // startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
+      startDate = lastMonth(new Date());
       endDate = new Date(dateFormat() + "T23:59:59.59Z");
       let stackedChartDone = await TaskModel.aggregate([
         {
@@ -436,7 +443,8 @@ router.post("/stackedChart", async function (req, res) {
       });
     } else if (startDate == "" && endDate != "") {
       //default, label daily
-      startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
+      // startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
+      startDate = lastMonth(new Date());
       endDate = new Date(dateFormat() + "T23:59:59.59Z");
       let stackedChartDone = await TaskModel.aggregate([
         {
@@ -575,18 +583,21 @@ router.post("/stackedChart", async function (req, res) {
         info: dataFromServer,
       });
     }
-  } else {
-    //weekly
+  } else {//weekly 
     if (startDate == "" && endDate == "") {
-      startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
+      // startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
+      startDate = lastMonth(new Date());
       endDate = new Date(dateFormat() + "T23:59:59.59Z");
     } else if (startDate != "" && endDate == "") {
       startDate = new Date(startDate + "T00:00:00.00Z"); //new Date("2020-08-01T00:00:00.00Z");
       endDate = new Date(dateFormat() + "T23:59:59.59Z");
+
     } else if (startDate == "" && endDate != "") {
-      startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
+      // startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
+      startDate = lastMonth(new Date());
       endDate = new Date(endDate + "T23:59:59.59Z");
-    } else {
+    }
+    else {
       startDate = new Date(startDate + "T00:00:00.00Z");
       endDate = new Date(endDate + "T23:59:59.0099Z");
     }
@@ -688,12 +699,14 @@ router.post("/stackedChart", async function (req, res) {
     });
 
     let resultWeek = [];
-    ResultWeeks.forEach((element) => {
-      resultWeek.push({
-        date: element.DataRange,
-        done: element.data.done,
-        notDone: element.data.notDone,
-      });
+    ResultWeeks.forEach(element => {
+      resultWeek.push(
+        {
+          date: element.DataRange,
+          done: element.data.done,
+          notDone: element.data.notDone
+        }
+      )
     });
     console.log("stackedChartDone", stackedChartDone);
     res.send({
@@ -893,7 +906,8 @@ router.post("/TypePie", async function (req, res) {
   let { modificationType, startDate, endDate } = req.body;
   let formatLabel = "%Y-%m-%d";
   if (startDate === "" && endDate === "") {
-    startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
+    // startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
+    startDate = lastMonth(new Date());
     endDate = new Date();
   } else if (startDate != "" && endDate != "") {
     startDate = new Date(startDate + "T00:00:00.00Z");
@@ -901,6 +915,9 @@ router.post("/TypePie", async function (req, res) {
   } else if (startDate != "" && endDate === "") {
     startDate = new Date(startDate + "T00:00:00.00Z");
     endDate = new Date();
+  } else {
+    startDate = lastMonth(new Date());
+    endDate = new Date(endDate + "T23:59:59.0099Z");
   }
 
   if (modificationType != "" && modificationType != "All") {
@@ -1139,7 +1156,8 @@ router.post("/fieldPie", async function (req, res) {
   let { modificationField, startDate, endDate } = req.body;
   let formatLabel = "%Y-%m-%d";
   if (startDate === "" && endDate === "") {
-    startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
+    // startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
+    startDate = lastMonth(new Date());
     endDate = new Date();
   } else if (startDate != "" && endDate != "") {
     startDate = new Date(startDate + "T00:00:00.00Z");
@@ -1148,7 +1166,8 @@ router.post("/fieldPie", async function (req, res) {
     startDate = new Date(startDate + "T00:00:00.00Z");
     endDate = new Date();
   } else {
-    startDate = new Date(0);
+    // startDate = new Date(0);
+    startDate=lastMonth(new Date());
     endDate = new Date();
   }
   if (modificationField != "" && modificationField != "All") {
@@ -1515,7 +1534,10 @@ router.post("/filltersAllSubmit", async function (req, res) {
 
 //start segmentData
 router.post("/segmentData", async function (req, res) {
-  let { date, status } = req.body; // 4 , 7,10
+  let {
+    date,
+    status
+  } = req.body; // 4 , 7,10 
   let formatLabel;
   let startNewDate = date,
     endNewDate = date;
@@ -1524,27 +1546,25 @@ router.post("/segmentData", async function (req, res) {
     startNewDate = date + "-01-01";
     endNewDate = date + "-12-31";
   } else if (date.length == 7) {
-    formatLabel = "%Y-%m";
-    startNewDate = date + "-01";
-    endNewDate = date + "-31";
+    formatLabel = "%Y-%m"
+    startNewDate = date + "-01"
+    endNewDate = date + "-31"
   }
 
   startDate = new Date(startNewDate + "T00:00:00.00Z");
   endDate = new Date(endNewDate + "T23:59:59.0099Z");
-
+  }
   if (status === "Done") {
     status = true;
   } else if (status === "NotDone") {
     status = false;
   }
-  let stackedChartDone = await TaskModel.aggregate([
-    {
-      $match: {
-        "diffItem.updatedTime": {
-          $gte: startDate,
-          $lte: endDate,
-        },
-        "taskItem.isDone": status,
+  let stackedChartDone = await TaskModel.aggregate([{
+    $match: {
+
+      "taskItem.createdTime": {
+        $gte: startDate,
+        $lte: endDate,
       },
     },
   ]);
