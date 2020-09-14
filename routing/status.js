@@ -26,7 +26,13 @@ function dateFormat() {
 
   return `${ye}-${mo}-${da}`;
 }
-
+function lastMonth(date) {
+  let d = new Date(date);
+  d.setDate(1);
+  d.setMonth(d.getMonth() - 1);
+  console.log("*************", d)
+  return d;
+}
 //////////////////////////////////////
 
 // Start daily status alert !
@@ -298,7 +304,8 @@ router.post("/stackedChart", async function (req, res) {
   if (formatLabel != "weekly") {
     if (startDate == "" && endDate == "") {
       //default, label daily
-      startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
+      // startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
+      startDate = lastMonth(new Date());
       endDate = new Date(dateFormat() + "T23:59:59.59Z");
       let stackedChartDone = await TaskModel.aggregate([{
         $match: {
@@ -431,7 +438,8 @@ router.post("/stackedChart", async function (req, res) {
     }
     else if (startDate == "" && endDate != "") {
       //default, label daily
-      startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
+      // startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
+      startDate = lastMonth(new Date());
       endDate = new Date(dateFormat() + "T23:59:59.59Z");
       let stackedChartDone = await TaskModel.aggregate([{
         $match: {
@@ -567,18 +575,19 @@ router.post("/stackedChart", async function (req, res) {
     }
   } else {//weekly 
     if (startDate == "" && endDate == "") {
-      startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
+      // startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
+      startDate = lastMonth(new Date());
       endDate = new Date(dateFormat() + "T23:59:59.59Z");
-    }else if(startDate != "" && endDate == ""){
+    } else if (startDate != "" && endDate == "") {
       startDate = new Date(startDate + "T00:00:00.00Z"); //new Date("2020-08-01T00:00:00.00Z");
       endDate = new Date(dateFormat() + "T23:59:59.59Z");
 
-    }else if(startDate == "" && endDate != "")
-    {
-      startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
+    } else if (startDate == "" && endDate != "") {
+      // startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
+      startDate = lastMonth(new Date());
       endDate = new Date(endDate + "T23:59:59.59Z");
     }
-     else {
+    else {
       startDate = new Date(startDate + "T00:00:00.00Z");
       endDate = new Date(endDate + "T23:59:59.0099Z");
     }
@@ -685,7 +694,7 @@ router.post("/stackedChart", async function (req, res) {
       resultWeek.push(
         {
           date: element.DataRange,
-           done: element.data.done,
+          done: element.data.done,
           notDone: element.data.notDone
         }
       )
@@ -886,7 +895,8 @@ router.post("/TypePie", async function (req, res) {
   } = req.body;
   let formatLabel = "%Y-%m-%d";
   if (startDate === "" && endDate === "") {
-    startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
+    // startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
+    startDate = lastMonth(new Date());
     endDate = new Date();
   } else if (startDate != "" && endDate != "") {
     startDate = new Date(startDate + "T00:00:00.00Z");
@@ -894,6 +904,9 @@ router.post("/TypePie", async function (req, res) {
   } else if (startDate != "" && endDate === "") {
     startDate = new Date(startDate + "T00:00:00.00Z");
     endDate = new Date();
+  } else {
+    startDate = lastMonth(new Date());
+    endDate = new Date(endDate + "T23:59:59.0099Z");
   }
 
   if (modificationType != "" && modificationType != "All") {
@@ -1127,7 +1140,8 @@ router.post("/fieldPie", async function (req, res) {
   } = req.body;
   let formatLabel = "%Y-%m-%d";
   if (startDate === "" && endDate === "") {
-    startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
+    // startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
+    startDate = lastMonth(new Date());
     endDate = new Date();
   } else if (startDate != "" && endDate != "") {
     startDate = new Date(startDate + "T00:00:00.00Z");
@@ -1136,7 +1150,8 @@ router.post("/fieldPie", async function (req, res) {
     startDate = new Date(startDate + "T00:00:00.00Z");
     endDate = new Date();
   } else {
-    startDate = new Date(0);
+    // startDate = new Date(0);
+    startDate=lastMonth(new Date());
     endDate = new Date();
   }
   if (modificationField != "" && modificationField != "All") {
