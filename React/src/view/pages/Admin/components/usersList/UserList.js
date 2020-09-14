@@ -40,9 +40,9 @@ function UserList() {
         <button onClick={e=>{goToAudit(e)}}>go to audit page </button>
             <div >
                 {!acivePage ?
-                   <button onClick={e=>{notActive(e)}}>Show Not Active</button>
+                   <button onClick={e=>{goToNotActiveUsers(e)}}>Show Not Active</button>
                    :
-                   <button onClick={e=>{activeUsers(e)}}>Show Active</button>
+                   <button onClick={e=>{goToActiveUsers(e)}}>Show Active</button>
                 }
                
             </div>
@@ -54,7 +54,7 @@ function UserList() {
                 <h3>Role</h3>
                 <h4>password</h4>
             </form>
-
+           
             <form name='create' onSubmit={createUser} >
 
                 <input name="inputName" type="text" placeholder='Enter Name' required ></input>
@@ -67,15 +67,17 @@ function UserList() {
                 <input name="inputPassword" type="password" placeholder='Enter pass' required ></input>
                 <button type='submit'>Create</button>
             </form>
+            :
 
-            {users.map(user => <UserRow setUsers={setUsers} key={user.id} user={user} />)}
+                         
+            {users.map(user => <UserRow isActive={user.active} setUsers={setUsers} key={user.id} user={user} />)}
 
 
         </div>
     )
 
 
-    function activeUsers(e) {
+    function goToActiveUsers(e) {
         e.preventDefault();
         fetch('/api/users/getUsersList')
         .then(res => res.json())
@@ -94,7 +96,7 @@ function UserList() {
 
 
 
-    function notActive(e) {
+    function goToNotActiveUsers(e) {
         console.log('ENTERED')
         e.preventDefault();
         fetch('/api/users/getDeactivatedList')   

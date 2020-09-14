@@ -3,20 +3,16 @@ import './UserList.css'
 
 
 export default props => {
+    //--------------------------------
+    const {isActive} = props ; 
 
     const { user, setUsers } = props;
 
     const [edit, setEdit] = useState(false);
+   //-----------------------------------------
+   
 
-    const [checkActive, setCheckActive] = useState(true);
-
-    //------------------------
-    if (user.active == true) {
-        setCheckActive(true);
-    }
-    else setCheckActive(false);
-    //-------------------------
-
+  
     return (
 
 
@@ -39,9 +35,10 @@ export default props => {
                     :
                     <button className="save__Btn" type='submit'>Save</button>
                 }
+                </div>
 
                 <div className="item1" >
-                    {checkActive ?
+                    {isActive ?
                         <button onClick={e => { deleteUser(e, user.id) }}>Delete</button>
                         :
                         <button onClick={e => { activeUser(e, user.id) }}>Activate</button>
@@ -49,9 +46,8 @@ export default props => {
 
                 </div>
 
-
-                <button onClick={e => { deleteUser(e, user.id) }}>Delete</button>
-            </div>
+            
+            
         </form>
 
 
