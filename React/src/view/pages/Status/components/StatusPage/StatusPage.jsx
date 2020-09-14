@@ -351,6 +351,7 @@ const StatusPage = () => {
   const handleAddTaskClick = () => {
     history.push("/NewTask");
   };
+  console.log(openTasks);
 
   return (
     <div>
