@@ -106,14 +106,10 @@ function ChangesByParentId() {
       </div>
       {/* Select Filters */}
       
-      <div className="ChangesByParentId__Filters__wrapper">
-        <div className="ChangesByParentId__Filters__headers">
-          <p className="filter__header__item">Old/New</p>
-          <p className="filter__header__item">Start date</p>
-          <p className="filter__header__item">End date</p>
-        </div>
+      <div className="ChangesByParentId__Filters__wrapper"> 
       <form className="ChangesByParentId__Filters__fields">
-
+      <div className="Date_header">
+         <p>Fix Version</p> 
         <Select
           name="fixVersion"
           options={fixVersionOptions}
@@ -121,8 +117,9 @@ function ChangesByParentId() {
           className="ChangesByParentId__Filter"
           onChange={HandlefixVersionChange}
         />
-
-        From
+      </div>
+        <div className="Date_header">
+         <p>Start Date</p> 
         <input
           className="ChangesByParentId__DateFilter"
           type="date"
@@ -130,7 +127,9 @@ function ChangesByParentId() {
           value={startDate}
           onChange={HandleStartDateChange}
         />
-        To
+        </div>
+        <div className="Date_header">
+         <p>End Date</p> 
         <input
           className="ChangesByParentId__DateFilter"
           type="date"
@@ -138,10 +137,10 @@ function ChangesByParentId() {
           value={endDate}
           onChange={HandleEndDateChange}
         />
-
+        </div>
       </form>
-
-    </div>
+      </div>
+      </div>
   )
 
 }
