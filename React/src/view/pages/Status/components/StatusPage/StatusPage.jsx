@@ -374,7 +374,7 @@ const StatusPage = () => {
         <div className="statusPage__charts">
           <div className="statusPage__barChart">
             <h3>Task History</h3>
-            <div className="statusPage__barChart__filters">
+            {/* <div className="statusPage__barChart__filters">
               <DatePicker
                 onDateClick={handleDateClick}
                 name="startDate"
@@ -392,7 +392,7 @@ const StatusPage = () => {
                 className="filterSelect"
                 placeholder="Time Range"
               />
-            </div>
+            </div> */}
             {!isEmpty(stackedChart) && (
               <div className="statusPage__barChart__filters">
                 <DatePicker
