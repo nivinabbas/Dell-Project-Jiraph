@@ -3,20 +3,26 @@ import "./ModificationByField.css";
 import { useState, useRef } from 'react';
 import Select from "react-select"
 import Chart from "../charts/Chart"
+import { ServerStyleSheets } from '@material-ui/core';
 
 //Server Filters to receive Data
 let serverFilters = { fieldName: [], values: [], qaRepresentative: [], startDate: "", endDate: "", label: [] };
-
 function ModificationByField(props) {
   //On Page Opening
+
   useEffect(() => {
     //Building Start and End date for last month (Default)
     let startDate = new Date();
     let endDate = new Date();
     startDate.setMonth(endDate.getMonth() - 1);
+    let endMonth = endDate.getMonth() + 1 < 10 ? `0${endDate.getMonth() + 1}` : endDate.getMonth() + 1;
+    let startMonth = startDate.getMonth() + 1 < 10 ? `0${startDate.getMonth() + 1}` : startDate.getMonth() + 1;
+    setStartDate(`${startDate.getFullYear()}-${startMonth}-${startDate.getDate()}`)
+    setEndDate(`${endDate.getFullYear()}-${endMonth}-${endDate.getDate()}`)
     const timeZone = (startDate.getTimezoneOffset() / 60);
     startDate.setHours(0 - timeZone, 0, 0, 0);
-    endDate.setHours(0 - timeZone+23, 59, 59, 59);
+    endDate.setHours(0 - timeZone + 23, 59, 59, 59);
+
 
     //Default Server Filters to receive Data
     serverFilters = {
@@ -61,7 +67,9 @@ function ModificationByField(props) {
     })
       .then(res => res.json())
       .then(data => {
-        if (data != null) { setUiObjs(data); }
+        if (data != null) {
+          setUiObjs(data);
+        }
         else { setUiObjs([]); }
       })
   }, [])
@@ -78,6 +86,7 @@ function ModificationByField(props) {
       .then((res) => res.json())
       .then((data) => {
         if (data != null) {
+          console.log(data)
           setUiObjs(data);
         }
         else {
@@ -99,9 +108,10 @@ function ModificationByField(props) {
       .then((data) => {
         if (data != null) {
           if (data.length > 0)
+            // console.log(data)
             setValueOptions(data[0].Values);
           else {
-            if(serverFilters.fieldName!=""){
+            if (serverFilters.fieldName != "") {
               alert("No Available FieldName Values received From The Server (Check Coonection /Pick another fieldName)")
             }
             setValueOptions([]);
@@ -114,12 +124,14 @@ function ModificationByField(props) {
   const [UiObjs, setUiObjs] = useState([]); //UiObject from the server
   const [fieldNameOptions, setFieldNameOptions] = useState([]); //FieldName options for filtering
   const [valueOptions, setValueOptions] = useState([]);//Values of certain FieldName options for filtering
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([]);//Qa Representative options for filtering
   const labelOptions = [ //Labels for Displaying the Chart 
-    { value:"daily" , label: "daily" },
-    { value:"weekly" , label: "weekly" },
-    { value:"monthly" , label: "monthly" },
-    { value:"yearly" , label: "yearly" }];
+    { value: "daily", label: "daily" },
+    { value: "weekly", label: "weekly" },
+    { value: "monthly", label: "monthly" },
+    { value: "yearly", label: "yearly" }];
 
 
   //Filters Changes Handlers
@@ -137,9 +149,11 @@ function ModificationByField(props) {
     serverFilters.values = [];
     serverFilters.qaRepresentative = [];
     if (change != null) { serverFilters.fieldName = [change.value]; }
-    else { serverFilters.fieldName = [];
-      valueInput.current.state.value = ""; 
-      qaInput.current.state.value = "" }
+    else {
+      serverFilters.fieldName = [];
+      valueInput.current.state.value = "";
+      qaInput.current.state.value = ""
+    }
     render(serverFilters);
     renderFilters(serverFilters);
   })
@@ -148,7 +162,14 @@ function ModificationByField(props) {
   const handleChangeValues = (change => {
     serverFilters.values = [];
     if (change != null) {
-      change.map((item) => { return (serverFilters.values.push(item.value)) })
+      change.map((item) => {
+        let value = item.value;
+        if (value == "true" || value == "false") {
+          value = (value === 'true');
+
+        }
+        return (serverFilters.values.push(value))
+      })     // change.map((item) => { })
     }
     else { serverFilters.values = []; }
     render(serverFilters);
@@ -156,7 +177,12 @@ function ModificationByField(props) {
 
   //Qa Representative
   const handleChangeQaRepresentative = (change => {
-    serverFilters.qaRepresentative = [change.value];
+    if (change != null) {
+      serverFilters.qaRepresentative = [change.value];
+    }
+    else {
+      serverFilters.qaRepresentative = []
+    }
     render(serverFilters);
   })
 
@@ -167,9 +193,9 @@ function ModificationByField(props) {
   })
   //End Date
   const handleChangeEndDate = (change => {
-    let endDate =new Date(change.target.value)
+    let endDate = new Date(change.target.value)
     const timeZone = (endDate.getTimezoneOffset() / 60);
-    endDate.setHours((0 - timeZone)+(23), 59, 59, 59);
+    endDate.setHours((0 - timeZone) + (23), 59, 59, 59);
     serverFilters.endDate = endDate;
     render(serverFilters);
   })
@@ -183,14 +209,11 @@ function ModificationByField(props) {
     <div className='ModificationByField__Wrapper'>
       <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
       <div className="ModificationByField__Chart">
-        {UiObjs && <Chart UiObjs={UiObjs} />}
+        {UiObjs && <Chart UiObjs={UiObjs}  />}
       </div>
       <div className="ModificationByField__MainTitle">Modification By Field</div>
       <div className="ModificationByField__Filters">
 
-        
-
-        
         <Select
           name="fieldName"
           onInputChange={() => { valueInput.current.state.value = ""; qaInput.current.state.value = "" }}
@@ -200,7 +223,7 @@ function ModificationByField(props) {
           options={fieldNameOptions}
           isClearable={true} />
 
-        
+
         <Select
           name="value"
           onChange={handleChangeValues}
@@ -210,20 +233,21 @@ function ModificationByField(props) {
           className="ModificationByField__Filter"
           options={valueOptions} />
 
-        
+
         <Select
           name="qaRepresentative"
           ref={qaInput}
           onChange={handleChangeQaRepresentative}
-          placeholder="Qa Rep"
+          placeholder="QA Representative"
           className="ModificationByField__Filter"
-          options={qaRepresentativeOptions} />
+          options={qaRepresentativeOptions}
+          isClearable={true} />
 
         From
         <input
           className="ModificationByField__Filter__date"
           type="date"
-          name="startDate"
+          value={startDate}
           onChange={handleChangeStartDate}
         />
 
@@ -232,10 +256,11 @@ function ModificationByField(props) {
           className="ModificationByField__Filter__date"
           type="date"
           name="endDate"
+          value={endDate}
           onChange={handleChangeEndDate}
         />
 
-        
+
         <Select
           name="label"
           onChange={handleChangeLabel}
