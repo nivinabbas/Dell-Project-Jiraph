@@ -290,7 +290,8 @@ router.post("/stackedChart", async function (req, res) {
     formatLabel = "%Y-%m-%d";
   } else if (label == "monthly") {
     formatLabel = "%Y-%m";
-  } else {
+  } 
+  else {
     formatLabel = "%Y";
   }
   if (startDate == "" && endDate == "") {
@@ -299,7 +300,7 @@ router.post("/stackedChart", async function (req, res) {
     endDate = new Date(dateFormat() + "T23:59:59.59Z");
     let stackedChartDone = await TaskModel.aggregate([{
       $match: {
-        "diffItem.updatedTime": {
+        "taskItem.createdTime": {
           $gte: startDate,
           $lte: endDate,
         },
@@ -309,7 +310,7 @@ router.post("/stackedChart", async function (req, res) {
       $group: {
         _id: {
           $dateToString: {
-            date: "$diffItem.updatedTime",
+            date: "$taskItem.createdTime",
             format: formatLabel,
           },
         },
@@ -365,7 +366,7 @@ router.post("/stackedChart", async function (req, res) {
 
     let stackedChartDone = await TaskModel.aggregate([{
       $match: {
-        "diffItem.updatedTime": {
+        "taskItem.createdTime": {
           $gte: startDate,
           $lte: endDate,
         },
@@ -375,7 +376,7 @@ router.post("/stackedChart", async function (req, res) {
       $group: {
         _id: {
           $dateToString: {
-            date: "$diffItem.updatedTime",
+            date: "$taskItem.createdTime",
             format: formatLabel, //"%Y-%m-%d",
           },
         },
@@ -1326,4 +1327,80 @@ router.get("/getType", async function (req, res) {
   }).then((err) => console.log(err));
 });
 //getType end
+
+
+
+
+//Weekly Label Function===> 
+function weeklyLabel(startDate, endDate, tasks) {
+
+  //function to get certain date after adding amount of days
+  function addDays(date, days) {
+      var result = new Date(date);
+      result.setDate(result.getDate() + days);
+      return result;
+  }
+
+  //function to get number of days between 2 date range
+  const diffTime = Math.abs(endDate - startDate);
+  let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  let weeklyStartDate = startDate;//variable for starting date of each week
+  let weeklyEndDate = addDays(weeklyStartDate, 6)//variable for ending date of each week
+  let currentWeek = 0;//counter for weeks
+  let arrayForWeeks = [];//array that will contain the UiObj
+  while (diffDays > 6) {
+      arrayForWeeks.push(
+          { _id: `${weeklyStartDate.getDate()}/${weeklyStartDate.getMonth() + 1}/${weeklyStartDate.getFullYear()} - ${weeklyEndDate.getDate()}/${weeklyEndDate.getMonth() + 1}/${weeklyEndDate.getFullYear()}`, arr: [] })
+      diffDays = diffDays - 7;
+      weeklyStartDate = addDays(weeklyEndDate, 1);
+      weeklyEndDate = addDays(weeklyStartDate, 6);
+  }
+  if (diffDays > 0) {//add the days as a range
+      weeklyEndDate = addDays(weeklyStartDate, diffDays-1);
+      arrayForWeeks.push(
+          { _id: `${weeklyStartDate.getDate()}/${weeklyStartDate.getMonth() + 1}/${weeklyStartDate.getFullYear()} - ${weeklyEndDate.getDate()}/${weeklyEndDate.getMonth() + 1}/${weeklyEndDate.getFullYear()}`, arr: [] })
+
+  }
+  weeklyEndDate = addDays(startDate, 6);
+  
+  for (i = 0; i < tasks.length; i++) {
+      if (new Date(tasks[i]._id) <= weeklyEndDate) {
+          arrayForWeeks[currentWeek].arr = arrayForWeeks[currentWeek].arr.concat(tasks[i].arr)
+      }
+      else {
+          while(weeklyEndDate<(new Date(tasks[i]._id))){
+          weeklyEndDate = addDays(weeklyEndDate, 7);
+          currentWeek++;
+          }
+          arrayForWeeks[currentWeek].arr = arrayForWeeks[currentWeek].arr.concat(tasks[i].arr)
+          
+      }
+  }
+
+  //function to remove all the weeks that contains 0 tasks
+  let filtered = arrayForWeeks.filter(function (el) { return el.arr.length > 0; });
+  let result = [];
+  filtered.map((element => {
+      let result2 = { _id: element._id, arr: [] };
+      element.arr.map((task => {
+          let obj = result2.arr.find(obj => obj.value === task.value);
+          if (obj != undefined) {
+              obj.tasks = obj.tasks.concat(task.tasks);
+              obj.size = obj.tasks.length;
+          }
+          else {
+              result2.arr.push({ value: task.value, tasks: task.tasks, size: task.tasks.length })
+          }
+      }))
+      result.push(result2);
+  }))
+  result.map((week => {
+      week.arr.sort((a, b) => a.value > b.value ? -1 : 1)
+  }))
+  return result;
+}
+
+
+
+
 module.exports = router;
