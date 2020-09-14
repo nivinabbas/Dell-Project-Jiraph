@@ -10,9 +10,6 @@ const options = {
     toolbar: {
       show: false,
     },
-    zoom: {
-      enabled: true,
-    },
 
     responsive: [
       {
@@ -20,30 +17,26 @@ const options = {
         options: {
           legend: {
             position: "bottom",
-            offsetX: -10,
+            offsetX: -2,
             offsetY: 0,
           },
         },
       },
     ],
-    plotOptions: {
-      bar: {
-        horizontal: false,
-      },
-    },
-
-    legend: {
-      position: "right",
-      offsetY: 40,
+  },
+  plotOptions: {
+    bar: {
+      horizontal: true,
     },
   },
+
+  series: { colors: ["#F44336", "#E91E63"] },
   fill: {
     opacity: 1,
     colors: "#388E3C",
   },
 };
 export default function StatisticsChart({ data = [], onDataSelected }) {
-
   const series = [
     {
       name: "Done",
@@ -52,9 +45,7 @@ export default function StatisticsChart({ data = [], onDataSelected }) {
     },
   ];
 
-
   const categories = data.map((d) => d.date);
-
 
   const xaxis = {
     categories: categories,
