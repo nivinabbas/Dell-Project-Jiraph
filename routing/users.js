@@ -71,6 +71,8 @@ router.post('/login', (req, res) => {
 })
 
 router.get('/getUsersList', (req, res) => {
+
+    console.log('goot')
     UserModel.find({active:true}).then(users => {
         if (users.length > 0) {
             let table = [];
@@ -80,6 +82,8 @@ router.get('/getUsersList', (req, res) => {
 
             res.send({ success: true, error: null, info: { table } })
         }
+        else {res.send({ success: false, error: "Not Found", info: null })}
+
     })
 })
 

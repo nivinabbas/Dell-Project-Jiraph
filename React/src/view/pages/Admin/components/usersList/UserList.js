@@ -2,10 +2,6 @@ import React, { useState, useEffect } from 'react';
 import './UserList.css'
 import { useHistory } from "react-router-dom";
 
-import {
-    Link
-} from "react-router-dom";
-
 
 
 //components
@@ -41,7 +37,7 @@ function UserList() {
 
 
         <div className='adminpage'>
-
+        <button onClick={e=>{goToAudit(e)}}>go to audit page </button>
             <div >
                 {!acivePage ?
                    <button onClick={e=>{notActive(e)}}>Show Not Active</button>
@@ -79,11 +75,14 @@ function UserList() {
     )
 
 
-    function activeUsers() {
+    function activeUsers(e) {
+        e.preventDefault();
         fetch('/api/users/getUsersList')
         .then(res => res.json())
         .then(data => {
             if (data.success == true) {
+                console.log(data.success)
+                console.log(data.info.table)
                 setUsers(data.info.table);
             }
             else {
@@ -95,12 +94,15 @@ function UserList() {
 
 
 
-    function notActive() {
+    function notActive(e) {
+        console.log('ENTERED')
+        e.preventDefault();
         fetch('/api/users/getDeactivatedList')   
             .then(res => res.json())
             .then(data => {
-                const tempData = data.info.table;
                 if (data.success == true) {
+                    console.log(data.success)
+                    console.log(data.info.table)
                     setUsers(data.info.table);
                     }
                 else {
@@ -138,7 +140,6 @@ function UserList() {
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data)
                 if (data.success == true) {
                     setUsers(data.info.table)
                     return (alert('created sucsses'))

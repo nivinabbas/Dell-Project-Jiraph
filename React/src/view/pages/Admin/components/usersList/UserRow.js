@@ -42,9 +42,9 @@ export default props => {
 
                 <div className="item1" >
                     {checkActive ?
-                       <button onClick={e => { deleteUser(e, user.id) }}>Delete</button>
+                        <button onClick={e => { deleteUser(e, user.id) }}>Delete</button>
                         :
-                        <button onClick={e => { activeUser(e,user.id) }}>Activate</button>
+                        <button onClick={e => { activeUser(e, user.id) }}>Activate</button>
                     }
 
                 </div>
@@ -59,23 +59,30 @@ export default props => {
     )
 
 
-    function activeUser(e, id){
+    function activeUser(e, id) {
         e.preventDefault();
         if (!window.confirm('Are you sure you want to Active this User?')) {
             alert("Not Activated")
             return;
         }
-        fetch('/api/users/getDeactivatedList')   
-        .then(res => res.json({id}))
-        .then(data => {
-            const tempData = data.info.table;
-            if (data.success == true) {
-                setUsers(data.info.table);
-                }
-            else {
-                alert(data.error)
+        fetch('/api/users/activeUser', {
+            method: 'PUT',
+            body: JSON.stringify({ id }),
+            headers: {
+                "Content-Type": "application/json"
             }
         })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success == true) {
+                    setUsers(data.info.table);
+                    return alert('Activated sucsses')
+                }
+                else if (data.success == false) {
+                    alert(data.error)
+                }
+
+            })
 
     }
 
@@ -137,11 +144,11 @@ export default props => {
         })
             .then(response => response.json())
             .then(data => {
-                if (data.success = true) {
+                if (data.success == true) {
                     setUsers(data.info.table);
                     return alert('Deleted sucsses')
                 }
-                else if (data.success = false) {
+                else if (data.success == false) {
                     alert(data.error)
                 }
 
