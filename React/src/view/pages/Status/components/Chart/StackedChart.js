@@ -14,7 +14,6 @@ const options = {
     zoom: {
       enabled: true,
     },
-
     responsive: [
       {
         breakpoint: 480,
@@ -32,16 +31,13 @@ const options = {
         horizontal: false,
       },
     },
-
-    legend: {
-      position: "right",
-      offsetY: 40,
-    },
   },
+
   fill: {
     opacity: 1,
     colors: ["#FF6900", "#4caf50"],
   },
+  colors: ["#FF6900", "#4caf50"],
 };
 
 export default function StackedChart({ data = [], onDataSelected }) {

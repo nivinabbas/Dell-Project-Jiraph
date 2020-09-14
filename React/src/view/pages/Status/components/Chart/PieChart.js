@@ -4,8 +4,15 @@ import "./PieChart.css";
 import { isEmpty } from "../../../../../service/utils";
 
 const PieChart = ({ name, dataPieChart }) => {
-  let selectName = name;
-  let options = { fill: { colors: ["#FF6900", "#4caf50"] } };
+  let options = {
+    fill: {
+      opacity: 1,
+      colors: ["#4caf50", "#FF6900"],
+    },
+    colors: ["#4caf50", "#FF6900"],
+    labels: ["Done", "Not Done"],
+  };
+
   return (
     <div id="chart">
       {!isEmpty(dataPieChart) && (

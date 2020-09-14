@@ -15,7 +15,7 @@ import {
   initialPieChartsFilters,
 } from "../../../../../service/statusService";
 import "./StatusPage.css";
-import { isEmpty, dateFormat, lastMonth } from "../../../../../service/utils";
+import { dateFormat, lastMonth } from "../../../../../service/utils";
 
 const timeLabelOptions = [
   { value: "daily", label: "Daily" },
@@ -371,6 +371,29 @@ const StatusPage = () => {
           <DailyAlerts cardsContent={cardsContent} />
         </div>
 
+        <div className="statusPage__barChart__filters">
+          <DatePicker
+            onDateClick={handleDateClick}
+            name="startDate"
+            label="From:"
+            value={startDate}
+          />
+          <DatePicker
+            onDateClick={handleDateClick}
+            name="endDate"
+            label="To:"
+            value={endDate}
+          />
+
+          <h3>Time Range</h3>
+          <Select
+            options={timeLabelOptions}
+            onChange={(filter) => setTimeLabel(filter)}
+            className="filterSelect"
+            placeholder="Daily"
+          />
+        </div>
+
         <div className="statusPage__barChart">
           <h3>Tasks statistics</h3>
           {StatisticsChart.length != 0 && (
@@ -382,32 +405,9 @@ const StatusPage = () => {
         </div>
 
         <div className="statusPage__charts">
-          <div className="statusPage__barChart">
+          <div className="statusPage__barChart2">
             <h3>Task History</h3>
-            {!isEmpty(stackedChart) && (
-              <div className="statusPage__barChart__filters">
-                <DatePicker
-                  onDateClick={handleDateClick}
-                  name="startDate"
-                  label="From:"
-                  value={startDate}
-                />
-                <DatePicker
-                  onDateClick={handleDateClick}
-                  name="endDate"
-                  label="To:"
-                  value={endDate}
-                />
 
-                <h3>Time Range</h3>
-                <Select
-                  options={timeLabelOptions}
-                  onChange={(filter) => setTimeLabel(filter)}
-                  className="filterSelect"
-                  placeholder="Daily"
-                />
-              </div>
-            )}
             {stackedChart.length === 0 && (
               <div className="statupPage__circularProgress">
                 <CircularProgress disableShrink />
