@@ -1,18 +1,26 @@
 const express = require('express');
 const app = express();
 var bodyParser = require('body-parser')
+const jwt = require("jsonwebtoken");
+const cookies = require("cookie-parser");
 app.use(bodyParser.json()); // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
     extended: true
 }));
+
 const port=process.env.PORT ||4000;
 //const TaskModel = require('./schemas/TaskSchema');
 
 const TaskModel = require('./schemas/TaskSchema');
 
+var secret = 'abcdefghujklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789!@#$%^&*()_+';
+module.exports = secret;
+
 
 
 app.use(express.static('public'))
+
+app.use(cookies());
 
  const url = "mongodb+srv://nimer:N1N1N1N1@cluster0.tejcy.mongodb.net/server";
 // const url = "mongodb+srv://Marshood:raMHdQuDOBxwrcss@cluster0.ifcjp.mongodb.net/jira";
@@ -72,9 +80,6 @@ function randomDate(start, end /*, startHour, endHour*/) {
     // console.log(date)
     return date;
 }
-
-
- 
 
 
 app.listen(port, () => {
