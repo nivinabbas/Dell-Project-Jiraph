@@ -7,9 +7,9 @@ const options = {
     type: "bar",
     height: 350,
     stacked: true,
-    //stackType: "100%",
+
     toolbar: {
-      show: true,
+      show: false,
     },
     zoom: {
       enabled: true,
@@ -37,19 +37,24 @@ const options = {
       position: "right",
       offsetY: 40,
     },
-    fill: {
-      opacity: 1,
-    },
+  },
+  fill: {
+    opacity: 1,
+    colors: ["#FF6900", "#4caf50"],
   },
 };
 
 export default function StackedChart({ data = [], onDataSelected }) {
-  
   const series = [
-    { name: "Done", data: data.map((d) => d.done) },
-    { name: "NotDone", data: data.map((d) => d.notDone) },
+    {
+      name: "NotDone",
+      data: data.map((d) => d.notDone),
+    },
+    {
+      name: "Done",
+      data: data.map((d) => d.done),
+    },
   ];
-  console.log("series StackedChart " ,series)
 
   const categories = data.map((d) => d.date);
 
@@ -80,9 +85,17 @@ export default function StackedChart({ data = [], onDataSelected }) {
   };
 
   return (
-    <div id="daily_chart" style={{ width: "100%" }}>
+    <div
+      id="daily_chart"
+      style={{
+        width: "100%",
+      }}
+    >
       <Chart
-        options={{ ...options, xaxis }}
+        options={{
+          ...options,
+          xaxis,
+        }}
         height="450"
         series={series}
         type="bar"
@@ -90,4 +103,3 @@ export default function StackedChart({ data = [], onDataSelected }) {
     </div>
   );
 }
-

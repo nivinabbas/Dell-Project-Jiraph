@@ -7,9 +7,8 @@ const options = {
     type: "bar",
     height: 350,
     stacked: true,
-    //stackType: "100%",
     toolbar: {
-      show: true,
+      show: false,
     },
     zoom: {
       enabled: true,
@@ -37,14 +36,14 @@ const options = {
       position: "right",
       offsetY: 40,
     },
-    fill: {
-      opacity: 1,
-    },
+  },
+  fill: {
+    opacity: 1,
+    colors: "#388E3C",
   },
 };
 export default function StatisticsChart({ data = [], onDataSelected }) {
-  console.log("test ");
-  console.log("data: ", data);
+
   const series = [
     {
       name: "Done",
@@ -53,9 +52,9 @@ export default function StatisticsChart({ data = [], onDataSelected }) {
     },
   ];
 
-  console.log("series", series);
+
   const categories = data.map((d) => d.date);
-  console.log("categories", categories);
+
 
   const xaxis = {
     categories: categories,

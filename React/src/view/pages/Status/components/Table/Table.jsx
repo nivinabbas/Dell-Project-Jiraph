@@ -1,6 +1,8 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import Select from "react-select";
 import "./style.css";
+import TablePagination from "@material-ui/core/TablePagination";
+import { Checkbox } from "@material-ui/core";
 
 export default function TasksTable({
   openTasks,
@@ -10,14 +12,26 @@ export default function TasksTable({
   onDoneClick,
   onSelect,
   tableFilters,
+  onUpdateClick,
 }) {
   const disableSelect = () => {
     return tableFilters[0].value !== "Update" ? true : false;
   };
 
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   /* Select inputs refs */
   const modField = useRef("");
   const modValue = useRef("");
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   return (
     <div className="open-tasks">
@@ -28,7 +42,7 @@ export default function TasksTable({
           options={modificationTypeOptions}
           className="filterSelectB"
           onChange={(filter, name) => onSelect(filter, "modificationType")}
-          placeholder="Type"
+          placeholder="All"
           onInputChange={() => {
             modField.current.state.value = "";
             modValue.current.state.value = "";
@@ -55,6 +69,7 @@ export default function TasksTable({
           placeholder="Value"
           ref={modValue}
         />
+        <button onClick={() => onUpdateClick()}>Update</button>
       </div>
       <div className="open-tasks-table">
         <table className="container">
@@ -88,15 +103,25 @@ export default function TasksTable({
                 <td>
                   <input
                     type="checkbox"
-                    onClick={() => onDoneClick(task._id, task.taskItem.isDone)}
+                    onClick={() => onDoneClick(task._id)}
                     key={task._id}
-                    checked={task.taskItem.isDone}
+                    //checked={task.taskItem.isDone}
+                    onChange={() => {}}
                   />
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={10}
+          rowsPerPage={1}
+          page={page}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+        />
       </div>
     </div>
   );
