@@ -67,6 +67,7 @@ export default function TasksTable({
           placeholder="Value"
           ref={modValue}
         />
+        <button>Update</button>
       </div>
       <div className="open-tasks-table">
         <table className="container">
