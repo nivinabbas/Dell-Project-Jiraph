@@ -7,9 +7,8 @@ const options = {
     type: "bar",
     height: 350,
     stacked: true,
-    //stackType: "100%",
     toolbar: {
-      show: true,
+      show: false,
     },
     zoom: {
       enabled: true,
@@ -37,9 +36,10 @@ const options = {
       position: "right",
       offsetY: 40,
     },
-    fill: {
-      opacity: 1,
-    },
+  },
+  fill: {
+    opacity: 1,
+    colors: "#388E3C",
   },
 };
 export default function StatisticsChart({ data = [], onDataSelected }) {
@@ -69,10 +69,10 @@ export default function StatisticsChart({ data = [], onDataSelected }) {
     ) {
       //console.log("series.tasks", series[0].tasks);
       console.log(seriesIndex);
-    //   let tasks = series[seriesIndex].tasks[dataPointIndex];
-    //   let date = categories[dataPointIndex];
+      //   let tasks = series[seriesIndex].tasks[dataPointIndex];
+      //   let date = categories[dataPointIndex];
 
-    //   return onDataSelected(date, tasks);
+      //   return onDataSelected(date, tasks);
     },
   };
 
