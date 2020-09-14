@@ -104,6 +104,7 @@ export default function TasksTable({
                     onClick={() => onDoneClick(task._id, task.taskItem.isDone)}
                     key={task._id}
                     checked={task.taskItem.isDone}
+                    onChange={() => {}}
                   />
                 </td>
               </tr>

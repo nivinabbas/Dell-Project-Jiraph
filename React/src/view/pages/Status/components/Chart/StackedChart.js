@@ -45,13 +45,16 @@ const options = {
 };
 
 export default function StackedChart({ data = [], onDataSelected }) {
-  console.log("data StackedChart: ", data)
-
   const series = [
-    { name: "NotDone", data: data.map((d) => d.notDone) },
-    { name: "Done", data: data.map((d) => d.done) },
+    {
+      name: "NotDone",
+      data: data.map((d) => d.notDone),
+    },
+    {
+      name: "Done",
+      data: data.map((d) => d.done),
+    },
   ];
-
 
   const categories = data.map((d) => d.date);
 
@@ -76,15 +79,23 @@ export default function StackedChart({ data = [], onDataSelected }) {
     ) {
       let status = series[seriesIndex].name;
       let date = categories[dataPointIndex];
-      console.log(status, date)
+
       return onDataSelected(date, status);
     },
   };
 
   return (
-    <div id="daily_chart" style={{ width: "100%" }}>
+    <div
+      id="daily_chart"
+      style={{
+        width: "100%",
+      }}
+    >
       <Chart
-        options={{ ...options, xaxis }}
+        options={{
+          ...options,
+          xaxis,
+        }}
         height="450"
         series={series}
         type="bar"

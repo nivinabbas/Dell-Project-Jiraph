@@ -1,9 +1,8 @@
 import React from "react";
 import "./DatePicker.css";
 import { isEmpty } from "../../../../../service/utils";
-import StackedChart from "../Chart/StackedChart";
+
 export default function DatePicker({ onDateClick, name, label, value }) {
-  console.log("dddddddddddddddddddddddddddddddd", value);
   return (
     <div className="datePicker">
       <label htmlFor={name} className="datePicker__label">

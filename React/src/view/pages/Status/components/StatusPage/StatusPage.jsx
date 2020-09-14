@@ -1,7 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { confirmAlert } from "react-confirm-alert";
-import AddTask from "../../img/add.png";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import Table from "../Table/Table.jsx";
 import StackedChart from "../Chart/StackedChart";
@@ -16,16 +15,7 @@ import {
   initialPieChartsFilters,
 } from "../../../../../service/statusService";
 import "./StatusPage.css";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect,
-  Link,
-  useLocation,
-  useHistory,
-} from "react-router-dom";
-import { isEmpty } from "../../../../../service/utils";
+import { isEmpty, dateFormat, lastMonth } from "../../../../../service/utils";
 
 const timeLabelOptions = [
   { value: "daily", label: "Daily" },
@@ -33,7 +23,6 @@ const timeLabelOptions = [
   { value: "monthly", label: "Monthly" },
 ];
 const StatusPage = () => {
-  let history = useHistory();
   const [cardsContent, setCardsContent] = useState([]);
   const [openTasks, setOpenTasks] = useState([]);
   const [stackedChart, setStackedChart] = useState([]);
@@ -49,13 +38,14 @@ const StatusPage = () => {
     modificationFieldValueOptions,
     setModificationFieldValueOptions,
   ] = useState({});
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(dateFormat(lastMonth()));
+  const [endDate, setEndDate] = useState(dateFormat(new Date()));
   const [timeLabel, setTimeLabel] = useState("");
   const [pieChartsFilters, setPieChartsFilters] = useState(
     initialPieChartsFilters
   );
   const [tableFilters, setTableFilters] = useState(initialTableFilters);
+  const [rawad, setRawad] = useState("");
   //statistics
   useEffect(() => {
     const filters = {
@@ -78,7 +68,7 @@ const StatusPage = () => {
           alert(error);
         }
       });
-  }, [startDate, endDate]);
+  }, [startDate, endDate, openTasks]);
 
   //statistics
   useEffect(() => {
@@ -115,6 +105,7 @@ const StatusPage = () => {
       endDate,
       label: timeLabel.value,
     };
+
     fetch("/api/status/stackedChart", {
       method: "POST",
       headers: {
@@ -271,9 +262,11 @@ const StatusPage = () => {
   //date
   const handleDateClick = (date) => {
     const { name, value } = date;
-    name === "startDate" ? setStartDate(value) : setEndDate(value);
+    name === "startDate"
+      ? setStartDate(value.trim())
+      : setEndDate(value.trim());
   };
-  console.log("dateeeeeeee", startDate, endDate);
+
   const handleSelect = (filter, name) => {
     const newFilters = [...tableFilters].map((f) => {
       if (f.name === name) {
@@ -335,7 +328,6 @@ const StatusPage = () => {
       .then((data) => {
         let { success, error, info } = data;
         if (success) {
-          console.log("rawaddddddddddddddddddddddddddddddddddddd", info);
           setOpenTasks(info);
         } else {
           alert(error);
@@ -347,11 +339,6 @@ const StatusPage = () => {
     setOpenTasks(tasks);
   };
 
-  const handleAddTaskClick = () => {
-    history.push("/NewTask");
-  };
-  console.log(openTasks);
-
   return (
     <div>
       <div className="status__header">Status</div>
@@ -360,53 +347,33 @@ const StatusPage = () => {
           <h3>Daily Alerts</h3>
           <DailyAlerts cardsContent={cardsContent} />
         </div>
-        <div>
-          <div className="statusPage__barChart">
-            <h3>Tasks statistics</h3>
-            {StatisticsChart.length != 0 && (
-              <StatisticsChart
-                data={statisticsChart}
-                onDataSelected={handleStaticsClick}
-              />
-            )}
-          </div>
+
+        <div className="statusPage__barChart">
+          <h3>Tasks statistics</h3>
+          {StatisticsChart.length != 0 && (
+            <StatisticsChart
+              data={statisticsChart}
+              onDataSelected={handleStaticsClick}
+            />
+          )}
         </div>
 
         <div className="statusPage__charts">
           <div className="statusPage__barChart">
             <h3>Task History</h3>
-            {/* <div className="statusPage__barChart__filters">
-              <DatePicker
-                onDateClick={handleDateClick}
-                name="startDate"
-                label="From:"
-              />
-              <DatePicker
-                onDateClick={handleDateClick}
-                name="endDate"
-                label="To:"
-              />
-              <h3>Time Range</h3>
-              <Select
-                options={timeLabelOptions}
-                onChange={(filter) => setTimeLabel(filter)}
-                className="filterSelect"
-                placeholder="Time Range"
-              />
-            </div> */}
             {!isEmpty(stackedChart) && (
               <div className="statusPage__barChart__filters">
                 <DatePicker
                   onDateClick={handleDateClick}
                   name="startDate"
                   label="From:"
-                  value={stackedChart[0].date}
+                  value={startDate}
                 />
                 <DatePicker
                   onDateClick={handleDateClick}
                   name="endDate"
                   label="To:"
-                  value={stackedChart[stackedChart.length - 1].date}
+                  value={endDate}
                 />
 
                 <h3>Time Range</h3>
