@@ -45,6 +45,7 @@ const StatusPage = () => {
     initialPieChartsFilters
   );
   const [tableFilters, setTableFilters] = useState(initialTableFilters);
+  const [rawad, setRawad] = useState("");
   //statistics
   useEffect(() => {
     const filters = {
@@ -67,7 +68,7 @@ const StatusPage = () => {
           alert(error);
         }
       });
-  }, [startDate, endDate]);
+  }, [startDate, endDate, openTasks]);
 
   //statistics
   useEffect(() => {
@@ -104,7 +105,7 @@ const StatusPage = () => {
       endDate,
       label: timeLabel.value,
     };
-    console.log("fil: ", filters);
+
     fetch("/api/status/stackedChart", {
       method: "POST",
       headers: {
@@ -338,8 +339,6 @@ const StatusPage = () => {
     setOpenTasks(tasks);
   };
 
-  console.log("startDate:", startDate);
-  console.log("endDate:", endDate);
   return (
     <div>
       <div className="status__header">Status</div>
@@ -348,16 +347,15 @@ const StatusPage = () => {
           <h3>Daily Alerts</h3>
           <DailyAlerts cardsContent={cardsContent} />
         </div>
-        <div>
-          <div className="statusPage__barChart">
-            <h3>Tasks statistics</h3>
-            {StatisticsChart.length != 0 && (
-              <StatisticsChart
-                data={statisticsChart}
-                onDataSelected={handleStaticsClick}
-              />
-            )}
-          </div>
+
+        <div className="statusPage__barChart">
+          <h3>Tasks statistics</h3>
+          {StatisticsChart.length != 0 && (
+            <StatisticsChart
+              data={statisticsChart}
+              onDataSelected={handleStaticsClick}
+            />
+          )}
         </div>
 
         <div className="statusPage__charts">
