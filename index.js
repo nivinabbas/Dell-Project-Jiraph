@@ -17,7 +17,6 @@ var secret = 'abcdefghujklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789!@#$%
 module.exports = secret;
 
 
-
 app.use(express.static('public'))
 
 app.use(cookies());

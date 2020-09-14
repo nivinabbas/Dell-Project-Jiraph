@@ -7,6 +7,8 @@ const router = express.Router();
 const UserSchema = require("../schemas/UserSchema");
 const TaskModel = require("../schemas/TaskSchema");
 const mongoose = require("mongoose");
+const auth = require("../authentication/auth");
+const admin = require("../authentication/admin");
 let Today;
 
 ////////////TEMP FUNCTIONS/////////////
@@ -30,7 +32,7 @@ function dateFormat() {
 //////////////////////////////////////
 
 // Start daily status alert !
-router.get("/dailyalerts", async function (req, res) {
+router.get("/dailyalerts",[auth], async function (req, res) {
   let Today = dateFormat();
   console.log("***************&&&&&&&&&*****");
   let DailyAlerts = await TaskModel.aggregate([{
@@ -143,7 +145,7 @@ router.get("/dailyalerts", async function (req, res) {
 // End daily status alert !
 
 // start open tasks
-router.get("/openTasks", async function (req, res) {
+router.get("/openTasks",[auth], async function (req, res) {
   TaskModel.find({
     "taskItem.isDone": false
   }, function (err, doc) {
@@ -159,7 +161,7 @@ router.get("/openTasks", async function (req, res) {
 // end open tasks
 
 // start openTasksWithFilter
-router.post("/openTasksWithFilter", async function (req, res) {
+router.post("/openTasksWithFilter",[auth], async function (req, res) {
   const {
     filter
   } = req.body;
@@ -199,7 +201,7 @@ router.post("/openTasksWithFilter", async function (req, res) {
 // end openTasksWithFilter
 
 // start update task
-router.post("/updateTasks", (req, res) => {
+router.post("/updateTasks",[auth], (req, res) => {
   console.log(req.body.jiraId);
   const {
     jiraId,
@@ -236,7 +238,7 @@ router.post("/updateTasks", (req, res) => {
 // end update task
 
 // start PieChart
-router.post("/PieChart", (req, res) => {
+router.post("/PieChart",[auth], (req, res) => {
   const {
     jiraId,
     userId
@@ -271,7 +273,7 @@ router.post("/PieChart", (req, res) => {
 });
 // end update task
 //stackedChart start
-router.post("/stackedChart", async function (req, res) {
+router.post("/stackedChart",[auth], async function (req, res) {
   let {
     label,
     startDate,
@@ -449,7 +451,7 @@ router.post("/stackedChart", async function (req, res) {
   // res.send({ success: false, error: null, info: null });
 });
 
-router.get("/stackedChart", async function (req, res) {
+router.get("/stackedChart",[auth], async function (req, res) {
   //default, label daily
   {
     datefrom = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
@@ -534,7 +536,7 @@ router.get("/stackedChart", async function (req, res) {
 //stackedChart end
 
 // start  type pie fieldPie
-router.get("/TypePie", async function (req, res) {
+router.get("/TypePie",[auth], async function (req, res) {
   datefrom = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
   dateTo = new Date();
   let TypePieOb = await TaskModel.aggregate([{
@@ -614,7 +616,7 @@ router.get("/TypePie", async function (req, res) {
   });
 });
 
-router.post("/TypePie", async function (req, res) {
+router.post("/TypePie",[auth], async function (req, res) {
   let TypePieOb;
   let {
     modificationType,
@@ -757,7 +759,7 @@ router.post("/TypePie", async function (req, res) {
 //end type pie
 
 // start pie field
-router.get("/fieldPie", async function (req, res) {
+router.get("/fieldPie",[auth], async function (req, res) {
   datefrom = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
   dateTo = new Date();
   let TypePieOb = await TaskModel.aggregate([{
@@ -837,7 +839,7 @@ router.get("/fieldPie", async function (req, res) {
   });
 });
 
-router.post("/fieldPie", async function (req, res) {
+router.post("/fieldPie",[auth], async function (req, res) {
   let TypePieOb;
   let {
     modificationField,
@@ -1012,7 +1014,7 @@ router.get("/modificationTypeOptions", async function (req, res) {
 // modificationTypeOptions end
 
 //modificationFieldOptions start
-router.get("/modificationFieldOptions", async function (req, res) {
+router.get("/modificationFieldOptions",[auth], async function (req, res) {
   let Data = [];
   let obj = {};
   console.log("modificationFieldOptions")
@@ -1042,7 +1044,7 @@ router.get("/modificationFieldOptions", async function (req, res) {
 //modificationFieldOptions end
 
 // modificationFieldOptions start
-router.post("/modificationFieldValueOptions", async function (req, res) {
+router.post("/modificationFieldValueOptions",[auth], async function (req, res) {
   let data = req.body;
   let returnData = [];
   TaskModel.find({
@@ -1074,7 +1076,7 @@ router.post("/modificationFieldValueOptions", async function (req, res) {
 
 
 //  start
-router.post("/filltersAllSubmit", async function (req, res) {
+router.post("/filltersAllSubmit",[auth], async function (req, res) {
   let data = req.body;
   if (data[0].value === "Update" && data[1].value != null && data[2].value != null) {
     TaskModel.find({
@@ -1175,7 +1177,7 @@ function openTasksWithFilter(type, fieldName) {
 }
 // openTasksWithFilter("Update", "qaRepresentative1");
 //fieldName start
-router.get("/getFieldName", async function (req, res) {
+router.get("/getFieldName",[auth], async function (req, res) {
   let Data = [];
   TaskModel.distinct("diffItem.updatedField.fieldName", function (err, doc) {
     // success:T/F,error:string,info{TaskItem[Task]
@@ -1199,7 +1201,7 @@ router.get("/getFieldName", async function (req, res) {
 //fieldName end
 
 //getType start
-router.get("/getType", async function (req, res) {
+router.get("/getType",[auth], async function (req, res) {
   TaskModel.distinct("diffItem.type", function (err, doc) {
     // success:T/F,error:string,info{TaskItem[Task]
     res.send({
