@@ -104,6 +104,7 @@ export default function StatisticsChart({ data = [], onDataSelected }) {
       <ClickAwayListener onClickAway={handleTooltipClose}>
         <div>
           <Tooltip
+            style={{ fontSize: 8 }}
             PopperProps={{
               disablePortal: true,
             }}
@@ -112,9 +113,9 @@ export default function StatisticsChart({ data = [], onDataSelected }) {
             disableFocusListener
             disableHoverListener
             disableTouchListener
-            title="Add"
+            title="how long does it take to complete a task in the selected period 0=same day,1=one day,2=two daysclick on the segment to see the task in the tableclick on the segment to see the task/s in the table"
           >
-            <Button onClick={handleTooltipOpen}>Click</Button>
+            <Button onClick={handleTooltipOpen}>Details</Button>
           </Tooltip>
         </div>
       </ClickAwayListener>
