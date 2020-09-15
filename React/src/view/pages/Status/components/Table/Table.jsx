@@ -103,13 +103,13 @@ export default function TasksTable({
             className="filterSelectB"
             onChange={(filter, name) => onSelect(filter, "status")}
             ref={statusSelect}
+            placeholder={tableFilters[3].value}
             // value={}
           />
         </div>
         <button className="filterSelectB" onClick={() => onUpdateClick()}>
           Update
         </button>
-          placeholder={tableFilters[3].value}
       </div>
       <div className="open-tasks-table">
         <table className="container">
