@@ -713,11 +713,7 @@ router.post('/changeOfJIRATicketsStatusFilters', async (req, res) => {
         item.status.sort((a, b) => (a.label > b.label) ? 1 : -1);
         item.qa.sort((a, b) => (a.label > b.label) ? 1 : -1);
     })
-
-
-    // console.log(tasks)
     res.send(tasks)
-
 })
 
 // --------------------------------------------------------------- delays in delivery ---------------------------------------------------------------------

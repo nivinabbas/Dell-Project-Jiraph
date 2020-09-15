@@ -87,7 +87,6 @@ function ModificationByField(props) {
       .then((res) => res.json())
       .then((data) => {
         if (data != null) {
-          console.log(data)
           setUiObjs(data);
 
         }
@@ -110,7 +109,6 @@ function ModificationByField(props) {
       .then((data) => {
         if (data != null) {
           if (data.length > 0)
-            // console.log(data)
             setValueOptions(data[0].Values);
           else {
             if (serverFilters.fieldName != "") {
