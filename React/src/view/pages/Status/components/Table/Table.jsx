@@ -102,6 +102,7 @@ export default function TasksTable({
             options={statusOptions}
             className="filterSelectB"
             onChange={(filter, name) => onSelect(filter, "status")}
+            ref={statusSelect}
             placeholder="Not Done"
             // value={}
           />
