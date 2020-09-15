@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './UserList.css'
-import { useHistory } from "react-router-dom";
-
-import {
-    Link
-} from "react-router-dom";
+import { useHistory,Link } from "react-router-dom";
 
 
 
@@ -14,17 +10,18 @@ import UserRow from './UserRow';
 
 function UserList() {
     const [users, setUsers] = useState([]);
+    const [acivePage, setAcivePage] = useState(false)
+
     const history = useHistory();
 
 
     //-------------------------------------
 
-
+    
     useEffect(() => {
         fetch('/api/users/getUsersList')
             .then(res => res.json())
             .then(data => {
-
                 if (data.success == true) {
                     setUsers(data.info.table);
                 }
@@ -34,20 +31,30 @@ function UserList() {
             })
     }, []);
 
-    
-    
+
+
     return (
 
 
         <div className='adminpage'>
+        <button onClick={e=>{goToAudit(e)}}>go to audit page </button>
+            <div >
+                {!acivePage ?
+                   <button onClick={e=>{goToNotActiveUsers(e)}}>Show Not Active</button>
+                   :
+                   <button onClick={e=>{goToActiveUsers(e)}}>Show Active</button>
+                }
+               
+            </div>
 
+            
             <form id='Names'>
                 <h1>Name</h1>
                 <h2>Email</h2>
                 <h3>Role</h3>
                 <h4>password</h4>
             </form>
-
+           
             <form name='create' onSubmit={createUser} >
 
                 <input name="inputName" type="text" placeholder='Enter Name' required ></input>
@@ -60,8 +67,10 @@ function UserList() {
                 <input name="inputPassword" type="password" placeholder='Enter pass' required ></input>
                 <button type='submit'>Create</button>
             </form>
+            :
 
-            {users.map(user => <UserRow setUsers={setUsers} key={user.id} user={user} />)}
+                         
+            {users.map(user => <UserRow isActive={user.active} setUsers={setUsers} key={user.id} user={user} />)}
 
             <div id="ButtonDiv">
                 
@@ -73,8 +82,43 @@ function UserList() {
     )
 
 
-    
+    function goToActiveUsers(e) {
+        e.preventDefault();
+        fetch('/api/users/getUsersList')
+        .then(res => res.json())
+        .then(data => {
+            if (data.success == true) {
+                console.log(data.success)
+                console.log(data.info.table)
+                setUsers(data.info.table);
+            }
+            else {
+                alert(data.error)
+            }
+        })
+            setAcivePage(false);
+    }
 
+
+
+    function goToNotActiveUsers(e) {
+        console.log('ENTERED')
+        e.preventDefault();
+        fetch('/api/users/getDeactivatedList')   
+            .then(res => res.json())
+            .then(data => {
+                if (data.success == true) {
+                    console.log(data.success)
+                    console.log(data.info.table)
+                    setUsers(data.info.table);
+                    }
+                else {
+                    alert(data.error)
+                }
+            })
+            setAcivePage(true);
+
+    }
 
     function goToAudit(e) {
         history.push("/Audit");
@@ -103,7 +147,6 @@ function UserList() {
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data)
                 if (data.success == true) {
                     setUsers(data.info.table)
                     return (alert('created sucsses'))

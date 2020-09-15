@@ -3,12 +3,16 @@ import './UserList.css'
 
 
 export default props => {
+    //--------------------------------
+    const {isActive} = props ; 
 
     const { user, setUsers } = props;
 
-    const [edit, setEdit] = useState(false)
+    const [edit, setEdit] = useState(false);
+   //-----------------------------------------
+   
 
-
+  
     return (
 
 
@@ -31,13 +35,52 @@ export default props => {
                     :
                     <button className="save__Btn" type='submit'>Save</button>
                 }
-                <button onClick={e => { deleteUser(e, user.id) }}>Delete</button>
-            </div>
+                </div>
+
+                <div className="item1" >
+                    {isActive ?
+                        <button onClick={e => { deleteUser(e, user.id) }}>Delete</button>
+                        :
+                        <button onClick={e => { activeUser(e, user.id) }}>Activate</button>
+                    }
+
+                </div>
+
+            
+            
         </form>
 
 
 
     )
+
+
+    function activeUser(e, id) {
+        e.preventDefault();
+        if (!window.confirm('Are you sure you want to Active this User?')) {
+            alert("Not Activated")
+            return;
+        }
+        fetch('/api/users/activeUser', {
+            method: 'PUT',
+            body: JSON.stringify({ id }),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success == true) {
+                    setUsers(data.info.table);
+                    return alert('Activated sucsses')
+                }
+                else if (data.success == false) {
+                    alert(data.error)
+                }
+
+            })
+
+    }
 
 
     function onSave(e, id) {
@@ -97,11 +140,11 @@ export default props => {
         })
             .then(response => response.json())
             .then(data => {
-                if (data.success = true) {
+                if (data.success == true) {
                     setUsers(data.info.table);
                     return alert('Deleted sucsses')
                 }
-                else if (data.success = false) {
+                else if (data.success == false) {
                     alert(data.error)
                 }
 
