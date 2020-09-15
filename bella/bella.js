@@ -8,7 +8,7 @@ const fetch = require('node-fetch');
 const Data = [
     {
         "diffItem": {
-            "updateTime": 1599969017, 
+            "updateTime": 1600055420, 
             "type": "Updated", 
             "updatedFields": [
                 {
@@ -37,7 +37,7 @@ const Data = [
     }, 
     {
         "diffItem": {
-            "updateTime": 1599969018, 
+            "updateTime": 1600055421, 
             "type": "Updated", 
             "updatedFields": [
                 {
@@ -66,12 +66,11 @@ const Data = [
     }
 ]
 
-const key = "QYZNRVlzTAzJjWJLxobY24hGYcoclsaf4ZX5BLhGSi0Xa4cMC1APBoN";
 async function sendbellaData() {
     await fetch('http://localhost:4000/api/PostBellaData/GetBellaData', {
         method: 'post',
         body: JSON.stringify({
-            key, Data
+            Data
         }),
         headers: { 'Content-Type': 'application/json' },
     })
