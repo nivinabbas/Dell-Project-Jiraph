@@ -245,9 +245,10 @@ const StatusPage = () => {
             const originalTasksID = [...openTasks];
             try {
               const userId = null;
-              //   var countriesFound = countries.filter(function(country) {
-              //     return ["Spain","Greece"].indexOf(country.key) != -1
-              // });
+              const tasks = openTasks.filter(
+                (task) => tasksId.indexOf(task._id) === -1
+              );
+              setOpenTasks(tasks);
 
               fetch("/api/status/updateTasks", {
                 method: "POST",
@@ -260,8 +261,6 @@ const StatusPage = () => {
                 .then((res) => {
                   let { success, error, info } = res;
                   if (success) {
-                    console.log(info);
-                    setOpenTasks(openTasks);
                   } else {
                     alert(error);
                   }
