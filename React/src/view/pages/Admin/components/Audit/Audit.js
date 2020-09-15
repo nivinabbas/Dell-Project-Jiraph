@@ -3,9 +3,10 @@ import './Audit.css'
 
 import AuditRow from './AuditRow';
 
+var d = new Date();
 
 //-----------------------------------------------------------change
-const serverFilters = { UserName: [], Email: [], Role: [], startDate: (new Date("2020-08-1")), endDate: new Date("2020-09-1") };
+const serverFilters = { UserName: [], Email: [], Role: [], startDate: (new Date(d.setMonth(d.getMonth()-1))), endDate: new Date() };
 //-----------------------------------------------------------change
 
 function UserAudit() {
@@ -57,9 +58,11 @@ const render = (serverFilters) => {
         if (data.success == true) {
                    
             setUsers(data.info.table);
+            console.log(data.info.table)
         }
         else {
             alert(data.error)
+            setUsers([]);
         }
       })
   }
@@ -119,7 +122,7 @@ const render = (serverFilters) => {
           className="ModificationByField__Filter__date"
           type="date"
           name="startDate"
-        //   onChange={handleChangeStartDate}
+           onChange={handleChangeStartDate}
         />
 
 
@@ -127,7 +130,7 @@ const render = (serverFilters) => {
           className="ModificationByField__Filter__date"
           type="date"
           name="endDate"
-        //   onChange={handleChangeEndDate}
+           onChange={handleChangeEndDate}
         />
         </div>
             <div id="header">
