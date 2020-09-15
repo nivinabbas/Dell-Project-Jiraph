@@ -1,7 +1,7 @@
 import React from 'react';
 import "./Chart.css";
 import MainTable from "../MainTable/MainTable"
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function Chart(props) {
   const { UiObjs } = props;
@@ -16,17 +16,25 @@ function Chart(props) {
     setTasks(tasks)
     setTableTitle(title)
   }
+
+  useEffect(()=>{
+    UiObjs.map((columns, index) => {
+
+    columns.arr.map((tasks=>{
+      tasks.tasks.map((task=>{
+        allTasksToDisplay.push(task);
+      }))
+    }))
+  })
+  setTasks(allTasksToDisplay)
+  }, [UiObjs])
   
   return (
     <div className="chart__Wrapper">
       <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
       <div className="chart">
         {UiObjs.length > 0 && UiObjs.map((columns, index) => {
-            columns.arr.map((tasks=>{
-              tasks.tasks.map((task=>{
-                allTasksToDisplay.push(task);
-              }))
-            }))
+            
           return (
             <div
               className='chart__column'
