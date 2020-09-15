@@ -292,6 +292,7 @@ router.post("/stackedChart", async function (req, res) {
   } = req.body;
   let dataFromServer = [];
   let formatLabel;
+  let NewFisrtDay = startDate, NewLastDay = endDate;
   if (label == "daily" || label == "" || label == undefined) {
     formatLabel = "%Y-%m-%d";
   } else if (label == "monthly") {
@@ -575,7 +576,6 @@ router.post("/stackedChart", async function (req, res) {
     }
   } else {//weekly 
     if (startDate == "" && endDate == "") {
-      // startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
       startDate = lastMonth(new Date());
       endDate = new Date(dateFormat() + "T23:59:59.59Z");
     } else if (startDate != "" && endDate == "") {
@@ -591,6 +591,7 @@ router.post("/stackedChart", async function (req, res) {
       startDate = new Date(startDate + "T00:00:00.00Z");
       endDate = new Date(endDate + "T23:59:59.0099Z");
     }
+    //weekly
     let stackedChartDone = await TaskModel.aggregate([
       {
         $match: {
@@ -607,7 +608,6 @@ router.post("/stackedChart", async function (req, res) {
               date: "$taskItem.createdTime",
               format: "%Y-%m-%d",
             },
-
           },
           count: {
             $sum: 1,
@@ -640,7 +640,6 @@ router.post("/stackedChart", async function (req, res) {
         },
       },
     ]);
-
     Date.prototype.getWeek = function () {
       var onejan = new Date(this.getFullYear(), 0, 1);
       return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
@@ -652,58 +651,85 @@ router.post("/stackedChart", async function (req, res) {
       var weekNoToday = d1.getWeek();
       var weeksInTheFuture = eval(weekNo - weekNoToday);
       d1.setDate(d1.getDate() + eval(7 * weeksInTheFuture));
-      let rangeIsFrom, rangeIsTo;
-      let tt = eval(d1.getMonth() + 1);
+      var rangeIsFrom, rangeIsTo;
       if (eval(d1.getMonth() + 1).toString().length == 1 && d1.getDate().toString().length == 1) {
-        rangeIsFrom = d1.getFullYear() + "-" + "0" + eval(d1.getMonth() + 1) + "-" + "0" + d1.getDate();
-      } else if (eval(d1.getMonth() + 1).toString().length == 1 && d1.getDate().toString().length == 2) {
-        rangeIsFrom = d1.getFullYear() + "-" + "0" + eval(d1.getMonth() + 1) + "-" + d1.getDate();
+        rangeIsFrom = d1.getFullYear() + "-" + "0" + eval(d1.getMonth() + 1) + "-" + "0" + eval(d1.getDate() - 1);
       } else if (eval(d1.getMonth() + 1).toString().length == 2 && d1.getDate().toString().length == 1) {
-        rangeIsFrom = d1.getFullYear() + "-" + eval(d1.getMonth() + 1) + "-" + "0" + d1.getDate();
+        rangeIsFrom = d1.getFullYear() + "-" + eval(d1.getMonth() + 1) + "-" + "0" + eval(d1.getDate() - 1);
+      } else if (eval(d1.getMonth() + 1).toString().length == 2 && d1.getDate().toString().length == 2) {
+        rangeIsFrom = d1.getFullYear() + "-" + eval(d1.getMonth() + 1) + "-" + eval(d1.getDate() - 1);
+      } else if (eval(d1.getMonth() + 1).toString().length == 1 && d1.getDate().toString().length == 2) {
+        rangeIsFrom = d1.getFullYear() + "-" + "0" + eval(d1.getMonth() + 1) + "-" +eval(d1.getDate() - 1);
       }
+      // rangeIsFrom = d1.getFullYear()+"-"+eval(d1.getMonth() + 1) + "-" + d1.getDate() ;
+
       d1.setDate(d1.getDate() + 6);
       if (eval(d1.getMonth() + 1).toString().length == 1 && d1.getDate().toString().length == 1) {
-        rangeIsTo = d1.getFullYear() + "-" + "0" + eval(d1.getMonth() + 1) + "-" + "0" + d1.getDate();
-      } else if (eval(d1.getMonth() + 1).toString().length == 1 && d1.getDate().toString().length == 2) {
-        rangeIsTo = d1.getFullYear() + "-" + "0" + eval(d1.getMonth() + 1) + "-" + d1.getDate();
+        rangeIsTo = d1.getFullYear() + "-" + "0" + eval(d1.getMonth() + 1) + "-" + "0" + eval(d1.getDate() -1);
       } else if (eval(d1.getMonth() + 1).toString().length == 2 && d1.getDate().toString().length == 1) {
-        rangeIsTo = d1.getFullYear() + "-" + eval(d1.getMonth() + 1) + "-" + "0" + d1.getDate();
+        rangeIsTo = d1.getFullYear() + "-" + eval(d1.getMonth() + 1) + "-" + "0" +eval(d1.getDate() -1);
+      } else if (eval(d1.getMonth() + 1).toString().length == 2 && d1.getDate().toString().length == 2) {
+        rangeIsTo = d1.getFullYear() + "-" + eval(d1.getMonth() + 1) + "-" + eval(d1.getDate() -1);
+      } else if (eval(d1.getMonth() + 1).toString().length == 1 && d1.getDate().toString().length == 2) {
+        rangeIsTo = d1.getFullYear() + "-" + "0" + eval(d1.getMonth() + 1) + "-" + eval(d1.getDate() -1);
       }
-      // let rangeIsTo = d1.getFullYear() + "-" + eval(d1.getMonth() + 1) + "-" + d1.getDate();
       return rangeIsFrom + " to " + rangeIsTo;
     };
+    //asdasdd
+    function getWeekNumber(d) {
+      // Copy date so don't modify original
+      d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+      // Set to nearest Thursday: current date + 4 - current day number
+      // Make Sunday's day number 7
+      d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+      // Get first day of year
+      var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+      // Calculate full weeks to nearest Thursday
+      var weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+      // Return array of year and week number
+      return weekNo;
+    }
+
+ 
+    //asdasd
     let DateWeek;
     let objIndex, weeknumber;
     let ResultWeeks = [];
+    console.log("stackedChartDone:", stackedChartDone)
     stackedChartDone.forEach(element => {
       weekID = element._id;
-      DateWeek = new Date(weekID + "T23:59:59.59Z");
-      weeknumber = DateWeek.getWeek();
-      objIndex = ResultWeeks.findIndex((obj => obj.weekID == weeknumber));
-      if (objIndex > -1)// 
-      {
- 
+      year=weekID.substr(0,4);
+       DateWeek = new Date(weekID + "T23:59:59.59Z");
+      weeknumber = getWeekNumber(DateWeek)//DateWeek.getWeek();
+      console.log("weekID",weekID,"yearyear ",year," weeknumber",weeknumber)
+
+       objIndex = ResultWeeks.findIndex((obj => obj.weekID == weeknumber));
+      if (objIndex > -1) {
+
         ResultWeeks[objIndex].data = ({
+          "count": ResultWeeks[objIndex].data.count + element.count,
           "done": ResultWeeks[objIndex].data.done + element.done,
           "notDone": ResultWeeks[objIndex].data.notDone + element.notDone
         }
-        )         
-       } else {
-         ResultWeeks.push(
+        )
+      } else {
+        ResultWeeks.push(
           {
             "weekID": weeknumber,
             "DataRange": getDateRangeOfWeek(weeknumber),
             data: {
+              "count": element.count,
               "done": element.done,
               "notDone": element.notDone
             }
           }
         )
- 
- 
+
       }
     });
-     let resultWeek = [];
+    console.log("befor ResultWeeks ", ResultWeeks)
+
+    let resultWeek = [];
     ResultWeeks.forEach(element => {
       resultWeek.push(
         {
@@ -713,11 +739,26 @@ router.post("/stackedChart", async function (req, res) {
         }
       )
     });
-     res.send({
+    FirstDate = resultWeek[0].date;
+    FirstDate = FirstDate.substring().split(" ");
+   
+    //  let NewFisrtDay=startDate,NewLastDay=endDate;
+    console.log("NewLastDay", NewLastDay, NewFisrtDay)
+    resultWeek[0].date = NewFisrtDay + " " + FirstDate[1] + " " + FirstDate[2];
+    // resultWeek[resultWeek.length - 1].date = LastDate[0] + " " + LastDate[1] + " " + NewLastDay;
+    // resultWeek[(resultWeek.length-1)].date = LastDate[0]+" "+NewFisrtDay + " " + LastDate[1] ;
+    LastDate = resultWeek[resultWeek.length - 1].date;
+    LastDate = LastDate.substring().split(" ");
+    resultWeek[resultWeek.length-1].date =LastDate[0] + " " + LastDate[1]+" "+NewLastDay;
+
+  
+    console.log("ResultWeekstest ", resultWeek, "FirstDate ", FirstDate, "LastDate ", LastDate)
+    res.send({
       success: true,
       error: null,
       info: resultWeek,
     });
+
   }
   // res.send({ success: false, error: null, info: null });
 });
@@ -1531,46 +1572,44 @@ router.post("/segmentData", async function (req, res) {
     formatLabel = "%Y-%m"
     startNewDate = date + "-01"
     endNewDate = date + "-31"
+    startDate = new Date(startNewDate + "T00:00:00.00Z");
+    endDate = new Date(endNewDate + "T23:59:59.0099Z");
   } else if (date.length == 10) {
     startDate = new Date(startNewDate + "T00:00:00.00Z");
     endDate = new Date(endNewDate + "T23:59:59.0099Z");
   } else {
+    console.log("segmentData segmentData segmentData segmentData")
     let n = date.indexOf("to");
     let fromDate = date.substr(0, n - 1).split(" ");
     let toDate = date.substr(n + 3).split(" ");
-    console.log("fromDatefromDate", fromDate[0].length, "  ", fromDate)
-    startDate = new Date(fromDate[0].split(" ") + "T00:00:00.0000Z");
-    endDate = new Date(toDate[0].split(" ") + "T23:59:59.0099Z");
-    console.log("startDate1546 ", startDate, "endDate", endDate);
+    console.log("fromDatefromDate segmentData", fromDate[0], "  ", fromDate[0])
+    startDate = new Date((fromDate[0] + "T00:00:00.00Z"));
+    endDate = new Date((toDate[0] + "T23:59:59.0099Z"));
   }
-
+  console.log("data date segmentData", startDate, endDate)
   if (status === "Done") {
     status = true;
   } else if (status === "NotDone") {
     status = false;
   }
 
-  console.log("startDate", startDate, "endDate", endDate);
-  let stackedChartDone1211111 = await TaskModel.aggregate([{
-    $match: {
-      "taskItem.createdTime": {
-        $gte: new Date("2020-09-14" + "T00:00:00.00Z"),
-        $lte: new Date("2020-09-16" + "T23:59:59.0099Z")
-      }, "taskItem.isDone": status,
-    },
-  }]);
-  console.log("test st ", stackedChartDone1211111.length)
+  console.log("startDate segmentData ", startDate, "endDate", endDate);
+
   let stackedChartDone = await TaskModel.aggregate([{
     $match: {
       "taskItem.createdTime": {
-        $gte: startDate,
-        $lte: endDate,
+        $gte: new Date(startDate),
+        $lte: new Date(endDate),
       },
       "taskItem.isDone": status,
-    },
+    }
   }]);
 
-  console.log("stackedChartDone123", stackedChartDone)
+  //data date  2020-09-11T00:00:00.000Z 2020-09-11T23:59:59.009Z
+  //data date  2020-09-14T00:00:00.000Z 2020-09-20T23:59:59.009Z
+
+  console.log("stackedChartDone segmentData", stackedChartDone.length)
+  console.log("End segmentData End segmentData End segmentData End segmentData");
   res.send({
     success: true,
     error: null,
@@ -1648,8 +1687,8 @@ router.get("/getType", async function (req, res) {
 
 
 router.get("/test122", async function (req, res) {
-  let startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
-  let endDate = new Date(dateFormat() + "T23:59:59.59Z");
+  let startDate = new Date("2020-09-07" + "T00:00:00:000Z"); //new Date("2020-08-01T00:00:00.00Z");
+  let endDate = new Date("2020-09-11" + "T23:59:59.009Z");
   //weekly
   let stackedChartDone = await TaskModel.aggregate([
     {
@@ -1700,7 +1739,7 @@ router.get("/test122", async function (req, res) {
       },
     },
   ]);
-
+  console.log("stackedChartDone!@#!@#: ", stackedChartDone)
   Date.prototype.getWeek = function () {
     var onejan = new Date(this.getFullYear(), 0, 1);
     return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
@@ -1760,7 +1799,7 @@ router.get("/test122", async function (req, res) {
       }
     )
   });
-  console.log("stackedChartDone", stackedChartDone)
+  console.log("ResultWeeks ", ResultWeeks)
   res.send({
     success: true,
     error: null,
