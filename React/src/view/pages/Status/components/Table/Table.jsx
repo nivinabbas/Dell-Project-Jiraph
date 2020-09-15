@@ -7,7 +7,6 @@ const getPaginatedTasks = (tasks = [], pageNumber = 0, rowsCount = 5) => {
   const start = (pageNumber + 1) * rowsCount - rowsCount;
   return tasks.slice(start, start + rowsCount);
 };
-//import { Checkbox } from "@material-ui/core";
 
 export default function TasksTable({
   openTasks,
