@@ -32,7 +32,7 @@ function dateFormat() {
 //////////////////////////////////////
 
 // Start daily status alert !
-router.get("/dailyalerts",[auth,qaManager], async function (req, res) {
+router.get("/dailyalerts", [auth, qaManager], async function (req, res) {
   let Today = dateFormat();
   let DailyAlerts = await TaskModel.aggregate([{
     $match: {
@@ -144,7 +144,7 @@ router.get("/dailyalerts",[auth,qaManager], async function (req, res) {
 // End daily status alert !
 
 // start open tasks
-router.get("/openTasks",[auth,qaManager], async function (req, res) {
+router.get("/openTasks", [auth, qaManager], async function (req, res) {
   TaskModel.find({
     "taskItem.isDone": false,
   },
@@ -162,7 +162,7 @@ router.get("/openTasks",[auth,qaManager], async function (req, res) {
 // end open tasks
 
 // start openTasksWithFilter
-router.post("/openTasksWithFilter",[auth,qaManager], async function (req, res) {
+router.post("/openTasksWithFilter", [auth, qaManager], async function (req, res) {
   const {
     filter
   } = req.body;
@@ -206,7 +206,7 @@ router.post("/openTasksWithFilter",[auth,qaManager], async function (req, res) {
 // end openTasksWithFilter
 
 // start update task
-router.post("/updateTasks",[auth,qaManager], (req, res) => {
+router.post("/updateTasks", [auth, qaManager], (req, res) => {
   console.log(req.body.jiraId);
   const {
     jiraId,
@@ -246,7 +246,7 @@ router.post("/updateTasks",[auth,qaManager], (req, res) => {
 // end update task
 
 // start PieChart
-router.post("/PieChart",[auth,qaManager], (req, res) => {
+router.post("/PieChart", [auth, qaManager], (req, res) => {
   const {
     jiraId,
     userId
@@ -281,7 +281,7 @@ router.post("/PieChart",[auth,qaManager], (req, res) => {
 });
 // end update task
 //stackedChart start
-router.post("/stackedChart",[auth,qaManager], async function (req, res) {
+router.post("/stackedChart", [auth, qaManager], async function (req, res) {
   let {
     label,
     startDate,
@@ -434,7 +434,7 @@ router.post("/stackedChart",[auth,qaManager], async function (req, res) {
   // res.send({ success: false, error: null, info: null });
 });
 
-router.get("/stackedChart",[auth,qaManager], async function (req, res) {
+router.get("/stackedChart", [auth, qaManager], async function (req, res) {
   //default, label daily
   {
     datefrom = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
@@ -525,7 +525,7 @@ router.get("/stackedChart",[auth,qaManager], async function (req, res) {
 //stackedChart end
 
 // start  type pie fieldPie
-router.get("/TypePie",[auth,qaManager], async function (req, res) {
+router.get("/TypePie", [auth, qaManager], async function (req, res) {
   datefrom = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
   dateTo = new Date();
   let TypePieOb = await TaskModel.aggregate([{
@@ -611,7 +611,7 @@ router.get("/TypePie",[auth,qaManager], async function (req, res) {
   });
 });
 
-router.post("/TypePie",[auth,qaManager], async function (req, res) {
+router.post("/TypePie", [auth, qaManager], async function (req, res) {
   let TypePieOb;
   let {
     modificationType,
@@ -766,7 +766,7 @@ router.post("/TypePie",[auth,qaManager], async function (req, res) {
 //end type pie
 
 // start pie field
-router.get("/fieldPie",[auth,qaManager], async function (req, res) {
+router.get("/fieldPie", [auth, qaManager], async function (req, res) {
   datefrom = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
   dateTo = new Date();
   let TypePieOb = await TaskModel.aggregate([{
@@ -852,7 +852,7 @@ router.get("/fieldPie",[auth,qaManager], async function (req, res) {
   });
 });
 
-router.post("/fieldPie",[auth,qaManager], async function (req, res) {
+router.post("/fieldPie", [auth, qaManager], async function (req, res) {
   let TypePieOb;
   let {
     modificationField,
@@ -1008,7 +1008,7 @@ router.post("/fieldPie",[auth,qaManager], async function (req, res) {
 //end pie field
 
 // modificationTypeOptions start
-router.get("/modificationTypeOptions",[auth,qaManager], async function (req, res) {
+router.get("/modificationTypeOptions", [auth, qaManager], async function (req, res) {
   let Data = [{
     value: "All",
     label: "All",
@@ -1035,7 +1035,7 @@ router.get("/modificationTypeOptions",[auth,qaManager], async function (req, res
 // modificationTypeOptions end
 
 //modificationFieldOptions start
-router.get("/modificationFieldOptions",[auth,qaManager], async function (req, res) {
+router.get("/modificationFieldOptions", [auth, qaManager], async function (req, res) {
   let Data = [];
   let obj = {};
   TaskModel.find({
@@ -1063,7 +1063,7 @@ router.get("/modificationFieldOptions",[auth,qaManager], async function (req, re
 //modificationFieldOptions end
 
 // modificationFieldOptions start
-router.post("/modificationFieldValueOptions",[auth,qaManager], async function (req, res) {
+router.post("/modificationFieldValueOptions", [auth, qaManager], async function (req, res) {
   let data = req.body;
   let returnData = [{
     value: "All",
@@ -1095,7 +1095,7 @@ router.post("/modificationFieldValueOptions",[auth,qaManager], async function (r
 // modificationFieldOptions end
 
 //  start
-router.post("/filltersAllSubmit",[auth,qaManager], async function (req, res) {
+router.post("/filltersAllSubmit", [auth, qaManager], async function (req, res) {
   let data = req.body;
 
   if (
@@ -1287,7 +1287,7 @@ function openTasksWithFilter(type, fieldName) {
 }
 // openTasksWithFilter("Update", "qaRepresentative1");
 //fieldName start
-router.get("/getFieldName",[auth,qaManager], async function (req, res) {
+router.get("/getFieldName", [auth, qaManager], async function (req, res) {
   let Data = [];
   TaskModel.distinct("diffItem.updatedField.fieldName", function (err, doc) {
     // success:T/F,error:string,info{TaskItem[Task]
@@ -1310,7 +1310,7 @@ router.get("/getFieldName",[auth,qaManager], async function (req, res) {
 //fieldName end
 
 //getType start
-router.get("/getType",[auth,qaManager], async function (req, res) {
+router.get("/getType", [auth, qaManager], async function (req, res) {
   TaskModel.distinct("diffItem.type", function (err, doc) {
     // success:T/F,error:string,info{TaskItem[Task]
     res.send({
