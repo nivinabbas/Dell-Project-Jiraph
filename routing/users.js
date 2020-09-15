@@ -343,7 +343,7 @@ function makeid(length) {
 
 router.put('/activeUser', (req, res) => {
     const { id } = req.body
-    let table = []
+    let table = [] 
     UserModel.find({ _id: id }).then(async doc => {
         if (doc.length > 0) {
             doc[0].active = true
