@@ -1,23 +1,27 @@
 const express = require("express");
+const app = express();
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
-
 const router = express.Router();
+const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken");
+const cookies = require("cookie-parser");
+
+
 const UserSchema = require('../schemas/UserSchema');
 const KeySchema = require('../schemas/KeySchema');
 const AuditSchema = require('../schemas/AuditSchema');
 const UserModel = mongoose.model("UserModel", UserSchema);
 const KeyModel = mongoose.model("KeyModel", KeySchema);
-const AuditModel = mongoose.model("AuditModel", AuditSchema);
+const AuditModel = mongoose.model("AudetModel", AuditSchema);
 
 var nodemailer = require('nodemailer')
 var validator = require("email-validator");
-const { find } = require("../schemas/TaskSchema");
-const e = require("express");
 
 var secret = require("../index")
+const auth = require("../authentication/auth");
+const admin = require("../authentication/admin");
+const audit = require("../authentication/audit");
 
-console.log(secret)
 
 const saltRounds = 10
 
@@ -38,7 +42,27 @@ router.post('/login', (req, res) => {
                 const isMatch = await bcrypt.compare(password, checkEmail[0].userInfo.password)
                 if (isMatch) {
                     if (checkEmail[0].active == true) {
-                        return (res.send({ success: true, error: null, info: { role: checkEmail[0].userInfo.employeeRole, id: checkEmail[0]._id } }))
+                        const token = await jwt.sign({
+                            name: checkEmail[0].userInfo.employeeName,
+                            username: checkEmail[0].userInfo.employeeEmail,
+                            role: checkEmail[0].userInfo.employeeRole,
+                        },
+                            secret
+                        );
+                        AuditModel.insertMany({
+                            id:checkEmail[0]._id,
+                            employeeName: checkEmail[0].userInfo.employeeName,
+                            employeeEmail: checkEmail[0].userInfo.employeeEmail,
+                            employeeRole: checkEmail[0].userInfo.employeeRole,
+                            change: 'Login',
+                            timeChange: Date.now()
+                        })
+                        res.cookie("loginToken", token, {
+                            maxAge: 120000,
+                        });
+                        res.send({ success: true, error: null, info: { role: checkEmail[0].userInfo.employeeRole, id: checkEmail[0]._id } })
+                        res.end();
+
                     } else {
                         return (res.send({ success: false, error: "User is deleted from the system", info: null }))
                     }
@@ -55,16 +79,13 @@ router.post('/login', (req, res) => {
     }
 })
 
-router.get('/getUsersList', (req, res) => {
-
-    console.log('goot')
-    UserModel.find({ active: true }).then(users => {
+router.get('/getUsersList', [auth, admin, audit], (req, res) => {
+    UserModel.find({ active: true }).then(async users => {
         if (users.length > 0) {
             let table = [];
             for (let index = 0; index < users.length; index++) {
                 table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id, active: users[index].active })
             }
-
             res.send({ success: true, error: null, info: { table } })
         }
         else {
@@ -73,20 +94,29 @@ router.get('/getUsersList', (req, res) => {
     })
 })
 
-router.get('/getDeactivatedList', (req, res) => {
-    UserModel.find({ active: false }).then(users => {
+router.get('/getDeactivatedList', [auth, admin, audit], (req, res) => {
+    UserModel.find({ active: false }).then(async users => {
         if (users.length > 0) {
             let table = [];
             for (let index = 0; index < users.length; index++) {
                 table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id, active: users[index].active })
             }
-
+            const { loginToken } = req.cookies;
+            const decodedToken = await jwt.verify(loginToken, secret);
+            AuditModel.insertMany(
+                {
+                    employeeName: decodedToken.name,
+                    employeeEmail: decodedToken.username,
+                    employeeRole: decodedToken.role,
+                    action: 'Get Deactivated List',
+                    timeChange: Date.now()
+                })
             res.send({ success: true, error: null, info: { table } })
         }
     })
 })
 
-router.put('/deleteUser', (req, res) => {
+router.put('/deleteUser', [auth, admin, audit], (req, res) => {
 
     const { id } = req.body;
     let table = [];
@@ -98,7 +128,7 @@ router.put('/deleteUser', (req, res) => {
             if (docs) {
                 docs.active = false;
                 await docs.save();
-                await UserModel.find({ active: true }).then(users => {
+                await UserModel.find({ active: true }).then(async users => {
                     if (users.length > 0) {
 
                         for (let index = 0; index < users.length; index++) {
@@ -159,7 +189,8 @@ ${key}`
     }
 })
 
-router.post('/createUser', (req, res) => {
+
+router.post('/createUser', [auth, admin, audit], (req, res) => {
 
     const { name, email, role, password } = req.body;
     const passwqord = req.body.password;
@@ -179,7 +210,7 @@ router.post('/createUser', (req, res) => {
                 const hashpassword = await bcrypt.hash(password, salt)
                 await UserModel.insertMany({ userInfo: { employeeName: name, employeeEmail: email, employeeRole: role, password: hashpassword }, active: true })
 
-                await UserModel.find({ active: true }).then(users => {
+                await UserModel.find({ active: true }).then(async users => {
                     if (users.length > 0) {
 
                         for (let index = 0; index < users.length; index++) {
@@ -247,6 +278,17 @@ router.put('/updatePassword', (req, res) => {
     let regex = /[^A-Za-z0-9]/;
     let containSepcChars = regex.test(password);
     if (!containSepcChars) {
+    UserModel.findOne({ "userInfo.employeeEmail": email }).then(async docs => {
+        if (docs) {
+            const salt = await bcrypt.genSalt(saltRounds)
+            const hashpassword = await bcrypt.hash(password, salt)
+            docs.userInfo.password = hashpassword
+            docs.save();
+            res.send({ success: true, error: null, info: null })
+
+        } else {
+            res.send({ success: false, error: "email not valid", info: null })
+        }
 
         UserModel.findOne({ "userInfo.employeeEmail": email }).then(async docs => {
             if (docs) {
@@ -270,62 +312,63 @@ router.put('/updatePassword', (req, res) => {
             }
 
         })
-    } else {
+    })
+}
+else {
         res.send({ success: false, error: "No Special Characters or White Space allowed in User Password!", info: null })
     }
 
 })
 
-router.put('/editUser', (req, res) => {
+router.put('/editUser', [auth, admin, audit], (req, res) => {
     const { id, name, email, role, password } = req.body;
     const passwqord = req.body.password;
     let regex = /[^A-Za-z0-9]/;
     let containSepcChars = regex.test(password);
     if (!containSepcChars) {
-        if (validator.validate(email)) {
-            UserModel.find({ _id: id }).then(async doc => {
-                if (doc.length > 0) {
-                    if (email == doc[0].userInfo.employeeEmail) {
-                        if (password.length > 0) {
-                            const salt = await bcrypt.genSalt(saltRounds)
-                            const hashpassword = await bcrypt.hash(password, salt)
-                            doc[0].userInfo.password = hashpassword;
-                        }
-                        doc[0].userInfo.employeeName = name
-                        doc[0].userInfo.employeeRole = role
-                        await doc[0].save();
-
-                        return (res.send({ success: true, error: null, info: null }))
-
+    if (validator.validate(email)) {
+        UserModel.find({ _id: id }).then(async doc => {
+            if (doc.length > 0) {
+                if (email == doc[0].userInfo.employeeEmail) {
+                    if (password.length > 0) {
+                        const salt = await bcrypt.genSalt(saltRounds)
+                        const hashpassword = await bcrypt.hash(password, salt)
+                        doc[0].userInfo.password = hashpassword;
                     }
-                    else {
-                        UserModel.find({ "userInfo.employeeEmail": email }).then(async docs => {
-                            if (docs.length > 0) {
-                                return (res.send({ success: false, error: "Email is already in use", info: null }))
-                            }
-                            else {
-                                if (password.length > 0) {
-                                    const salt = await bcrypt.genSalt(saltRounds)
-                                    const hashpassword = await bcrypt.hash(password, salt)
-                                    doc[0].userInfo.password = hashpassword;
-                                }
-                                doc[0].userInfo.employeeEmail = email
-                                doc[0].userInfo.employeeName = name
-                                doc[0].userInfo.employeeRole = role
-                                await doc[0].save();
-                                res.send({ success: true, error: null, info: null })
-                            }
-                        })
-                    }
-                } else {
-                    res.send({ success: false, error: 'User Not Found', info: null })
+                    doc[0].userInfo.employeeName = name
+                    doc[0].userInfo.employeeRole = role
+                    await doc[0].save();
+
+                    return (res.send({ success: true, error: null, info: null }))
+
                 }
-            })
-        } else {
-            res.send({ success: false, error: "Email not valid", info: null })
-        }
+                else {
+                    UserModel.find({ "userInfo.employeeEmail": email }).then(async docs => {
+                        if (docs.length > 0) {
+                            return (res.send({ success: false, error: "Email is already in use", info: null }))
+                        }
+                        else {
+                            if (password.length > 0) {
+                                const salt = await bcrypt.genSalt(saltRounds)
+                                const hashpassword = await bcrypt.hash(password, salt)
+                                doc[0].userInfo.password = hashpassword;
+                            }
+                            doc[0].userInfo.employeeEmail = email
+                            doc[0].userInfo.employeeName = name
+                            doc[0].userInfo.employeeRole = role
+                            await doc[0].save();
+                            res.send({ success: true, error: null, info: null })
+                        }
+                    })
+                }
+            } else {
+                res.send({ success: false, error: 'User Not Found', info: null })
+            }
+        })
+    } else {
+        res.send({ success: false, error: "Email not valid", info: null })
     }
-    else {
+}else {
         res.send({ success: false, error: "No Special Characters or White Space allowed in User Password!", info: null })
     }
 })
@@ -341,9 +384,9 @@ function makeid(length) {
     return result;
 }
 
-router.put('/activeUser', (req, res) => {
+router.put('/activeUser', [auth, admin, audit], (req, res) => {
     const { id } = req.body
-    let table = [] 
+    let table = []
     UserModel.find({ _id: id }).then(async doc => {
         if (doc.length > 0) {
             doc[0].active = true
@@ -360,6 +403,21 @@ router.put('/activeUser', (req, res) => {
         }
         else {
             return (res.send({ success: false, error: 'User Not Found in DB', info: null }))
+        }
+    })
+})
+
+router.get('/getUsersAudit',[auth,admin],(req,res)=>{
+    AuditModel.find({ }).then(async users => {
+        if (users.length > 0) {
+            let table = [];
+            for (let index = 0; index < users.length; index++) {
+                table.push({ email:users[index].employeeEmail,name:users[index].employeeName,role:users[index].employeeRole,action:users[index].action,date:users[index].timeChange })
+            }
+            res.send({ success: true, error: null, info: { table } })
+        }
+        else {
+            res.send({ success: false, error: "No Actions found", info: null })
         }
     })
 })
