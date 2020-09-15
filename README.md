@@ -1,7 +1,7 @@
-#Dell-Project-Jiraph1
+# Dell-Project-Jiraph1
 what is jiraph
 
-#Installing
+## Installing
 Clone this repositroy
 start by installing node modules
  
@@ -12,7 +12,7 @@ open new terminal
 in /Dell-Project-Jiraph/React
 `npm i`
 
-#Running
+## Running
 
 in /Dell-Project-Jiraph 
 `npm start index`
