@@ -214,16 +214,12 @@ function ModificationByField(props) {
       <div className="ModificationByField__MainTitle">Modification By Field</div>
 
       <div className="ModificationByField__Filters__wrapper">
-        <div className="ModificationByField__Filters__headers">
-          <p className="filter__header__item">Priority</p>
-          <p className="filter__header__item">Functional Test</p>
-          <p className="filter__header__item">QA Representative</p>
-          <p className="filter__header__item">Start date</p>
-          <p className="filter__header__item">End date</p>
-          <p className="filter__header__item">Dates aggregation</p>
-        </div>
+        
         <div className="ModificationByField__Filters__fields">
-        <Select
+
+          <div className="ModificationByField__Filters__Header">
+          <p>Field Name</p>
+          <Select
           name="fieldName"
           onInputChange={() => { valueInput.current.state.value = ""; qaInput.current.state.value = "" }}
           onChange={handleChangeFieldName}
@@ -231,9 +227,11 @@ function ModificationByField(props) {
           className="ModificationByField__Filter"
           options={fieldNameOptions}
           isClearable={true} />
+          </div>
 
-
-        <Select
+          <div className="ModificationByField__Filters__Header">
+          <p>Value</p>
+          <Select
           name="value"
           onChange={handleChangeValues}
           ref={valueInput}
@@ -241,9 +239,11 @@ function ModificationByField(props) {
           placeholder="Value"
           className="ModificationByField__Filter"
           options={valueOptions} />
+          </div>
 
-
-        <Select
+          <div className="ModificationByField__Filters__Header">
+          <p>Qa Representative</p>
+          <Select
           name="qaRepresentative"
           ref={qaInput}
           onChange={handleChangeQaRepresentative}
@@ -251,16 +251,20 @@ function ModificationByField(props) {
           className="ModificationByField__Filter"
           options={qaRepresentativeOptions}
           isClearable={true} />
-
-        From
+          </div>
+        
+          <div className="ModificationByField__Filters__Header">
+          <p>Start Date</p>
         <input
           className="ModificationByField__Filter__date"
           type="date"
           value={startDate}
           onChange={handleChangeStartDate}
         />
+        </div>
 
-        To
+        <div className="ModificationByField__Filters__Header">
+          <p>End Date</p>
         <input
           className="ModificationByField__Filter__date"
           type="date"
@@ -268,14 +272,17 @@ function ModificationByField(props) {
           value={endDate}
           onChange={handleChangeEndDate}
         />
+        </div>
 
-
+        <div className="ModificationByField__Filters__Header">
+          <p>Period</p>
         <Select
           name="label"
           onChange={handleChangeLabel}
           placeholder="Weekly"
           className="ModificationByField__Filter"
           options={labelOptions} />
+          </div>
         </div>
       </div>
     </div>
