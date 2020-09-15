@@ -28,7 +28,7 @@ function weeklyLabel(startDate, endDate, tasks) {
     let arrayForWeeks = [];//array that will contain the UiObj
     while (diffDays > 6) {
         arrayForWeeks.push(
-            { _id: `${weeklyStartDate.getDate()}/${weeklyStartDate.getMonth() + 1}/${weeklyStartDate.getFullYear()} - ${weeklyEndDate.getDate()}/${weeklyEndDate.getMonth() + 1}/${weeklyEndDate.getFullYear()}`, arr: [] })
+            { _id: `${weeklyStartDate.getDate()}-${weeklyStartDate.getMonth() + 1}-${weeklyStartDate.getFullYear()}/${weeklyEndDate.getDate()}-${weeklyEndDate.getMonth() + 1}-${weeklyEndDate.getFullYear()}`, arr: [] })
         diffDays = diffDays - 7;
         weeklyStartDate = addDays(weeklyEndDate, 1);
         weeklyEndDate = addDays(weeklyStartDate, 6);
@@ -36,7 +36,7 @@ function weeklyLabel(startDate, endDate, tasks) {
     if (diffDays > 0) {//add the days as a range
         weeklyEndDate = addDays(weeklyStartDate, diffDays - 1);
         arrayForWeeks.push(
-            { _id: `${weeklyStartDate.getDate()}/${weeklyStartDate.getMonth() + 1}/${weeklyStartDate.getFullYear()} - ${weeklyEndDate.getDate()}/${weeklyEndDate.getMonth() + 1}/${weeklyEndDate.getFullYear()}`, arr: [] })
+            { _id: `${weeklyStartDate.getDate()}-${weeklyStartDate.getMonth() + 1}-${weeklyStartDate.getFullYear()}/${weeklyEndDate.getDate()}-${weeklyEndDate.getMonth() + 1}-${weeklyEndDate.getFullYear()}`, arr: [] })
 
     }
     weeklyEndDate = addDays(startDate, 6);
@@ -90,7 +90,7 @@ function formatDate(date) {
     if (day.length < 2)
         day = '0' + day;
 
-    return [year, month, day].join('-');
+    return [day, month,year ].join('-');
 }
 
 router.post('/modificationByField', async (req, res) => {
@@ -105,9 +105,12 @@ router.post('/modificationByField', async (req, res) => {
         dateFormat = "%Y"
     }
     else if (label[0] == 'monthly') {
-        dateFormat = "%Y-%m"
+        dateFormat = "%m-%Y"
     }
-    else {
+    else if(label[0] == 'daily')  {
+        dateFormat = "%d-%m-%Y"
+    }
+    else{
         dateFormat = "%Y-%m-%d"
     }
 
@@ -149,7 +152,15 @@ router.post('/modificationByField', async (req, res) => {
                 $group: {
                     _id: {
                         date: { $dateToString: { format: dateFormat, date: "$diffItem.updatedTime" } },
-                        fieldName: "$diffItem.updatedField.newValue"
+                        fieldName: {
+                                $cond: {
+                                    if: { $eq: ["$diffItem.updatedField.fieldName", "functionalTest"] },
+
+                                    then: { $toString: "$diffItem.updatedField.newValue" },
+
+                                    else: "$diffItem.updatedField.newValue"
+                                }  
+                        }
                     },
                     tasks: { $push: "$$ROOT" },
                 }
@@ -169,10 +180,23 @@ router.post('/modificationByField', async (req, res) => {
     matchFilterValue["$and"] = filtersArray
     tasks = await TaskModel.aggregate(aggregateArray)
 
+
     if (label[0] === "weekly") {
         tasks = weeklyLabel(startDate, endDate, tasks);
     }
+    else{
+        tasks.sort(function(a, b){
 
+            let aa = a._id.split('-').reverse().join(),
+                bb = b._id.split('-').reverse().join();
+            return aa < bb ? -1 : (aa > bb ? 1 : 0);
+        });
+    }
+    
+    
+    
+
+    
     let maxLength = 0;
     let sumLength = 0;
     if (tasks.length > 0) {
@@ -231,6 +255,7 @@ router.post('/modificationByFieldFilters', async (req, res) => {
     }
     else { // bring all the Values for the fieldName
         const name = fieldName[0];
+
         tasks = await TaskModel.aggregate([
             {
                 $match: { "diffItem.updatedField.fieldName": name, "diffItem.type": "Update" }
@@ -238,7 +263,18 @@ router.post('/modificationByFieldFilters', async (req, res) => {
             {
                 $group: {
                     _id: null,
-                    Values: { $addToSet: { "label": "$diffItem.updatedField.newValue", "value": "$diffItem.updatedField.newValue" } },
+
+                    Values: {
+                        $addToSet: {
+                            $cond: {
+                                if: { $eq: ["$diffItem.updatedField.fieldName", "functionalTest"] },
+
+                                then: { "label": { $toString: "$diffItem.updatedField.newValue" }, "value": { $toString: "$diffItem.updatedField.newValue" } },
+
+                                else: { "label": "$diffItem.updatedField.newValue", "value": "$diffItem.updatedField.newValue" }
+                            }
+                        }
+                    }
                 }
             },
         ])
@@ -261,9 +297,12 @@ router.post('/deletedJiraTickets', async (req, res) => {
         dateFormat = "%Y"
     }
     else if (label[0] == 'monthly') {
-        dateFormat = "%Y-%m"
+        dateFormat = "%m-%Y"
     }
-    else {
+    else if(label[0] == 'daily')  {
+        dateFormat = "%d-%m-%Y"
+    }
+    else{
         dateFormat = "%Y-%m-%d"
     }
 
@@ -322,8 +361,17 @@ router.post('/deletedJiraTickets', async (req, res) => {
         },
         { $sort: { _id: 1 } }
     ])
+    
     if (label[0] === "weekly") {
         tasks = weeklyLabel(startDate, endDate, tasks);
+    }
+    else{
+        tasks.sort(function(a, b){
+
+            let aa = a._id.split('-').reverse().join(),
+                bb = b._id.split('-').reverse().join();
+            return aa < bb ? -1 : (aa > bb ? 1 : 0);
+        });
     }
     let maxLength = 0;
     let sumLength = 0;
@@ -486,13 +534,16 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
 
 
     let dateFormat = '';
-    if (label[0] == 'monthly') {
-        dateFormat = "%Y-%m"
-    }
-    else if (label[0] == 'yearly') {
+    if (label[0] == 'yearly') {
         dateFormat = "%Y"
     }
-    else {
+    else if (label[0] == 'monthly') {
+        dateFormat = "%m-%Y"
+    }
+    else if(label[0] == 'daily')  {
+        dateFormat = "%d-%m-%Y"
+    }
+    else{
         dateFormat = "%Y-%m-%d"
     }
 
@@ -584,6 +635,14 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
 
     if (label[0] == 'weekly') {
         tasks = weeklyLabel(startDate, endDate, tasks)
+    }
+    else{
+        tasks.sort(function(a, b){
+
+            let aa = a._id.split('-').reverse().join(),
+                bb = b._id.split('-').reverse().join();
+            return aa < bb ? -1 : (aa > bb ? 1 : 0);
+        });
     }
 
     if (tasks.length != 0) {
@@ -686,13 +745,16 @@ router.post('/delaysInDelivery', async (req, res) => {
 
     let dateFormat = '';
 
-    if (label[0] == 'monthly') {
-        dateFormat = "%Y-%m"
-    }
-    else if (label[0] == 'yearly') {
+    if (label[0] == 'yearly') {
         dateFormat = "%Y"
     }
-    else {
+    else if (label[0] == 'monthly') {
+        dateFormat = "%m-%Y"
+    }
+    else if(label[0] == 'daily')  {
+        dateFormat = "%d-%m-%Y"
+    }
+    else{
         dateFormat = "%Y-%m-%d"
     }
 
@@ -812,6 +874,14 @@ router.post('/delaysInDelivery', async (req, res) => {
 
     if (label[0] == 'weekly') {
         tasks = weeklyLabel(startDate, endDate, tasks)
+    }
+    else{
+        tasks.sort(function(a, b){
+
+            let aa = a._id.split('-').reverse().join(),
+                bb = b._id.split('-').reverse().join();
+            return aa < bb ? -1 : (aa > bb ? 1 : 0);
+        });
     }
 
     if (tasks.length != 0) {

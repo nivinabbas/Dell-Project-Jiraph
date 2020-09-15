@@ -28,6 +28,10 @@ function DelaysInDelivery() {
     let startDate = new Date()
     let endDate = new Date()
     startDate.setMonth(endDate.getMonth() - 1)
+    let endMonth = endDate.getMonth() + 1 < 10 ? `0${endDate.getMonth() + 1}` : endDate.getMonth() + 1;
+    let startMonth = startDate.getMonth() + 1 < 10 ? `0${startDate.getMonth() + 1}` : startDate.getMonth() + 1;
+    setStartDate(`${startDate.getFullYear()}-${startMonth}-${startDate.getDate()}`)
+    setEndDate(`${endDate.getFullYear()}-${endMonth}-${endDate.getDate()}`)
     const timeZone = startDate.getTimezoneOffset() / 60
     startDate.setHours(0 - timeZone, 0, 0, 0)
     endDate.setHours(0 - timeZone+23, 59, 59, 59);
@@ -107,7 +111,8 @@ function DelaysInDelivery() {
 
   // To set UiObj from the filtered Data we recieved from server 
   const [UiObjs, setUiObjs] = useState([]);
-
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   // Options To get From Server 
   const [fixVersionOptions, setfixVersionOptions] = useState([])
   const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([])
@@ -212,7 +217,7 @@ function DelaysInDelivery() {
      
       {/* Here We Call the Chart Component if we have a uiObj ready */}
       <div className="DelaysInDelivery__Chart"> 
-      {UiObjs && <Chart UiObjs={UiObjs} />}
+      {UiObjs && <Chart UiObjs={UiObjs} title="Delays in Delivery (All)" />}
       </div>
 
        {/* Page Title */}
@@ -220,8 +225,14 @@ function DelaysInDelivery() {
 
 
       {/* Select Filters */}
-      <form className="DelaysInDelivery__Filters">
+      
+      <div className="DelaysInDelivery__Filters__wrapper">
+       
 
+      <form className="DelaysInDelivery__Filters__fields">
+
+        <div className="DelaysInDelivery__Filters__Header">
+        <p> Fix Version </p>
         <Select
           name="fixVersion"
           onInputChange={() => { jiraTypeInput.current.state.value = ""; qaInput.current.state.value = "" }}
@@ -229,10 +240,11 @@ function DelaysInDelivery() {
           placeholder="fix Version "
           className="DelaysInDelivery__Filter"
           onChange={HandlefixVersionChange}
-          
-
         />
+        </div>
 
+        <div className="DelaysInDelivery__Filters__Header">
+        <p> Jira Type </p>
         <Select
           name="jiraType"
           isMulti
@@ -241,8 +253,10 @@ function DelaysInDelivery() {
           placeholder="jira Type  "
           className="DelaysInDelivery__Filter"
           onChange={HandlejiraTypeChange}
-        />
+        /></div>
 
+<div className="DelaysInDelivery__Filters__Header">
+        <p> Qa Representative </p>
         <Select
           name="qaRepresentative"
           isMulti
@@ -251,31 +265,41 @@ function DelaysInDelivery() {
           placeholder="Qa Representative "
           className="DelaysInDelivery__Filter"
           onChange={HandleqaRepresentativeChange}
-        />
-        From
+        /></div>
+        
+        <div className="DelaysInDelivery__Filters__Header">
+        <p> Start Date </p>
         <input
           className="DelaysInDelivery__Filter__date"
           type="date"
           name="startDate"
+          value={startDate}
           onChange={HandleStartDateChange}
         />
-        To
+        </div>
+
+        <div className="DelaysInDelivery__Filters__Header">
+        <p> End Date</p>
         <input
           className="DelaysInDelivery__Filter__date"
           type="date"
           name="endDate"
+          value={endDate}
           onChange={HandleEndDateChange}
-        />
+        /></div>
 
+<div className="DelaysInDelivery__Filters__Header">
+        <p> Period </p>
         <Select
           name="labels"
           options={labelOptions}
           placeholder="Weekly"
           className="DelaysInDelivery__Filter"
           onChange={HandleLabelChange}
-        />
+        /></div>
 
       </form>
+    </div>
     </div>
   )
 
