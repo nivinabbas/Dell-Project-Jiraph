@@ -32,7 +32,7 @@ app.use("/api/analytics", analyticsRouter);
 const bellaRouting = require("./routing/bellaRouting");
 app.use("/api/PostBellaData", bellaRouting);
 
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 4000; 
 
 app.listen(port, () => {
   console.log("App is Listening to port:", port);
