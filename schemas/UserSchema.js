@@ -6,7 +6,8 @@ const UserSchema = new mongoose.Schema({
         employeeEmail: String,
         employeeRole: String,
         password: String
-    }
+    },
+    active:Boolean
 })
 
 

@@ -8,30 +8,30 @@ import Nav from './components/Nav/Nav';
 //admin
 import Login from "./view/pages/Admin/components/Login/Login"
 import ForgetPassword from "./view/pages/Admin/components/ForgetPassword/ForgetPassword";
+import StatusPage from "./view/pages/Status/components/StatusPage/StatusPage";
+import MainPage from "./view/pages/Analytics/components/mainPage/MainPage";
 import ChangePassword from "./view/pages/Admin/components/ChangePassword/ChangePassword";
 import KeyPassword from "./view/pages/Admin/components/KeyPassword/KeyPassword";
 import UserList from "./view/pages/Admin/components/usersList/UserList";
+import Audit from "./view/pages/Admin/components/Audit/Audit"
 
-
-import MainPage from './view/pages/Analytics/components/mainPage/MainPage';
 import ModificationByField from "./view/pages/Analytics/components/ModificationByField/ModificationByField";
-import DeletedJira from "./view/pages/Analytics/components/DeletedJiraTickets/Deletedjira";
+import DeletedJiraTickets from "./view/pages/Analytics/components/DeletedJiraTickets/DeletedJiraTickets";
 import ChangesInJiraTickets from "./view/pages/Analytics/components/ChangesInJiraTickets/ChangesInJiraTickets";
 import ChangesByParentId from "./view/pages/Analytics/components/ChangesByParentId/ChangesByParentId";
 import DelaysInDelivery from "./view/pages/Analytics/components/DelaysInDelivery/DelaysInDelivery";
 
-import "./App.css"
-
+import "./App.css";
 
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-
+  Redirect,
+  Link,
+  useLocation,
+  useParams
 } from "react-router-dom";
-
-
-
 
 
 
@@ -41,26 +41,41 @@ function App() {
 
   return (
     <Router>
-      <div className='app'>
-        <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@200;300;400;500;531;600;700;800&display=swap" rel="stylesheet"></link>
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
+      <div className="app">
+        <link
+          href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@200;300;400;500;531;600;700;800&display=swap"
+          rel="stylesheet"
+        ></link>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+          rel="stylesheet"
+        ></link>
         <Nav />
-        <div className='mainPage'>
+        <div className="mainPage">
           <Switch>
             <Route exact={true} path="/">
               <Login />
             </Route>
-            <Route path="/changePassword">
-              <ChangePassword />
-            </Route>
+          
+            <Route path="/register"></Route>
             <Route path="/forgotPassword">
               <ForgetPassword />
             </Route>
-            <Route path="/keyPassword">
-              <KeyPassword />
-            </Route>
+           
+
+            <Route path="/KeyPassword/:email" children={<KeyPassword  />} />
+
+              <Route path="/ChangePassword/:email" children={<ChangePassword  />} />
+
+
             <Route path="/Admin">
               <UserList />
+            </Route>
+            <Route path="/Audit">
+              <Audit />
+            </Route>
+            <Route path="/status">
+              <StatusPage />
             </Route>
             <Route path="/analysis">
               <MainPage />
@@ -70,7 +85,7 @@ function App() {
               <ModificationByField />
             </Route>
             <Route path="/DeletedJiraTickets">
-              <DeletedJira />
+              <DeletedJiraTickets />
             </Route>
             <Route path="/ChangesInJiraTickets">
               <ChangesInJiraTickets />
@@ -81,11 +96,10 @@ function App() {
             <Route path="/DelaysInDelivery">
               <DelaysInDelivery />
             </Route>
-
           </Switch>
         </div>
       </div>
-    </Router >
+    </Router>
   );
 }
 
