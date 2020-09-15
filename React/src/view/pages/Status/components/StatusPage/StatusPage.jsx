@@ -22,6 +22,11 @@ const timeLabelOptions = [
   { value: "weekly", label: "Weekly" },
   { value: "monthly", label: "Monthly" },
 ];
+const statusOptions = [
+  { value: "all", label: "All" },
+  { value: "done", label: "Done" },
+  { value: "notDone", label: "Not Done" },
+];
 const StatusPage = () => {
   const [cardsContent, setCardsContent] = useState([]);
   const [openTasks, setOpenTasks] = useState([]);
@@ -338,6 +343,7 @@ const StatusPage = () => {
         }
       });
   };
+  console.log(tableFilters);
   const handleSegmentClick = (date, status) => {
     fetch("/api/status/segmentData", {
       method: "POST",
@@ -453,6 +459,7 @@ const StatusPage = () => {
             modificationFieldValueOptions={modificationFieldValueOptions}
             modificationFieldOptions={modificationFieldOptions}
             modificationTypeOptions={modificationTypeOptions}
+            statusOptions={statusOptions}
             openTasks={openTasks}
             onDoneClick={handleDoneClick}
             onSelect={handleSelect}
