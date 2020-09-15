@@ -2,9 +2,9 @@
   text-align: center;
   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
   border-collapse: collapse;
-  border: .1px solid #C8C9C7;
+  border: 0.1px solid #c8c9c7;
   width: 100%;
-  color:#444444;
+  color: #444444;
 }
 .open-tasks-title {
   text-align: center;
@@ -14,18 +14,18 @@
 }
 .container td,
 .container th {
-  border: .1px solid #C8C9C7;
-  padding: .5rem;
+  border: 0.1px solid #c8c9c7;
+  padding: 0.5rem;
   font-size: 16px;
   font-weight: 300;
 }
 
 .container tr:nth-child(even) {
-  background-color: #EEEEEE;
+  background-color: #eeeeee;
 }
 
 .container tr:nth-child(odd) {
-  background-color: #EEEEEE;
+  background-color: #eeeeee;
 }
 
 .container tr:hover {
@@ -36,7 +36,7 @@
   padding-top: 1rem;
   padding-bottom: 1rem;
   text-align: center;
-  background-color:  #00447C;
+  background-color: #00447c;
   color: white;
   font-size: 19px;
   font-weight: 300;
@@ -48,14 +48,15 @@
   flex-direction: row;
 }
 
-.submitButton {
+.updateButton {
   width: 80px;
   height: 39px;
   min-height: 39px;
   background-color: white;
   border: 1px solid #cccccc;
+  padding-top: 4px;
   border-radius: 4px;
-  margin: 4px;
+  /* margin: 4px; */
   outline: none;
   cursor: pointer;
 }
@@ -66,17 +67,22 @@
 
 .filterSelectB {
   width: 22em;
-  margin-right: 1rem;
+  /* position: relative; */
+  padding-right: 2;
 }
 
 .container__filterSelect {
   display: flex;
-  justify-items: center;
+  /* justify-items: center; */
   /* background-color: white; */
-  margin: 2rem 15rem 2rem 15rem;
-  justify-content: space-between;
+  /* margin: 2rem 15rem 2rem 15rem; */
+  /* justify-content: space-between; */
 }
 
-.container{
+.container {
   margin-bottom: 5vh;
+}
+
+h3 {
+  margin: 2%;
 }
