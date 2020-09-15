@@ -168,7 +168,7 @@ function DeletedJiraTickets() {
   const qaInput = useRef("")
   return (
     <div className='DeletedJiraTicketsWrapper'>
-      <div className="DeletedJiraTickets__Chart"> {UiObjs && <Chart UiObjs={UiObjs} />}</div>
+      <div className="DeletedJiraTickets__Chart"> {UiObjs && <Chart UiObjs={UiObjs} title="Deleted Jira Tickets (All)" />}</div>
       <div className="DeletedJiraTickets__Title">Deleted Jira Tickets</div>
 
       <div className="DeletedJiraTickets__Filters__wrapper">

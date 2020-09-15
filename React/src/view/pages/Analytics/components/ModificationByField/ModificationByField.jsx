@@ -69,6 +69,7 @@ function ModificationByField(props) {
       .then(data => {
         if (data != null) {
           setUiObjs(data);
+          setTasks(data.tasks)
         }
         else { setUiObjs([]); }
       })
@@ -88,6 +89,7 @@ function ModificationByField(props) {
         if (data != null) {
           console.log(data)
           setUiObjs(data);
+
         }
         else {
           setUiObjs([]);
@@ -125,6 +127,7 @@ function ModificationByField(props) {
   const [fieldNameOptions, setFieldNameOptions] = useState([]); //FieldName options for filtering
   const [valueOptions, setValueOptions] = useState([]);//Values of certain FieldName options for filtering
   const [startDate, setStartDate] = useState("");
+  const [tasks,setTasks]=useState([])
   const [endDate, setEndDate] = useState("");
   const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([]);//Qa Representative options for filtering
   const labelOptions = [ //Labels for Displaying the Chart 
@@ -209,7 +212,7 @@ function ModificationByField(props) {
     <div className='ModificationByField__Wrapper'>
       <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
       <div className="ModificationByField__Chart">
-        {UiObjs && <Chart UiObjs={UiObjs}  />}
+        {UiObjs && <Chart UiObjs={UiObjs} title="Modification By Field (All)" />}
       </div>
       <div className="ModificationByField__MainTitle">Modification By Field</div>
 

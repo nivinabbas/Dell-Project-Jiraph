@@ -3,30 +3,33 @@ import "./Chart.css";
 import MainTable from "../MainTable/MainTable"
 import { useState, useEffect } from 'react';
 
+let allTasksToDisplay = [];
+
 function Chart(props) {
   const { UiObjs } = props;
+  const {title}=props
   const [tasks, setTasks] = useState([]);
   const [tableTitle, setTableTitle] = useState([]);
   const handleClick = (tasks, title) => {
     setTasks(tasks)
     setTableTitle(title)
   }
-  const allTasksToDisplay = [];
-  const handleAllTasks = (tasks, title) => {
+
+  const handleAllTasks = (tasks) => {
     setTasks(tasks)
     setTableTitle(title)
   }
-
   useEffect(()=>{
+    allTasksToDisplay=[];
     UiObjs.map((columns, index) => {
-
     columns.arr.map((tasks=>{
-      tasks.tasks.map((task=>{
+      tasks.tasks.map((task=>{  
         allTasksToDisplay.push(task);
       }))
     }))
   })
   setTasks(allTasksToDisplay)
+  setTableTitle(title)
   }, [UiObjs])
   
   return (
@@ -66,7 +69,7 @@ function Chart(props) {
       <div className="Chart__Table">
         <button
           className="allTasksButton"
-          onClick={() => handleAllTasks(allTasksToDisplay, `All Tasks`)}>
+          onClick={() => handleAllTasks(allTasksToDisplay)}>
           <span>All Tasks</span>
         </button>
         {tasks.length > 0 && <MainTable tasks={tasks} title={tableTitle} />}
