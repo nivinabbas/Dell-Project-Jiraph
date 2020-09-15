@@ -6,8 +6,12 @@ const UserSchema = new mongoose.Schema({
         employeeEmail: String,
         employeeRole: String,
         password: String
-    }
+    },
+    active:Number
 })
+
+
+
 
 
 module.exports = UserSchema;

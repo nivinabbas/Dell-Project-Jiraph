@@ -1,8 +1,0 @@
-.dashboard {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  /* padding: 32px; */
-  margin: 16px;
-  align-content: center;
-  /* box-shadow: 10px 10px 5px grey; */
-}
