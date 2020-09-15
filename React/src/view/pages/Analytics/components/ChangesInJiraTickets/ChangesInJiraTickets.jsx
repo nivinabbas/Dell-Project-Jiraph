@@ -212,17 +212,11 @@ function ChangesInJiraTickets() {
       <div className="ChangeOfJiraTicket__Title">Changes Of Jira Tickets</div>
 
       <div className="ModificationByField__Filters__wrapper">
-        <div className="ModificationByField__Filters__headers">
-          <p className="filter__header__item">Old/New</p>
-          <p className="filter__header__item">Status</p>
-          <p className="filter__header__item">QA Representative</p>
-          <p className="filter__header__item">Start date</p>
-          <p className="filter__header__item">End date</p>
-          <p className="filter__header__item">Dates aggregation</p>
-        </div>
+       
 
-      <form className="ChangeOfJiraTicket__Filters__fields">
-
+        <form className="ChangeOfJiraTicket__Filters__fields">
+        <div className="ChangeOfJiraTicket__Filters__Header">
+        <p> Old/New  </p>
         <Select
           onInputChange={() => { statusInput.current.state.value = ""; qaInput.current.state.value = "" }}
           name="oldNew"
@@ -230,9 +224,11 @@ function ChangesInJiraTickets() {
           placeholder="New value"
           className="ChangeOfJiraTicket__Filter"
           onChange={HandleValuesChange}
-          isClearable={true}
-        />
+          isClearable={true}/>
+        </div>
 
+        <div className="ChangeOfJiraTicket__Filters__Header">
+        <p> Status </p>
         <Select
           name="status"
           ref={statusInput}
@@ -240,9 +236,11 @@ function ChangesInJiraTickets() {
           options={statusOptions}
           placeholder="Status "
           className="ChangeOfJiraTicket__Filter"
-          onChange={HandleStatusChange}
-        />
+          onChange={HandleStatusChange}/>
+          </div>
 
+        <div className="ChangeOfJiraTicket__Filters__Header">
+        <p> Qa Representative</p>
         <Select
           name="qaRepresentative"
           isMulti
@@ -250,25 +248,31 @@ function ChangesInJiraTickets() {
           options={qaRepresentativeOptions}
           placeholder="Qa Representative "
           className="DelaysInDelivery__Filter"
-          onChange={HandleqaRepresentativeChange}
-        />
-        From
+          onChange={HandleqaRepresentativeChange}/>
+          </div>
+       
+        <div className="ChangeOfJiraTicket__Filters__Header">
+        <p> Start Date </p>
         <input
           className="ChangeOfJiraTicket__Filter__date"
           type="date"
           name="startDate"
           value={startDate}
-          onChange={HandleStartDateChange}
-        />
-        To
+          onChange={HandleStartDateChange}/>
+        </div>
+
+        <div className="ChangeOfJiraTicket__Filters__Header">
+        <p> End Date </p>
         <input
           className="ChangeOfJiraTicket__Filter__date"
           type="date"
           name="endDate"
           value={endDate}
-          onChange={HandleEndDateChange}
-        />
+          onChange={HandleEndDateChange}/>
+          </div>
 
+        <div className="ChangeOfJiraTicket__Filters__Header">
+        <p> Period </p>
         <Select
           name="labels"
           options={labelOptions}
@@ -276,6 +280,7 @@ function ChangesInJiraTickets() {
           className="ChangeOfJiraTicket__Filter"
           onChange={HandleLabelChange}
         />
+        </div>
 
       </form>
     </div>

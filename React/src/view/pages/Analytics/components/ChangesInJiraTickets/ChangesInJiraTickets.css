@@ -135,3 +135,9 @@
     padding-bottom: 0;
     margin-top: 0;
   } */
+
+.ChangeOfJiraTicket__Filters__Header > p {
+  text-align: center;
+  color: #00447C;
+  font-weight: bold;
+  }

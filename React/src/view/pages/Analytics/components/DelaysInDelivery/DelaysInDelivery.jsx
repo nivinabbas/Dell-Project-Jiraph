@@ -227,17 +227,12 @@ function DelaysInDelivery() {
       {/* Select Filters */}
       
       <div className="DelaysInDelivery__Filters__wrapper">
-        <div className="DelaysInDelivery__Filters__headers">
-          <p className="filter__header__item">Fix Version</p>
-          <p className="filter__header__item">Jira Type</p>
-          <p className="filter__header__item">QA Representative</p>
-          <p className="filter__header__item">Start date</p>
-          <p className="filter__header__item">End date</p>
-          <p className="filter__header__item">Dates aggregation</p>
-        </div>
+       
 
       <form className="DelaysInDelivery__Filters__fields">
 
+        <div className="DelaysInDelivery__Filters__Header">
+        <p> Fix Version </p>
         <Select
           name="fixVersion"
           onInputChange={() => { jiraTypeInput.current.state.value = ""; qaInput.current.state.value = "" }}
@@ -245,10 +240,11 @@ function DelaysInDelivery() {
           placeholder="fix Version "
           className="DelaysInDelivery__Filter"
           onChange={HandlefixVersionChange}
-          
-
         />
+        </div>
 
+        <div className="DelaysInDelivery__Filters__Header">
+        <p> Jira Type </p>
         <Select
           name="jiraType"
           isMulti
@@ -257,8 +253,10 @@ function DelaysInDelivery() {
           placeholder="jira Type  "
           className="DelaysInDelivery__Filter"
           onChange={HandlejiraTypeChange}
-        />
+        /></div>
 
+<div className="DelaysInDelivery__Filters__Header">
+        <p> Qa Representative </p>
         <Select
           name="qaRepresentative"
           isMulti
@@ -267,8 +265,10 @@ function DelaysInDelivery() {
           placeholder="Qa Representative "
           className="DelaysInDelivery__Filter"
           onChange={HandleqaRepresentativeChange}
-        />
-        From
+        /></div>
+        
+        <div className="DelaysInDelivery__Filters__Header">
+        <p> Start Date </p>
         <input
           className="DelaysInDelivery__Filter__date"
           type="date"
@@ -276,22 +276,27 @@ function DelaysInDelivery() {
           value={startDate}
           onChange={HandleStartDateChange}
         />
-        To
+        </div>
+
+        <div className="DelaysInDelivery__Filters__Header">
+        <p> End Date</p>
         <input
           className="DelaysInDelivery__Filter__date"
           type="date"
           name="endDate"
           value={endDate}
           onChange={HandleEndDateChange}
-        />
+        /></div>
 
+<div className="DelaysInDelivery__Filters__Header">
+        <p> Period </p>
         <Select
           name="labels"
           options={labelOptions}
           placeholder="Weekly"
           className="DelaysInDelivery__Filter"
           onChange={HandleLabelChange}
-        />
+        /></div>
 
       </form>
     </div>
