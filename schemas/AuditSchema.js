@@ -6,7 +6,9 @@ const AuditSchema = new mongoose.Schema({
     employeeEmail: String,
     employeeRole: String,
     action: String,
-    body:String,
+    body:{
+        
+    },
     timeChange: Date
 })
 
