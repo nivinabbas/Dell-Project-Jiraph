@@ -659,19 +659,19 @@ router.post("/stackedChart", async function (req, res) {
       } else if (eval(d1.getMonth() + 1).toString().length == 2 && d1.getDate().toString().length == 2) {
         rangeIsFrom = d1.getFullYear() + "-" + eval(d1.getMonth() + 1) + "-" + eval(d1.getDate() - 1);
       } else if (eval(d1.getMonth() + 1).toString().length == 1 && d1.getDate().toString().length == 2) {
-        rangeIsFrom = d1.getFullYear() + "-" + "0" + eval(d1.getMonth() + 1) + "-" +eval(d1.getDate() - 1);
+        rangeIsFrom = d1.getFullYear() + "-" + "0" + eval(d1.getMonth() + 1) + "-" + eval(d1.getDate() - 1);
       }
       // rangeIsFrom = d1.getFullYear()+"-"+eval(d1.getMonth() + 1) + "-" + d1.getDate() ;
 
       d1.setDate(d1.getDate() + 6);
       if (eval(d1.getMonth() + 1).toString().length == 1 && d1.getDate().toString().length == 1) {
-        rangeIsTo = d1.getFullYear() + "-" + "0" + eval(d1.getMonth() + 1) + "-" + "0" + eval(d1.getDate() -1);
+        rangeIsTo = d1.getFullYear() + "-" + "0" + eval(d1.getMonth() + 1) + "-" + "0" + eval(d1.getDate() - 1);
       } else if (eval(d1.getMonth() + 1).toString().length == 2 && d1.getDate().toString().length == 1) {
-        rangeIsTo = d1.getFullYear() + "-" + eval(d1.getMonth() + 1) + "-" + "0" +eval(d1.getDate() -1);
+        rangeIsTo = d1.getFullYear() + "-" + eval(d1.getMonth() + 1) + "-" + "0" + eval(d1.getDate() - 1);
       } else if (eval(d1.getMonth() + 1).toString().length == 2 && d1.getDate().toString().length == 2) {
-        rangeIsTo = d1.getFullYear() + "-" + eval(d1.getMonth() + 1) + "-" + eval(d1.getDate() -1);
+        rangeIsTo = d1.getFullYear() + "-" + eval(d1.getMonth() + 1) + "-" + eval(d1.getDate() - 1);
       } else if (eval(d1.getMonth() + 1).toString().length == 1 && d1.getDate().toString().length == 2) {
-        rangeIsTo = d1.getFullYear() + "-" + "0" + eval(d1.getMonth() + 1) + "-" + eval(d1.getDate() -1);
+        rangeIsTo = d1.getFullYear() + "-" + "0" + eval(d1.getMonth() + 1) + "-" + eval(d1.getDate() - 1);
       }
       return rangeIsFrom + " to " + rangeIsTo;
     };
@@ -690,7 +690,7 @@ router.post("/stackedChart", async function (req, res) {
       return weekNo;
     }
 
- 
+
     //asdasd
     let DateWeek;
     let objIndex, weeknumber;
@@ -698,12 +698,12 @@ router.post("/stackedChart", async function (req, res) {
     console.log("stackedChartDone:", stackedChartDone)
     stackedChartDone.forEach(element => {
       weekID = element._id;
-      year=weekID.substr(0,4);
-       DateWeek = new Date(weekID + "T23:59:59.59Z");
+      year = weekID.substr(0, 4);
+      DateWeek = new Date(weekID + "T23:59:59.59Z");
       weeknumber = getWeekNumber(DateWeek)//DateWeek.getWeek();
-      console.log("weekID",weekID,"yearyear ",year," weeknumber",weeknumber)
+      console.log("weekID", weekID, "yearyear ", year, " weeknumber", weeknumber)
 
-       objIndex = ResultWeeks.findIndex((obj => obj.weekID == weeknumber));
+      objIndex = ResultWeeks.findIndex((obj => obj.weekID == weeknumber));
       if (objIndex > -1) {
 
         ResultWeeks[objIndex].data = ({
@@ -741,7 +741,7 @@ router.post("/stackedChart", async function (req, res) {
     });
     FirstDate = resultWeek[0].date;
     FirstDate = FirstDate.substring().split(" ");
-   
+
     //  let NewFisrtDay=startDate,NewLastDay=endDate;
     console.log("NewLastDay", NewLastDay, NewFisrtDay)
     resultWeek[0].date = NewFisrtDay + " " + FirstDate[1] + " " + FirstDate[2];
@@ -749,9 +749,9 @@ router.post("/stackedChart", async function (req, res) {
     // resultWeek[(resultWeek.length-1)].date = LastDate[0]+" "+NewFisrtDay + " " + LastDate[1] ;
     LastDate = resultWeek[resultWeek.length - 1].date;
     LastDate = LastDate.substring().split(" ");
-    resultWeek[resultWeek.length-1].date =LastDate[0] + " " + LastDate[1]+" "+NewLastDay;
+    resultWeek[resultWeek.length - 1].date = LastDate[0] + " " + LastDate[1] + " " + NewLastDay;
 
-  
+
     console.log("ResultWeekstest ", resultWeek, "FirstDate ", FirstDate, "LastDate ", LastDate)
     res.send({
       success: true,
@@ -1807,7 +1807,6 @@ router.get("/test122", async function (req, res) {
   });
 })
 
-
-
+ 
 
 module.exports = router;
