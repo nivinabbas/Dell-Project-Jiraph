@@ -13,6 +13,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import {
   initialTableFilters,
   initialPieChartsFilters,
+  tasksNames,
 } from "../../../../../service/statusService";
 import "./StatusPage.css";
 import { dateFormat, lastMonth } from "../../../../../service/utils";
@@ -21,6 +22,11 @@ const timeLabelOptions = [
   { value: "daily", label: "Daily" },
   { value: "weekly", label: "Weekly" },
   { value: "monthly", label: "Monthly" },
+];
+const statusOptions = [
+  { value: "all", label: "All" },
+  { value: "done", label: "Done" },
+  { value: "notDone", label: "NotDone" },
 ];
 const StatusPage = () => {
   const [cardsContent, setCardsContent] = useState([]);
@@ -142,7 +148,7 @@ const StatusPage = () => {
       .then((res) => res.json())
       .then((data) => {
         let { success, error, info } = data;
-        console.log("type Pie info: ",info)
+        console.log("type Pie info: ", info);
         if (success) {
           setTypePieChart(info);
         } else {
@@ -219,19 +225,29 @@ const StatusPage = () => {
   }, []);
 
   const handleDoneClick = (jiraId) => {
+    console.log(jiraId);
     const cloned = [...tasksId];
     const index = tasksId.indexOf(jiraId);
     index != -1 ? cloned.splice(index, 1) : cloned.push(jiraId);
 
     setTasksId(cloned);
   };
-
+  console.log("tttt", tableFilters[3]);
   const handleUpdateClick = () => {
+    const names = tasksNames(tasksId, openTasks);
+
     confirmAlert({
-      // title: `Confirm to ${isDone ? "Not Done" : "Done"} `,
-      // message: `Are you sure to modify this task to ${
-      //   isDone ? "Not Done" : "Done"
-      // }?`,
+      title: `Confirm`,
+      message: (
+        <ol>
+          {names.map((name, index) => (
+            <li key={index}>
+              <span>{++index}.</span>
+              {name}
+            </li>
+          ))}
+        </ol>
+      ),
       buttons: [
         {
           label: "Yes",
@@ -239,9 +255,12 @@ const StatusPage = () => {
             const originalTasksID = [...openTasks];
             try {
               const userId = null;
-              //   var countriesFound = countries.filter(function(country) {
-              //     return ["Spain","Greece"].indexOf(country.key) != -1
-              // });
+              if (tableFilters[3].value !== "all") {
+                const tasks = openTasks.filter(
+                  (task) => tasksId.indexOf(task._id) === -1
+                );
+                setOpenTasks(tasks);
+              }
 
               fetch("/api/status/updateTasks", {
                 method: "POST",
@@ -254,8 +273,6 @@ const StatusPage = () => {
                 .then((res) => {
                   let { success, error, info } = res;
                   if (success) {
-                    console.log(info);
-                    setOpenTasks(info);
                   } else {
                     alert(error);
                   }
@@ -272,6 +289,7 @@ const StatusPage = () => {
       ],
     });
   };
+
   ////////////////////////////
   const handlePieChartsFilters = (filter, name) => {
     const newPieFilters = [...pieChartsFilters].map((f) => {
@@ -339,7 +357,9 @@ const StatusPage = () => {
         }
       });
   };
+
   const handleSegmentClick = (date, status) => {
+    console.log("s:", status);
     fetch("/api/status/segmentData", {
       method: "POST",
       headers: {
@@ -356,6 +376,9 @@ const StatusPage = () => {
           alert(error);
         }
       });
+    const newFilters = [...tableFilters];
+    newFilters[3].value = status;
+    setTableFilters(newFilters);
   };
 
   const handleStaticsClick = (date, tasks) => {
@@ -384,14 +407,6 @@ const StatusPage = () => {
             label="To:"
             value={endDate}
           />
-
-          <h3>Time Range</h3>
-          <Select
-            options={timeLabelOptions}
-            onChange={(filter) => setTimeLabel(filter)}
-            className="filterSelect"
-            placeholder="Daily"
-          />
         </div>
 
         <div className="statusPage__barChart">
@@ -404,47 +419,57 @@ const StatusPage = () => {
           )}
         </div>
 
-        <div className="statusPage__charts">
-          <div className="statusPage__barChart2">
-            <h3>Task History</h3>
-
-            {stackedChart.length === 0 && (
-              <div className="statupPage__circularProgress">
-                <CircularProgress disableShrink />
-              </div>
-            )}
-            {stackedChart.length != 0 && (
-              <StackedChart
-                data={stackedChart}
-                onDataSelected={handleSegmentClick}
-              />
-            )}
-          </div>
-
-          <div className="statusPage__pieCharts">
-            <div className="statusPage__pieChart">
-              <h3>Type:</h3>
+        <div className="statusPage__divAllcharts">
+          <h2 style={{ textAlign: "center", padding: 8 }}>Task History</h2>
+          <div className="statusPage__charts">
+            <div className="statusPage__barChart2">
+              <h5 style={{ margin: "4px" }}>Period </h5>
               <Select
-                options={modificationTypeOptions}
-                onChange={(filter, name) =>
-                  handlePieChartsFilters(filter, "pieChartModificationType")
-                }
-                className="filterSelect filterSelect-pie"
-                placeholder="All"
+                options={timeLabelOptions}
+                onChange={(filter) => setTimeLabel(filter)}
+                className="filterSelect"
+                placeholder="Daily"
               />
-              <PieChart dataPieChart={typePieChart} name="pie1" />
+              {stackedChart.length === 0 && (
+                <div className="statupPage__circularProgress">
+                  <CircularProgress disableShrink />
+                </div>
+              )}
+              {stackedChart.length != 0 && (
+                <StackedChart
+                  data={stackedChart}
+                  onDataSelected={handleSegmentClick}
+                />
+              )}
             </div>
-            <div className="statusPage__pieChart">
-              <h3>Field:</h3>
-              <Select
-                options={modificationNamePieOptions}
-                onChange={(filter, name) =>
-                  handlePieChartsFilters(filter, "pieChartModificationField")
-                }
-                className="filterSelect filterSelect-pie"
-                placeholder="All"
-              />
-              <PieChart dataPieChart={fieldPieChart} name="pie2" />
+
+            <div className="statusPage__pieCharts">
+              <div className="statusPage__pieChart">
+                <h3>Type:</h3>
+                <Select
+                  options={modificationTypeOptions}
+                  onChange={(filter, name) =>
+                    handlePieChartsFilters(filter, "pieChartModificationType")
+                  }
+                  className="filterSelect filterSelect-pie"
+                  placeholder="All"
+                />
+                <PieChart dataPieChart={typePieChart} name="pie1" />
+              </div>
+            </div>
+            <div className="statusPage__pieCharts">
+              <div className="statusPage__pieChart">
+                <h3>Field:</h3>
+                <Select
+                  options={modificationNamePieOptions}
+                  onChange={(filter, name) =>
+                    handlePieChartsFilters(filter, "pieChartModificationField")
+                  }
+                  className="filterSelect filterSelect-pie"
+                  placeholder="All"
+                />
+                <PieChart dataPieChart={fieldPieChart} name="pie2" />
+              </div>
             </div>
           </div>
         </div>
@@ -454,6 +479,7 @@ const StatusPage = () => {
             modificationFieldValueOptions={modificationFieldValueOptions}
             modificationFieldOptions={modificationFieldOptions}
             modificationTypeOptions={modificationTypeOptions}
+            statusOptions={statusOptions}
             openTasks={openTasks}
             onDoneClick={handleDoneClick}
             onSelect={handleSelect}

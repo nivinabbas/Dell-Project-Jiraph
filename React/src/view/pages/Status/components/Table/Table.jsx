@@ -13,6 +13,7 @@ export default function TasksTable({
   modificationFieldOptions,
   modificationTypeOptions,
   modificationFieldValueOptions,
+  statusOptions,
   onDoneClick,
   onSelect,
   tableFilters,
@@ -21,6 +22,11 @@ export default function TasksTable({
   const disableSelect = () => {
     return tableFilters[0].value !== "Update" ? true : false;
   };
+
+  /* Select inputs refs */
+  const modField = useRef("");
+  const modValue = useRef("");
+  const statusSelect = useRef("");
 
   const [pageNumber, setPageNumber] = useState(0);
   const [rowsCount, setRowsCount] = useState(5);
@@ -40,9 +46,9 @@ export default function TasksTable({
     setPaginatedTasks(getPaginatedTasks(openTasks));
   }, [openTasks]);
 
-  /* Select inputs refs */
-  const modField = useRef("");
-  const modValue = useRef("");
+  // /* Select inputs refs */
+  // const modField = useRef("");
+  // const modValue = useRef("");
 
   return (
     <div className="open-tasks">
@@ -57,6 +63,7 @@ export default function TasksTable({
           onInputChange={() => {
             modField.current.state.value = "";
             modValue.current.state.value = "";
+            statusSelect.current.state.value = "";
           }}
         />
         <h3>Field:</h3>
@@ -69,7 +76,10 @@ export default function TasksTable({
           isDisabled={disableSelect()}
           placeholder="Field"
           ref={modField}
-          onInputChange={() => (modValue.current.state.value = "")}
+          onInputChange={() => {
+            modValue.current.state.value = "";
+            statusSelect.current.state.value = "";
+          }}
         />
         <h3>Value:</h3>
         <Select
@@ -79,6 +89,14 @@ export default function TasksTable({
           isDisabled={disableSelect()}
           placeholder="Value"
           ref={modValue}
+        />
+        <h3>Done/Not Done:</h3>
+        <Select
+          options={statusOptions}
+          className="filterSelectB"
+          onChange={(filter, name) => onSelect(filter, "status")}
+          placeholder={tableFilters[3].value}
+          ref={statusSelect}
         />
         <button onClick={() => onUpdateClick()}>Update</button>
       </div>
@@ -114,9 +132,10 @@ export default function TasksTable({
                 <td>
                   <input
                     type="checkbox"
-                    onClick={() => onDoneClick(task._id)}
+                    onClick={() => onDoneClick(task._id, task.taskItem.isDone)}
                     key={task._id}
-                    //checked={task.taskItem.isDone}
+                    defaultChecked={task.taskItem.isDone}
+                    // checked={task.taskItem.isDone}
                     onChange={() => {}}
                   />
                 </td>
@@ -126,7 +145,7 @@ export default function TasksTable({
         </table>
         <div>
           <TablePagination
-            rowsPerPageOptions={[5, 10, 15, 25, 50, 100]}
+            rowsPerPageOptions={[25, 50, 100]}
             component="div"
             count={openTasks.length}
             rowsPerPage={rowsCount}
