@@ -54,7 +54,8 @@ router.post('/login', (req, res) => {
                             employeeName: checkEmail[0].userInfo.employeeName,
                             employeeEmail: checkEmail[0].userInfo.employeeEmail,
                             employeeRole: checkEmail[0].userInfo.employeeRole,
-                            change: 'Login',
+                            action: 'Login',
+                            body:req.body,
                             timeChange: Date.now()
                         })
                         res.cookie("loginToken", token, {
@@ -407,7 +408,7 @@ router.put('/activeUser', [auth, admin, audit], (req, res) => {
     })
 })
 
-router.get('/getUsersAudit',[auth,admin],(req,res)=>{
+router.get('/getUsersAudit',[auth,admin,audit],(req,res)=>{
     AuditModel.find({ }).then(async users => {
         if (users.length > 0) {
             let table = [];

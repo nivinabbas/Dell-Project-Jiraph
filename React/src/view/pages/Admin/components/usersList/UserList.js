@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './UserList.css'
-import { useHistory } from "react-router-dom";
+import { useHistory,Link } from "react-router-dom";
 
 
 
@@ -72,8 +72,13 @@ function UserList() {
                          
             {users.map(user => <UserRow isActive={user.active} setUsers={setUsers} key={user.id} user={user} />)}
 
-
+            <div id="ButtonDiv">
+                
+                <Link to="/Audit"><button>Audit</button> </Link>
+                
+            </div>
         </div>
+        
     )
 
 
