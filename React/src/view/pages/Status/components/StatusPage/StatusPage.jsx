@@ -361,14 +361,6 @@ const StatusPage = () => {
             label="To:"
             value={endDate}
           />
-
-          <h3>Time Range</h3>
-          <Select
-            options={timeLabelOptions}
-            onChange={(filter) => setTimeLabel(filter)}
-            className="filterSelect"
-            placeholder="Daily"
-          />
         </div>
 
         <div className="statusPage__barChart">
@@ -381,47 +373,57 @@ const StatusPage = () => {
           )}
         </div>
 
-        <div className="statusPage__charts">
-          <div className="statusPage__barChart2">
-            <h3>Task History</h3>
-
-            {stackedChart.length === 0 && (
-              <div className="statupPage__circularProgress">
-                <CircularProgress disableShrink />
-              </div>
-            )}
-            {stackedChart.length != 0 && (
-              <StackedChart
-                data={stackedChart}
-                onDataSelected={handleSegmentClick}
-              />
-            )}
-          </div>
-
-          <div className="statusPage__pieCharts">
-            <div className="statusPage__pieChart">
-              <h3>Type:</h3>
+        <div className="statusPage__divAllcharts">
+          <h2>Task History</h2>
+          <div className="statusPage__charts">
+            <div className="statusPage__barChart2">
+              <h5 style={{ margin: "4px" }}>Period </h5>
               <Select
-                options={modificationTypeOptions}
-                onChange={(filter, name) =>
-                  handlePieChartsFilters(filter, "pieChartModificationType")
-                }
-                className="filterSelect filterSelect-pie"
-                placeholder="All"
+                options={timeLabelOptions}
+                onChange={(filter) => setTimeLabel(filter)}
+                className="filterSelect"
+                placeholder="Daily"
               />
-              <PieChart dataPieChart={typePieChart} name="pie1" />
+              {stackedChart.length === 0 && (
+                <div className="statupPage__circularProgress">
+                  <CircularProgress disableShrink />
+                </div>
+              )}
+              {stackedChart.length != 0 && (
+                <StackedChart
+                  data={stackedChart}
+                  onDataSelected={handleSegmentClick}
+                />
+              )}
             </div>
-            <div className="statusPage__pieChart">
-              <h3>Field:</h3>
-              <Select
-                options={modificationNamePieOptions}
-                onChange={(filter, name) =>
-                  handlePieChartsFilters(filter, "pieChartModificationField")
-                }
-                className="filterSelect filterSelect-pie"
-                placeholder="All"
-              />
-              <PieChart dataPieChart={fieldPieChart} name="pie2" />
+
+            <div className="statusPage__pieCharts">
+              <div className="statusPage__pieChart">
+                <h3>Type:</h3>
+                <Select
+                  options={modificationTypeOptions}
+                  onChange={(filter, name) =>
+                    handlePieChartsFilters(filter, "pieChartModificationType")
+                  }
+                  className="filterSelect filterSelect-pie"
+                  placeholder="All"
+                />
+                <PieChart dataPieChart={typePieChart} name="pie1" />
+              </div>
+            </div>
+            <div className="statusPage__pieCharts">
+              <div className="statusPage__pieChart">
+                <h3>Field:</h3>
+                <Select
+                  options={modificationNamePieOptions}
+                  onChange={(filter, name) =>
+                    handlePieChartsFilters(filter, "pieChartModificationField")
+                  }
+                  className="filterSelect filterSelect-pie"
+                  placeholder="All"
+                />
+                <PieChart dataPieChart={fieldPieChart} name="pie2" />
+              </div>
             </div>
           </div>
         </div>
