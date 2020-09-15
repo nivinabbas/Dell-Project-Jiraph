@@ -7,7 +7,7 @@ const getPaginatedTasks = (tasks = [], pageNumber = 0, rowsCount = 5) => {
   const start = (pageNumber + 1) * rowsCount - rowsCount;
   return tasks.slice(start, start + rowsCount);
 };
-import { Checkbox } from "@material-ui/core";
+//import { Checkbox } from "@material-ui/core";
 
 export default function TasksTable({
   openTasks,
@@ -47,9 +47,9 @@ export default function TasksTable({
     setPaginatedTasks(getPaginatedTasks(openTasks));
   }, [openTasks]);
 
-  /* Select inputs refs */
-  const modField = useRef("");
-  const modValue = useRef("");
+  // /* Select inputs refs */
+  // const modField = useRef("");
+  // const modValue = useRef("");
 
   return (
     <div className="open-tasks">
