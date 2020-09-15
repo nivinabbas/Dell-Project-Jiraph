@@ -1,32 +1,43 @@
 import React from 'react';
 import "./Chart.css";
 import MainTable from "../MainTable/MainTable"
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+let allTasksToDisplay = [];
 
 function Chart(props) {
   const { UiObjs } = props;
+  const {title}=props
   const [tasks, setTasks] = useState([]);
   const [tableTitle, setTableTitle] = useState([]);
   const handleClick = (tasks, title) => {
     setTasks(tasks)
     setTableTitle(title)
   }
-  const allTasksToDisplay = [];
-  const handleAllTasks = (tasks, title) => {
+
+  const handleAllTasks = (tasks) => {
     setTasks(tasks)
     setTableTitle(title)
   }
+  useEffect(()=>{
+    allTasksToDisplay=[];
+    UiObjs.map((columns, index) => {
+    columns.arr.map((tasks=>{
+      tasks.tasks.map((task=>{  
+        allTasksToDisplay.push(task);
+      }))
+    }))
+  })
+  setTasks(allTasksToDisplay)
+  setTableTitle(title)
+  }, [UiObjs])
   
   return (
     <div className="chart__Wrapper">
       <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
       <div className="chart">
         {UiObjs.length > 0 && UiObjs.map((columns, index) => {
-            columns.arr.map((tasks=>{
-              tasks.tasks.map((task=>{
-                allTasksToDisplay.push(task);
-              }))
-            }))
+            
           return (
             <div
               className='chart__column'
@@ -58,7 +69,7 @@ function Chart(props) {
       <div className="Chart__Table">
         <button
           className="allTasksButton"
-          onClick={() => handleAllTasks(allTasksToDisplay, `All Tasks`)}>
+          onClick={() => handleAllTasks(allTasksToDisplay)}>
           <span>All Tasks</span>
         </button>
         {tasks.length > 0 && <MainTable tasks={tasks} title={tableTitle} />}

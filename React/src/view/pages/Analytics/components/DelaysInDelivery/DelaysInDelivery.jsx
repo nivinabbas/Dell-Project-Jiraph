@@ -217,7 +217,7 @@ function DelaysInDelivery() {
      
       {/* Here We Call the Chart Component if we have a uiObj ready */}
       <div className="DelaysInDelivery__Chart"> 
-      {UiObjs && <Chart UiObjs={UiObjs} />}
+      {UiObjs && <Chart UiObjs={UiObjs} title="Delays in Delivery (All)" />}
       </div>
 
        {/* Page Title */}

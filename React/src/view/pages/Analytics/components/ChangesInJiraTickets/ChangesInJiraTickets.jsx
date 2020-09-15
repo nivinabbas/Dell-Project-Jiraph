@@ -206,7 +206,7 @@ function ChangesInJiraTickets() {
       {/* Here We Call the Chart Component if we have a uiObj ready */}
 
       <div className="ChangeOfJiraTicket__Chart">
-        {UiObjs && <Chart UiObjs={UiObjs} />}
+        {UiObjs && <Chart UiObjs={UiObjs} title="Changes In Jira Ticket Status (All)"/>}
       </div>
 
       <div className="ChangeOfJiraTicket__Title">Changes Of Jira Tickets</div>
