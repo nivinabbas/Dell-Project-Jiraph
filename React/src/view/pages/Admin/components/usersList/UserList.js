@@ -63,8 +63,13 @@ function UserList() {
 
             {users.map(user => <UserRow setUsers={setUsers} key={user.id} user={user} />)}
 
-
+            <div id="ButtonDiv">
+                
+                <Link to="/Audit"><button>Audit</button> </Link>
+                
+            </div>
         </div>
+        
     )
 
 

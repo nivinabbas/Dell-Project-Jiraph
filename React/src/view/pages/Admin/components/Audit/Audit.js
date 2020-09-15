@@ -5,7 +5,7 @@ import AuditRow from './AuditRow';
 
 function UserAudit() {
 
-    // const [usersAudit, setUsersAudit] = useState([]);
+  
     const [users, setUsers] = useState([]);
     
 
@@ -16,7 +16,7 @@ function UserAudit() {
             .then(data => {
                 
                 if (data.success == true) {
-                    // alert("ok");
+                   
                     setUsers(data.info.table);
                 }
                 else {
@@ -36,7 +36,7 @@ function UserAudit() {
                     <h4>E-Mail</h4>
                     <h4> Role</h4>
                     <h4>Action</h4>
-                    <h4>Date</h4>
+                    <h4>Date & Time</h4>
                 </div>
               
                 
