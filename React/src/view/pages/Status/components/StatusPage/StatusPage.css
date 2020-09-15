@@ -1,15 +1,3 @@
-.status__header{
-  font-weight: 500;
-text-align: center;
-color: #00447c;
-background-color: white;
-font-family: "Roboto Slab", serif;
-font-size: 26px;
-padding-top: 3vh;
-height: 10vh;
-}
-
-
 .statusPageContainer {
   display: flex;
   flex-direction: column;
@@ -21,29 +9,32 @@ height: 10vh;
   display: flex;
   justify-content: center;
   margin-bottom: 2rem;
-  justify-content: space-between;
-  width: 70%;
 }
 
 .statusPage__barChart {
-  flex: 1;
+  /* flex: 1; */
   background-color: #fff;
   padding: 1rem;
-  margin-right: 1rem;
+
+  /* margin-right: 1rem; */
   border-radius: 5px;
 }
 
-.filterSelect{
-  color: black;
-  margin-top: 1rem;
-  margin-left: .6rem;
-  margin-right: -.5rem;
+.statusPage__barChart2 {
+  flex: 1;
+  background-color: #fff;
+  padding: 1rem;
+  width: 500px;
+  /* margin-right: 1rem; */
+  border-radius: 5px;
+  margin: 10px;
 }
+
 .statusPage__barChart__filters {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  margin-bottom: 2rem;
+  /* margin-bottom: 2rem; */
 }
 
 .statusPage__pieCharts {
@@ -53,6 +44,13 @@ height: 10vh;
   align-items: flex-start;
   background-color: #fff;
   padding: 1rem;
+  margin: 10px;
+  border-radius: 5px;
+}
+.statusPage__divAllcharts {
+  background-color: rgba(255, 255, 255, 0.719);
+  margin-top: 8px;
+  /* margin: 8px; */
   border-radius: 5px;
 }
 
@@ -66,13 +64,7 @@ height: 10vh;
 }
 
 .filterSelect-pie {
-  width: 15rem;
-  margin-left: 2rem;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 .1rem .3rem rgba(0,0,0,.2);
-  border: none;
-  height: 2rem;
+  margin-bottom: 3rem;
 }
 
 .statusPage__table {
@@ -85,4 +77,8 @@ height: 10vh;
   height: 50%;
   text-align: center;
   margin-top: 2rem;
+}
+#NewTaskLogo {
+  cursor: pointer;
+  margin: 1%;
 }
