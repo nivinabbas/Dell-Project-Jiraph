@@ -135,7 +135,8 @@ export default function TasksTable({
                     type="checkbox"
                     onClick={() => onDoneClick(task._id, task.taskItem.isDone)}
                     key={task._id}
-                    //checked={task.taskItem.isDone}
+                    defaultChecked={task.taskItem.isDone}
+                    // checked={task.taskItem.isDone}
                     onChange={() => {}}
                   />
                 </td>
