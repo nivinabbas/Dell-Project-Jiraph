@@ -7,19 +7,27 @@ const getPaginatedTasks = (tasks = [], pageNumber = 0, rowsCount = 5) => {
   const start = (pageNumber + 1) * rowsCount - rowsCount;
   return tasks.slice(start, start + rowsCount);
 };
+import { Checkbox } from "@material-ui/core";
 
 export default function TasksTable({
   openTasks,
   modificationFieldOptions,
   modificationTypeOptions,
   modificationFieldValueOptions,
+  statusOptions,
   onDoneClick,
   onSelect,
   tableFilters,
+  onUpdateClick,
 }) {
   const disableSelect = () => {
     return tableFilters[0].value !== "Update" ? true : false;
   };
+
+  /* Select inputs refs */
+  const modField = useRef("");
+  const modValue = useRef("");
+  const statusSelect = useRef("");
 
   const [pageNumber, setPageNumber] = useState(0);
   const [rowsCount, setRowsCount] = useState(5);
@@ -56,6 +64,7 @@ export default function TasksTable({
           onInputChange={() => {
             modField.current.state.value = "";
             modValue.current.state.value = "";
+            statusSelect.current.state.value = "";
           }}
         />
         <h3>Field:</h3>
@@ -68,7 +77,10 @@ export default function TasksTable({
           isDisabled={disableSelect()}
           placeholder="Field"
           ref={modField}
-          onInputChange={() => (modValue.current.state.value = "")}
+          onInputChange={() => {
+            modValue.current.state.value = "";
+            statusSelect.current.state.value = "";
+          }}
         />
         <h3>Value:</h3>
         <Select
@@ -79,7 +91,16 @@ export default function TasksTable({
           placeholder="Value"
           ref={modValue}
         />
-        <button>Update</button>
+        <h3>Done/Not Done:</h3>
+        <Select
+          options={statusOptions}
+          className="filterSelectB"
+          onChange={(filter, name) => onSelect(filter, "status")}
+          placeholder="Not Done"
+          ref={statusSelect}
+          // value={}
+        />
+        <button onClick={() => onUpdateClick()}>Update</button>
       </div>
       <div className="open-tasks-table">
         <table className="container">
@@ -113,9 +134,9 @@ export default function TasksTable({
                 <td>
                   <input
                     type="checkbox"
-                    onClick={() => onDoneClick(task._id, task.taskItem.isDone)}
+                    onClick={() => onDoneClick(task._id)}
                     key={task._id}
-                    checked={task.taskItem.isDone}
+                    //checked={task.taskItem.isDone}
                     onChange={() => {}}
                   />
                 </td>
