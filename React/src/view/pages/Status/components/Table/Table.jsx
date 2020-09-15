@@ -133,7 +133,7 @@ export default function TasksTable({
                 <td>
                   <input
                     type="checkbox"
-                    onClick={() => onDoneClick(task._id)}
+                    onClick={() => onDoneClick(task._id, task.taskItem.isDone)}
                     key={task._id}
                     //checked={task.taskItem.isDone}
                     onChange={() => {}}

@@ -223,14 +223,15 @@ const StatusPage = () => {
       });
   }, []);
 
-  const handleDoneClick = (jiraId) => {
+  const handleDoneClick = (jiraId, status) => {
+    console.log(status);
     const cloned = [...tasksId];
     const index = tasksId.indexOf(jiraId);
     index != -1 ? cloned.splice(index, 1) : cloned.push(jiraId);
 
     setTasksId(cloned);
   };
-
+  console.log(tasksId);
   const handleUpdateClick = () => {
     confirmAlert({
       // title: `Confirm to ${isDone ? "Not Done" : "Done"} `,
@@ -260,7 +261,7 @@ const StatusPage = () => {
                   let { success, error, info } = res;
                   if (success) {
                     console.log(info);
-                    setOpenTasks(info);
+                    setOpenTasks(openTasks);
                   } else {
                     alert(error);
                   }
@@ -277,6 +278,7 @@ const StatusPage = () => {
       ],
     });
   };
+  console.log(openTasks);
   ////////////////////////////
   const handlePieChartsFilters = (filter, name) => {
     const newPieFilters = [...pieChartsFilters].map((f) => {
@@ -344,7 +346,7 @@ const StatusPage = () => {
         }
       });
   };
-  console.log(tableFilters);
+
   const handleSegmentClick = (date, status) => {
     fetch("/api/status/segmentData", {
       method: "POST",
