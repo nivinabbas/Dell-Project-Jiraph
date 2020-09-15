@@ -99,8 +99,14 @@ function ChangesByParentId() {
         {UiObjs.length > 0 && <PieChartAnalysis UiObjs={UiObjs} />}
       </div>
       {/* Select Filters */}
-
-      <form className="ChangesByParentId__Filters">
+      
+      <div className="ChangesByParentId__Filters__wrapper">
+        <div className="ChangesByParentId__Filters__headers">
+          <p className="filter__header__item">Old/New</p>
+          <p className="filter__header__item">Start date</p>
+          <p className="filter__header__item">End date</p>
+        </div>
+      <form className="ChangesByParentId__Filters__fields">
 
         <Select
           name="fixVersion"
@@ -126,6 +132,8 @@ function ChangesByParentId() {
         />
 
       </form>
+      </div>
+      <div className="ChangesByParentId__Chart">
 
     </div>
   )
