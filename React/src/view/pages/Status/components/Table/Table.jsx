@@ -95,9 +95,8 @@ export default function TasksTable({
           options={statusOptions}
           className="filterSelectB"
           onChange={(filter, name) => onSelect(filter, "status")}
-          placeholder="Not Done"
+          placeholder={tableFilters[3].value}
           ref={statusSelect}
-          // value={}
         />
         <button onClick={() => onUpdateClick()}>Update</button>
       </div>
