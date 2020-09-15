@@ -6,13 +6,13 @@ const UserSchema = require('../schemas/UserSchema');
 const UserModel = mongoose.model("UserModel", UserSchema);
 const TaskModel = require('../schemas/TaskSchema');
 const auth = require("../authentication/auth");
-const admin = require("../authentication/admin");
+const topManager = require("../authentication/topManager");
 
 //app.get/post/put/delete => router.get/post/put/delete
 
 
 
-router.post('/modificationByField',[auth], async (req, res) => {
+router.post('/modificationByField',[auth,topManager], async (req, res) => {
     let tasks = []
     const { serverFilters } = req.body
     let { fieldName, values, qaRepresentative, startDate, endDate, label } = serverFilters;
@@ -106,7 +106,7 @@ router.post('/modificationByField',[auth], async (req, res) => {
 })
 
 
-router.post('/modificationByFieldFilters',[auth], async (req, res) => {
+router.post('/modificationByFieldFilters',[auth,topManager], async (req, res) => {
     let tasks = []
     let { fieldName, startDate, endDate } = req.body
     startDate = new Date(startDate)
@@ -152,7 +152,7 @@ router.post('/modificationByFieldFilters',[auth], async (req, res) => {
 })
 
 
-router.post('/deletedJiraTickets',[auth], async (req, res) => {
+router.post('/deletedJiraTickets',[auth,topManager], async (req, res) => {
     let tasks = []
     const { serverFilters } = req.body
     let { priority, qaRepresentative, functionalTest, startDate, endDate, label } = serverFilters;
@@ -255,7 +255,7 @@ router.post('/deletedJiraTickets',[auth], async (req, res) => {
 })
 
 
-router.post('/deletedJiraTicketsFilters',[auth], async (req, res) => {
+router.post('/deletedJiraTicketsFilters',[auth,topManager], async (req, res) => {
     let tasks = []
     let { startDate, endDate } = req.body
     startDate = new Date(startDate)
@@ -281,7 +281,7 @@ router.post('/deletedJiraTicketsFilters',[auth], async (req, res) => {
 
 })
 
-router.post('/changesByParentIdFilters',[auth], async (req, res) => {
+router.post('/changesByParentIdFilters',[auth,topManager], async (req, res) => {
     let tasks = []
     const { serverFilters } = req.body
     let { fixVersion, startDate, endDate } = serverFilters;
@@ -347,7 +347,7 @@ router.post('/changesByParentIdFilters',[auth], async (req, res) => {
 
 // ---------------------------------------------------------- changes in jira tickets
 
-router.post('/changeOfJIRATicketsStatus',[auth], async (req, res) => {
+router.post('/changeOfJIRATicketsStatus',[auth,topManager], async (req, res) => {
     const filterValue = req.body.values
     const filterStatus = req.body.status
     const filterQaRep = req.body.qaRepresentative
@@ -463,7 +463,7 @@ router.post('/changeOfJIRATicketsStatus',[auth], async (req, res) => {
 
 })
 
-router.post('/changeOfJIRATicketsStatusFilters',[auth], async (req, res) => {
+router.post('/changeOfJIRATicketsStatusFilters',[auth,topManager], async (req, res) => {
 
     let tasks = []
     let matchFilters = ''
@@ -520,7 +520,7 @@ router.post('/changeOfJIRATicketsStatusFilters',[auth], async (req, res) => {
 
 // --------------------------------------------------------------- delays in delivery ---------------------------------------------------------------------
 
-router.post('/delaysInDelivery',[auth], (req, res) => {
+router.post('/delaysInDelivery',[auth,topManager], (req, res) => {
 
 })
 
