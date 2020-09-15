@@ -52,8 +52,9 @@ router.post('/login', (req, res) => {
                         res.cookie("loginToken", token, {
                             maxAge: 60000,
                           });
+                                     res.send({ success: true, error: null, info: { role: checkEmail[0].userInfo.employeeRole, id: checkEmail[0]._id } })
+
                           res.end();
-                        // return (res.send({ success: true, error: null, info: { role: checkEmail[0].userInfo.employeeRole, id: checkEmail[0]._id } }))
                     }else{
                         return (res.send({ success: false, error: "User is deleted from the system", info: null }))
                     }

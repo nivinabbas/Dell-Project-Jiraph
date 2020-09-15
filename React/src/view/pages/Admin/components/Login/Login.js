@@ -1,5 +1,7 @@
 import { useHistory } from "react-router-dom";
 import React from 'react';
+import Cookies from "js-cookie";
+import jwt from "jsonwebtoken";
 import './Login.css';
 import {
     Link
@@ -10,8 +12,8 @@ import {
 function Login(props) {
     const history = useHistory();
     let error='';
-
-    function handleLogin(e) {
+    Cookies.remove('loginToken');   
+     function handleLogin(e) {
         e.preventDefault();
 
         const { userEmailInp, userPswInp } = e.target.elements;
@@ -27,28 +29,18 @@ function Login(props) {
         })
             .then((res) => res.json())
             .then((data) => {
-                const { success } = data;
-                const { error } = data;
-                if (success) {
-                    const { info } = data;
-                    sessionStorage.setItem("ID", info.id);
-                    if (info.role === 'Admin') {
-                        history.push("/Admin")
-                    }
-                    if (info.role === 'QA manager') {
-                        history.push("/status")
-                    }
-                    if (info.role === 'TOP manager') {
-                        history.push("/analysis")
-                    }
-            
+                let token = Cookies.get('loginToken');
+                if(token!=null){
+                    const decoded = jwt.decode(token);
+                    if(decoded.role==='Admin')
+                    history.replace("Admin")
+                    if(decoded.role==="QA manager")
+                    history.replace("/status")
+                    if(decoded.role==="TOP manager")
+                    history.replace("/analysis")
                 }
-
-                else {
-                    const { error } = data;
-                    alert(error)
-
-                }
+                else 
+                alert("User Not Found")
 
             });
     }
@@ -59,8 +51,8 @@ function Login(props) {
             <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@200;300;400;500;531;600;700;800&display=swap" rel="stylesheet"></link>
             <h3 className="header">Welcome to Jiraph System</h3>
             <form id="loginForm" onSubmit={handleLogin} >
-                <input id="userEmail-Inp" name="userEmailInp" placeholder="Enter your Email Adress"></input>
-                <input  id="userPsw-Inp" type="password" name="userPswInp" placeholder="Enter your Password"></input>
+                <input id="userEmail-Inp" name="userEmailInp" placeholder="Enter your Email Adress" required></input>
+                <input  id="userPsw-Inp" type="password" name="userPswInp" placeholder="Enter your Password" required></input>
                 <button type="submit">LOGIN</button>
             </form>
             <Link className="forgetPassword" to="/forgotPassword">Forgot Password?</Link>
