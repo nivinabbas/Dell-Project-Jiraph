@@ -30,20 +30,19 @@ var transporter = nodemailer.createTransport({
 });
 
 
-
 router.post('/login', (req, res) => {
     const { email, password } = req.body;
     if (validator.validate(email)) {
         UserModel.find({ "userInfo.employeeEmail": email }).then(async checkEmail => {
             if (checkEmail.length > 0) {
-                const isMatch = await bcrypt.compare(password,checkEmail[0].userInfo.password)
-                if(isMatch){
-                    if(checkEmail[0].active == true){
+                const isMatch = await bcrypt.compare(password, checkEmail[0].userInfo.password)
+                if (isMatch) {
+                    if (checkEmail[0].active == true) {
                         return (res.send({ success: true, error: null, info: { role: checkEmail[0].userInfo.employeeRole, id: checkEmail[0]._id } }))
-                    }else{
+                    } else {
                         return (res.send({ success: false, error: "User is deleted from the system", info: null }))
                     }
-                }else{
+                } else {
                     return (res.send({ success: false, error: "Password incorrect", info: null }))
                 }
             } else {
@@ -59,27 +58,27 @@ router.post('/login', (req, res) => {
 router.get('/getUsersList', (req, res) => {
 
     console.log('goot')
-    UserModel.find({active:true}).then(users => {
+    UserModel.find({ active: true }).then(users => {
         if (users.length > 0) {
             let table = [];
             for (let index = 0; index < users.length; index++) {
-                table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id , active:users[index].active })
+                table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id, active: users[index].active })
             }
 
             res.send({ success: true, error: null, info: { table } })
         }
-        else{
+        else {
             res.send({ success: false, error: "No Users found", info: null })
         }
     })
 })
 
 router.get('/getDeactivatedList', (req, res) => {
-    UserModel.find({active:false}).then(users => {
+    UserModel.find({ active: false }).then(users => {
         if (users.length > 0) {
             let table = [];
             for (let index = 0; index < users.length; index++) {
-                table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id , active:users[index].active })
+                table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id, active: users[index].active })
             }
 
             res.send({ success: true, error: null, info: { table } })
@@ -99,11 +98,11 @@ router.put('/deleteUser', (req, res) => {
             if (docs) {
                 docs.active = false;
                 await docs.save();
-                await UserModel.find({ active:true }).then(users => {
+                await UserModel.find({ active: true }).then(users => {
                     if (users.length > 0) {
 
                         for (let index = 0; index < users.length; index++) {
-                            table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id , active:users[index].active })
+                            table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id, active: users[index].active })
                         }
                         res.send({ success: true, error: null, info: { table } })
                     }
@@ -115,7 +114,6 @@ router.put('/deleteUser', (req, res) => {
     })
 
 })
-
 
 
 
@@ -161,30 +159,32 @@ ${key}`
     }
 })
 
-
 router.post('/createUser', (req, res) => {
 
     const { name, email, role, password } = req.body;
+    const passwqord = req.body.password;
+    let regex = /[^A-Za-z0-9]/;
+    let containSepcChars = regex.test(password);
+
     let table = [];
+    if (!containSepcChars) {
     if (validator.validate(email)) {
         UserModel.find({ "userInfo.employeeEmail": email }).then(async (checkEmail) => {
             if (checkEmail.length > 0) {
                 return (res.send({ success: false, error: "Email is already in use", info: null }))
             }
 
-
             else {
                 const salt = await bcrypt.genSalt(saltRounds)
-                const hashpassword = await bcrypt.hash(password,salt)
+                const hashpassword = await bcrypt.hash(password, salt)
                 await UserModel.insertMany({ userInfo: { employeeName: name, employeeEmail: email, employeeRole: role, password: hashpassword }, active: true })
 
-                await UserModel.find({ active:true }).then(users => {
+                await UserModel.find({ active: true }).then(users => {
                     if (users.length > 0) {
 
                         for (let index = 0; index < users.length; index++) {
-                            table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id , active:users[index].active })
+                            table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id, active: users[index].active })
                         }
-
 
                         var mailOptions = {
                             from: 'servicetest468@gmail.com',
@@ -211,11 +211,13 @@ router.post('/createUser', (req, res) => {
                 })
             }
 
-
         })
     } else {
         res.send({ success: false, error: "Email not valid", info: null })
     }
+} else {
+    res.send({ success: false, error: "No Special Characters or White Space allowed in User Password!", info: null })
+}
 })
 
 router.post('/checkSendedPassword', (req, res) => {
@@ -241,77 +243,92 @@ router.post('/checkSendedPassword', (req, res) => {
 
 router.put('/updatePassword', (req, res) => {
     const { email, password } = req.body;
-    UserModel.findOne({ "userInfo.employeeEmail": email }).then(async docs => {
-        if (docs) {
-            // const name = docs.userInfo.employeeName
-            // const role = docs.userInfo.employeeRole
-            // const id = docs._id
-            const salt = await bcrypt.genSalt(saltRounds)
-            const hashpassword = await bcrypt.hash(password,salt)
-            docs.userInfo.password = hashpassword
-            docs.save();
-            res.send({ success: true, error: null, info: null })
-            // UserModel.updateOne({ _id: id }, { $set: { userInfo: { employeeName: name, employeeEmail: email, employeeRole: role, password: password } } }).then(doc => {
-            //     if (doc.n > 0) {
-            //         res.send({ success: true, error: null, info: null })
-            //     } else {
-            //         res.send({ success: false, error: null, info: null })
-            //     }
-            // })
-        } else {
-            res.send({ success: false, error: "email not valid", info: null })
-        }
+    const passwqord = req.body.password;
+    let regex = /[^A-Za-z0-9]/;
+    let containSepcChars = regex.test(password);
+    if (!containSepcChars) {
 
-    })
+        UserModel.findOne({ "userInfo.employeeEmail": email }).then(async docs => {
+            if (docs) {
+                // const name = docs.userInfo.employeeName
+                // const role = docs.userInfo.employeeRole
+                // const id = docs._id
+                const salt = await bcrypt.genSalt(saltRounds)
+                const hashpassword = await bcrypt.hash(password, salt)
+                docs.userInfo.password = hashpassword
+                docs.save();
+                res.send({ success: true, error: null, info: null })
+                // UserModel.updateOne({ _id: id }, { $set: { userInfo: { employeeName: name, employeeEmail: email, employeeRole: role, password: password } } }).then(doc => {
+                //     if (doc.n > 0) {
+                //         res.send({ success: true, error: null, info: null })
+                //     } else {
+                //         res.send({ success: false, error: null, info: null })
+                //     }
+                // })
+            } else {
+                res.send({ success: false, error: "email not valid", info: null })
+            }
+
+        })
+    } else {
+        res.send({ success: false, error: "No Special Characters or White Space allowed in User Password!", info: null })
+    }
 
 })
 
 router.put('/editUser', (req, res) => {
     const { id, name, email, role, password } = req.body;
-    if (validator.validate(email)) {
-        UserModel.find({ _id: id }).then(async doc => {
-            if(doc.length>0){
-            if (email == doc[0].userInfo.employeeEmail) {
-                if (password.length > 0) {
-                    const salt = await bcrypt.genSalt(saltRounds)
-                    const hashpassword = await bcrypt.hash(password,salt)
-                    doc[0].userInfo.password = hashpassword;
-                }
-                doc[0].userInfo.employeeName = name
-                doc[0].userInfo.employeeRole = role
-                await doc[0].save();
-
-                return (res.send({ success: true, error: null, info: null }))
-            
-            }
-            else {
-                UserModel.find({ "userInfo.employeeEmail": email }).then(async docs => {
-                    if (docs.length>0) {
-                        return (res.send({ success: false, error: "Email is already in use", info: null }))
-                    }
-                    else {
+    const passwqord = req.body.password;
+    let regex = /[^A-Za-z0-9]/;
+    let containSepcChars = regex.test(password);
+    if (!containSepcChars) {
+        if (validator.validate(email)) {
+            UserModel.find({ _id: id }).then(async doc => {
+                if (doc.length > 0) {
+                    if (email == doc[0].userInfo.employeeEmail) {
                         if (password.length > 0) {
                             const salt = await bcrypt.genSalt(saltRounds)
-                            const hashpassword = await bcrypt.hash(password,salt)
+                            const hashpassword = await bcrypt.hash(password, salt)
                             doc[0].userInfo.password = hashpassword;
                         }
-                        doc[0].userInfo.employeeEmail = email
                         doc[0].userInfo.employeeName = name
                         doc[0].userInfo.employeeRole = role
                         await doc[0].save();
-                        res.send({ success: true, error: null, info: null })
+
+                        return (res.send({ success: true, error: null, info: null }))
+
                     }
-                })
-            }
-        }else{
-            res.send({ success: false, error: 'User Not Found', info: null })
+                    else {
+                        UserModel.find({ "userInfo.employeeEmail": email }).then(async docs => {
+                            if (docs.length > 0) {
+                                return (res.send({ success: false, error: "Email is already in use", info: null }))
+                            }
+                            else {
+                                if (password.length > 0) {
+                                    const salt = await bcrypt.genSalt(saltRounds)
+                                    const hashpassword = await bcrypt.hash(password, salt)
+                                    doc[0].userInfo.password = hashpassword;
+                                }
+                                doc[0].userInfo.employeeEmail = email
+                                doc[0].userInfo.employeeName = name
+                                doc[0].userInfo.employeeRole = role
+                                await doc[0].save();
+                                res.send({ success: true, error: null, info: null })
+                            }
+                        })
+                    }
+                } else {
+                    res.send({ success: false, error: 'User Not Found', info: null })
+                }
+            })
+        } else {
+            res.send({ success: false, error: "Email not valid", info: null })
         }
-        })
-    } else {
-        res.send({ success: false, error: "Email not valid", info: null })
+    }
+    else {
+        res.send({ success: false, error: "No Special Characters or White Space allowed in User Password!", info: null })
     }
 })
-
 
 function makeid(length) {
     var result = '';
@@ -325,27 +342,26 @@ function makeid(length) {
 }
 
 router.put('/activeUser', (req, res) => {
-    const {id} = req.body
-    let table =[]
-    UserModel.find({_id:id}).then(async doc=>{
-        if(doc.length>0){
+    const { id } = req.body
+    let table = []
+    UserModel.find({ _id: id }).then(async doc => {
+        if (doc.length > 0) {
             doc[0].active = true
             await doc[0].save();
-            await UserModel.find({ active:false }).then(users => { 
+            await UserModel.find({ active: false }).then(users => {
                 if (users.length > 0) {
 
                     for (let index = 0; index < users.length; index++) {
-                        table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id , active:users[index].active })
+                        table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id, active: users[index].active })
                     }
                 }
             })
             return (res.send({ success: true, error: null, info: { table } }))
         }
-        else{
-            return (res.send({success: false, error: 'User Not Found in DB', info: null}))
+        else {
+            return (res.send({ success: false, error: 'User Not Found in DB', info: null }))
         }
     })
 })
 
 module.exports = router;
-
