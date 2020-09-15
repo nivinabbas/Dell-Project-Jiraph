@@ -147,7 +147,7 @@ const StatusPage = () => {
       .then((res) => res.json())
       .then((data) => {
         let { success, error, info } = data;
-        console.log("type Pie info: ",info)
+        console.log("type Pie info: ", info);
         if (success) {
           setTypePieChart(info);
         } else {
@@ -403,7 +403,7 @@ const StatusPage = () => {
         </div>
 
         <div className="statusPage__divAllcharts">
-          <h2>Task History</h2>
+          <h2 style={{ textAlign: "center", padding: 8 }}>Task History</h2>
           <div className="statusPage__charts">
             <div className="statusPage__barChart2">
               <h5 style={{ margin: "4px" }}>Period </h5>
