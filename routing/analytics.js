@@ -2,6 +2,10 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require('mongoose');
 const UserSchema = require('../schemas/UserSchema');
+/////////////////////////////////////////////////////
+const FilterSchema = require('../schemas/FilterSchema');
+const FilterModel = mongoose.model("FilterModel", FilterSchema);
+//////////////////////////////////////////////////////
 const UserModel = mongoose.model("UserModel", UserSchema);
 const TaskModel = require('../schemas/TaskSchema');
 
@@ -928,6 +932,72 @@ router.post('/delaysInDeliveryFilters', async (req, res) => {
 })
 
 
+ router.post('/modificationByFieldSavedFilters', async (req, res) => {
+    const { savedFilters } = req.body;
+
+    let { pageName, filterName, filters } = savedFilters;
+
+    let array = [];
+    let i = 0;
+    filters.map((x, key) => {
+        let filterObj = { filter: filters[i].filter, values: filters[i].values[0] };
+        if (i < filters.length) {
+            i++;
+        }
+        array.push(filterObj);
+
+    })
+
+    let temp = {
+        pageName: pageName,
+        filters: array
+        ,
+        filterName: filterName
+
+    }
+
+    var data = new FilterModel({ Filter: temp });
+    data.save();
+
+    res.send({ success: true, error: null });
+}) 
+
+
+
+router.post('/modificationByFieldSelectTwo', async (req, res) => {
+    let array = [];
+    let filterNames = [];
+    // console.log('okkkkk')
+    console.log(req.body);
+    const { savedFilters } = req.body;
+    let { pageName } = savedFilters;
+
+   
+     FilterModel.find({ "Filter.pageName":pageName}).then(filters => {
+       // console.log('here');
+        //console.log(filters.length);
+        if (filters.length > 0) {
+            //console.log('here');
+            for (let index = 0; index < filters.length; index++) {
+                array.push({ pageName: filters[index].Filter.pageName, filters: filters[index].Filter.filters, filterName: filters[index].Filter.filterName });
+                filterNames.push({lable:filters[index].Filter.filterName , value:filters[index].Filter.filterName});
+            }
+            
+        }
+
+        array.push({filterNames : filterNames});
+        console.log('////////////////////////////////');
+       // console.log(array);
+        console.log(array[array.length-1].filterNames[0].lable);
+        //console.log(array[0].filters[0]);
+       res.send({ array });
+
+    })
+
+
+
+
+})
 
 
 module.exports = router;
