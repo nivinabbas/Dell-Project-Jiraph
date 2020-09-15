@@ -1,36 +1,35 @@
 import React from "react";
-import "./style.css";
 import Select from "react-select";
+import "./style.css";
 
 export default function TasksTable({
   openTasks,
-  selectOptions,
   modificationFieldOptions,
   modificationTypeOptions,
   modificationFieldValueOptions,
   onDoneClick,
   onSelect,
-  onTableFilterClick,
   tableFilters,
 }) {
   const disableSelect = () => {
     return tableFilters[0].value !== "Update" ? true : false;
   };
+
   return (
     <div className="open-tasks">
       <div className="open-tasks-title">
-        <h3> Open Tasks </h3>
+        OPEN TASKS
       </div>
       <div className="container__filterSelect">
         <Select
           options={modificationTypeOptions}
-          className="filterSelect"
+          className="filterSelectB"
           onChange={(filter, name) => onSelect(filter, "modificationType")}
           placeholder="Type"
         />
         <Select
           options={modificationFieldOptions}
-          className="filterSelect"
+          className="filterSelectB"
           onChange={(filterObj, name) =>
             onSelect(filterObj, "modificationField")
           }
@@ -39,7 +38,7 @@ export default function TasksTable({
         />
         <Select
           options={modificationFieldValueOptions}
-          className="filterSelect"
+          className="filterSelectB"
           onChange={(filter, name) => onSelect(filter, "modificationValue")}
           isDisabled={disableSelect()}
           placeholder="Value"
@@ -55,12 +54,12 @@ export default function TasksTable({
               <th scope="col"> New Val </th> <th scope="col"> Done </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="body">
             {openTasks.map((task, index) => (
               <tr key={index}>
                 <th scope="row"> {++index} </th>
-                <td> {task.jiraItem.jiraId} </td>
-                <td> {task.jiraItem.jiraName} </td>
+                <td> {task.jiraItem.id} </td>
+                <td> {task.jiraItem.name} </td>
                 <td> {task.diffItem.type} </td>
                 <td>
                   {task.diffItem.updatedField &&
@@ -77,8 +76,9 @@ export default function TasksTable({
                 <td>
                   <input
                     type="checkbox"
-                    onClick={() => onDoneClick(task.jiraItem.jiraId)}
+                    onClick={() => onDoneClick(task._id, task.taskItem.isDone)}
                     key={task._id}
+                    checked={task.taskItem.isDone}
                   />
                 </td>
               </tr>

@@ -1,5 +1,6 @@
 import React from "react";
 import Chart from "react-apexcharts";
+import "./PieChart.css";
 import { isEmpty } from "../../../../../service/utils";
 
 const PieChart = ({ name, dataPieChart }) => {
