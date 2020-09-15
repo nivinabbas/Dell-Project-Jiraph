@@ -223,8 +223,8 @@ const StatusPage = () => {
       });
   }, []);
 
-  const handleDoneClick = (jiraId, status) => {
-    console.log(status);
+  const handleDoneClick = (jiraId) => {
+    console.log(jiraId);
     const cloned = [...tasksId];
     const index = tasksId.indexOf(jiraId);
     index != -1 ? cloned.splice(index, 1) : cloned.push(jiraId);
