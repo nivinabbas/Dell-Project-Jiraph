@@ -2,7 +2,11 @@ import React, { useRef, useState } from "react";
 import Select from "react-select";
 import "./style.css";
 import TablePagination from "@material-ui/core/TablePagination";
-import { Checkbox } from "@material-ui/core";
+import { useEffect } from "react";
+const getPaginatedTasks = (tasks = [], pageNumber = 0, rowsCount = 5) => {
+  const start = (pageNumber + 1) * rowsCount - rowsCount;
+  return tasks.slice(start, start + rowsCount);
+};
 
 export default function TasksTable({
   openTasks,
@@ -19,21 +23,32 @@ export default function TasksTable({
     return tableFilters[0].value !== "Update" ? true : false;
   };
 
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
   /* Select inputs refs */
   const modField = useRef("");
   const modValue = useRef("");
   const statusSelect = useRef("");
 
+  const [pageNumber, setPageNumber] = useState(0);
+  const [rowsCount, setRowsCount] = useState(5);
+  const [paginatedTasks, setPaginatedTasks] = useState([]);
   const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+    setPageNumber(newPage);
+    setPaginatedTasks(getPaginatedTasks(openTasks, newPage, rowsCount));
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+    setRowsCount(parseInt(event.target.value, 10));
+    setPageNumber(0);
+    setPaginatedTasks(getPaginatedTasks(openTasks, 0, event.target.value));
   };
+
+  useEffect(() => {
+    setPaginatedTasks(getPaginatedTasks(openTasks));
+  }, [openTasks]);
+
+  // /* Select inputs refs */
+  // const modField = useRef("");
+  // const modValue = useRef("");
 
   return (
     <div className="open-tasks">
@@ -97,7 +112,7 @@ export default function TasksTable({
             </tr>
           </thead>
           <tbody className="body">
-            {openTasks.map((task, index) => (
+            {paginatedTasks.map((task, index) => (
               <tr key={index}>
                 <th scope="row"> {++index} </th>
                 <td> {task.jiraItem.id} </td>
@@ -128,15 +143,17 @@ export default function TasksTable({
             ))}
           </tbody>
         </table>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={10}
-          rowsPerPage={1}
-          page={page}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
-        />
+        <div>
+          <TablePagination
+            rowsPerPageOptions={[25, 50, 100]}
+            component="div"
+            count={openTasks.length}
+            rowsPerPage={rowsCount}
+            page={pageNumber}
+            onChangePage={handleChangePage}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+          />
+        </div>
       </div>
     </div>
   );

@@ -12,18 +12,29 @@
 }
 
 .statusPage__barChart {
+  /* flex: 1; */
+  background-color: #fff;
+  padding: 1rem;
+
+  /* margin-right: 1rem; */
+  border-radius: 5px;
+}
+
+.statusPage__barChart2 {
   flex: 1;
   background-color: #fff;
   padding: 1rem;
-  margin-right: 1rem;
+  width: 500px;
+  /* margin-right: 1rem; */
   border-radius: 5px;
+  margin: 10px;
 }
 
 .statusPage__barChart__filters {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  margin-bottom: 2rem;
+  /* margin-bottom: 2rem; */
 }
 
 .statusPage__pieCharts {
@@ -33,6 +44,13 @@
   align-items: flex-start;
   background-color: #fff;
   padding: 1rem;
+  margin: 10px;
+  border-radius: 5px;
+}
+.statusPage__divAllcharts {
+  background-color: rgba(255, 255, 255, 0.719);
+  margin-top: 8px;
+  /* margin: 8px; */
   border-radius: 5px;
 }
 

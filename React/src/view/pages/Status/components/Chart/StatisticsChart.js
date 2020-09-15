@@ -1,4 +1,5 @@
-import React from "react";
+import { Button, ClickAwayListener, Tooltip } from "@material-ui/core";
+import React, { useState } from "react";
 import Chart from "react-apexcharts";
 import "./StackedChart.css";
 
@@ -10,51 +11,66 @@ const options = {
     toolbar: {
       show: false,
     },
-    zoom: {
-      enabled: true,
-    },
-
-    responsive: [
-      {
-        breakpoint: 480,
-        options: {
-          legend: {
-            position: "bottom",
-            offsetX: -10,
-            offsetY: 0,
-          },
-        },
-      },
-    ],
-    plotOptions: {
-      bar: {
-        horizontal: false,
-      },
-    },
-
-    legend: {
-      position: "right",
-      offsetY: 40,
+    // yaxis: {
+    //   axisBorder: {
+    //     show: true,
+    //   },
+    //   title: {
+    //     text: "Days to task completion ",
+    //     align: "center",
+    //     margin: 10,
+    //     offsetX: 0,
+    //     offsetY: 0,
+    //   },
+    // },
+  },
+  plotOptions: {
+    bar: {
+      horizontal: false,
     },
   },
+
+  title: {
+    text: "Days to task completion ",
+    align: "center",
+    margin: 10,
+    offsetX: -10,
+    offsetY: 425,
+  },
+
+  yaxis: {
+    show: true,
+
+    title: { text: "Number of tasks completed" },
+  },
+  // xaxis: {
+  //   show: true,
+  //   title: { text: "Days to task completion " },
+  // },
+
   fill: {
     opacity: 1,
-    colors: "#388E3C",
+    colors: ["#388E3C"],
   },
+  colors: ["#388E3C"],
+  // yaxis: {
+  //   labels: {
+  //     show: true,
+  //     text: "N",
+  //     align: "left",
+  //   },
+  // },
 };
 export default function StatisticsChart({ data = [], onDataSelected }) {
-
   const series = [
     {
-      name: "Done",
+      name: "Number of tasks",
       data: data.map((d) => d.Done),
       tasks: data.map((d) => d.tasks),
     },
   ];
 
-
   const categories = data.map((d) => d.date);
-
 
   const xaxis = {
     categories: categories,
@@ -66,7 +82,6 @@ export default function StatisticsChart({ data = [], onDataSelected }) {
       chartContext,
       { dataPointIndex, seriesIndex }
     ) {
-      //console.log("series.tasks", series[0].tasks);
       console.log(seriesIndex);
       let tasks = series[seriesIndex].tasks[dataPointIndex];
       let date = categories[dataPointIndex];
@@ -75,8 +90,35 @@ export default function StatisticsChart({ data = [], onDataSelected }) {
     },
   };
 
+  const [open, setOpen] = useState(false);
+
+  const handleTooltipClose = () => {
+    setOpen(false);
+  };
+
+  const handleTooltipOpen = () => {
+    setOpen(true);
+  };
   return (
     <div id="daily_chart" style={{ width: "100%" }}>
+      <ClickAwayListener onClickAway={handleTooltipClose}>
+        <div>
+          <Tooltip
+            style={{ fontSize: 8 }}
+            PopperProps={{
+              disablePortal: true,
+            }}
+            onClose={handleTooltipClose}
+            open={open}
+            disableFocusListener
+            disableHoverListener
+            disableTouchListener
+            title="how long does it take to complete a task in the selected period 0=same day,1=one day,2=two daysclick on the segment to see the task in the tableclick on the segment to see the task/s in the table"
+          >
+            <Button onClick={handleTooltipOpen}>Details</Button>
+          </Tooltip>
+        </div>
+      </ClickAwayListener>
       <Chart
         options={{ ...options, xaxis }}
         height="450"
