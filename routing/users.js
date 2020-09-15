@@ -398,8 +398,19 @@ router.put('/activeUser', [auth, admin, audit], (req, res) => {
     })
 })
 
-router.get('/getUsersAudit', [auth,admin,audit],(req,res)=>{
-    AuditModel.find({ }).then(async users => {
+router.post('/getUsersAudit', [auth,admin,audit],async (req,res)=>{
+    let { startDate, endDate } = req.body;
+  //startDate  "2020-09-31" "2020-09-31T59:59:009Z"
+  datefrom = new Date(startDate); //new Date("2020-08-01T00:00:00.00Z");
+  dateTo = new Date(endDate);
+  let users = await TaskModel.aggregate([{
+    $match: {
+      "timeChange": {
+        $gte: datefrom,
+        $lte: dateTo,
+      }
+    }
+  }]);
         if (users.length > 0) {
             let table = [];
             for (let index = 0; index < users.length; index++) {
@@ -410,7 +421,7 @@ router.get('/getUsersAudit', [auth,admin,audit],(req,res)=>{
         else {
             res.send({ success: false, error: "No Actions found", info: null })
         }
-    })
+
 })
 
 module.exports = router;
