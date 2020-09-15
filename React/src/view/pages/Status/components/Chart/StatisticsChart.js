@@ -41,7 +41,12 @@ const options = {
   yaxis: {
     show: true,
 
-    title: { text: "Number of tasks completed" },
+    title: {
+      text: "Number of tasks completed",
+      style: {
+        fontSize: "14px",
+      },
+    },
   },
   // xaxis: {
   //   show: true,
