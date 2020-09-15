@@ -1,4 +1,5 @@
-import React from "react";
+import { Button, ClickAwayListener, Tooltip } from "@material-ui/core";
+import React, { useState } from "react";
 import Chart from "react-apexcharts";
 import "./StackedChart.css";
 
@@ -10,30 +11,55 @@ const options = {
     toolbar: {
       show: false,
     },
+    // yaxis: {
+    //   axisBorder: {
+    //     show: true,
+    //   },
+    //   title: {
+    //     text: "Days to task completion ",
+    //     align: "center",
+    //     margin: 10,
+    //     offsetX: 0,
+    //     offsetY: 0,
+    //   },
+    // },
   },
   plotOptions: {
     bar: {
       horizontal: false,
     },
   },
-  labels: {
-    formatter: (value) => {
-      return value + "per day";
-    },
-  },
+
   title: {
-    text: "/day",
+    text: "Days to task completion ",
     align: "center",
     margin: 10,
     offsetX: -10,
     offsetY: 425,
   },
 
+  yaxis: {
+    show: true,
+
+    title: { text: "Number of tasks completed" },
+  },
+  // xaxis: {
+  //   show: true,
+  //   title: { text: "Days to task completion " },
+  // },
+
   fill: {
     opacity: 1,
     colors: ["#388E3C"],
   },
   colors: ["#388E3C"],
+  // yaxis: {
+  //   labels: {
+  //     show: true,
+  //     text: "N",
+  //     align: "left",
+  //   },
+  // },
 };
 export default function StatisticsChart({ data = [], onDataSelected }) {
   const series = [
@@ -56,7 +82,6 @@ export default function StatisticsChart({ data = [], onDataSelected }) {
       chartContext,
       { dataPointIndex, seriesIndex }
     ) {
-      //console.log("series.tasks", series[0].tasks);
       console.log(seriesIndex);
       let tasks = series[seriesIndex].tasks[dataPointIndex];
       let date = categories[dataPointIndex];
@@ -65,8 +90,34 @@ export default function StatisticsChart({ data = [], onDataSelected }) {
     },
   };
 
+  const [open, setOpen] = useState(false);
+
+  const handleTooltipClose = () => {
+    setOpen(false);
+  };
+
+  const handleTooltipOpen = () => {
+    setOpen(true);
+  };
   return (
     <div id="daily_chart" style={{ width: "100%" }}>
+      <ClickAwayListener onClickAway={handleTooltipClose}>
+        <div>
+          <Tooltip
+            PopperProps={{
+              disablePortal: true,
+            }}
+            onClose={handleTooltipClose}
+            open={open}
+            disableFocusListener
+            disableHoverListener
+            disableTouchListener
+            title="Add"
+          >
+            <Button onClick={handleTooltipOpen}>Click</Button>
+          </Tooltip>
+        </div>
+      </ClickAwayListener>
       <Chart
         options={{ ...options, xaxis }}
         height="450"
