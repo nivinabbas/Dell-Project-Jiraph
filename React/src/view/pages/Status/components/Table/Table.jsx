@@ -3,7 +3,7 @@ import Select from "react-select";
 import "./style.css";
 import TablePagination from "@material-ui/core/TablePagination";
 import { useEffect } from "react";
-const getPaginatedTasks = (tasks = [], pageNumber = 0, rowsCount = 5) => {
+const getPaginatedTasks = (tasks = [], pageNumber = 0, rowsCount = 25) => {
   const start = (pageNumber + 1) * rowsCount - rowsCount;
   return tasks.slice(start, start + rowsCount);
 };
@@ -29,7 +29,7 @@ export default function TasksTable({
   const statusSelect = useRef("");
 
   const [pageNumber, setPageNumber] = useState(0);
-  const [rowsCount, setRowsCount] = useState(5);
+  const [rowsCount, setRowsCount] = useState(25);
   const [paginatedTasks, setPaginatedTasks] = useState([]);
   const handleChangePage = (event, newPage) => {
     setPageNumber(newPage);
@@ -54,51 +54,63 @@ export default function TasksTable({
     <div className="open-tasks">
       <div className="open-tasks-title">OPEN TASKS</div>
       <div className="container__filterSelect">
-        <h3>Type:</h3>
-        <Select
-          options={modificationTypeOptions}
-          className="filterSelectB"
-          onChange={(filter, name) => onSelect(filter, "modificationType")}
-          placeholder="All"
-          onInputChange={() => {
-            modField.current.state.value = "";
-            modValue.current.state.value = "";
-            statusSelect.current.state.value = "";
-          }}
-        />
-        <h3>Field:</h3>
-        <Select
-          options={modificationFieldOptions}
-          className="filterSelectB"
-          onChange={(filterObj, name) =>
-            onSelect(filterObj, "modificationField")
-          }
-          isDisabled={disableSelect()}
-          placeholder="Field"
-          ref={modField}
-          onInputChange={() => {
-            modValue.current.state.value = "";
-            statusSelect.current.state.value = "";
-          }}
-        />
-        <h3>Value:</h3>
-        <Select
-          options={modificationFieldValueOptions}
-          className="filterSelectB"
-          onChange={(filter, name) => onSelect(filter, "modificationValue")}
-          isDisabled={disableSelect()}
-          placeholder="Value"
-          ref={modValue}
-        />
-        <h3>Done/Not Done:</h3>
-        <Select
-          options={statusOptions}
-          className="filterSelectB"
-          onChange={(filter, name) => onSelect(filter, "status")}
+        <div>
+          <h3>Type:</h3>
+          <Select
+            options={modificationTypeOptions}
+            className="filterSelectB"
+            onChange={(filter, name) => onSelect(filter, "modificationType")}
+            placeholder="All"
+            onInputChange={() => {
+              modField.current.state.value = "";
+              modValue.current.state.value = "";
+              statusSelect.current.state.value = "";
+            }}
+          />
+        </div>
+        <div>
+          <h3>Field:</h3>
+          <Select
+            options={modificationFieldOptions}
+            className="filterSelectB"
+            onChange={(filterObj, name) =>
+              onSelect(filterObj, "modificationField")
+            }
+            isDisabled={disableSelect()}
+            placeholder="Field"
+            ref={modField}
+            onInputChange={() => {
+              modValue.current.state.value = "";
+              statusSelect.current.state.value = "";
+            }}
+          />
+        </div>
+        <div>
+          <h3>Value:</h3>
+          <Select
+            options={modificationFieldValueOptions}
+            className="filterSelectB"
+            onChange={(filter, name) => onSelect(filter, "modificationValue")}
+            isDisabled={disableSelect()}
+            placeholder="Value"
+            ref={modValue}
+          />
+        </div>
+        <div>
+          <h3>Done/Not Done:</h3>
+          <Select
+            options={statusOptions}
+            className="filterSelectB"
+            onChange={(filter, name) => onSelect(filter, "status")}
+            ref={statusSelect}
+            placeholder="Not Done"
+            // value={}
+          />
+        </div>
+        <button className="filterSelectB" onClick={() => onUpdateClick()}>
+          Update
+        </button>
           placeholder={tableFilters[3].value}
-          ref={statusSelect}
-        />
-        <button onClick={() => onUpdateClick()}>Update</button>
       </div>
       <div className="open-tasks-table">
         <table className="container">
@@ -145,7 +157,7 @@ export default function TasksTable({
         </table>
         <div>
           <TablePagination
-            rowsPerPageOptions={[25, 50, 100]}
+            rowsPerPageOptions={[50, 100]}
             component="div"
             count={openTasks.length}
             rowsPerPage={rowsCount}

@@ -2,7 +2,7 @@
     .adminPage {
     display: grid;
     grid-template-columns: 17vw 50vw auto;
-    grid-template-rows: 10vh 10vh 70vh auto;
+    grid-template-rows: 7vh 10vh 70vh auto;
     grid-template-areas: 
     "header__A header__A header__A"
     ". . ."
@@ -18,10 +18,10 @@
         text-align: center;
         color: #00447c;
         background-color: white;
-        height: 10vh;
+        height: 7vh;
         font-family: "Roboto Slab", serif;
         font-size: 26px;
-        padding-top: 3vh;
+        padding-top: 2vh;
       }
 
 
