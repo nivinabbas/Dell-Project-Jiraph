@@ -4,8 +4,7 @@ import "./DelaysInDelivery.css";
 
 //Components 
 import Select from 'react-select'
-import Chart from "../charts/Chart"
-
+import Chart from "../../charts/Chart"
 
 // Filters To Send To Server 
 let serverFilters = {

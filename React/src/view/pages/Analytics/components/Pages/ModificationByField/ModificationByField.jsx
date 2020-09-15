@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import "./ModificationByField.css";
 import { useState, useRef } from 'react';
 import Select from "react-select"
-import Chart from "../charts/Chart"
+import Chart from "../../charts/Chart"
 import { ServerStyleSheets } from '@material-ui/core';
 
 //Server Filters to receive Data
