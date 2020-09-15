@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
-var bodyParser = require("body-parser");
+var bodyParser = require('body-parser')
+const jwt = require("jsonwebtoken");
+const cookies = require("cookie-parser");
 app.use(bodyParser.json()); // to support JSON-encoded bodies
 app.use(
   bodyParser.urlencoded({
@@ -11,6 +13,9 @@ app.use(
 
 app.use(express.static("public"));
 
+var secret = 'abcdefghujklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789!@#$%^&*()_+';
+module.exports = secret;
+app.use(cookies());
 const url = "mongodb+srv://nimer:N1N1N1N1@cluster0.tejcy.mongodb.net/server";
 const mongoose = require("mongoose");
 mongoose.connect(url, {

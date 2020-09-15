@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const UserSchema = require('../schemas/UserSchema');
 const UserModel = mongoose.model("UserModel", UserSchema);
 const TaskModel = require('../schemas/TaskSchema');
+const auth = require("../authentication/auth");
+const topManager = require("../authentication/topManager");
 
 
 //Weekly Label Function===> 
@@ -284,7 +286,7 @@ router.post('/modificationByFieldFilters', async (req, res) => {
 
 // --------------------------------------------------------------- deleted JiraTickets ---------------------------------------------------------------
 
-router.post('/deletedJiraTickets', async (req, res) => {
+router.post('/deletedJiraTickets',[auth,topManager], async (req, res) => {
     let tasks = []
     const { serverFilters } = req.body
     let { priority, qaRepresentative, functionalTest, startDate, endDate, label } = serverFilters;
@@ -519,7 +521,7 @@ router.post('/changesByParentIdFilters', async (req, res) => {
 
 // --------------------------------------------------------------- changes in jira tickets ---------------------------------------------------------------
 
-router.post('/changeOfJIRATicketsStatus', async (req, res) => {
+router.post('/changeOfJIRATicketsStatus',[auth,topManager], async (req, res) => {
     const filterValue = req.body.values
     const filterStatus = req.body.status
     const filterQaRep = req.body.qaRepresentative
@@ -669,7 +671,7 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
 
 })
 
-router.post('/changeOfJIRATicketsStatusFilters', async (req, res) => {
+router.post('/changeOfJIRATicketsStatusFilters',[auth,topManager], async (req, res) => {
 
     let tasks = []
     let matchFilters = ''
