@@ -13,6 +13,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import {
   initialTableFilters,
   initialPieChartsFilters,
+  tasksNames,
 } from "../../../../../service/statusService";
 import "./StatusPage.css";
 import { dateFormat, lastMonth } from "../../../../../service/utils";
@@ -25,7 +26,7 @@ const timeLabelOptions = [
 const statusOptions = [
   { value: "all", label: "All" },
   { value: "done", label: "Done" },
-  { value: "notDone", label: "Not Done" },
+  { value: "notDone", label: "NotDone" },
 ];
 const StatusPage = () => {
   const [cardsContent, setCardsContent] = useState([]);
@@ -231,13 +232,22 @@ const StatusPage = () => {
 
     setTasksId(cloned);
   };
-  console.log(tasksId);
+  console.log("tttt", tableFilters[3]);
   const handleUpdateClick = () => {
+    const names = tasksNames(tasksId, openTasks);
+
     confirmAlert({
-      // title: `Confirm to ${isDone ? "Not Done" : "Done"} `,
-      // message: `Are you sure to modify this task to ${
-      //   isDone ? "Not Done" : "Done"
-      // }?`,
+      title: `Confirm`,
+      message: (
+        <ol>
+          {names.map((name, index) => (
+            <li key={index}>
+              <span>{++index}.</span>
+              {name}
+            </li>
+          ))}
+        </ol>
+      ),
       buttons: [
         {
           label: "Yes",
@@ -245,10 +255,12 @@ const StatusPage = () => {
             const originalTasksID = [...openTasks];
             try {
               const userId = null;
-              const tasks = openTasks.filter(
-                (task) => tasksId.indexOf(task._id) === -1
-              );
-              setOpenTasks(tasks);
+              if (tableFilters[3].value !== "all") {
+                const tasks = openTasks.filter(
+                  (task) => tasksId.indexOf(task._id) === -1
+                );
+                setOpenTasks(tasks);
+              }
 
               fetch("/api/status/updateTasks", {
                 method: "POST",
@@ -277,7 +289,7 @@ const StatusPage = () => {
       ],
     });
   };
-  console.log(openTasks);
+
   ////////////////////////////
   const handlePieChartsFilters = (filter, name) => {
     const newPieFilters = [...pieChartsFilters].map((f) => {
@@ -347,6 +359,7 @@ const StatusPage = () => {
   };
 
   const handleSegmentClick = (date, status) => {
+    console.log("s:", status);
     fetch("/api/status/segmentData", {
       method: "POST",
       headers: {
@@ -363,6 +376,9 @@ const StatusPage = () => {
           alert(error);
         }
       });
+    const newFilters = [...tableFilters];
+    newFilters[3].value = status;
+    setTableFilters(newFilters);
   };
 
   const handleStaticsClick = (date, tasks) => {
