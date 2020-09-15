@@ -14,6 +14,10 @@ function ChangesByParentId() {
     let startDate = new Date()
     let endDate = new Date()
     startDate.setMonth(endDate.getMonth() - 1)
+    let endMonth = endDate.getMonth() + 1 < 10 ? `0${endDate.getMonth() + 1}` : endDate.getMonth() + 1;
+    let startMonth = startDate.getMonth() + 1 < 10 ? `0${startDate.getMonth() + 1}` : startDate.getMonth() + 1;
+    setStartDate(`${startDate.getFullYear()}-${startMonth}-${startDate.getDate()}`)
+    setEndDate(`${endDate.getFullYear()}-${endMonth}-${endDate.getDate()}`)
     const timeZone = startDate.getTimezoneOffset() / 60
     startDate.setHours(0 - timeZone, 0, 0, 0)
     endDate.setHours(0 - timeZone+23, 59, 59, 59);
@@ -47,6 +51,8 @@ function ChangesByParentId() {
 
   const [UiObjs,setUiObjs]=useState([]);
   const [fixVersionOptions,setfixVersionOptions] = useState([]);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
 
   //fetch to receive Data (UiObj) from server after every filter Change
@@ -96,12 +102,14 @@ function ChangesByParentId() {
       <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
       <div className="ChangesByParentId__Title">Changes By Parent Id</div>
       <div className="ChangesByParentId__Chart" >
-        {UiObjs.length > 0 && <PieChartAnalysis UiObjs={UiObjs} />}
+        {UiObjs.length > 0 && <PieChartAnalysis UiObjs={UiObjs} title="Changes By Parent ID (All)" />}
       </div>
       {/* Select Filters */}
-
-      <form className="ChangesByParentId__Filters">
-
+      
+      <div className="ChangesByParentId__Filters__wrapper"> 
+      <form className="ChangesByParentId__Filters__fields">
+      <div className="Date_header">
+         <p>Fix Version</p> 
         <Select
           name="fixVersion"
           options={fixVersionOptions}
@@ -109,25 +117,31 @@ function ChangesByParentId() {
           className="ChangesByParentId__Filter"
           onChange={HandlefixVersionChange}
         />
-
-        From
+      </div>
+        <div className="Date_header">
+         <p>Start Date</p> 
         <input
-          className="ChangesByParentId__Filter"
+          className="ChangesByParentId__DateFilter"
           type="date"
           name="startDate"
+          value={startDate}
           onChange={HandleStartDateChange}
         />
-        To
+        </div>
+        
+        <div className="Date_header">
+         <p>End Date</p> 
         <input
-          className="ChangesByParentId__Filter"
+          className="ChangesByParentId__DateFilter"
           type="date"
           name="endDate"
+          value={endDate}
           onChange={HandleEndDateChange}
         />
-
+        </div>
       </form>
-
-    </div>
+      </div>
+      </div>
   )
 
 }

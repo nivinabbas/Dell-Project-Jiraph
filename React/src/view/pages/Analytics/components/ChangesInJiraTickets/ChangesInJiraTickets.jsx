@@ -9,7 +9,7 @@ import Chart from "../charts/Chart"
 
 // Filters To Send To Server 
 let serverFilters = {
-  values: ["newValue"],
+  values: [],
   status: [],
   qaRepresentative: [],
   startDate: "",
@@ -29,6 +29,10 @@ function ChangesInJiraTickets() {
     let startDate = new Date()
     let endDate = new Date()
     startDate.setMonth(endDate.getMonth() - 1)
+    let endMonth = endDate.getMonth() + 1 < 10 ? `0${endDate.getMonth() + 1}` : endDate.getMonth() + 1;
+    let startMonth = startDate.getMonth() + 1 < 10 ? `0${startDate.getMonth() + 1}` : startDate.getMonth() + 1;
+    setStartDate(`${startDate.getFullYear()}-${startMonth}-${startDate.getDate()}`)
+    setEndDate(`${endDate.getFullYear()}-${endMonth}-${endDate.getDate()}`)
     const timeZone = startDate.getTimezoneOffset() / 60
     startDate.setHours(0 - timeZone, 0, 0, 0)
     endDate.setHours(0 - timeZone+23, 59, 59, 59);
@@ -40,7 +44,7 @@ function ChangesInJiraTickets() {
       qaRepresentative: [],
       startDate: startDate,
       endDate: endDate,
-      label: ["daily"]
+      label: ["weekly"]
     };
 
     //fetch to receive Available Filters options from server by date
@@ -53,7 +57,6 @@ function ChangesInJiraTickets() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
         if (data.length > 0) {
           setStatusOptions(data[0].status)
           setQaRepresentativeOptions(data[0].qa)
@@ -73,8 +76,6 @@ function ChangesInJiraTickets() {
     })
       .then(res => res.json())
       .then(data => {
-
-        console.log(data)
         setUiObjs(data)
 
       })
@@ -93,8 +94,6 @@ function ChangesInJiraTickets() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
-
         setUiObjs(data)
       })
 
@@ -104,7 +103,8 @@ function ChangesInJiraTickets() {
 
   // To set UiObj from the filtered Data we recieved from server 
   const [UiObjs, setUiObjs] = useState([]);
-
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   // Options To get From Server 
   const [statusOptions, setStatusOptions] = useState([])
   const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([])
@@ -138,7 +138,9 @@ function ChangesInJiraTickets() {
       serverFilters.values = [change.value]
     }
     else {
-      serverFilters.values = []
+      serverFilters.values = [];
+      statusInput.current.state.value = ""; 
+      qaInput.current.state.value = ""
     }
     render(serverFilters);
   })
@@ -204,25 +206,29 @@ function ChangesInJiraTickets() {
       {/* Here We Call the Chart Component if we have a uiObj ready */}
 
       <div className="ChangeOfJiraTicket__Chart">
-        {UiObjs && <Chart UiObjs={UiObjs} />}
+        {UiObjs && <Chart UiObjs={UiObjs} title="Changes In Jira Ticket Status (All)"/>}
       </div>
 
       <div className="ChangeOfJiraTicket__Title">Changes Of Jira Tickets</div>
 
+      <div className="ModificationByField__Filters__wrapper">
+       
 
-      {/* Select Filters */}
-      <form className="ChangeOfJiraTicket__Filters">
-
+        <form className="ChangeOfJiraTicket__Filters__fields">
+        <div className="ChangeOfJiraTicket__Filters__Header">
+        <p> Old/New  </p>
         <Select
           onInputChange={() => { statusInput.current.state.value = ""; qaInput.current.state.value = "" }}
           name="oldNew"
           options={valueOptions}
-          placeholder="old/new "
+          placeholder="New value"
           className="ChangeOfJiraTicket__Filter"
           onChange={HandleValuesChange}
-          isClearable={true}
-        />
+          isClearable={true}/>
+        </div>
 
+        <div className="ChangeOfJiraTicket__Filters__Header">
+        <p> Status </p>
         <Select
           name="status"
           ref={statusInput}
@@ -230,9 +236,11 @@ function ChangesInJiraTickets() {
           options={statusOptions}
           placeholder="Status "
           className="ChangeOfJiraTicket__Filter"
-          onChange={HandleStatusChange}
-        />
+          onChange={HandleStatusChange}/>
+          </div>
 
+        <div className="ChangeOfJiraTicket__Filters__Header">
+        <p> Qa Representative</p>
         <Select
           name="qaRepresentative"
           isMulti
@@ -240,32 +248,42 @@ function ChangesInJiraTickets() {
           options={qaRepresentativeOptions}
           placeholder="Qa Representative "
           className="DelaysInDelivery__Filter"
-          onChange={HandleqaRepresentativeChange}
-        />
-        From
+          onChange={HandleqaRepresentativeChange}/>
+          </div>
+       
+        <div className="ChangeOfJiraTicket__Filters__Header">
+        <p> Start Date </p>
         <input
           className="ChangeOfJiraTicket__Filter__date"
           type="date"
           name="startDate"
-          onChange={HandleStartDateChange}
-        />
-        To
+          value={startDate}
+          onChange={HandleStartDateChange}/>
+        </div>
+
+        <div className="ChangeOfJiraTicket__Filters__Header">
+        <p> End Date </p>
         <input
           className="ChangeOfJiraTicket__Filter__date"
           type="date"
           name="endDate"
-          onChange={HandleEndDateChange}
-        />
+          value={endDate}
+          onChange={HandleEndDateChange}/>
+          </div>
 
+        <div className="ChangeOfJiraTicket__Filters__Header">
+        <p> Period </p>
         <Select
           name="labels"
           options={labelOptions}
-          placeholder="Label"
+          placeholder="Weekly"
           className="ChangeOfJiraTicket__Filter"
           onChange={HandleLabelChange}
         />
+        </div>
 
       </form>
+    </div>
     </div>
   )
 

@@ -7,7 +7,7 @@
   "table "
   ; 
   text-align: center;
-  background-color: #EEEEEE;
+  padding-top: .5rem;
   box-shadow: 0px 0.1px 0.3px rgba(0, 0, 0, 0.8);
   border-radius: 3px;
 }
@@ -15,34 +15,29 @@
 .chart{
   grid-area: chart;
   overflow-x: scroll;
-  
   height:100%;
   width: 99%;
-  /* height:auto; */
- 
-  background-color: whitesmoke;
-  /* margin: auto; */
-  
-  
+  padding-top: .5rem;
+  background-color: #EEEEEE;
+  border-radius: 5px;
+  box-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.4);
   display: flex;
-  
-  
 }
 
 .chart__Each_column{
   display: flex;
-  justify-content: space-around  ;
+  justify-content: space-between;
   align-items: flex-end;
-  /* width: 100%; */
  height: 100%;
- 
+ justify-content: center;
 }
 .chart__column{
   height: 75%;
   text-align: center; 
-  margin-left: 3%;
+  align-items: center;
+  margin-left: 2rem;
   cursor: pointer;
-  margin-top: 50px;
+  margin-top: 2rem;
 }
 .chart__column__Text{
   visibility: visible;
@@ -86,8 +81,6 @@ height: 25px;
   grid-area: table;
   margin-top: 2rem;
  width: 100%;
-  
-  /* padding-right: 10rem; */
 }
 .warningDisplay , h4 {
   position: relative;
@@ -96,4 +89,43 @@ height: 25px;
   transform: translate(-50%,-50%);
   
 
+}
+
+.allTasksButton {
+  border-radius: 4px;
+  background-color: #00447C;
+  border: none;
+  color: #FFFFFF;
+  text-align: center;
+  font-size: 20px;
+  padding: 5px;
+  width: 120px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.allTasksButton span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.allTasksButton span:after {
+  content: "\25be ";
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.allTasksButton:hover span {
+  padding-right: 25px;
+}
+
+.allTasksButton:hover span:after {
+  opacity: 1;
+  right: 0;
 }
