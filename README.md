@@ -1,5 +1,5 @@
 # Dell-Project-Jiraph1
-what is jiraph
+**Jiraph** in an application that gives the ability to **QA managers** to trace and analyze version changes done in Jira and to apply them to **QC system**.
 
 ## Installing
 Clone this repositroy
