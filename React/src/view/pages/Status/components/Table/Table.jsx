@@ -102,7 +102,6 @@ export default function TasksTable({
             options={statusOptions}
             className="filterSelectB"
             onChange={(filter, name) => onSelect(filter, "status")}
-            placeholder="Not Done"
             ref={statusSelect}
             // value={}
           />
@@ -110,6 +109,7 @@ export default function TasksTable({
         <button className="filterSelectB" onClick={() => onUpdateClick()}>
           Update
         </button>
+          placeholder={tableFilters[3].value}
       </div>
       <div className="open-tasks-table">
         <table className="container">
@@ -143,9 +143,10 @@ export default function TasksTable({
                 <td>
                   <input
                     type="checkbox"
-                    onClick={() => onDoneClick(task._id)}
+                    onClick={() => onDoneClick(task._id, task.taskItem.isDone)}
                     key={task._id}
-                    //checked={task.taskItem.isDone}
+                    defaultChecked={task.taskItem.isDone}
+                    // checked={task.taskItem.isDone}
                     onChange={() => {}}
                   />
                 </td>

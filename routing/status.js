@@ -26,6 +26,7 @@ function dateFormat() {
 
   return `${ye}-${mo}-${da}`;
 }
+
 function lastMonth(date) {
   let d = new Date(date);
   d.setDate(1);
@@ -210,42 +211,26 @@ router.post("/openTasksWithFilter", async function (req, res) {
 // end openTasksWithFilter
 
 // start update task
-router.post("/updateTasks", (req, res) => {
+router.post("/updateTasks", async (req, res) => {
   const {
-    jiraId,
-    userId,
-    isDone
+    tasksId,
+    userId
   } = req.body;
 
+  for (let i = 0; i < tasksId.length; i++) {
+    const task = await TaskModel.findOne({
+      _id: tasksId[i]
+    });
+    task.taskItem.isDone = !task.taskItem.isDone;
+    task.taskItem.user = userId;
+    task.taskItem.updatedTime = new Date();
 
-  TaskModel.updateOne({
-    "_id": jiraId,
-    "taskItem.user._id": userId,
-  }, {
-    $set: {
-      "taskItem.isDone": !isDone,
-      "taskItem.updatedTime": new Date()
-    },
-  },
-    function (err, doc) {
-      if (err)
-        res.send({
-          success: false,
-          error: "This task has already been completed",
-          info: {
-            doc,
-          },
-        });
-      res.send({
-        success: true,
-        error: null,
-        info: {
-          doc,
-        },
-      });
-    }
-  );
+    await task.save();
+  }
+
 });
+
+
 // end update task
 
 // start PieChart
@@ -292,7 +277,8 @@ router.post("/stackedChart", async function (req, res) {
   } = req.body;
   let dataFromServer = [];
   let formatLabel;
-  let NewFisrtDay = startDate, NewLastDay = endDate;
+  let NewFisrtDay = startDate,
+    NewLastDay = endDate;
   if (label == "daily" || label == "" || label == undefined) {
     formatLabel = "%Y-%m-%d";
   } else if (label == "monthly") {
@@ -436,8 +422,7 @@ router.post("/stackedChart", async function (req, res) {
         error: null,
         info: dataFromServer,
       });
-    }
-    else if (startDate == "" && endDate != "") {
+    } else if (startDate == "" && endDate != "") {
       //default, label daily
       // startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
       startDate = lastMonth(new Date());
@@ -504,8 +489,7 @@ router.post("/stackedChart", async function (req, res) {
         error: null,
         info: dataFromServer,
       });
-    }
-    else {
+    } else {
       startDate = new Date(startDate + "T00:00:00.00Z");
       endDate = new Date(endDate + "T23:59:59.0099Z");
 
@@ -574,7 +558,7 @@ router.post("/stackedChart", async function (req, res) {
         info: dataFromServer,
       });
     }
-  } else {//weekly 
+  } else { //weekly 
     if (startDate == "" && endDate == "") {
       startDate = lastMonth(new Date());
       endDate = new Date(dateFormat() + "T23:59:59.59Z");
@@ -586,64 +570,63 @@ router.post("/stackedChart", async function (req, res) {
       // startDate = new Date(0); //new Date("2020-08-01T00:00:00.00Z");
       startDate = lastMonth(new Date());
       endDate = new Date(endDate + "T23:59:59.59Z");
-    }
-    else {
+    } else {
       startDate = new Date(startDate + "T00:00:00.00Z");
       endDate = new Date(endDate + "T23:59:59.0099Z");
     }
     //weekly
-    let stackedChartDone = await TaskModel.aggregate([
-      {
-        $match: {
-          "taskItem.createdTime": {
-            $gte: startDate,
-            $lte: endDate,
+    let stackedChartDone = await TaskModel.aggregate([{
+      $match: {
+        "taskItem.createdTime": {
+          $gte: startDate,
+          $lte: endDate,
+        },
+      },
+    },
+    {
+      $group: {
+        _id: {
+          $dateToString: {
+            date: "$taskItem.createdTime",
+            format: "%Y-%m-%d",
+          },
+        },
+        count: {
+          $sum: 1,
+        },
+        done: {
+          $sum: {
+            $cond: [{
+              $eq: ["$taskItem.isDone", true],
+            },
+              1,
+              0,
+            ],
+          },
+        },
+        notDone: {
+          $sum: {
+            $cond: [{
+              $eq: ["$taskItem.isDone", false],
+            },
+              1,
+              0,
+            ],
           },
         },
       },
-      {
-        $group: {
-          _id: {
-            $dateToString: {
-              date: "$taskItem.createdTime",
-              format: "%Y-%m-%d",
-            },
-          },
-          count: {
-            $sum: 1,
-          },
-          done: {
-            $sum: {
-              $cond: [{
-                $eq: ["$taskItem.isDone", true],
-              },
-                1,
-                0,
-              ],
-            },
-          },
-          notDone: {
-            $sum: {
-              $cond: [{
-                $eq: ["$taskItem.isDone", false],
-              },
-                1,
-                0,
-              ],
-            },
-          },
-        },
+    },
+    {
+      $sort: {
+        _id: 1,
       },
-      {
-        $sort: {
-          _id: 1,
-        },
-      },
+    },
     ]);
     Date.prototype.getWeek = function () {
       var onejan = new Date(this.getFullYear(), 0, 1);
       return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
     };
+
     function getDateRangeOfWeek(weekNo) {
       var d1 = new Date();
       numOfdaysPastSinceLastMonday = eval(d1.getDay() - 1);
@@ -659,19 +642,19 @@ router.post("/stackedChart", async function (req, res) {
       } else if (eval(d1.getMonth() + 1).toString().length == 2 && d1.getDate().toString().length == 2) {
         rangeIsFrom = d1.getFullYear() + "-" + eval(d1.getMonth() + 1) + "-" + eval(d1.getDate() - 1);
       } else if (eval(d1.getMonth() + 1).toString().length == 1 && d1.getDate().toString().length == 2) {
-        rangeIsFrom = d1.getFullYear() + "-" + "0" + eval(d1.getMonth() + 1) + "-" +eval(d1.getDate() - 1);
+        rangeIsFrom = d1.getFullYear() + "-" + "0" + eval(d1.getMonth() + 1) + "-" + eval(d1.getDate() - 1);
       }
       // rangeIsFrom = d1.getFullYear()+"-"+eval(d1.getMonth() + 1) + "-" + d1.getDate() ;
 
       d1.setDate(d1.getDate() + 6);
       if (eval(d1.getMonth() + 1).toString().length == 1 && d1.getDate().toString().length == 1) {
-        rangeIsTo = d1.getFullYear() + "-" + "0" + eval(d1.getMonth() + 1) + "-" + "0" + eval(d1.getDate() -1);
+        rangeIsTo = d1.getFullYear() + "-" + "0" + eval(d1.getMonth() + 1) + "-" + "0" + eval(d1.getDate() - 1);
       } else if (eval(d1.getMonth() + 1).toString().length == 2 && d1.getDate().toString().length == 1) {
-        rangeIsTo = d1.getFullYear() + "-" + eval(d1.getMonth() + 1) + "-" + "0" +eval(d1.getDate() -1);
+        rangeIsTo = d1.getFullYear() + "-" + eval(d1.getMonth() + 1) + "-" + "0" + eval(d1.getDate() - 1);
       } else if (eval(d1.getMonth() + 1).toString().length == 2 && d1.getDate().toString().length == 2) {
-        rangeIsTo = d1.getFullYear() + "-" + eval(d1.getMonth() + 1) + "-" + eval(d1.getDate() -1);
+        rangeIsTo = d1.getFullYear() + "-" + eval(d1.getMonth() + 1) + "-" + eval(d1.getDate() - 1);
       } else if (eval(d1.getMonth() + 1).toString().length == 1 && d1.getDate().toString().length == 2) {
-        rangeIsTo = d1.getFullYear() + "-" + "0" + eval(d1.getMonth() + 1) + "-" + eval(d1.getDate() -1);
+        rangeIsTo = d1.getFullYear() + "-" + "0" + eval(d1.getMonth() + 1) + "-" + eval(d1.getDate() - 1);
       }
       return rangeIsFrom + " to " + rangeIsTo;
     };
@@ -690,7 +673,7 @@ router.post("/stackedChart", async function (req, res) {
       return weekNo;
     }
 
- 
+
     //asdasd
     let DateWeek;
     let objIndex, weeknumber;
@@ -698,32 +681,29 @@ router.post("/stackedChart", async function (req, res) {
     console.log("stackedChartDone:", stackedChartDone)
     stackedChartDone.forEach(element => {
       weekID = element._id;
-      year=weekID.substr(0,4);
-       DateWeek = new Date(weekID + "T23:59:59.59Z");
-      weeknumber = getWeekNumber(DateWeek)//DateWeek.getWeek();
-      console.log("weekID",weekID,"yearyear ",year," weeknumber",weeknumber)
+      year = weekID.substr(0, 4);
+      DateWeek = new Date(weekID + "T23:59:59.59Z");
+      weeknumber = getWeekNumber(DateWeek) //DateWeek.getWeek();
+      console.log("weekID", weekID, "yearyear ", year, " weeknumber", weeknumber)
 
-       objIndex = ResultWeeks.findIndex((obj => obj.weekID == weeknumber));
+      objIndex = ResultWeeks.findIndex((obj => obj.weekID == weeknumber));
       if (objIndex > -1) {
 
         ResultWeeks[objIndex].data = ({
           "count": ResultWeeks[objIndex].data.count + element.count,
           "done": ResultWeeks[objIndex].data.done + element.done,
           "notDone": ResultWeeks[objIndex].data.notDone + element.notDone
-        }
-        )
+        })
       } else {
-        ResultWeeks.push(
-          {
-            "weekID": weeknumber,
-            "DataRange": getDateRangeOfWeek(weeknumber),
-            data: {
-              "count": element.count,
-              "done": element.done,
-              "notDone": element.notDone
-            }
+        ResultWeeks.push({
+          "weekID": weeknumber,
+          "DataRange": getDateRangeOfWeek(weeknumber),
+          data: {
+            "count": element.count,
+            "done": element.done,
+            "notDone": element.notDone
           }
-        )
+        })
 
       }
     });
@@ -731,17 +711,15 @@ router.post("/stackedChart", async function (req, res) {
 
     let resultWeek = [];
     ResultWeeks.forEach(element => {
-      resultWeek.push(
-        {
-          date: element.DataRange,
-          done: element.data.done,
-          notDone: element.data.notDone
-        }
-      )
+      resultWeek.push({
+        date: element.DataRange,
+        done: element.data.done,
+        notDone: element.data.notDone
+      })
     });
     FirstDate = resultWeek[0].date;
     FirstDate = FirstDate.substring().split(" ");
-   
+
     //  let NewFisrtDay=startDate,NewLastDay=endDate;
     console.log("NewLastDay", NewLastDay, NewFisrtDay)
     resultWeek[0].date = NewFisrtDay + " " + FirstDate[1] + " " + FirstDate[2];
@@ -749,9 +727,9 @@ router.post("/stackedChart", async function (req, res) {
     // resultWeek[(resultWeek.length-1)].date = LastDate[0]+" "+NewFisrtDay + " " + LastDate[1] ;
     LastDate = resultWeek[resultWeek.length - 1].date;
     LastDate = LastDate.substring().split(" ");
-    resultWeek[resultWeek.length-1].date =LastDate[0] + " " + LastDate[1]+" "+NewLastDay;
+    resultWeek[resultWeek.length - 1].date = LastDate[0] + " " + LastDate[1] + " " + NewLastDay;
 
-  
+
     console.log("ResultWeekstest ", resultWeek, "FirstDate ", FirstDate, "LastDate ", LastDate)
     res.send({
       success: true,
@@ -1435,106 +1413,116 @@ router.post("/modificationFieldValueOptions", async function (req, res) {
 //  start
 router.post("/filltersAllSubmit", async function (req, res) {
   let data = req.body;
+  let status = data[3].value;
+  if (status === "done") {
+    status = true;
+  } else if (status === "notDone") {
+    status = false;
+  }
+ 
+  if(data[0].value===''&&data[1].value==''&&data[2].value==''){
+    if(status==="all"){
+    TaskModel.find({},
+      function (err, doc) {
+        res.send({
+          success: true,
+          error: null,
+          info: {
+            doc,
+          },
+        });
+      }
+    ).then((err) => console.log(err));}
+    else {
+      TaskModel.find({
+        "taskItem.isDone":status
+      },
+        function (err, doc) {
+          res.send({
+            success: true,
+            error: null,
+            info: {
+              doc,
+            },
+          });
+        }
+      ).then((err) => console.log(err));
+    }
+   }else
+{
+  if (status === "all") {
+    if (
+      data[0].value === "Update" &&
+      data[1].value != null &&
+      data[2].value != null &&
+      data[2].value != "All" &&
+      data[1].value != "All" 
+    ) {
+      TaskModel.find({
+        "diffItem.type": data[0].value,
+        "diffItem.updatedField.fieldName": data[1].value,
+        "diffItem.updatedField.newValue": data[2].value,
+      },
+        function (err, doc) {
+          res.send({
+            success: true,
+            error: null,
+            info: {
+              doc,
+            },
+          });
+        }
+      ).then((err) => console.log(err));
+    } else if (
+      data[0].value === "Update" &&
+      data[1].value != null &&
+      data[2].value == null &&
+      data[1].value != "All" 
+    ) {
+      TaskModel.find({
+        "diffItem.type": data[0].value,
+        "diffItem.updatedField.fieldName": data[1].value,
+      },
+        function (err, doc) {
+          res.send({
+            success: true,
+            error: null,
+            info: {
+              doc,
+            },
+          });
+        }
+      ).then((err) => console.log(err));
+    } else if (
+      data[0].value === "Update" &&
+      data[1].value != null &&
+      data[2].value === "All" &&
+      data[1].value != "All" 
+    ) {
+      //************************ */
+      TaskModel.find({
+        "diffItem.type": data[0].value,
+        "diffItem.updatedField.fieldName": data[1].value,
+      },
+        function (err, doc) {
+          res.send({
+            success: true,
+            error: null,
+            info: {
+              doc,
+            },
+          });
+        }
+      ).then((err) => console.log(err));
 
-  if (
-    data[0].value === "Update" &&
-    data[1].value != null &&
-    data[2].value != null &&
-    data[2].value != "All" &&
-    data[1].value != "All"
-  ) {
-    TaskModel.find({
-      "diffItem.type": data[0].value,
-      "diffItem.updatedField.fieldName": data[1].value,
-      "diffItem.updatedField.newValue": data[2].value,
-    },
-      function (err, doc) {
-        res.send({
-          success: true,
-          error: null,
-          info: {
-            doc,
-          },
-        });
-      }
-    ).then((err) => console.log(err));
-  } else if (
-    data[0].value === "Update" &&
-    data[1].value != null &&
-    data[2].value == null &&
-    data[1].value != "All"
-  ) {
-    TaskModel.find({
-      "diffItem.type": data[0].value,
-      "diffItem.updatedField.fieldName": data[1].value,
-    },
-      function (err, doc) {
-        res.send({
-          success: true,
-          error: null,
-          info: {
-            doc,
-          },
-        });
-      }
-    ).then((err) => console.log(err));
-  } else if (
-    data[0].value === "Update" &&
-    data[1].value != null &&
-    data[2].value === "All" &&
-    data[1].value != "All"
-  ) {
-    //************************ */
-    TaskModel.find({
-      "diffItem.type": data[0].value,
-      "diffItem.updatedField.fieldName": data[1].value,
-    },
-      function (err, doc) {
-        res.send({
-          success: true,
-          error: null,
-          info: {
-            doc,
-          },
-        });
-      }
-    ).then((err) => console.log(err));
-
-    //*&********
-  } else if (
-    (data[0].value === "Update" && data[1].value === "All") ||
-    (data[0].value === "Update" &&
-      data[1].value === "All" &&
-      data[2].value === "All")
-  ) {
-    //************************ */
-    TaskModel.find({
-      "diffItem.type": data[0].value,
-    },
-      function (err, doc) {
-        res.send({
-          success: true,
-          error: null,
-          info: {
-            doc,
-          },
-        });
-      }
-    ).then((err) => console.log(err));
-
-    //*&********
-  } else if (data[0].value === "All" || data[0].value === "all") {
-    TaskModel.find({}, function (err, doc) {
-      res.send({
-        success: true,
-        error: null,
-        info: {
-          doc,
-        },
-      });
-    }).then((err) => console.log(err));
-  } else {
-    {
+      //*&********
+    } else if (
+      (data[0].value === "Update" && data[1].value === "All") ||
+      (data[0].value === "Update" &&
+        data[1].value === "All" &&
+        data[2].value === "All") && data[3].value == "all"
+    ) {
+      //************************ */
       TaskModel.find({
         "diffItem.type": data[0].value,
       },
@@ -1548,8 +1536,160 @@ router.post("/filltersAllSubmit", async function (req, res) {
           });
         }
       ).then((err) => console.log(err));
+
+      //*&********
+    } else if (data[0].value === "All" || data[0].value === "all") {
+      TaskModel.find({}, function (err, doc) {
+        res.send({
+          success: true,
+          error: null,
+          info: {
+            doc,
+          },
+        });
+      }).then((err) => console.log(err));
+    } else {
+      {
+        TaskModel.find({
+          "diffItem.type": data[0].value,
+        },
+          function (err, doc) {
+            res.send({
+              success: true,
+              error: null,
+              info: {
+                doc,
+              },
+            });
+          }
+        ).then((err) => console.log(err));
+      }
     }
-  }
+  } else {
+    //else start
+    if (
+      data[0].value === "Update" &&
+      data[1].value != null &&
+      data[2].value != null &&
+      data[2].value != "All" &&
+      data[1].value != "All" 
+    ) {
+      TaskModel.find({
+        "diffItem.type": data[0].value,
+        "diffItem.updatedField.fieldName": data[1].value,
+        "diffItem.updatedField.newValue": data[2].value,
+        "taskItem.isDone":status
+      },
+        function (err, doc) {
+          res.send({
+            success: true,
+            error: null,
+            info: {
+              doc,
+            },
+          });
+        }
+      ).then((err) => console.log(err));
+    } else if (
+      data[0].value === "Update" &&
+      data[1].value != null &&
+      data[2].value == null &&
+      data[1].value != "All" 
+    ) {
+      TaskModel.find({
+        "diffItem.type": data[0].value,
+        "diffItem.updatedField.fieldName": data[1].value,
+        "taskItem.isDone":status
+      },
+        function (err, doc) {
+          res.send({
+            success: true,
+            error: null,
+            info: {
+              doc,
+            },
+          });
+        }
+      ).then((err) => console.log(err));
+    } else if (
+      data[0].value === "Update" &&
+      data[1].value != null &&
+      data[2].value === "All" &&
+      data[1].value != "All" 
+    ) {
+      //************************ */
+      TaskModel.find({
+        "diffItem.type": data[0].value,
+        "diffItem.updatedField.fieldName": data[1].value,
+        "taskItem.isDone":status
+      },
+        function (err, doc) {
+          res.send({
+            success: true,
+            error: null,
+            info: {
+              doc,
+            },
+          });
+        }
+      ).then((err) => console.log(err));
+
+      //*&********
+    } else if (
+      (data[0].value === "Update" && data[1].value === "All") ||
+      (data[0].value === "Update" &&
+        data[1].value === "All" &&
+        data[2].value === "All") 
+    ) {
+      //************************ */
+      TaskModel.find({
+        "diffItem.type": data[0].value,
+        "taskItem.isDone":status
+      },
+        function (err, doc) {
+          res.send({
+            success: true,
+            error: null,
+            info: {
+              doc,
+            },
+          });
+        }
+      ).then((err) => console.log(err));
+
+      //*&********
+    } else if (data[0].value === "All" || data[0].value === "all") {
+      TaskModel.find({}, function (err, doc) {
+        res.send({
+          success: true,
+          error: null,
+          info: {
+            doc,
+          },
+        });
+      }).then((err) => console.log(err));
+    } else {
+      {
+        TaskModel.find({
+          "diffItem.type": data[0].value,
+          "taskItem.isDone":status
+        },
+          function (err, doc) {
+            res.send({
+              success: true,
+              error: null,
+              info: {
+                doc,
+              },
+            });
+          }
+        ).then((err) => console.log(err));
+      }
+    }
+
+
+    ////else end 
+  }}
 });
 //  end
 
@@ -1690,60 +1830,60 @@ router.get("/test122", async function (req, res) {
   let startDate = new Date("2020-09-07" + "T00:00:00:000Z"); //new Date("2020-08-01T00:00:00.00Z");
   let endDate = new Date("2020-09-11" + "T23:59:59.009Z");
   //weekly
-  let stackedChartDone = await TaskModel.aggregate([
-    {
-      $match: {
-        "taskItem.createdTime": {
-          $gte: startDate,
-          $lte: endDate,
-        },
+  let stackedChartDone = await TaskModel.aggregate([{
+    $match: {
+      "taskItem.createdTime": {
+        $gte: startDate,
+        $lte: endDate,
       },
     },
-    {
-      $group: {
-        _id: {
-          $dateToString: {
-            date: "$taskItem.createdTime",
-            format: "%Y-%m-%d",
-          },
+  },
+  {
+    $group: {
+      _id: {
+        $dateToString: {
+          date: "$taskItem.createdTime",
+          format: "%Y-%m-%d",
+        },
 
-        },
-        count: {
-          $sum: 1,
-        },
-        done: {
-          $sum: {
-            $cond: [{
-              $eq: ["$taskItem.isDone", true],
-            },
-              1,
-              0,
-            ],
+      },
+      count: {
+        $sum: 1,
+      },
+      done: {
+        $sum: {
+          $cond: [{
+            $eq: ["$taskItem.isDone", true],
           },
+            1,
+            0,
+          ],
         },
-        notDone: {
-          $sum: {
-            $cond: [{
-              $eq: ["$taskItem.isDone", false],
-            },
-              1,
-              0,
-            ],
+      },
+      notDone: {
+        $sum: {
+          $cond: [{
+            $eq: ["$taskItem.isDone", false],
           },
+            1,
+            0,
+          ],
         },
       },
     },
-    {
-      $sort: {
-        _id: 1,
-      },
+  },
+  {
+    $sort: {
+      _id: 1,
     },
+  },
   ]);
   console.log("stackedChartDone!@#!@#: ", stackedChartDone)
   Date.prototype.getWeek = function () {
     var onejan = new Date(this.getFullYear(), 0, 1);
     return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
   };
+
   function getDateRangeOfWeek(weekNo) {
     var d1 = new Date();
     numOfdaysPastSinceLastMonday = eval(d1.getDay() - 1);
@@ -1764,40 +1904,35 @@ router.get("/test122", async function (req, res) {
     DateWeek = new Date(weekID + "T23:59:59.59Z");
     weeknumber = DateWeek.getWeek();
     objIndex = ResultWeeks.findIndex((obj => obj.weekID == weeknumber));
-    if (objIndex > -1)// 
+    if (objIndex > -1) // 
     {
       ResultWeeks[objIndex].data = ({
         "count": ResultWeeks[objIndex].data.count + element.count,
         "done": ResultWeeks[objIndex].data.done + element.done,
         "notDone": ResultWeeks[objIndex].data.notDone + element.notDone
-      }
-      )
+      })
     } else {
-      ResultWeeks.push(
-        {
-          "weekID": weeknumber,
-          "DataRange": getDateRangeOfWeek(weeknumber),
-          data: {
-            "count": element.count,
-            "done": element.done,
-            "notDone": element.notDone
-          }
+      ResultWeeks.push({
+        "weekID": weeknumber,
+        "DataRange": getDateRangeOfWeek(weeknumber),
+        data: {
+          "count": element.count,
+          "done": element.done,
+          "notDone": element.notDone
         }
-      )
+      })
 
     }
   });
 
   let resultWeek = [];
   ResultWeeks.forEach(element => {
-    resultWeek.push(
-      {
-        _id: element.DataRange,
-        count: element.data.count,
-        done: element.data.done,
-        notDone: element.data.notDone
-      }
-    )
+    resultWeek.push({
+      _id: element.DataRange,
+      count: element.data.count,
+      done: element.data.done,
+      notDone: element.data.notDone
+    })
   });
   console.log("ResultWeeks ", ResultWeeks)
   res.send({
@@ -1806,7 +1941,6 @@ router.get("/test122", async function (req, res) {
     info: resultWeek,
   });
 })
-
 
 
 

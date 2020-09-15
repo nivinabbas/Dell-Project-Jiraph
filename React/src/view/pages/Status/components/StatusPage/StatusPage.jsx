@@ -13,6 +13,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import {
   initialTableFilters,
   initialPieChartsFilters,
+  tasksNames,
 } from "../../../../../service/statusService";
 import "./StatusPage.css";
 import { dateFormat, lastMonth } from "../../../../../service/utils";
@@ -25,7 +26,7 @@ const timeLabelOptions = [
 const statusOptions = [
   { value: "all", label: "All" },
   { value: "done", label: "Done" },
-  { value: "notDone", label: "Not Done" },
+  { value: "notDone", label: "NotDone" },
 ];
 const StatusPage = () => {
   const [cardsContent, setCardsContent] = useState([]);
@@ -224,19 +225,29 @@ const StatusPage = () => {
   }, []);
 
   const handleDoneClick = (jiraId) => {
+    console.log(jiraId);
     const cloned = [...tasksId];
     const index = tasksId.indexOf(jiraId);
     index != -1 ? cloned.splice(index, 1) : cloned.push(jiraId);
 
     setTasksId(cloned);
   };
-
+  console.log("tttt", tableFilters[3]);
   const handleUpdateClick = () => {
+    const names = tasksNames(tasksId, openTasks);
+
     confirmAlert({
-      // title: `Confirm to ${isDone ? "Not Done" : "Done"} `,
-      // message: `Are you sure to modify this task to ${
-      //   isDone ? "Not Done" : "Done"
-      // }?`,
+      title: `Confirm`,
+      message: (
+        <ol>
+          {names.map((name, index) => (
+            <li key={index}>
+              <span>{++index}.</span>
+              {name}
+            </li>
+          ))}
+        </ol>
+      ),
       buttons: [
         {
           label: "Yes",
@@ -244,9 +255,12 @@ const StatusPage = () => {
             const originalTasksID = [...openTasks];
             try {
               const userId = null;
-              //   var countriesFound = countries.filter(function(country) {
-              //     return ["Spain","Greece"].indexOf(country.key) != -1
-              // });
+              if (tableFilters[3].value !== "all") {
+                const tasks = openTasks.filter(
+                  (task) => tasksId.indexOf(task._id) === -1
+                );
+                setOpenTasks(tasks);
+              }
 
               fetch("/api/status/updateTasks", {
                 method: "POST",
@@ -259,8 +273,6 @@ const StatusPage = () => {
                 .then((res) => {
                   let { success, error, info } = res;
                   if (success) {
-                    console.log(info);
-                    setOpenTasks(info);
                   } else {
                     alert(error);
                   }
@@ -277,6 +289,7 @@ const StatusPage = () => {
       ],
     });
   };
+
   ////////////////////////////
   const handlePieChartsFilters = (filter, name) => {
     const newPieFilters = [...pieChartsFilters].map((f) => {
@@ -344,8 +357,9 @@ const StatusPage = () => {
         }
       });
   };
-  console.log(tableFilters);
+
   const handleSegmentClick = (date, status) => {
+    console.log("s:", status);
     fetch("/api/status/segmentData", {
       method: "POST",
       headers: {
@@ -362,6 +376,9 @@ const StatusPage = () => {
           alert(error);
         }
       });
+    const newFilters = [...tableFilters];
+    newFilters[3].value = status;
+    setTableFilters(newFilters);
   };
 
   const handleStaticsClick = (date, tasks) => {
