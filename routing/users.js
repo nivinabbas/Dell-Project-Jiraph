@@ -18,7 +18,7 @@ var nodemailer = require('nodemailer')
 var validator = require("email-validator");
 
 var secret = require("../index")
-const auth = require("../authentication/auth");
+const auth = require("../authentication/auth"); 
 const admin = require("../authentication/admin");
 const audit = require("../authentication/audit");
 
@@ -102,16 +102,6 @@ router.get('/getDeactivatedList', [auth, admin, audit], (req, res) => {
             for (let index = 0; index < users.length; index++) {
                 table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id, active: users[index].active })
             }
-            const { loginToken } = req.cookies;
-            const decodedToken = await jwt.verify(loginToken, secret);
-            AuditModel.insertMany(
-                {
-                    employeeName: decodedToken.name,
-                    employeeEmail: decodedToken.username,
-                    employeeRole: decodedToken.role,
-                    action: 'Get Deactivated List',
-                    timeChange: Date.now()
-                })
             res.send({ success: true, error: null, info: { table } })
         }
     })
@@ -408,7 +398,7 @@ router.put('/activeUser', [auth, admin, audit], (req, res) => {
     })
 })
 
-router.get('/getUsersAudit',[auth,admin,audit],(req,res)=>{
+router.get('/getUsersAudit', [auth,admin,audit],(req,res)=>{
     AuditModel.find({ }).then(async users => {
         if (users.length > 0) {
             let table = [];
