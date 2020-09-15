@@ -34,7 +34,6 @@ var transporter = nodemailer.createTransport({
 });
 
 
-
 router.post('/login', (req, res) => {
     const { email, password } = req.body;
     if (validator.validate(email)) {
@@ -148,7 +147,6 @@ router.put('/deleteUser', [auth, admin, audit], (req, res) => {
 
 
 
-
 router.post('/forgotPassword', (req, res) => {
     const { email } = req.body;
     if (validator.validate(email)) {
@@ -195,13 +193,17 @@ ${key}`
 router.post('/createUser', [auth, admin, audit], (req, res) => {
 
     const { name, email, role, password } = req.body;
+    const passwqord = req.body.password;
+    let regex = /[^A-Za-z0-9]/;
+    let containSepcChars = regex.test(password);
+
     let table = [];
+    if (!containSepcChars) {
     if (validator.validate(email)) {
         UserModel.find({ "userInfo.employeeEmail": email }).then(async (checkEmail) => {
             if (checkEmail.length > 0) {
                 return (res.send({ success: false, error: "Email is already in use", info: null }))
             }
-
 
             else {
                 const salt = await bcrypt.genSalt(saltRounds)
@@ -214,7 +216,6 @@ router.post('/createUser', [auth, admin, audit], (req, res) => {
                         for (let index = 0; index < users.length; index++) {
                             table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id, active: users[index].active })
                         }
-
 
                         var mailOptions = {
                             from: 'servicetest468@gmail.com',
@@ -241,11 +242,13 @@ router.post('/createUser', [auth, admin, audit], (req, res) => {
                 })
             }
 
-
         })
     } else {
         res.send({ success: false, error: "Email not valid", info: null })
     }
+} else {
+    res.send({ success: false, error: "No Special Characters or White Space allowed in User Password!", info: null })
+}
 })
 
 router.post('/checkSendedPassword', (req, res) => {
@@ -271,6 +274,10 @@ router.post('/checkSendedPassword', (req, res) => {
 
 router.put('/updatePassword', (req, res) => {
     const { email, password } = req.body;
+    const passwqord = req.body.password;
+    let regex = /[^A-Za-z0-9]/;
+    let containSepcChars = regex.test(password);
+    if (!containSepcChars) {
     UserModel.findOne({ "userInfo.employeeEmail": email }).then(async docs => {
         if (docs) {
             const salt = await bcrypt.genSalt(saltRounds)
@@ -283,12 +290,40 @@ router.put('/updatePassword', (req, res) => {
             res.send({ success: false, error: "email not valid", info: null })
         }
 
-    })
+        UserModel.findOne({ "userInfo.employeeEmail": email }).then(async docs => {
+            if (docs) {
+                // const name = docs.userInfo.employeeName
+                // const role = docs.userInfo.employeeRole
+                // const id = docs._id
+                const salt = await bcrypt.genSalt(saltRounds)
+                const hashpassword = await bcrypt.hash(password, salt)
+                docs.userInfo.password = hashpassword
+                docs.save();
+                res.send({ success: true, error: null, info: null })
+                // UserModel.updateOne({ _id: id }, { $set: { userInfo: { employeeName: name, employeeEmail: email, employeeRole: role, password: password } } }).then(doc => {
+                //     if (doc.n > 0) {
+                //         res.send({ success: true, error: null, info: null })
+                //     } else {
+                //         res.send({ success: false, error: null, info: null })
+                //     }
+                // })
+            } else {
+                res.send({ success: false, error: "email not valid", info: null })
+            }
+
+        })
+    } else {
+        res.send({ success: false, error: "No Special Characters or White Space allowed in User Password!", info: null })
+    }
 
 })
 
 router.put('/editUser', [auth, admin, audit], (req, res) => {
     const { id, name, email, role, password } = req.body;
+    const passwqord = req.body.password;
+    let regex = /[^A-Za-z0-9]/;
+    let containSepcChars = regex.test(password);
+    if (!containSepcChars) {
     if (validator.validate(email)) {
         UserModel.find({ _id: id }).then(async doc => {
             if (doc.length > 0) {
@@ -331,8 +366,10 @@ router.put('/editUser', [auth, admin, audit], (req, res) => {
     } else {
         res.send({ success: false, error: "Email not valid", info: null })
     }
+    else {
+        res.send({ success: false, error: "No Special Characters or White Space allowed in User Password!", info: null })
+    }
 })
-
 
 function makeid(length) {
     var result = '';
@@ -384,4 +421,3 @@ router.get('/getUsersAudit',[auth,admin],(req,res)=>{
 })
 
 module.exports = router;
-
