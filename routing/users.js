@@ -58,7 +58,7 @@ router.post('/login', (req, res) => {
                             timeChange: Date.now()
                         })
                         res.cookie("loginToken", token, {
-                            maxAge: 60000,
+                            maxAge: 120000,
                         });
                         res.send({ success: true, error: null, info: { role: checkEmail[0].userInfo.employeeRole, id: checkEmail[0]._id } })
                         res.end();
@@ -312,7 +312,9 @@ router.put('/updatePassword', (req, res) => {
             }
 
         })
-    } else {
+    })
+}
+else {
         res.send({ success: false, error: "No Special Characters or White Space allowed in User Password!", info: null })
     }
 
@@ -366,7 +368,7 @@ router.put('/editUser', [auth, admin, audit], (req, res) => {
     } else {
         res.send({ success: false, error: "Email not valid", info: null })
     }
-    else {
+}else {
         res.send({ success: false, error: "No Special Characters or White Space allowed in User Password!", info: null })
     }
 })
