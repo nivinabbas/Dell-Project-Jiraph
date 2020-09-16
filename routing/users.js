@@ -61,7 +61,7 @@ router.post('/login', (req, res) => {
                             timeChange: Date.now()
                         })
                         res.cookie("loginToken", token, {
-                            maxAge: 120000,
+                            maxAge: 172800000,
                         });
                         res.send({ success: true, error: null, info: { role: checkEmail[0].userInfo.employeeRole, id: checkEmail[0]._id } })
                         res.end();
@@ -402,10 +402,14 @@ router.put('/activeUser', [auth, admin, audit], (req, res) => {
 
 router.post('/getUsersAudit', [auth,admin,audit],async (req,res)=>{
     let { startDate, endDate } = req.body;
-    let o = new Intl.DateTimeFormat("en" , {
-        timeStyle: "medium",
-        dateStyle: "medium"
-      });
+
+    // let startDate = new Date();
+    // let endDate = new Date();
+    // startDate.setMonth(endDate.getMonth() - 1);
+    // const timeZone = (startDate.getTimezoneOffset() / 60);
+    // startDate.setHours(0 - timeZone, 0, 0, 0);
+    // endDate.setHours(0 - timeZone + 23, 59, 59, 59);
+
       
     var date=dateFormat(endDate, "yyyy-mm-dd");
 //   datefrom = new Date(startDate); //new Date("2020-08-01T00:00:00.00Z");
