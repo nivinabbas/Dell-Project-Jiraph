@@ -37,7 +37,9 @@ const Data = [
     }
 ]
 
+
 async function sendbellaData() {
+    //change the next line according to the location of the server in Dell's servers
     await fetch('http://localhost:4000/api/PostBellaData/GetBellaData', {
         method: 'post',
         body: JSON.stringify({
