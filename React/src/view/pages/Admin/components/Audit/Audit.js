@@ -118,6 +118,7 @@ const render = (serverFilters) => {
 
         <div className='adminpage'>
             <div className="ModificationByField__Filters">
+            <label >From</label>
             <input
           className="ModificationByField__Filter__date"
           type="date"
@@ -125,7 +126,7 @@ const render = (serverFilters) => {
            onChange={handleChangeStartDate}
         />
 
-
+        <label >To</label>
         <input
           className="ModificationByField__Filter__date"
           type="date"
