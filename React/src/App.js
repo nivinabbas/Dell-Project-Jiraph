@@ -29,7 +29,8 @@ import {
   Redirect,
   Link,
   useLocation,
-  useParams
+  useParams ,
+  HashRouter
 } from "react-router-dom";
 import { createBrowserHistory } from "history";
 
@@ -39,7 +40,7 @@ function App() {
   // console.log(location);
 const history = createBrowserHistory();
   return (
-    <Router>
+    <HashRouter>
       <div className="app">
         <link
           href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@200;300;400;500;531;600;700;800&display=swap"
@@ -99,7 +100,7 @@ const history = createBrowserHistory();
           </Switch>
         </div>
       </div>
-    </Router>
+    </HashRouter>
   );
 }
 

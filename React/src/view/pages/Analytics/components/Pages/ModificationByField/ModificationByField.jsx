@@ -187,7 +187,7 @@ function ModificationByField(props) {
     if (change != null) {
       change.map((item) => {
         let value = item.value;
-        if (value == "true" || value == "false") {
+        if (value === "true" || value === "false") {
           value = (value === 'true');
 
         }
@@ -251,7 +251,7 @@ function ModificationByField(props) {
     })
       .then(res => res.json())
       .then(data => {
-        if (data.success == true) {
+        if (data.success === true) {
           renderSavedFilters(savedFilters);
         }
 
