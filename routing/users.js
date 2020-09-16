@@ -14,6 +14,7 @@ const UserModel = mongoose.model("UserModel", UserSchema);
 const KeyModel = mongoose.model("KeyModel", KeySchema);
 const AuditModel = mongoose.model("AudetModel", AuditSchema);
 
+var dateFormat = require('dateformat');
 var nodemailer = require('nodemailer')
 var validator = require("email-validator");
 
@@ -24,6 +25,7 @@ const audit = require("../authentication/audit");
 
 
 const saltRounds = 10
+
 
 var transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -59,7 +61,7 @@ router.post('/login', (req, res) => {
                             timeChange: Date.now()
                         })
                         res.cookie("loginToken", token, {
-                            maxAge: 120000,
+                            maxAge: 172800000,
                         });
                         res.send({ success: true, error: null, info: { role: checkEmail[0].userInfo.employeeRole, id: checkEmail[0]._id } })
                         res.end();
@@ -398,19 +400,66 @@ router.put('/activeUser', [auth, admin, audit], (req, res) => {
     })
 })
 
-router.get('/getUsersAudit', [auth,admin,audit],(req,res)=>{
-    AuditModel.find({ }).then(async users => {
-        if (users.length > 0) {
-            let table = [];
-            for (let index = 0; index < users.length; index++) {
-                table.push({ email:users[index].employeeEmail,name:users[index].employeeName,role:users[index].employeeRole,action:users[index].action,date:users[index].timeChange })
+router.post('/getUsersAudit', [auth,admin,audit],async (req,res)=>{
+    let { startDate, endDate } = req.body;
+
+    // let startDate = new Date();
+    // let endDate = new Date();
+    // startDate.setMonth(endDate.getMonth() - 1);
+    // const timeZone = (startDate.getTimezoneOffset() / 60);
+    // startDate.setHours(0 - timeZone, 0, 0, 0);
+    // endDate.setHours(0 - timeZone + 23, 59, 59, 59);
+
+      
+    var date=dateFormat(endDate, "yyyy-mm-dd");
+//   datefrom = new Date(startDate); //new Date("2020-08-01T00:00:00.00Z");
+  dateTo = new Date(date+"T23:59:59.0099Z");
+date=dateFormat(startDate, "yyyy-mm-dd");
+  datefrom = new Date(date+"T00:00:00.000Z");
+  if(datefrom.length>0&&dateTo.length<0){
+    let users = await AuditModel.aggregate([{
+        $match: {
+          "timeChange": {
+            $gte: datefrom
+          }
+            
+        }
+      },{ $sort: { "timeChange": -1 } }]);
+      
+            if (users.length > 0) {
+                let table = [];
+                for (let index = 0; index < users.length; index++) {
+                    table.push({ email:users[index].employeeEmail,name:users[index].employeeName,role:users[index].employeeRole,action:users[index].action,date:dateFormat(users[index].timeChange,"yyyy-mm-dd , h:MM:ss TT") })
+                }
+                res.send({ success: true, error: null, info: { table } })
             }
-            res.send({ success: true, error: null, info: { table } })
+            else {
+                res.send({ success: false, error: "No Actions found", info: null })
+            }
+  }else{
+    let users = await AuditModel.aggregate([{
+        $match: {
+          "timeChange": {
+            $gte: datefrom,
+            $lte: dateTo,
+          }
+            
         }
-        else {
-            res.send({ success: false, error: "No Actions found", info: null })
-        }
-    })
+      },{ $sort: { "timeChange": -1 } }]);
+      
+            if (users.length > 0) {
+                let table = [];
+                for (let index = 0; index < users.length; index++) {
+                    table.push({ email:users[index].employeeEmail,name:users[index].employeeName,role:users[index].employeeRole,action:users[index].action,date:dateFormat(users[index].timeChange,"yyyy-mm-dd , h:MM:ss TT") })
+                }
+                res.send({ success: true, error: null, info: { table } })
+            }
+            else {
+                res.send({ success: false, error: "No Actions found", info: null })
+            }
+  }
+  
+
 })
 
 module.exports = router;

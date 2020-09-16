@@ -9,8 +9,4 @@ module.exports = async (req, res, next) => {
         return res.status(403).send("permission denied.only QA Manager Or Top Manager user can have access!");
     }
 
-
-
-
-
 }

@@ -4,20 +4,20 @@ import { useHistory,Link } from "react-router-dom";
 
 
 
-//components
+//import component
 import UserRow from './UserRow';
 
 
 function UserList() {
+
+
     const [users, setUsers] = useState([]);
     const [acivePage, setAcivePage] = useState(false)
-
     const history = useHistory();
 
 
-    //-------------------------------------
 
-    
+    //show active users list
     useEffect(() => {
         fetch('/api/users/getUsersList')
             .then(res => res.json())
@@ -32,7 +32,7 @@ function UserList() {
     }, []);
 
 
-
+    //show create row 
     return (
 
 
@@ -69,19 +69,15 @@ function UserList() {
             </form>
             :
 
-                         
+            {/* sho users list using component              */}
             {users.map(user => <UserRow isActive={user.active} setUsers={setUsers} key={user.id} user={user} />)}
 
-            <div id="ButtonDiv">
-                
-                <Link to="/Audit"><button>Audit</button> </Link>
-                
-            </div>
+           
         </div>
         
     )
 
-
+    //button send you to active users (default)
     function goToActiveUsers(e) {
         e.preventDefault();
         fetch('/api/users/getUsersList')
@@ -100,7 +96,7 @@ function UserList() {
     }
 
 
-
+    //button send you to- not active users 
     function goToNotActiveUsers(e) {
         console.log('ENTERED')
         e.preventDefault();
@@ -119,13 +115,14 @@ function UserList() {
             setAcivePage(true);
 
     }
-
+    
+    //go to audit page 
     function goToAudit(e) {
         history.push("/Audit");
 
     }
 
-
+    //creating user function 
     function createUser(e) {
         e.preventDefault();
         let { inputName, inputEmail, inputRole, inputPassword } = e.target.elements;
