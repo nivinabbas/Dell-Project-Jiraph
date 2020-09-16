@@ -4,27 +4,23 @@
  */
 const express = require("express");
 const router = express.Router();
-const UserSchema = require('../schemas/UserSchema')
 const TaskModel = require('../schemas/TaskSchema');
-const mongoose = require('mongoose');
-
-const UserModel = mongoose.model("UserModel", UserSchema)
 
 
- function addTaskItem(lst) {
+function addTaskItem(lst) {
     let updateData = convertUpdatedFields(lst)
 
     // remove irrelevant tasks
-     updateData.map((item,index)=>{
-        if(item.diffItem.type == "Update"){
-            if(((item.diffItem.updatedField.oldValue == null) ||(item.diffItem.updatedField.oldValue == ""))
-            && ((item.diffItem.updatedField.newValue == null) ||(item.diffItem.updatedField.newValue == ""))){
+    updateData.map((item, index) => {
+        if (item.diffItem.type == "Update") {
+            if (((item.diffItem.updatedField.oldValue == null) || (item.diffItem.updatedField.oldValue == ""))
+                && ((item.diffItem.updatedField.newValue == null) || (item.diffItem.updatedField.newValue == ""))) {
                 updateData.splice(index, 1);
             }
         }
     })
 
-     updateData.map((item, index) => {
+    updateData.map((item, index) => {
 
         // adding 3 zeros to the end of the timestamp
         item.diffItem.updatedTime = item.diffItem.updatedTime * 1000
@@ -90,25 +86,21 @@ function convertUpdatedFields(data) {
 
 
 router.post("/GetBellaData", async function (req, res) {
-    const { user_id, user_pass, Data } = req.body;
-    if (req.body.key == "QYZNRVlzTAzJjWJLxobY24hGYcoclsaf4ZX5BLhGSi0Xa4cMC1APBoN") {
-        let updatedData = addTaskItem(Data);
-        TaskModel.insertMany(updatedData).then(console.log("Adding Success.!"));
-        res.send({ "success": "true" });
-    } else {
-        res.send({ "success": "false" });
-    };
+    const { Data } = req.body;
+    let updatedData = addTaskItem(Data);
+    TaskModel.insertMany(updatedData).then(console.log("Adding Success.!"));
+    res.send({ "success": "true" });
 });
 
 
-
+//always
 //date * 1000---------------------------------------------------------------
 //task item-----------------------------------------------------------------
-// functional test yes/no => true/false-------------------------------------
-// type updated => type update ---------------------------------------------
 //updatedfields[] => field -------------------------------------------------
 //check for nulls ----------------------------------------------------------
+
+//dell must change 
+// type updated => type update ---------------------------------------------
 //updateTime => updatedTime ------------------------------------------------
-// remove "jira" prefix|||||||||||||||||||||||||||||||||||||||||||||||||||||
 
 module.exports = router;

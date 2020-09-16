@@ -123,6 +123,12 @@
     grid-area: chart;
   }
 
+  .DelaysInDelivery__Filters__Header > p {
+    text-align: center;
+    color: #00447C;
+    font-weight: bold;
+  }
+
   
 
   
