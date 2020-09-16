@@ -8,6 +8,7 @@ const PieChartAnalysis = (props) => {
   const features = [UiObjs[0].features, UiObjs[1].features, UiObjs[2].features];
   const [featuresToDisplay, setFeaturesToDisplay] = useState([]);
   const [tasks,setTasks]= useState([]);
+  const [title,setTitle]=useState("");
   const options = {
     series: [UiObjs[0].featuresSize, UiObjs[1].featuresSize, UiObjs[2].featuresSize],
     labels: ['Light Changes(1-4)', 'Major Changes(5-9)', 'Critical Changes(10+)'],
@@ -24,8 +25,9 @@ const PieChartAnalysis = (props) => {
       }
     }
   }
-  const handleClick = tasks => {
-    return setTasks(tasks)
+  const handleClick = (tasks,title) => {
+    setTasks(tasks)
+    setTitle(title)
   }
 
   return (
@@ -50,7 +52,7 @@ const PieChartAnalysis = (props) => {
           </thead>
           <tbody>
             {featuresToDisplay.map((task, index) => (
-              <tr onClick={()=>handleClick(task.tasks)} key={index}>
+              <tr onClick={()=>handleClick(task.tasks,task._id)} key={index}>
                 <th scope="row"> {++index} </th>
                 <td> {task._id} </td>
                 <td> {task.TotalChanges} </td>
@@ -67,7 +69,7 @@ const PieChartAnalysis = (props) => {
         </table>
       </div>}
 
-      {tasks.length>0 && <div className="PieChartAnalysis__MainTable"><MainTable  tasks={tasks}/></div>}
+      {tasks.length>0 && <div className="PieChartAnalysis__MainTable"><MainTable  tasks={tasks} title={title}/></div>}
 
 
     </div>

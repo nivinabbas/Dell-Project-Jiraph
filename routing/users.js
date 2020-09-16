@@ -1,20 +1,31 @@
 const express = require("express");
+const app = express();
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
-
 const router = express.Router();
+const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken");
+const cookies = require("cookie-parser");
+
+
 const UserSchema = require('../schemas/UserSchema');
 const KeySchema = require('../schemas/KeySchema');
 const AuditSchema = require('../schemas/AuditSchema');
 const UserModel = mongoose.model("UserModel", UserSchema);
 const KeyModel = mongoose.model("KeyModel", KeySchema);
-const AuditModel = mongoose.model("AuditModel", AuditSchema);
+const AuditModel = mongoose.model("AudetModel", AuditSchema);
 
+var dateFormat = require('dateformat');
 var nodemailer = require('nodemailer')
 var validator = require("email-validator");
-const { find } = require("../schemas/TaskSchema");
+
+var secret = require("../index")
+const auth = require("../authentication/auth"); 
+const admin = require("../authentication/admin");
+const audit = require("../authentication/audit");
+
+
 const saltRounds = 10
- 
+
 
 var transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -24,40 +35,41 @@ var transporter = nodemailer.createTransport({
     }
 });
 
-AuditModel.insertMany(
-    {
-        employeeName: 'rami',
-        employeeEmail: 'rami@gmail.com',
-        employeeRole: 'Admin',
-        change: 'Login',
-        timeChange: '1'
-    }
-)
 
-
-const u = new UserModel({
-    userInfo: {
-        employeeName: "yousef",
-        employeeEmail: "yousef@gmail.com",
-        employeeRole: "admin",
-        password: "111"
-    }
-})
-
-//app.get/post/put/delete => router.get/post/put/delete
 router.post('/login', (req, res) => {
     const { email, password } = req.body;
     if (validator.validate(email)) {
         UserModel.find({ "userInfo.employeeEmail": email }).then(async checkEmail => {
             if (checkEmail.length > 0) {
-                const isMatch = await bcrypt.compare(password,checkEmail[0].userInfo.password)
-                if(isMatch){
-                    if(checkEmail[0].active == 1){
-                        return (res.send({ success: true, error: null, info: { role: checkEmail[0].userInfo.employeeRole, id: checkEmail[0]._id } }))
-                    }else{
+                const isMatch = await bcrypt.compare(password, checkEmail[0].userInfo.password)
+                if (isMatch) {
+                    if (checkEmail[0].active == true) {
+                        const token = await jwt.sign({
+                            name: checkEmail[0].userInfo.employeeName,
+                            username: checkEmail[0].userInfo.employeeEmail,
+                            role: checkEmail[0].userInfo.employeeRole,
+                        },
+                            secret
+                        );
+                        AuditModel.insertMany({
+                            id:checkEmail[0]._id,
+                            employeeName: checkEmail[0].userInfo.employeeName,
+                            employeeEmail: checkEmail[0].userInfo.employeeEmail,
+                            employeeRole: checkEmail[0].userInfo.employeeRole,
+                            action: 'Login',
+                            body:req.body,
+                            timeChange: Date.now()
+                        })
+                        res.cookie("loginToken", token, {
+                            maxAge: 172800000,
+                        });
+                        res.send({ success: true, error: null, info: { role: checkEmail[0].userInfo.employeeRole, id: checkEmail[0]._id } })
+                        res.end();
+
+                    } else {
                         return (res.send({ success: false, error: "User is deleted from the system", info: null }))
                     }
-                }else{
+                } else {
                     return (res.send({ success: false, error: "Password incorrect", info: null }))
                 }
             } else {
@@ -70,20 +82,34 @@ router.post('/login', (req, res) => {
     }
 })
 
-router.get('/getUsersList', (req, res) => {
-    UserModel.find({ active: 1 }).then(users => {
+router.get('/getUsersList', [auth, admin, audit], (req, res) => {
+    UserModel.find({ active: true }).then(async users => {
         if (users.length > 0) {
             let table = [];
             for (let index = 0; index < users.length; index++) {
-                table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id })
+                table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id, active: users[index].active })
             }
+            res.send({ success: true, error: null, info: { table } })
+        }
+        else {
+            res.send({ success: false, error: "No Users found", info: null })
+        }
+    })
+})
 
+router.get('/getDeactivatedList', [auth, admin, audit], (req, res) => {
+    UserModel.find({ active: false }).then(async users => {
+        if (users.length > 0) {
+            let table = [];
+            for (let index = 0; index < users.length; index++) {
+                table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id, active: users[index].active })
+            }
             res.send({ success: true, error: null, info: { table } })
         }
     })
 })
 
-router.put('/deleteUser', (req, res) => {
+router.put('/deleteUser', [auth, admin, audit], (req, res) => {
 
     const { id } = req.body;
     let table = [];
@@ -93,13 +119,13 @@ router.put('/deleteUser', (req, res) => {
         }
         else {
             if (docs) {
-                docs.active = 0;
+                docs.active = false;
                 await docs.save();
-                await UserModel.find({ active: 1 }).then(users => {
+                await UserModel.find({ active: true }).then(async users => {
                     if (users.length > 0) {
 
                         for (let index = 0; index < users.length; index++) {
-                            table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id })
+                            table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id, active: users[index].active })
                         }
                         res.send({ success: true, error: null, info: { table } })
                     }
@@ -114,11 +140,10 @@ router.put('/deleteUser', (req, res) => {
 
 
 
-
 router.post('/forgotPassword', (req, res) => {
     const { email } = req.body;
     if (validator.validate(email)) {
-        UserModel.find({ "userInfo.employeeEmail": email, active: 1 }).then(checkEmail => {
+        UserModel.find({ "userInfo.employeeEmail": email, active: true }).then(checkEmail => {
             if (checkEmail.length > 0) {
                 const key = makeid(10)
 
@@ -158,29 +183,32 @@ ${key}`
 })
 
 
-router.post('/createUser', (req, res) => {
+router.post('/createUser', [auth, admin, audit], (req, res) => {
 
     const { name, email, role, password } = req.body;
+    const passwqord = req.body.password;
+    let regex = /[^A-Za-z0-9]/;
+    let containSepcChars = regex.test(password);
+
     let table = [];
+    if (!containSepcChars) {
     if (validator.validate(email)) {
         UserModel.find({ "userInfo.employeeEmail": email }).then(async (checkEmail) => {
             if (checkEmail.length > 0) {
                 return (res.send({ success: false, error: "Email is already in use", info: null }))
             }
 
-
             else {
                 const salt = await bcrypt.genSalt(saltRounds)
-                const hashpassword = await bcrypt.hash(password,salt)
-                await UserModel.insertMany({ userInfo: { employeeName: name, employeeEmail: email, employeeRole: role, password: hashpassword }, active: 1 })
+                const hashpassword = await bcrypt.hash(password, salt)
+                await UserModel.insertMany({ userInfo: { employeeName: name, employeeEmail: email, employeeRole: role, password: hashpassword }, active: true })
 
-                await UserModel.find({ active: 1 }).then(users => {
+                await UserModel.find({ active: true }).then(async users => {
                     if (users.length > 0) {
 
                         for (let index = 0; index < users.length; index++) {
-                            table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id })
+                            table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id, active: users[index].active })
                         }
-
 
                         var mailOptions = {
                             from: 'servicetest468@gmail.com',
@@ -207,11 +235,13 @@ router.post('/createUser', (req, res) => {
                 })
             }
 
-
         })
     } else {
         res.send({ success: false, error: "Email not valid", info: null })
     }
+} else {
+    res.send({ success: false, error: "No Special Characters or White Space allowed in User Password!", info: null })
+}
 })
 
 router.post('/checkSendedPassword', (req, res) => {
@@ -237,77 +267,104 @@ router.post('/checkSendedPassword', (req, res) => {
 
 router.put('/updatePassword', (req, res) => {
     const { email, password } = req.body;
+    const passwqord = req.body.password;
+    let regex = /[^A-Za-z0-9]/;
+    let containSepcChars = regex.test(password);
+    if (!containSepcChars) {
     UserModel.findOne({ "userInfo.employeeEmail": email }).then(async docs => {
         if (docs) {
-            // const name = docs.userInfo.employeeName
-            // const role = docs.userInfo.employeeRole
-            // const id = docs._id
             const salt = await bcrypt.genSalt(saltRounds)
-            const hashpassword = await bcrypt.hash(password,salt)
+            const hashpassword = await bcrypt.hash(password, salt)
             docs.userInfo.password = hashpassword
             docs.save();
             res.send({ success: true, error: null, info: null })
-            // UserModel.updateOne({ _id: id }, { $set: { userInfo: { employeeName: name, employeeEmail: email, employeeRole: role, password: password } } }).then(doc => {
-            //     if (doc.n > 0) {
-            //         res.send({ success: true, error: null, info: null })
-            //     } else {
-            //         res.send({ success: false, error: null, info: null })
-            //     }
-            // })
+
         } else {
             res.send({ success: false, error: "email not valid", info: null })
         }
 
+        UserModel.findOne({ "userInfo.employeeEmail": email }).then(async docs => {
+            if (docs) {
+                // const name = docs.userInfo.employeeName
+                // const role = docs.userInfo.employeeRole
+                // const id = docs._id
+                const salt = await bcrypt.genSalt(saltRounds)
+                const hashpassword = await bcrypt.hash(password, salt)
+                docs.userInfo.password = hashpassword
+                docs.save();
+                res.send({ success: true, error: null, info: null })
+                // UserModel.updateOne({ _id: id }, { $set: { userInfo: { employeeName: name, employeeEmail: email, employeeRole: role, password: password } } }).then(doc => {
+                //     if (doc.n > 0) {
+                //         res.send({ success: true, error: null, info: null })
+                //     } else {
+                //         res.send({ success: false, error: null, info: null })
+                //     }
+                // })
+            } else {
+                res.send({ success: false, error: "email not valid", info: null })
+            }
+
+        })
     })
+}
+else {
+        res.send({ success: false, error: "No Special Characters or White Space allowed in User Password!", info: null })
+    }
 
 })
 
-router.put('/editUser', (req, res) => {
+router.put('/editUser', [auth, admin, audit], (req, res) => {
     const { id, name, email, role, password } = req.body;
+    const passwqord = req.body.password;
+    let regex = /[^A-Za-z0-9]/;
+    let containSepcChars = regex.test(password);
+    if (!containSepcChars) {
     if (validator.validate(email)) {
         UserModel.find({ _id: id }).then(async doc => {
-            if(doc.length>0){
-            if (email == doc[0].userInfo.employeeEmail) {
-                if (password.length > 0) {
-                    const salt = await bcrypt.genSalt(saltRounds)
-                    const hashpassword = await bcrypt.hash(password,salt)
-                    doc[0].userInfo.password = hashpassword;
-                }
-                doc[0].userInfo.employeeName = name
-                doc[0].userInfo.employeeRole = role
-                await doc[0].save();
+            if (doc.length > 0) {
+                if (email == doc[0].userInfo.employeeEmail) {
+                    if (password.length > 0) {
+                        const salt = await bcrypt.genSalt(saltRounds)
+                        const hashpassword = await bcrypt.hash(password, salt)
+                        doc[0].userInfo.password = hashpassword;
+                    }
+                    doc[0].userInfo.employeeName = name
+                    doc[0].userInfo.employeeRole = role
+                    await doc[0].save();
 
-                return (res.send({ success: true, error: null, info: null }))
-            
-            }
-            else {
-                UserModel.find({ "userInfo.employeeEmail": email }).then(async docs => {
-                    if (docs.length>0) {
-                        return (res.send({ success: false, error: "Email is already in use", info: null }))
-                    }
-                    else {
-                        if (password.length > 0) {
-                            const salt = await bcrypt.genSalt(saltRounds)
-                            const hashpassword = await bcrypt.hash(password,salt)
-                            doc[0].userInfo.password = hashpassword;
+                    return (res.send({ success: true, error: null, info: null }))
+
+                }
+                else {
+                    UserModel.find({ "userInfo.employeeEmail": email }).then(async docs => {
+                        if (docs.length > 0) {
+                            return (res.send({ success: false, error: "Email is already in use", info: null }))
                         }
-                        doc[0].userInfo.employeeEmail = email
-                        doc[0].userInfo.employeeName = name
-                        doc[0].userInfo.employeeRole = role
-                        await doc[0].save();
-                        res.send({ success: true, error: null, info: null })
-                    }
-                })
+                        else {
+                            if (password.length > 0) {
+                                const salt = await bcrypt.genSalt(saltRounds)
+                                const hashpassword = await bcrypt.hash(password, salt)
+                                doc[0].userInfo.password = hashpassword;
+                            }
+                            doc[0].userInfo.employeeEmail = email
+                            doc[0].userInfo.employeeName = name
+                            doc[0].userInfo.employeeRole = role
+                            await doc[0].save();
+                            res.send({ success: true, error: null, info: null })
+                        }
+                    })
+                }
+            } else {
+                res.send({ success: false, error: 'User Not Found', info: null })
             }
-        }else{
-            res.send({ success: false, error: 'User Not Found', info: null })
-        }
         })
     } else {
         res.send({ success: false, error: "Email not valid", info: null })
     }
+}else {
+        res.send({ success: false, error: "No Special Characters or White Space allowed in User Password!", info: null })
+    }
 })
-
 
 function makeid(length) {
     var result = '';
@@ -320,6 +377,89 @@ function makeid(length) {
     return result;
 }
 
+router.put('/activeUser', [auth, admin, audit], (req, res) => {
+    const { id } = req.body
+    let table = []
+    UserModel.find({ _id: id }).then(async doc => {
+        if (doc.length > 0) {
+            doc[0].active = true
+            await doc[0].save();
+            await UserModel.find({ active: false }).then(users => {
+                if (users.length > 0) {
+
+                    for (let index = 0; index < users.length; index++) {
+                        table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id, active: users[index].active })
+                    }
+                }
+            })
+            return (res.send({ success: true, error: null, info: { table } }))
+        }
+        else {
+            return (res.send({ success: false, error: 'User Not Found in DB', info: null }))
+        }
+    })
+})
+
+router.post('/getUsersAudit', [auth,admin,audit],async (req,res)=>{
+    let { startDate, endDate } = req.body;
+
+    // let startDate = new Date();
+    // let endDate = new Date();
+    // startDate.setMonth(endDate.getMonth() - 1);
+    // const timeZone = (startDate.getTimezoneOffset() / 60);
+    // startDate.setHours(0 - timeZone, 0, 0, 0);
+    // endDate.setHours(0 - timeZone + 23, 59, 59, 59);
+
+      
+    var date=dateFormat(endDate, "yyyy-mm-dd");
+//   datefrom = new Date(startDate); //new Date("2020-08-01T00:00:00.00Z");
+  dateTo = new Date(date+"T23:59:59.0099Z");
+date=dateFormat(startDate, "yyyy-mm-dd");
+  datefrom = new Date(date+"T00:00:00.000Z");
+  if(datefrom.length>0&&dateTo.length<0){
+    let users = await AuditModel.aggregate([{
+        $match: {
+          "timeChange": {
+            $gte: datefrom
+          }
+            
+        }
+      },{ $sort: { "timeChange": -1 } }]);
+      
+            if (users.length > 0) {
+                let table = [];
+                for (let index = 0; index < users.length; index++) {
+                    table.push({ email:users[index].employeeEmail,name:users[index].employeeName,role:users[index].employeeRole,action:users[index].action,date:dateFormat(users[index].timeChange,"yyyy-mm-dd , h:MM:ss TT") })
+                }
+                res.send({ success: true, error: null, info: { table } })
+            }
+            else {
+                res.send({ success: false, error: "No Actions found", info: null })
+            }
+  }else{
+    let users = await AuditModel.aggregate([{
+        $match: {
+          "timeChange": {
+            $gte: datefrom,
+            $lte: dateTo,
+          }
+            
+        }
+      },{ $sort: { "timeChange": -1 } }]);
+      
+            if (users.length > 0) {
+                let table = [];
+                for (let index = 0; index < users.length; index++) {
+                    table.push({ email:users[index].employeeEmail,name:users[index].employeeName,role:users[index].employeeRole,action:users[index].action,date:dateFormat(users[index].timeChange,"yyyy-mm-dd , h:MM:ss TT") })
+                }
+                res.send({ success: true, error: null, info: { table } })
+            }
+            else {
+                res.send({ success: false, error: "No Actions found", info: null })
+            }
+  }
+  
+
+})
 
 module.exports = router;
-
