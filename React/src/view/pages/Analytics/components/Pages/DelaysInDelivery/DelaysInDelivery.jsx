@@ -183,12 +183,14 @@ function DelaysInDelivery() {
 
   // Start Date 
   const HandleStartDateChange = (date => {
+    setStartDate(date.target.value)
     serverFilters.startDate = (date.target.value);
     render(serverFilters);
   })
 
   // End Date 
   const HandleEndDateChange = (date => {
+    setEndDate(date.target.value)
     let endDate =new Date(date.target.value)
     const timeZone = (endDate.getTimezoneOffset() / 60);
     endDate.setHours((0 - timeZone)+(23), 59, 59, 59);
