@@ -1,6 +1,6 @@
 import React from 'react';
 import "./DeletedJiraTickets.css";
-import Chart from "../charts/Chart";
+import Chart from "../../charts/Chart"
 import Select from 'react-select';
 import { useState, useRef ,useEffect } from 'react';
 
@@ -15,6 +15,10 @@ function DeletedJiraTickets() {
     let startDate = new Date()
     let endDate = new Date()
     startDate.setMonth(endDate.getMonth() - 1)
+    let endMonth = endDate.getMonth() + 1 < 10 ? `0${endDate.getMonth() + 1}` : endDate.getMonth() + 1;
+    let startMonth = startDate.getMonth() + 1 < 10 ? `0${startDate.getMonth() + 1}` : startDate.getMonth() + 1;
+    setStartDate(`${startDate.getFullYear()}-${startMonth}-${startDate.getDate()}`)
+    setEndDate(`${endDate.getFullYear()}-${endMonth}-${endDate.getDate()}`)
     const timeZone = startDate.getTimezoneOffset() / 60
     startDate.setHours(0 - timeZone, 0, 0, 0)
     endDate.setHours(0 - timeZone+23, 59, 59, 59);
@@ -80,7 +84,8 @@ function DeletedJiraTickets() {
 
   //Deleted Jira TicketsVariables
   const [UiObjs, setUiObjs] = useState([]); //UiObject from the server
-
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   // Options To get From Server 
   const [priorityOptions, setPriorityOptions] = useState([]);//proiority options for filters
   const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([]);//Qa Representative options for filters
@@ -163,13 +168,17 @@ function DeletedJiraTickets() {
   const qaInput = useRef("")
   return (
     <div className='DeletedJiraTicketsWrapper'>
-      <div className="DeletedJiraTickets__Chart"> {UiObjs && <Chart UiObjs={UiObjs} />}</div>
+      <div className="DeletedJiraTickets__Chart"> {UiObjs && <Chart UiObjs={UiObjs} title="Deleted Jira Tickets (All)" />}</div>
       <div className="DeletedJiraTickets__Title">Deleted Jira Tickets</div>
-      {/* Select Filters */}
-      <form className="DeletedJiraTickets__Filters">
-        {/* select */}
 
-        <Select
+      <div className="DeletedJiraTickets__Filters__wrapper">
+       
+
+      <form className="DeletedJiraTickets__Filters__fields">
+        
+        <div className="DeletedJiraTickets__Filters__Header">
+          <p>Priority</p>
+        <Select        
           name="priority"
           onInputChange={() => { functionalTestInput.current.state.value = ""; qaInput.current.state.value = "" }}
           isMulti
@@ -178,7 +187,9 @@ function DeletedJiraTickets() {
           className="DeletedJiraTickets__Filter"
           onChange={HandlePriorityChange}
         />
-
+        </div>
+        <div className="DeletedJiraTickets__Filters__Header">
+          <p>Functional Test </p>
         <Select
           name="functional test"
           isMulti
@@ -187,8 +198,10 @@ function DeletedJiraTickets() {
           placeholder="functional-Test "
           className="DeletedJiraTickets__Filter"
           onChange={HandlefunctionalTestChange}
-        />
+        /></div>
 
+<div className="DeletedJiraTickets__Filters__Header">
+          <p>Qa Representative</p>
         <Select
           name="qaRepresentative"
           isMulti
@@ -197,23 +210,32 @@ function DeletedJiraTickets() {
           placeholder="Qa Representative"
           className="DeletedJiraTickets__Filter"
           onChange={HandleqaRepresentativeChange}
-        />
-        From
+        /></div>
+
+      <div className="DeletedJiraTickets__Filters__Header">
+          <p>Start Date</p>
         <input
           className="DeletedJiraTickets__Filter__date"
           type="date"
           name="startDate"
+          value={startDate}
           onChange={HandleStartDateChange}
         />
+        </div>
 
-        To
+
+        <div className="DeletedJiraTickets__Filters__Header">
+          <p>End Date</p>
         <input
           className="DeletedJiraTickets__Filter__date"
           type="date"
           name="endDate"
+          value={endDate}
           onChange={HandleEndDateChange}
         />
-
+        </div>
+        <div className="DeletedJiraTickets__Filters__Header">
+          <p>Period</p>
         <Select
           name="labels"
           options={labelOptions}
@@ -221,7 +243,9 @@ function DeletedJiraTickets() {
           className="DeletedJiraTickets__Filter"
           onChange={HandleLabelChange}
         />
+        </div>
       </form>
+    </div>
     </div>
   )
 }

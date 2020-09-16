@@ -16,7 +16,7 @@ import {
   tasksNames,
 } from "../../../../../service/statusService";
 import "./StatusPage.css";
-import { dateFormat, lastMonth } from "../../../../../service/utils";
+import { datesFormat } from "../../../../../service/utils";
 
 const timeLabelOptions = [
   { value: "daily", label: "Daily" },
@@ -25,7 +25,7 @@ const timeLabelOptions = [
 ];
 const statusOptions = [
   { value: "all", label: "All" },
-  { value: "done", label: "Done" },
+  { value: "Done", label: "Done" },
   { value: "notDone", label: "NotDone" },
 ];
 const StatusPage = () => {
@@ -44,14 +44,15 @@ const StatusPage = () => {
     modificationFieldValueOptions,
     setModificationFieldValueOptions,
   ] = useState({});
-  const [startDate, setStartDate] = useState(dateFormat(lastMonth()));
-  const [endDate, setEndDate] = useState(dateFormat(new Date()));
+  const [startDate, setStartDate] = useState(datesFormat()[0]);
+  const [endDate, setEndDate] = useState(datesFormat()[1]);
   const [timeLabel, setTimeLabel] = useState("");
   const [pieChartsFilters, setPieChartsFilters] = useState(
     initialPieChartsFilters
   );
   const [tableFilters, setTableFilters] = useState(initialTableFilters);
   const [tasksId, setTasksId] = useState([]);
+
   //statistics
   useEffect(() => {
     const filters = {
@@ -351,6 +352,7 @@ const StatusPage = () => {
       .then((res) => {
         let { success, error, info } = res;
         if (success) {
+          console.log(info.doc);
           setOpenTasks(info.doc);
         } else {
           alert(error);
@@ -377,14 +379,23 @@ const StatusPage = () => {
         }
       });
     const newFilters = [...tableFilters];
+    newFilters[0].value = "All";
+    newFilters[1].value = null;
+    newFilters[2].value = null;
     newFilters[3].value = status;
     setTableFilters(newFilters);
   };
 
   const handleStaticsClick = (date, tasks) => {
+    const newFilters = [...tableFilters];
+    newFilters[0].value = "All";
+    newFilters[1].value = null;
+    newFilters[2].value = null;
+    newFilters[3].value = "Done";
+    setTableFilters(newFilters);
     setOpenTasks(tasks);
   };
-
+  console.log("asdadasdasdasdasda", tableFilters);
   return (
     <div>
       <div className="status__header">Status</div>
@@ -410,7 +421,7 @@ const StatusPage = () => {
         </div>
 
         <div className="statusPage__barChart">
-          <h3>Tasks statistics</h3>
+          <h2 className="statusPage__headerTitles">Tasks Statistics</h2>
           {StatisticsChart.length != 0 && (
             <StatisticsChart
               data={statisticsChart}
@@ -420,10 +431,10 @@ const StatusPage = () => {
         </div>
 
         <div className="statusPage__divAllcharts">
-          <h2 style={{ textAlign: "center", padding: 8 }}>Task History</h2>
+          <h2 className="statusPage__headerTitles">Task History</h2>
           <div className="statusPage__charts">
             <div className="statusPage__barChart2">
-              <h5 style={{ margin: "4px" }}>Period </h5>
+              <h3 style={{ margin: "4px" }}>Period: </h3>
               <Select
                 options={timeLabelOptions}
                 onChange={(filter) => setTimeLabel(filter)}
