@@ -7,7 +7,7 @@ const UserSchema = new mongoose.Schema({
         employeeRole: String,
         password: String
     },
-    active:Number
+    active:Boolean
 })
 
 
