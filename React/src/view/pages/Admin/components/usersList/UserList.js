@@ -64,8 +64,8 @@ function UserList() {
                     <option value="QA manager">QA manager</option>
                     <option value="TOP manager">TOP manager</option>
                 </select>
-                <input name="inputPassword" type="password" placeholder='Enter pass' required ></input>
-                <button type='submit'>Create</button>
+                <input className="filter" name="inputPassword" type="password" placeholder='Enter password' required ></input>
+                <button type='submit'>CREATE</button>
             </form>
             :
 

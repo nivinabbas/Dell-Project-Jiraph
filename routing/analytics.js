@@ -1,59 +1,131 @@
 const express = require("express");
-
 const router = express.Router();
 const mongoose = require('mongoose');
 const UserSchema = require('../schemas/UserSchema');
+/////////////////////////////////////////////////////
+const FilterSchema = require('../schemas/FilterSchema');
+const FilterModel = mongoose.model("FilterModel", FilterSchema);
+//////////////////////////////////////////////////////
 const UserModel = mongoose.model("UserModel", UserSchema);
 const TaskModel = require('../schemas/TaskSchema');
 const auth = require("../authentication/auth");
-const topManager = require("../authentication/topManager");
+const qaTopManagers = require("../authentication/qaTopManagers");
+const audit = require("../authentication/audit");
 
-//app.get/post/put/delete => router.get/post/put/delete
+//Weekly Label Function===> 
+function weeklyLabel(startDate, endDate, tasks) {
 
+    //function to get certain date after adding amount of days
+    function addDays(date, days) {
+        var result = new Date(date);
+        result.setDate(result.getDate() + days);
+        return result;
+    }
 
+    //function to get number of days between 2 date range
+    const diffTime = Math.abs(endDate - startDate);
+    let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    let weeklyStartDate = startDate;//variable for starting date of each week
+    let weeklyEndDate = addDays(weeklyStartDate, 6)//variable for ending date of each week
+    let currentWeek = 0;//counter for weeks
+    let arrayForWeeks = [];//array that will contain the UiObj
+    while (diffDays > 6) {
+        arrayForWeeks.push(
+            { _id: `${weeklyStartDate.getDate()}-${weeklyStartDate.getMonth() + 1}-${weeklyStartDate.getFullYear()}/${weeklyEndDate.getDate()}-${weeklyEndDate.getMonth() + 1}-${weeklyEndDate.getFullYear()}`, arr: [] })
+        diffDays = diffDays - 7;
+        weeklyStartDate = addDays(weeklyEndDate, 1);
+        weeklyEndDate = addDays(weeklyStartDate, 6);
+    }
+    if (diffDays > 0) {//add the days as a range
+        weeklyEndDate = addDays(weeklyStartDate, diffDays - 1);
+        arrayForWeeks.push(
+            { _id: `${weeklyStartDate.getDate()}-${weeklyStartDate.getMonth() + 1}-${weeklyStartDate.getFullYear()}/${weeklyEndDate.getDate()}-${weeklyEndDate.getMonth() + 1}-${weeklyEndDate.getFullYear()}`, arr: [] })
 
-router.post('/modificationByField',[auth,topManager], async (req, res) => {
+    }
+    weeklyEndDate = addDays(startDate, 6);
+
+    for (i = 0; i < tasks.length; i++) {
+        if (new Date(tasks[i]._id) <= weeklyEndDate) {
+            arrayForWeeks[currentWeek].arr = arrayForWeeks[currentWeek].arr.concat(tasks[i].arr)
+        }
+        else {
+            while (weeklyEndDate < (new Date(tasks[i]._id))) {
+                weeklyEndDate = addDays(weeklyEndDate, 7);
+                currentWeek++;
+            }
+            arrayForWeeks[currentWeek].arr = arrayForWeeks[currentWeek].arr.concat(tasks[i].arr)
+
+        }
+    }
+
+    //function to remove all the weeks that contains 0 tasks
+    let filtered = arrayForWeeks.filter(function (el) { return el.arr.length > 0; });
+    let result = [];
+    filtered.map((element => {
+        let result2 = { _id: element._id, arr: [] };
+        element.arr.map((task => {
+            let obj = result2.arr.find(obj => obj.value === task.value);
+            if (obj != undefined) {
+                obj.tasks = obj.tasks.concat(task.tasks);
+                obj.size = obj.tasks.length;
+            }
+            else {
+                result2.arr.push({ value: task.value, tasks: task.tasks, size: task.tasks.length })
+            }
+        }))
+        result.push(result2);
+    }))
+    result.map((week => {
+        week.arr.sort((a, b) => a.value > b.value ? -1 : 1)
+    }))
+    return result;
+}
+
+//Date format function
+function formatDate(date) {
+    month = '' + (date.getMonth() + 1),
+        day = '' + date.getDate(),
+        year = date.getFullYear();
+
+    if (month.length < 2)
+        month = '0' + month;
+    if (day.length < 2)
+        day = '0' + day;
+
+    return [day, month, year].join('-');
+}
+
+// --------------------------------------------------------------- modification By Field ---------------------------------------------------------------
+
+router.post('/modificationByField', [auth, qaTopManagers, audit], async (req, res) => {
     let tasks = []
     const { serverFilters } = req.body
     let { fieldName, values, qaRepresentative, startDate, endDate, label } = serverFilters;
-    console.log(fieldName, values, label, qaRepresentative)
     startDate = new Date(startDate)
     endDate = new Date(endDate)
+
     let dateFormat = '';
-    if (label[0] == 'daily') {
-        dateFormat = "%Y-%m-%d"
-    }
-    else if (label[0] == 'yearly') {
+    if (label[0] == 'yearly') {
         dateFormat = "%Y"
     }
+    else if (label[0] == 'monthly') {
+        dateFormat = "%m-%Y"
+    }
+    else if (label[0] == 'daily') {
+        dateFormat = "%d-%m-%Y"
+    }
     else {
-        dateFormat = "%Y-%m"
+        dateFormat = "%Y-%m-%d"
     }
 
 
     //here we build the match expression according to the user's filters.
 
-    let filtersArray = [{ "diffItem.type": "Update" }, { "diffItem.updatedTime": { $gte: startDate } }, { "diffItem.updatedTime": { $lte: endDate } }] // add the startdate and enddate and label here
+    let filtersArray = [{ "diffItem.type": "Update" }, { "diffItem.updatedTime": { $gte: startDate } }, { "diffItem.updatedTime": { $lte: endDate } }]
     let matchFilterValue = {
         "$and": []
     }
-    if (fieldName.length != 0) {
-        filtersArray.push({ "diffItem.updatedField.fieldName": fieldName[0] })
-    }
-    if (qaRepresentative.length != 0) {
-        filtersArray.push({ "jiraItem.qaRepresentative": qaRepresentative[0] })
-    }
-    if (values.length != 0) {
-        let valuesArray = []
-        values.map((item, index) => {
-            valuesArray.push({ "diffItem.updatedField.newValue": item })
-        })
-        filtersArray.push({ "$or": valuesArray })
-    }
-
-    matchFilterValue["$and"] = filtersArray
-
-    tasks = await TaskModel.aggregate([
+    let aggregateArray = [
         {
             $match: matchFilterValue
         },
@@ -70,14 +142,69 @@ router.post('/modificationByField',[auth,topManager], async (req, res) => {
         {
             $group: {
                 _id: "$_id.date",
-                //_id: { $dateFromString: { dateString: "$_id.date" , format: "%Y-%m-%d" } },
-                arr: { $push: { fieldName: "$_id.fieldName", tasks: "$tasks", size: { $size: "$tasks" } } },
+                arr: { $push: { value: "$_id.fieldName", tasks: "$tasks", size: { $size: "$tasks" } } },
 
             }
 
         },
         { $sort: { _id: 1 } }
-    ])
+    ]
+    if (fieldName.length != 0) {
+        filtersArray.push({ "diffItem.updatedField.fieldName": fieldName[0] })
+        aggregateArray.splice(1, 1,
+            {
+                $group: {
+                    _id: {
+                        date: { $dateToString: { format: dateFormat, date: "$diffItem.updatedTime" } },
+                        fieldName: {
+                            $cond: {
+                                if: { $eq: ["$diffItem.updatedField.fieldName", "functionalTest"] },
+
+                                then: { $toString: "$diffItem.updatedField.newValue" },
+
+                                else: "$diffItem.updatedField.newValue"
+                            }
+                        }
+                    },
+                    tasks: { $push: "$$ROOT" },
+                }
+            });
+    }
+    if (qaRepresentative.length != 0) {
+        let valuesArray = []
+        qaRepresentative.map((item, index) => {
+            valuesArray.push({ "jiraItem.qaRepresentative": item })
+        })
+        filtersArray.push({ "$or": valuesArray })
+       // filtersArray.push({ "jiraItem.qaRepresentative": qaRepresentative[0] })
+    }
+    if (values.length != 0) {
+        let valuesArray = []
+        values.map((item, index) => {
+            valuesArray.push({ "diffItem.updatedField.newValue": item })
+        })
+        filtersArray.push({ "$or": valuesArray })
+    }
+
+    matchFilterValue["$and"] = filtersArray
+    tasks = await TaskModel.aggregate(aggregateArray)
+
+
+    if (label[0] === "weekly") {
+        tasks = weeklyLabel(startDate, endDate, tasks);
+    }
+    else {
+        tasks.sort(function (a, b) {
+
+            let aa = a._id.split('-').reverse().join(),
+                bb = b._id.split('-').reverse().join();
+            return aa < bb ? -1 : (aa > bb ? 1 : 0);
+        });
+    }
+
+
+
+
 
     let maxLength = 0;
     let sumLength = 0;
@@ -85,6 +212,10 @@ router.post('/modificationByField',[auth,topManager], async (req, res) => {
         tasks.map((item, index) => {
             let myArray = item.arr;
             myArray.forEach(element => {
+                element.tasks.map((task => {
+                    task.diffItem.updatedTime = formatDate(task.diffItem.updatedTime)
+                }))
+
                 if (element.size > maxLength) {
                     maxLength = element.size
                 }
@@ -105,8 +236,7 @@ router.post('/modificationByField',[auth,topManager], async (req, res) => {
     res.send(tasks)
 })
 
-
-router.post('/modificationByFieldFilters',[auth,topManager], async (req, res) => {
+router.post('/modificationByFieldFilters', [auth, qaTopManagers, audit], async (req, res) => {
     let tasks = []
     let { fieldName, startDate, endDate } = req.body
     startDate = new Date(startDate)
@@ -133,6 +263,7 @@ router.post('/modificationByFieldFilters',[auth,topManager], async (req, res) =>
     }
     else { // bring all the Values for the fieldName
         const name = fieldName[0];
+
         tasks = await TaskModel.aggregate([
             {
                 $match: { "diffItem.updatedField.fieldName": name, "diffItem.type": "Update" }
@@ -140,7 +271,18 @@ router.post('/modificationByFieldFilters',[auth,topManager], async (req, res) =>
             {
                 $group: {
                     _id: null,
-                    Values: { $addToSet: { "label": "$diffItem.updatedField.newValue", "value": "$diffItem.updatedField.newValue" } },
+
+                    Values: {
+                        $addToSet: {
+                            $cond: {
+                                if: { $eq: ["$diffItem.updatedField.fieldName", "functionalTest"] },
+
+                                then: { "label": { $toString: "$diffItem.updatedField.newValue" }, "value": { $toString: "$diffItem.updatedField.newValue" } },
+
+                                else: { "label": "$diffItem.updatedField.newValue", "value": "$diffItem.updatedField.newValue" }
+                            }
+                        }
+                    }
                 }
             },
         ])
@@ -151,23 +293,26 @@ router.post('/modificationByFieldFilters',[auth,topManager], async (req, res) =>
     res.send(tasks)
 })
 
+// --------------------------------------------------------------- deleted JiraTickets ---------------------------------------------------------------
 
-router.post('/deletedJiraTickets',[auth,topManager], async (req, res) => {
+router.post('/deletedJiraTickets', [auth, qaTopManagers, audit], async (req, res) => {
     let tasks = []
     const { serverFilters } = req.body
     let { priority, qaRepresentative, functionalTest, startDate, endDate, label } = serverFilters;
     startDate = new Date(startDate)
     endDate = new Date(endDate)
-    console.log(priority, qaRepresentative, functionalTest, startDate, endDate, label)
     let dateFormat = '';
-    if (label[0] == 'daily') {
-        dateFormat = "%Y-%m-%d"
-    }
-    else if (label[0] == 'yearly') {
+    if (label[0] == 'yearly') {
         dateFormat = "%Y"
     }
+    else if (label[0] == 'monthly') {
+        dateFormat = "%m-%Y"
+    }
+    else if (label[0] == 'daily') {
+        dateFormat = "%d-%m-%Y"
+    }
     else {
-        dateFormat = "%Y-%m"
+        dateFormat = "%Y-%m-%d"
     }
 
 
@@ -218,22 +363,34 @@ router.post('/deletedJiraTickets',[auth,topManager], async (req, res) => {
         {
             $group: {
                 _id: "$_id.date",
-                arr: { $push: { priority: "$_id.priority", tasks: "$tasks", size: { $size: "$tasks" } } },
+                arr: { $push: { value: "$_id.priority", tasks: "$tasks", size: { $size: "$tasks" } } },
 
             }
 
         },
         { $sort: { _id: 1 } }
     ])
-    // let d1 = new Date(tasks[0]._id)
-    // console.log(d1)
-    // console.log(new Date(d1.setDate(d1.getDate() + 5)))
+
+    if (label[0] === "weekly") {
+        tasks = weeklyLabel(startDate, endDate, tasks);
+    }
+    else {
+        tasks.sort(function (a, b) {
+
+            let aa = a._id.split('-').reverse().join(),
+                bb = b._id.split('-').reverse().join();
+            return aa < bb ? -1 : (aa > bb ? 1 : 0);
+        });
+    }
     let maxLength = 0;
     let sumLength = 0;
     if (tasks.length > 0) {
         tasks.map((item, index) => {
             let myArray = item.arr;
             myArray.forEach(element => {
+                element.tasks.map((task => {
+                    task.diffItem.updatedTime = formatDate(task.diffItem.updatedTime)
+                }))
                 if (element.size > maxLength) {
                     maxLength = element.size
                 }
@@ -254,8 +411,7 @@ router.post('/deletedJiraTickets',[auth,topManager], async (req, res) => {
     res.send(tasks)
 })
 
-
-router.post('/deletedJiraTicketsFilters',[auth,topManager], async (req, res) => {
+router.post('/deletedJiraTicketsFilters', [auth, qaTopManagers, audit], async (req, res) => {
     let tasks = []
     let { startDate, endDate } = req.body
     startDate = new Date(startDate)
@@ -281,7 +437,9 @@ router.post('/deletedJiraTicketsFilters',[auth,topManager], async (req, res) => 
 
 })
 
-router.post('/changesByParentIdFilters',[auth,topManager], async (req, res) => {
+// --------------------------------------------------------------- changes By ParentId ---------------------------------------------------------------
+
+router.post('/changesByParentIdFilters', [auth, qaTopManagers, audit], async (req, res) => {
     let tasks = []
     const { serverFilters } = req.body
     let { fixVersion, startDate, endDate } = serverFilters;
@@ -293,85 +451,122 @@ router.post('/changesByParentIdFilters',[auth,topManager], async (req, res) => {
                 $group: {
                     _id: null,
                     fixVersions: { $addToSet: { "label": "$jiraItem.fixVersion", "value": "$jiraItem.fixVersion" } },
-                    // QA: { $addToSet: { "label": "$jiraItem.qaRepresentative", "value": "$jiraItem.qaRepresentative" } }
                 },
             }
         ])
         tasks.map((item, index) => {
             item.fixVersions.sort((a, b) => (a.label > b.label) ? 1 : -1);
-            //item.QA.sort((a, b) => (a.label > b.label) ? 1 : -1);
         })
     }
     else {
         const version = fixVersion[0];
-        console.log(version)
+
+
         tasks = await TaskModel.aggregate([
             {
-                $match: { "jiraItem.fixVersion": version, "jiraItem.jiraType": "Epic" }
-            },
+                $match: {
+                    "jiraItem.fixVersion": version, "jiraItem.type": "Epic", "diffItem.updatedTime": { $gte: startDate, $lte: endDate },
 
-            // {
-            //     // "jiraItem.jiraType":"Feature","jiraItem.jiraType":"Epic"
-            //    // $match: { "jiraItem.fixVersion": version ,}
-            //     $match:{ $and: [ { "jiraItem.fixVersion": version }, { $or: [ { "jiraItem.jiraType":"Feature"}, {"jiraItem.jiraType":"Epic"} ] } ] }
-            // },
+                }
+            },
             {
                 $group: {
-                    _id: "$jiraItem.jiraParentId",
+                    _id: "$jiraItem.parentId",
                     tasks: { $push: "$$ROOT" },
-                    size: {
+                    TotalChanges: {
                         $sum: 1
                     }
                 }
-            },
-            // {
-            //     $group: {
-            //         _id: "$size",
-            //         // color:
-            //         // {
-            //         //   $addToSet : {$cond: [ { $lte: [ "$size" , 10 ] }, 'Green', 'Yellow' ]}
-            //         // },
-            //         tasks: { $push: "$$ROOT" }
-            //         //_id: { $dateFromString: { dateString: "$_id.date" , format: "%Y-%m-%d" } },
-            //         //arr: { $push: { priority: "$_id.priority", tasks: "$tasks", size: { $size: "$tasks" } } },
-
-            //     }
-
-            // }
+            }
         ])
+        tasks.map((item, index) => {
+            let updateCounter = 0;
+            let deleteCounter = 0;
+            let createCounter = 0;
+            let tasksArray = item.tasks
+            tasksArray.map((task, index) => {
+                task.diffItem.updatedTime = formatDate(task.diffItem.updatedTime)
+                if (task.diffItem.type === "Update") {
+                    updateCounter++
+                }
+                else if (task.diffItem.type === "Create") {
+                    createCounter++
+                }
+                else {
+                    deleteCounter++
+                }
+            })
+            item.Update = updateCounter
+            item.Create = createCounter
+            item.Delete = deleteCounter
+        })
+        let groupedArray = [
+            { _id: "Green", features: [], featuresSize: 0 },
+            { _id: "Yellow", features: [], featuresSize: 0 },
+            { _id: "Red", features: [], featuresSize: 0 }
+        ]
+
+        tasks.map((item, index) => {
+            let totalChanges = item.TotalChanges
+            if (totalChanges >= 0 && totalChanges < 5) {
+                groupedArray[0].features.push(item)
+                groupedArray[0].featuresSize++
+            }
+            else if (totalChanges >= 5 && totalChanges < 10) {
+                groupedArray[1].features.push(item)
+                groupedArray[1].featuresSize++
+
+            }
+            else {
+                groupedArray[2].features.push(item)
+                groupedArray[2].featuresSize++
+
+            }
+        })
+        tasks = groupedArray
     }
-
     res.send(tasks)
-
 })
 
-// ---------------------------------------------------------- changes in jira tickets
+// --------------------------------------------------------------- changes in jira tickets ---------------------------------------------------------------
 
-router.post('/changeOfJIRATicketsStatus',[auth,topManager], async (req, res) => {
+router.post('/changeOfJIRATicketsStatus', [auth, qaTopManagers, audit], async (req, res) => {
     const filterValue = req.body.values
     const filterStatus = req.body.status
     const filterQaRep = req.body.qaRepresentative
-    const label = req.body
-    let { startDate, endDate } = req.body
+    const label = req.body.label
+    let startDate = req.body.startDate
+    let endDate = req.body.endDate
     startDate = new Date(startDate)
     endDate = new Date(endDate)
+
+
     let dateFormat = '';
-    if (label[0] == 'daily') {
-        dateFormat = "%Y-%m-%d"
-    }
-    else if (label[0] == 'yearly') {
+    if (label[0] == 'yearly') {
         dateFormat = "%Y"
     }
+    else if (label[0] == 'monthly') {
+        dateFormat = "%m-%Y"
+    }
+    else if (label[0] == 'daily') {
+        dateFormat = "%d-%m-%Y"
+    }
     else {
-        dateFormat = "%Y-%m"
+        dateFormat = "%Y-%m-%d"
     }
 
 
     //here we build the match expression according to the user's filters.
-    console.log(filterValue, filterStatus, filterQaRep, endDate, startDate)
+
 
     let matchFilterValue = { "$and": [] };
-    let ValToAgg = filterValue.length == 0 ? "$diffItem.updatedField.newValue" : `$diffItem.updatedField.${filterValue}`
+
+    let ValToAgg = filterValue.length == 0 ? "$diffItem.updatedField.newValue" : `$diffItem.updatedField.${filterValue[0]}`
+
+    if (filterValue.length == 0) {
+        filterValue[0] = "newValue"
+    }
+
 
     let filtersArray = [];
 
@@ -379,6 +574,8 @@ router.post('/changeOfJIRATicketsStatus',[auth,topManager], async (req, res) => 
 
     filtersArray.push({ 'diffItem.type': 'Update' })
     filtersArray.push({ 'diffItem.updatedField.fieldName': 'status' })
+    filtersArray.push({ "diffItem.updatedTime": { $gte: startDate } }, { "diffItem.updatedTime": { $lte: endDate } })
+
     //multiselect status
     if (filterStatus[0] != undefined && filterValue[0] != undefined) {
         if (filterStatus.length != 0) {
@@ -395,6 +592,7 @@ router.post('/changeOfJIRATicketsStatus',[auth,topManager], async (req, res) => 
             filtersArray.push({ "$or": statusArray })
         }
     }
+
     // multiselect QA REP
     if (filterQaRep[0] != undefined && filterValue[0] != undefined) {
         if (filterQaRep.length != 0) {
@@ -406,6 +604,8 @@ router.post('/changeOfJIRATicketsStatus',[auth,topManager], async (req, res) => 
             filtersArray.push({ "$or": qaArray })
         }
     }
+
+
     if (filtersArray.length == 0) {
         delete matchFilterValue.$and;
     }
@@ -415,7 +615,7 @@ router.post('/changeOfJIRATicketsStatus',[auth,topManager], async (req, res) => 
     if (filterValue.length == 0) {
         matchFilterValue = {}
     }
-    const tasks = await TaskModel.aggregate([
+    let tasks = await TaskModel.aggregate([
         {
             $match: matchFilterValue
         },
@@ -424,7 +624,6 @@ router.post('/changeOfJIRATicketsStatus',[auth,topManager], async (req, res) => 
                 _id: {
                     date: { $dateToString: { format: dateFormat, date: "$diffItem.updatedTime" } },
                     Val: ValToAgg
-                    // Val: `$diffItem.updatedField.${filterValue}`
 
                 },
                 tasks: { $push: "$$ROOT" },
@@ -436,17 +635,35 @@ router.post('/changeOfJIRATicketsStatus',[auth,topManager], async (req, res) => 
                 _id: "$_id.date",
                 arr: { $push: { value: "$_id.Val", tasks: "$tasks", size: { $size: "$tasks" } } },
             }
+        },
+        {
+            $sort: { _id: 1 }
         }
     ])
+
+    if (label[0] == 'weekly') {
+        tasks = weeklyLabel(startDate, endDate, tasks)
+    }
+    else {
+        tasks.sort(function (a, b) {
+
+            let aa = a._id.split('-').reverse().join(),
+                bb = b._id.split('-').reverse().join();
+            return aa < bb ? -1 : (aa > bb ? 1 : 0);
+        });
+    }
+
     if (tasks.length != 0) {
         tasks.map((item, index) => {
             item.arr.sort((a, b) => (a.value > b.value) ? 1 : -1);
         })
-        tasks.sort((a, b) => (a._id > b._id) ? 1 : -1);
         let maxLength = -1;
         tasks.map((task, index) => {
             let sum = 0;
             task.arr.forEach(element => {
+                element.tasks.map((task => {
+                    task.diffItem.updatedTime = formatDate(task.diffItem.updatedTime)
+                }))
                 sum += element.size
                 if (element.size > maxLength)
                     maxLength = element.size
@@ -463,7 +680,7 @@ router.post('/changeOfJIRATicketsStatus',[auth,topManager], async (req, res) => 
 
 })
 
-router.post('/changeOfJIRATicketsStatusFilters',[auth,topManager], async (req, res) => {
+router.post('/changeOfJIRATicketsStatusFilters', [auth, qaTopManagers, audit], async (req, res) => {
 
     let tasks = []
     let matchFilters = ''
@@ -507,24 +724,195 @@ router.post('/changeOfJIRATicketsStatusFilters',[auth,topManager], async (req, r
         item.status.sort((a, b) => (a.label > b.label) ? 1 : -1);
         item.qa.sort((a, b) => (a.label > b.label) ? 1 : -1);
     })
-
-
-    // console.log(tasks)
     res.send(tasks)
-
 })
-
-
-
-
 
 // --------------------------------------------------------------- delays in delivery ---------------------------------------------------------------------
 
-router.post('/delaysInDelivery',[auth,topManager], (req, res) => {
+router.post('/delaysInDelivery', [auth, qaTopManagers, audit], async (req, res) => {
+
+
+    const fixVersion = req.body.fixVersion[0]
+    const jiraTypeFilter = req.body.jiraType
+    const label = req.body.label
+    const qaRepresentativeFilter = req.body.qaRepresentative
+    let startDate = req.body.startDate
+    let endDate = req.body.endDate
+    startDate = new Date(startDate)
+    endDate = new Date(endDate)
+
+
+    let dateFormat = '';
+
+    if (label[0] == 'yearly') {
+        dateFormat = "%Y"
+    }
+    else if (label[0] == 'monthly') {
+        dateFormat = "%m-%Y"
+    }
+    else if (label[0] == 'daily') {
+        dateFormat = "%d-%m-%Y"
+    }
+    else {
+        dateFormat = "%Y-%m-%d"
+    }
+
+
+
+    let filtersArray = [];
+    let matchFilterValue = { "$and": [] };
+
+
+    filtersArray.push({
+        "$or": [
+            {
+                "diffItem.type": "Create",
+                "jiraItem.fixVersion": fixVersion,
+                "diffItem.updatedField.newValue": fixVersion
+            },
+            {
+                "diffItem.type": "Delete",
+                "jiraItem.fixVersion": fixVersion,
+                "diffItem.updatedField.newValue": fixVersion
+            },
+            {
+                "diffItem.type": "Update",
+                "$or": [
+                    {
+                        "diffItem.updatedField.fieldName": "fixVersion",
+                        "$or": [
+                            { "diffItem.updatedField.newValue": fixVersion },
+                            { "diffItem.updatedField.oldValue": fixVersion }
+                        ]
+                    },
+                    { "diffItem.updatedField.fieldName": "functionalTest" }
+                ]
+            }
+        ]
+    })
+
+
+    filtersArray.push({ "diffItem.updatedTime": { $gte: startDate } }, { "diffItem.updatedTime": { $lte: endDate } })
+
+    if (jiraTypeFilter[0] != undefined && jiraTypeFilter.length != 0) {
+        let typesArray = []
+        jiraTypeFilter.map((item, index) => {
+            typesArray.push({ 'diffItem.type': item })
+        })
+        filtersArray.push({ "$or": typesArray })
+    }
+
+    // multiselect QA REP
+    if (qaRepresentativeFilter[0] != undefined) {
+        if (qaRepresentativeFilter.length != 0) {
+            let qaArray = []
+            qaRepresentativeFilter.map(item => {
+                qaArray.push({ 'jiraItem.qaRepresentative': item })
+            })
+            // orArray.push(qaArray)
+            filtersArray.push({ "$or": qaArray })
+        }
+    }
+
+    matchFilterValue["$and"] = filtersArray
+
+    let tasks = await TaskModel.aggregate([
+        {
+            $match: matchFilterValue
+
+        },
+        {
+            $group: {
+                _id: {
+                    date: { $dateToString: { format: dateFormat, date: "$diffItem.updatedTime" } },
+                    value: "$diffItem.updatedField.fieldName",
+                    type: "$diffItem.type"
+                },
+                tasks: { $push: "$$ROOT" },
+            }
+
+        },
+        {
+            $group: {
+
+                _id: "$_id.date",
+                arr: {
+                    $push: {
+                        value:
+                        {
+                            $cond: {
+                                if: { $eq: ["$_id.value", "functionalTest"] },
+                                then: "$_id.value",
+                                else:
+                                {
+                                    $cond: {
+                                        if: { $eq: ["$_id.type", "Update"] },
+                                        then: "$_id.value",
+                                        else: "$_id.type"
+                                    }
+                                }
+                            }
+                        },
+                        type: {
+                            $cond: {
+                                if: { $eq: ["$_id.value", "functionalTest"] },
+                                then: "$_id.type",
+                                else: "$_id.value"
+                            }
+                        },
+                        tasks: "$tasks", size: { $size: "$tasks" }
+                    }
+                },
+            }
+        },
+        {
+            $sort: { _id: 1 }
+        }
+
+    ])
+
+    if (label[0] == 'weekly') {
+        tasks = weeklyLabel(startDate, endDate, tasks)
+    }
+    else {
+        tasks.sort(function (a, b) {
+
+            let aa = a._id.split('-').reverse().join(),
+                bb = b._id.split('-').reverse().join();
+            return aa < bb ? -1 : (aa > bb ? 1 : 0);
+        });
+    }
+
+    if (tasks.length != 0) {
+        tasks.map((item, index) => {
+            item.arr.sort((a, b) => (a.value > b.value) ? 1 : -1);
+        })
+        let maxLength = -1;
+        tasks.map((task, index) => {
+            let sum = 0;
+            task.arr.forEach(element => {
+                element.tasks.map((task => {
+                    task.diffItem.updatedTime = formatDate(task.diffItem.updatedTime)
+                }))
+                sum += element.size
+                if (element.size > maxLength)
+                    maxLength = element.size
+            })
+            tasks[index].sum = sum
+        })
+
+        tasks.map((task, index) => {
+            tasks[index].maxLength = maxLength
+        })
+
+    }
+
+    res.send(tasks)
+
 
 })
 
-router.post('/delaysInDeliveryFilters', async (req, res) => {
+router.post('/delaysInDeliveryFilters', [auth, qaTopManagers, audit], async (req, res) => {
     let filters = await TaskModel.aggregate([
         {
             $match: {}
@@ -545,12 +933,108 @@ router.post('/delaysInDeliveryFilters', async (req, res) => {
     })
 
 
-    // console.log(filters)
     res.send(filters)
 
 })
 
 
+router.post('/modificationByFieldSavedFilters', async (req, res) => {
+    const { savedFilters } = req.body;
+
+    let { pageName, filterName, filters } = savedFilters;
+
+    let array = [];
+    let i = 0;
+    filters.map((x, key) => {
+        let filterObj = { filter: filters[i].filter, values: filters[i].values[0] };
+        if (i < filters.length) {
+            i++;
+        }
+        array.push(filterObj);
+
+    })
+
+    FilterModel.find({ "Filter.filterName": filterName }).then(filters => {
+        // console.log('here');
+        //console.log(filters.length);
+        if (filters.length > 0) {
+            //  console.log(filters);
+            res.send({ success: false, error: 'filter name already exist , please pick another one !!' });
+        }
+
+        else {
+            let temp = {
+                pageName: pageName,
+                filters: array
+                ,
+                filterName: filterName
+            }
+
+            var data = new FilterModel({ Filter: temp });
+            data.save();
+            res.send({ success: true, error: null });
+        }
+    })
+})
+
+
+router.post('/modificationByFieldSelectTwo', async (req, res) => {
+    let array = [];
+    let filterNames = [];
+    console.log(req.body);
+    const { savedFilters } = req.body;
+    let { pageName } = savedFilters;
+
+    FilterModel.find({ "Filter.pageName": pageName }).then(filters => {
+        // console.log('here');
+        //console.log(filters.length);
+        if (filters.length > 0) {
+            //console.log('here');
+            for (let index = 0; index < filters.length; index++) {
+                array.push({ pageName: filters[index].Filter.pageName, filters: filters[index].Filter.filters, filterName: filters[index].Filter.filterName });
+                filterNames.push({ label: filters[index].Filter.filterName, value: filters[index].Filter.filterName });
+            }
+
+        }
+
+        array.push({ filterNames: filterNames });
+        // console.log('////////////////////////////////');
+        // console.log(array);
+        // console.log(array[array.length-1].filterNames[0].lable);
+        //console.log(array[0].filters[0]);
+        res.send({ array });
+
+    })
+
+})
+
+
+router.post('/modificationByFieldDelete', async (req, res) => {
+    // const {filterName , pageName } = body.req;
+    let filterName = "hbl";
+    let pageName = "ModificationByField"
+
+    FilterModel.find({ "Filter.filterName": filterName, "Filter.pageName": pageName }).then(filters => {
+        if (filters.length > 0) {
+            FilterModel.findOneAndDelete({ "Filter.filterName": filterName, "Filter.pageName": pageName }, function (err, docs) {
+                if (err) {
+                    console.log(err)
+                }
+                else {
+                    console.log("Deleted filter : ", docs);
+                }
+            });
+            res.send({ success: true, error: null });
+
+        }
+
+        else {
+            res.send({ success: false, error: 'can not delete this filter ' });
+        }
+
+    })
+
+})
 
 
 module.exports = router;
