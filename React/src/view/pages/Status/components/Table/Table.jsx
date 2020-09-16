@@ -60,7 +60,8 @@ export default function TasksTable({
             options={modificationTypeOptions}
             className="filterSelectB"
             onChange={(filter, name) => onSelect(filter, "modificationType")}
-            placeholder="All"
+            placeholder={tableFilters[0].value}
+            value={tableFilters[0].value}
             onInputChange={() => {
               modField.current.state.value = "";
               modValue.current.state.value = "";
@@ -77,7 +78,8 @@ export default function TasksTable({
               onSelect(filterObj, "modificationField")
             }
             isDisabled={disableSelect()}
-            placeholder="Field"
+            placeholder={tableFilters[1].value}
+            value={tableFilters[1].value}
             ref={modField}
             onInputChange={() => {
               modValue.current.state.value = "";
@@ -92,7 +94,8 @@ export default function TasksTable({
             className="filterSelectB"
             onChange={(filter, name) => onSelect(filter, "modificationValue")}
             isDisabled={disableSelect()}
-            placeholder="Value"
+            placeholder={tableFilters[2].value}
+            value={tableFilters[2].value}
             ref={modValue}
           />
         </div>
@@ -104,7 +107,7 @@ export default function TasksTable({
             onChange={(filter, name) => onSelect(filter, "status")}
             ref={statusSelect}
             placeholder={tableFilters[3].value}
-            // value={}
+            value={tableFilters[3].value}
           />
         </div>
         <button className="filterSelectB" onClick={() => onUpdateClick()}>
