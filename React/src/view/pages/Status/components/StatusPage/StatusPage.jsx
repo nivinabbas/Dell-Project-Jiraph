@@ -13,7 +13,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import {
   initialTableFilters,
   initialPieChartsFilters,
-  tasksNames,
+  tasksToBeUpdated,
 } from "../../../../../service/statusService";
 import "./StatusPage.css";
 import { datesFormat } from "../../../../../service/utils";
@@ -149,7 +149,7 @@ const StatusPage = () => {
       .then((res) => res.json())
       .then((data) => {
         let { success, error, info } = data;
-        console.log("type Pie info: ", info);
+
         if (success) {
           setTypePieChart(info);
         } else {
@@ -226,25 +226,27 @@ const StatusPage = () => {
   }, []);
 
   const handleDoneClick = (jiraId) => {
-    console.log(jiraId);
     const cloned = [...tasksId];
     const index = tasksId.indexOf(jiraId);
-    index != -1 ? cloned.splice(index, 1) : cloned.push(jiraId);
+    index !== -1 ? cloned.splice(index, 1) : cloned.push(jiraId);
 
     setTasksId(cloned);
   };
-  console.log("tttt", tableFilters[3]);
-  const handleUpdateClick = () => {
-    const names = tasksNames(tasksId, openTasks);
 
+  const handleUpdateClick = () => {
+    const tasks = tasksToBeUpdated(tasksId, openTasks);
     confirmAlert({
-      title: `Confirm`,
-      message: (
+      childrenElement: () => (
         <ol>
-          {names.map((name, index) => (
+          <h2>Are You Sure?</h2>
+          {tasks.map((task, index) => (
             <li key={index}>
-              <span>{++index}.</span>
-              {name}
+              <p>
+                {++index}.{task.name}
+                <span
+                  style={{ fontWeight: "bold" }}
+                >{`(to ${task.status})`}</span>
+              </p>
             </li>
           ))}
         </ol>
@@ -261,6 +263,7 @@ const StatusPage = () => {
                   (task) => tasksId.indexOf(task._id) === -1
                 );
                 setOpenTasks(tasks);
+                setTasksId([]);
               }
 
               fetch("/api/status/updateTasks", {
@@ -291,7 +294,6 @@ const StatusPage = () => {
     });
   };
 
-  ////////////////////////////
   const handlePieChartsFilters = (filter, name) => {
     const newPieFilters = [...pieChartsFilters].map((f) => {
       if (f.name === name) {
@@ -301,7 +303,7 @@ const StatusPage = () => {
     });
     setPieChartsFilters(newPieFilters);
   };
-  //date
+
   const handleDateClick = (date) => {
     const { name, value } = date;
     name === "startDate"
@@ -352,16 +354,15 @@ const StatusPage = () => {
       .then((res) => {
         let { success, error, info } = res;
         if (success) {
-          console.log(info.doc);
           setOpenTasks(info.doc);
         } else {
           alert(error);
         }
       });
+    setTasksId([]);
   };
 
   const handleSegmentClick = (date, status) => {
-    console.log("s:", status);
     fetch("/api/status/segmentData", {
       method: "POST",
       headers: {
@@ -374,10 +375,12 @@ const StatusPage = () => {
         let { success, error, info } = data;
         if (success) {
           setOpenTasks(info);
+          setTasksId([]);
         } else {
           alert(error);
         }
       });
+
     const newFilters = [...tableFilters];
     newFilters[0].value = "All";
     newFilters[1].value = null;
@@ -394,8 +397,9 @@ const StatusPage = () => {
     newFilters[3].value = "Done";
     setTableFilters(newFilters);
     setOpenTasks(tasks);
+    setTasksId([]);
   };
-  console.log("asdadasdasdasdasda", tableFilters);
+
   return (
     <div>
       <div className="status__header">Status</div>
@@ -422,7 +426,7 @@ const StatusPage = () => {
 
         <div className="statusPage__barChart">
           <h2 className="statusPage__headerTitles">Tasks Statistics</h2>
-          {StatisticsChart.length != 0 && (
+          {StatisticsChart.length !== 0 && (
             <StatisticsChart
               data={statisticsChart}
               onDataSelected={handleStaticsClick}
@@ -446,7 +450,7 @@ const StatusPage = () => {
                   <CircularProgress disableShrink />
                 </div>
               )}
-              {stackedChart.length != 0 && (
+              {stackedChart.length !== 0 && (
                 <StackedChart
                   data={stackedChart}
                   onDataSelected={handleSegmentClick}
@@ -496,6 +500,7 @@ const StatusPage = () => {
             onSelect={handleSelect}
             tableFilters={tableFilters}
             onUpdateClick={handleUpdateClick}
+            numOfTasksToBeUpdeated={tasksId.length}
           />
         </div>
       </div>
