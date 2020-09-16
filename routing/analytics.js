@@ -90,7 +90,7 @@ function formatDate(date) {
     if (day.length < 2)
         day = '0' + day;
 
-    return [day, month,year ].join('-');
+    return [day, month, year].join('-');
 }
 
 // --------------------------------------------------------------- modification By Field ---------------------------------------------------------------
@@ -109,10 +109,10 @@ router.post('/modificationByField', async (req, res) => {
     else if (label[0] == 'monthly') {
         dateFormat = "%m-%Y"
     }
-    else if(label[0] == 'daily')  {
+    else if (label[0] == 'daily') {
         dateFormat = "%d-%m-%Y"
     }
-    else{
+    else {
         dateFormat = "%Y-%m-%d"
     }
 
@@ -155,13 +155,13 @@ router.post('/modificationByField', async (req, res) => {
                     _id: {
                         date: { $dateToString: { format: dateFormat, date: "$diffItem.updatedTime" } },
                         fieldName: {
-                                $cond: {
-                                    if: { $eq: ["$diffItem.updatedField.fieldName", "functionalTest"] },
+                            $cond: {
+                                if: { $eq: ["$diffItem.updatedField.fieldName", "functionalTest"] },
 
-                                    then: { $toString: "$diffItem.updatedField.newValue" },
+                                then: { $toString: "$diffItem.updatedField.newValue" },
 
-                                    else: "$diffItem.updatedField.newValue"
-                                }  
+                                else: "$diffItem.updatedField.newValue"
+                            }
                         }
                     },
                     tasks: { $push: "$$ROOT" },
@@ -186,19 +186,19 @@ router.post('/modificationByField', async (req, res) => {
     if (label[0] === "weekly") {
         tasks = weeklyLabel(startDate, endDate, tasks);
     }
-    else{
-        tasks.sort(function(a, b){
+    else {
+        tasks.sort(function (a, b) {
 
             let aa = a._id.split('-').reverse().join(),
                 bb = b._id.split('-').reverse().join();
             return aa < bb ? -1 : (aa > bb ? 1 : 0);
         });
     }
-    
-    
-    
 
-    
+
+
+
+
     let maxLength = 0;
     let sumLength = 0;
     if (tasks.length > 0) {
@@ -301,10 +301,10 @@ router.post('/deletedJiraTickets', async (req, res) => {
     else if (label[0] == 'monthly') {
         dateFormat = "%m-%Y"
     }
-    else if(label[0] == 'daily')  {
+    else if (label[0] == 'daily') {
         dateFormat = "%d-%m-%Y"
     }
-    else{
+    else {
         dateFormat = "%Y-%m-%d"
     }
 
@@ -363,12 +363,12 @@ router.post('/deletedJiraTickets', async (req, res) => {
         },
         { $sort: { _id: 1 } }
     ])
-    
+
     if (label[0] === "weekly") {
         tasks = weeklyLabel(startDate, endDate, tasks);
     }
-    else{
-        tasks.sort(function(a, b){
+    else {
+        tasks.sort(function (a, b) {
 
             let aa = a._id.split('-').reverse().join(),
                 bb = b._id.split('-').reverse().join();
@@ -541,10 +541,10 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
     else if (label[0] == 'monthly') {
         dateFormat = "%m-%Y"
     }
-    else if(label[0] == 'daily')  {
+    else if (label[0] == 'daily') {
         dateFormat = "%d-%m-%Y"
     }
-    else{
+    else {
         dateFormat = "%Y-%m-%d"
     }
 
@@ -637,8 +637,8 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
     if (label[0] == 'weekly') {
         tasks = weeklyLabel(startDate, endDate, tasks)
     }
-    else{
-        tasks.sort(function(a, b){
+    else {
+        tasks.sort(function (a, b) {
 
             let aa = a._id.split('-').reverse().join(),
                 bb = b._id.split('-').reverse().join();
@@ -744,10 +744,10 @@ router.post('/delaysInDelivery', async (req, res) => {
     else if (label[0] == 'monthly') {
         dateFormat = "%m-%Y"
     }
-    else if(label[0] == 'daily')  {
+    else if (label[0] == 'daily') {
         dateFormat = "%d-%m-%Y"
     }
-    else{
+    else {
         dateFormat = "%Y-%m-%d"
     }
 
@@ -868,8 +868,8 @@ router.post('/delaysInDelivery', async (req, res) => {
     if (label[0] == 'weekly') {
         tasks = weeklyLabel(startDate, endDate, tasks)
     }
-    else{
-        tasks.sort(function(a, b){
+    else {
+        tasks.sort(function (a, b) {
 
             let aa = a._id.split('-').reverse().join(),
                 bb = b._id.split('-').reverse().join();
@@ -932,7 +932,7 @@ router.post('/delaysInDeliveryFilters', async (req, res) => {
 })
 
 
- router.post('/modificationByFieldSavedFilters', async (req, res) => {
+router.post('/modificationByFieldSavedFilters', async (req, res) => {
     const { savedFilters } = req.body;
 
     let { pageName, filterName, filters } = savedFilters;
@@ -948,54 +948,85 @@ router.post('/delaysInDeliveryFilters', async (req, res) => {
 
     })
 
-    let temp = {
-        pageName: pageName,
-        filters: array
-        ,
-        filterName: filterName
+    FilterModel.find({ "Filter.filterName": filterName }).then(filters => {
+        // console.log('here');
+        //console.log(filters.length);
+        if (filters.length > 0) {
+            //  console.log(filters);
+            res.send({ success: false, error: 'filter name already exist , please pick another one !!' });
+        }
 
-    }
+        else {
+            let temp = {
+                pageName: pageName,
+                filters: array
+                ,
+                filterName: filterName
+            }
 
-    var data = new FilterModel({ Filter: temp });
-    data.save();
-
-    res.send({ success: true, error: null });
-}) 
-
+            var data = new FilterModel({ Filter: temp });
+            data.save();
+            res.send({ success: true, error: null });
+        }
+    })
+})
 
 
 router.post('/modificationByFieldSelectTwo', async (req, res) => {
     let array = [];
     let filterNames = [];
-    // console.log('okkkkk')
     console.log(req.body);
     const { savedFilters } = req.body;
     let { pageName } = savedFilters;
 
-   
-     FilterModel.find({ "Filter.pageName":pageName}).then(filters => {
-       // console.log('here');
+    FilterModel.find({ "Filter.pageName": pageName }).then(filters => {
+        // console.log('here');
         //console.log(filters.length);
         if (filters.length > 0) {
             //console.log('here');
             for (let index = 0; index < filters.length; index++) {
                 array.push({ pageName: filters[index].Filter.pageName, filters: filters[index].Filter.filters, filterName: filters[index].Filter.filterName });
-                filterNames.push({lable:filters[index].Filter.filterName , value:filters[index].Filter.filterName});
+                filterNames.push({ lable: filters[index].Filter.filterName, value: filters[index].Filter.filterName });
             }
-            
+
         }
 
-        array.push({filterNames : filterNames});
-        console.log('////////////////////////////////');
-       // console.log(array);
-        console.log(array[array.length-1].filterNames[0].lable);
+        array.push({ filterNames: filterNames });
+        // console.log('////////////////////////////////');
+        // console.log(array);
+        // console.log(array[array.length-1].filterNames[0].lable);
         //console.log(array[0].filters[0]);
-       res.send({ array });
+        res.send({ array });
 
     })
 
+})
 
 
+router.post('/modificationByFieldDelete', async (req, res) => {
+    // const {filterName , pageName } = body.req;
+    let filterName = "hbl";
+    let pageName = "ModificationByField"
+
+    FilterModel.find({ "Filter.filterName": filterName, "Filter.pageName": pageName }).then(filters => {
+        if (filters.length > 0) {
+            FilterModel.findOneAndDelete({ "Filter.filterName": filterName, "Filter.pageName": pageName }, function (err, docs) {
+                if (err) {
+                    console.log(err)
+                }
+                else {
+                    console.log("Deleted filter : ", docs);
+                }
+            });
+            res.send({ success: true, error: null });
+
+        }
+
+        else {
+            res.send({ success: false, error: 'can not delete this filter ' });
+        }
+
+    })
 
 })
 

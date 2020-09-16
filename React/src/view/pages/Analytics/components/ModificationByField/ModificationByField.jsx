@@ -279,6 +279,10 @@ function ModificationByField(props) {
       .then(data => {
         if (data.success == true)
           renderSavedFilters(savedFilters);
+
+          else{
+            alert(data.error);
+          }
       })
   })
 
