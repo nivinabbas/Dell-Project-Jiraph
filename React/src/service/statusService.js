@@ -10,6 +10,10 @@ exports.initialTableFilters = [{
         name: "modificationValue",
         value: ""
     },
+    {
+        name: "status",
+        value: "notDone"
+    }
 ];
 exports.initialPieChartsFilters = [{
         name: "pieChartModificationType",
@@ -20,3 +24,13 @@ exports.initialPieChartsFilters = [{
         value: "",
     },
 ];
+
+exports.tasksNames = (tasksId, openTasks) => {
+    const names = [];
+    for (let id of tasksId) {
+        let found = openTasks.find(task => id === task._id);
+        if (found)
+            names.push(found.jiraItem.name);
+    }
+    return names;
+}

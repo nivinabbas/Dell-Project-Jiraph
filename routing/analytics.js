@@ -742,7 +742,6 @@ router.post('/delaysInDelivery', [auth, qaTopManagers, audit], async (req, res) 
     endDate = new Date(endDate)
 
 
-
     let dateFormat = '';
 
     if (label[0] == 'yearly') {
