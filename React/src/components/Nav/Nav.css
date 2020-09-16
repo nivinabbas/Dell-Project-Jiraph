@@ -1,8 +1,15 @@
 @media screen and (max-width: 20000px) {
 
+  
+.sidebar {
+  margin: 0;
+  padding: 0;
+}
+
 nav {
   font-family: "Roboto Slab", serif;
 }
+
 .sidebar__header-wrapper {
   height: 7vh;
   grid-area: header;
@@ -22,7 +29,7 @@ nav {
 .menu__wrapper {
   padding-top: 1rem;
   height: 88vh;
-  grid-area: menu;
+  /* grid-area: menu; */
   background-color: #EEEEEE;
 }
   
@@ -111,7 +118,7 @@ nav {
 }
 
 }
-
+/* 
 @media screen and (max-width: 1700px) {
   
   .sidebar__header-wrapper {
@@ -530,7 +537,7 @@ nav {
               padding-top: 1rem;
               height: 88vh;
               grid-area: menu;
-              /* background-color: #EEEEEE; */
+              
               background-color: #00447C;
             }
               
@@ -577,8 +584,7 @@ nav {
             }
             
              .analysis__logo, .status__logo, .admin__logo, .register__logo {
-              /* text-shadow:0 0.1rem 0.3rem rgba(255, 255, 255, 0.7); */
-              /* border: 1px solid rgba(255, 255, 255, 0.322); */
+             
               padding: 5px;
               width: 29px;
               height: 29px;
@@ -614,7 +620,6 @@ nav {
             
             .sidebar__footer {
               height: 5vh;
-              /* background-color: #EEEEEE; */
               background-color: #00447C;
               grid-area: footer;
               color:transparent;
@@ -653,7 +658,7 @@ nav {
                 padding-top: 1rem;
                 height: 85vh;
                 grid-area: menu;
-                /* background-color: #EEEEEE; */
+               
                 background-color: #00447C;
               }
                 
@@ -700,8 +705,7 @@ nav {
               }
               
                .analysis__logo, .status__logo, .admin__logo, .register__logo {
-                /* text-shadow:0 0.1rem 0.3rem rgba(255, 255, 255, 0.7); */
-                /* border: 1px solid rgba(255, 255, 255, 0.322); */
+ 
                 padding: 5px;
                 width: 27px;
                 height: 27px;
@@ -737,7 +741,7 @@ nav {
               
               .sidebar__footer {
                 height: 5vh;
-                /* background-color: #EEEEEE; */
+              =
                 background-color: #00447C;
                 grid-area: footer;
                 color:transparent;
@@ -792,8 +796,7 @@ nav {
                 }
                 
                  .analysis__logo, .status__logo, .admin__logo, .register__logo {
-                  /* text-shadow:0 0.1rem 0.3rem rgba(255, 255, 255, 0.7); */
-                  /* border: 1px solid rgba(255, 255, 255, 0.322); */
+     
                   margin-left: 7px;
                   margin-right: 7px;
                   width: 26px;
@@ -861,8 +864,7 @@ nav {
                 }
                 
                  .analysis__logo, .status__logo, .admin__logo, .register__logo {
-                  /* text-shadow:0 0.1rem 0.3rem rgba(255, 255, 255, 0.7); */
-                  /* border: 1px solid rgba(255, 255, 255, 0.322); */
+              
                   margin: 3px;
                   width: 26px;
                   height: 26px;
@@ -889,7 +891,7 @@ nav {
 }
 
 
-                  
+                   */
                 
 
             

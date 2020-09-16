@@ -6,69 +6,30 @@
   list-style: none;
   text-decoration: none;
 }
-
 .app {
-  background-color: #c8c9c7;
+  background-color: #c8c9c7; 
+
   display: grid;
   grid-template-columns: 13vw auto;
 }
 
 .mainPage{
-  overflow-y: scroll;
   height: 100vh;
 }
 
 @media screen and (max-width: 1190px) {
   .app {
-  grid-template-columns: 5vw auto;
-  }
-}
-
-@media screen and (max-width: 950px) {
-  .app {
   grid-template-columns: 5.5vw auto;
   }
 }
 
-@media screen and (max-width: 850px) {
-  .app {
-  grid-template-columns: 6vw auto;
-  }
-}
+
 
 @media screen and (max-width: 800px) {
   .app {
   grid-template-columns: 5vw auto;
   }
 }
-
-@media screen and (max-width: 750px) {
-  .app {
-  grid-template-columns: 5vw auto;
-  }
-}
-@media screen and (max-width: 700px) {
-  .app {
-  grid-template-columns: 5vw auto;
-  }
-}
-@media screen and (max-width: 650px) {
-  .app {
-  grid-template-columns: 5vw auto;
-  }
-}
-@media screen and (max-width: 600px) {
-  .app {
-  grid-template-columns: 5vw auto;
-  }
-}
-@media screen and (max-width: 550px) {
-  .app {
-  grid-template-columns: 5vw auto;
-  }
-}
-
-
 
 
 
