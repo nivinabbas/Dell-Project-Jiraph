@@ -7,12 +7,10 @@ import {
 
 import './KeyPassword.css'
 
-
+//function to check the sended password 
 function KeyPassword(props) {
     const history = useHistory();
     const { email } = useParams();
-    // console.log('email:', email)
-
 
 
     function onConfirmCode(e) {
@@ -21,7 +19,7 @@ function KeyPassword(props) {
         const { confCodeInp } = e.target.elements;
         const key = confCodeInp.value;
 
-
+        //fetch to check the sended password if its the same in email
         fetch("/api/users/checkSendedPassword", {
             method: "POST",
             body: JSON.stringify({ email, key }),

@@ -351,6 +351,7 @@ const StatusPage = () => {
       .then((res) => {
         let { success, error, info } = res;
         if (success) {
+          console.log(info.doc);
           setOpenTasks(info.doc);
         } else {
           alert(error);

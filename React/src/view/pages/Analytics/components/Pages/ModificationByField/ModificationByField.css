@@ -126,6 +126,12 @@
   border-radius: 5px;
 }
 
+.ModificationByField__Filters__Header > p {
+  text-align: center;
+  color: #00447C;
+  font-weight: bold;
+}
+
 @media screen and (max-width: 1700px){
   .ModificationByField__Filter{
     width: 12rem;
