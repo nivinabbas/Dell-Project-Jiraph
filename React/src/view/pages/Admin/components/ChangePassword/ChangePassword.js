@@ -10,12 +10,13 @@ import {
 
 
 
-
+//function to change the password 
 function ChangePassword(props) {
     const history = useHistory();
     const { email } = useParams();
     console.log('email Change password:', email)
 
+    //function to Change the password after check if 2 input is the same
     function onResetPassword(e) {
         e.preventDefault();
         const { resetNPswInp, confirmNPswInp } = e.target.elements;

@@ -7,16 +7,18 @@ import Nav from "./components/Nav/Nav";
 import Login from "./view/pages/Admin/components/Login/Login";
 import ForgetPassword from "./view/pages/Admin/components/ForgetPassword/ForgetPassword";
 import StatusPage from "./view/pages/Status/components/StatusPage/StatusPage";
+
 import ChangePassword from "./view/pages/Admin/components/ChangePassword/ChangePassword";
 import KeyPassword from "./view/pages/Admin/components/KeyPassword/KeyPassword";
 import UserList from "./view/pages/Admin/components/usersList/UserList";
 import Audit from "./view/pages/Admin/components/Audit/Audit";
 
-import ModificationByField from "./view/pages/Analytics/components/ModificationByField/ModificationByField";
-import DeletedJiraTickets from "./view/pages/Analytics/components/DeletedJiraTickets/DeletedJiraTickets";
-import ChangesInJiraTickets from "./view/pages/Analytics/components/ChangesInJiraTickets/ChangesInJiraTickets";
-import ChangesByParentId from "./view/pages/Analytics/components/ChangesByParentId/ChangesByParentId";
-import DelaysInDelivery from "./view/pages/Analytics/components/DelaysInDelivery/DelaysInDelivery";
+import ModificationByField from "./view/pages/Analytics/components/Pages/ModificationByField/ModificationByField";
+import DeletedJiraTickets from "./view/pages/Analytics/components/Pages/DeletedJiraTickets/DeletedJiraTickets";
+import ChangesInJiraTickets from "./view/pages/Analytics/components/Pages/ChangesInJiraTickets/ChangesInJiraTickets";
+import ChangesByParentId from "./view/pages/Analytics/components/Pages/ChangesByParentId/ChangesByParentId";
+import DelaysInDelivery from "./view/pages/Analytics/components/Pages/DelaysInDelivery/DelaysInDelivery";
+
 
 import "./App.css";
 
@@ -75,7 +77,7 @@ function App() {
             <Route path="/analysis">
             <ModificationByField />
             </Route>
-
+            
             <Route path="/ModificationByField">
               <ModificationByField />
             </Route>
