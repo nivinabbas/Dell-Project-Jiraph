@@ -21,10 +21,10 @@ function Chart(props) {
   }
   useEffect(()=>{
     allTasksToDisplay=[];
-    UiObjs.map((columns, index) => {
-    columns.arr.map((tasks=>{
-      tasks.tasks.map((task=>{  
-        allTasksToDisplay.push(task);
+    UiObjs.map((columns) => {
+      return columns.arr.map((tasks=>{
+      return tasks.tasks.map((task=>{  
+       return allTasksToDisplay.push(task);
       }))
     }))
   })

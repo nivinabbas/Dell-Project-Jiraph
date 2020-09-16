@@ -38,7 +38,6 @@ function ChangesByParentId() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
         if (data.length > 0) {
           setfixVersionOptions(data[0].fixVersions)
         }
@@ -66,7 +65,6 @@ function ChangesByParentId() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setUiObjs(data)
       })
   }

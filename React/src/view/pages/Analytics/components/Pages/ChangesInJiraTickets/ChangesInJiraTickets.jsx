@@ -84,7 +84,6 @@ function ChangesInJiraTickets() {
 
   //fetch to receive Data (UiObj) from server after every filter Change
   const render = (serverFilters) => {
-    console.log(serverFilters)
     fetch('/api/analytics/changeOfJIRATicketsStatus', {
       method: 'POST',
       body: JSON.stringify(serverFilters),
