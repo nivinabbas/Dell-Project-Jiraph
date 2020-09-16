@@ -25,7 +25,7 @@ const timeLabelOptions = [
 ];
 const statusOptions = [
   { value: "all", label: "All" },
-  { value: "done", label: "Done" },
+  { value: "Done", label: "Done" },
   { value: "notDone", label: "NotDone" },
 ];
 const StatusPage = () => {
@@ -388,7 +388,7 @@ const StatusPage = () => {
   const handleStaticsClick = (date, tasks) => {
     setOpenTasks(tasks);
   };
-
+  console.log("asdadasdasdasdasda", tableFilters);
   return (
     <div>
       <div className="status__header">Status</div>

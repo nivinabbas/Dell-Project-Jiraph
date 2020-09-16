@@ -1412,8 +1412,9 @@ router.post("/modificationFieldValueOptions", [auth, qaManager], async function 
 //  start
 router.post("/filltersAllSubmit", [auth, qaManager], async function (req, res) {
   let data = req.body;
+  console.log("omri hek bdo", data)
   let status = data[3].value;
-  if (status === "done") {
+  if (status === "Done") {
     status = true;
   } else if (status === "notDone") {
     status = false;
@@ -1730,7 +1731,7 @@ router.post("/segmentData", async function (req, res) {
   console.log("data date segmentData", startDate, endDate)
   if (status === "Done") {
     status = true;
-  } else if (status === "NotDone") {
+  } else if (status === "notDone") {
     status = false;
   }
 

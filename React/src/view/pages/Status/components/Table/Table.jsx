@@ -78,7 +78,7 @@ export default function TasksTable({
               onSelect(filterObj, "modificationField")
             }
             isDisabled={disableSelect()}
-            placeholder="Field"
+            placeholder={tableFilters[1].value}
             value={tableFilters[1].value}
             ref={modField}
             onInputChange={() => {
@@ -94,7 +94,7 @@ export default function TasksTable({
             className="filterSelectB"
             onChange={(filter, name) => onSelect(filter, "modificationValue")}
             isDisabled={disableSelect()}
-            placeholder="Value"
+            placeholder={tableFilters[2].value}
             value={tableFilters[2].value}
             ref={modValue}
           />
