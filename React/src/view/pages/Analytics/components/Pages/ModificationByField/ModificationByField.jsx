@@ -3,7 +3,7 @@ import "./ModificationByField.css";
 import { useState, useRef } from 'react';
 import Select from "react-select"
 import Chart from "../../charts/Chart"
-import { ServerStyleSheets } from '@material-ui/core';
+
 
 //Server Filters to receive Data
 let serverFilters = { fieldName: [], values: [], qaRepresentative: [], startDate: "", endDate: "", label: [] };
@@ -69,7 +69,6 @@ function ModificationByField(props) {
       .then(data => {
         if (data != null) {
           setUiObjs(data);
-          setTasks(data.tasks)
         }
         else { setUiObjs([]); }
       })
@@ -111,7 +110,7 @@ function ModificationByField(props) {
           if (data.length > 0)
             setValueOptions(data[0].Values);
           else {
-            if (serverFilters.fieldName != "") {
+            if (serverFilters.fieldName !== "") {
               alert("No Available FieldName Values received From The Server (Check Coonection /Pick another fieldName)")
             }
             setValueOptions([]);
@@ -125,7 +124,6 @@ function ModificationByField(props) {
   const [fieldNameOptions, setFieldNameOptions] = useState([]); //FieldName options for filtering
   const [valueOptions, setValueOptions] = useState([]);//Values of certain FieldName options for filtering
   const [startDate, setStartDate] = useState("");
-  const [tasks,setTasks]=useState([])
   const [endDate, setEndDate] = useState("");
   const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([]);//Qa Representative options for filtering
   const labelOptions = [ //Labels for Displaying the Chart 
@@ -178,12 +176,14 @@ function ModificationByField(props) {
 
   //Qa Representative
   const handleChangeQaRepresentative = (change => {
+    serverFilters.qaRepresentative = [];
     if (change != null) {
-      serverFilters.qaRepresentative = [change.value];
+      change.map((item) => {
+        return (serverFilters.qaRepresentative.push(item.value))
+      }) 
     }
-    else {
-      serverFilters.qaRepresentative = []
-    }
+    else { serverFilters.values = []; }
+    console.log(serverFilters)
     render(serverFilters);
   })
 
@@ -247,6 +247,7 @@ function ModificationByField(props) {
           <Select
           name="qaRepresentative"
           ref={qaInput}
+          isMulti
           onChange={handleChangeQaRepresentative}
           placeholder="QA Representative"
           className="ModificationByField__Filter"

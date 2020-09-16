@@ -165,7 +165,12 @@ router.post('/modificationByField', async (req, res) => {
             });
     }
     if (qaRepresentative.length != 0) {
-        filtersArray.push({ "jiraItem.qaRepresentative": qaRepresentative[0] })
+        let valuesArray = []
+        qaRepresentative.map((item, index) => {
+            valuesArray.push({ "jiraItem.qaRepresentative": item })
+        })
+        filtersArray.push({ "$or": valuesArray })
+       // filtersArray.push({ "jiraItem.qaRepresentative": qaRepresentative[0] })
     }
     if (values.length != 0) {
         let valuesArray = []
