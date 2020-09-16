@@ -158,7 +158,7 @@ export default function TasksTable({
           <TablePagination
             rowsPerPageOptions={[50, 100]}
             component="div"
-            count={openTasks.length}
+            count={openTasks === undefined ? 0 : openTasks.length}
             rowsPerPage={rowsCount}
             page={pageNumber}
             onChangePage={handleChangePage}
