@@ -213,7 +213,7 @@ router.post("/openTasksWithFilter", [auth, qaManager], async function (req, res)
 // end openTasksWithFilter
 
 // start update task
-router.post("/updateTasks", [auth, qaManager], (req, res) => {
+router.post("/updateTasks", [auth, qaManager], async (req, res) => {
   const {
     tasksId,
     userId
