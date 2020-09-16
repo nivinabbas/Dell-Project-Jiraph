@@ -10,12 +10,13 @@ import {
 
 
 
-
+//function to change the password 
 function ChangePassword(props) {
     const history = useHistory();
     const { email } = useParams();
     console.log('email Change password:', email)
 
+    //function to Change the password after check if 2 input is the same
     function onResetPassword(e) {
         e.preventDefault();
         const { resetNPswInp, confirmNPswInp } = e.target.elements;
@@ -34,6 +35,7 @@ function ChangePassword(props) {
                 .then((data) => {
                     const { success } = data;
                     const { error } = data;
+                    console.log(success)
                     if (success) {
                         history.push("/")
                     }
@@ -48,6 +50,7 @@ function ChangePassword(props) {
     }
     return (
         <div className='forgotpassword'>
+            <h3 className="header">Enter the new password</h3>
             <form id="resetPasswordForm" onSubmit={onResetPassword} >
                 <input id="resetNPswInp" type="password" name="resetNPswInp" placeholder="Choose a new Password"></input>
                 <input id="confirmNPswInp" type="password" name="confirmNPswInp" placeholder="confirm the new Password"></input>

@@ -1,30 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import './UserList.css'
-import { useHistory } from "react-router-dom";
-
-import {
-    Link
-} from "react-router-dom";
+import { useHistory,Link } from "react-router-dom";
 
 
 
-//components
+//import component
 import UserRow from './UserRow';
 
 
 function UserList() {
+
+
     const [users, setUsers] = useState([]);
+    const [acivePage, setAcivePage] = useState(false)
     const history = useHistory();
 
 
-    //-------------------------------------
 
-
+    //show active users list
     useEffect(() => {
         fetch('/api/users/getUsersList')
             .then(res => res.json())
             .then(data => {
-
                 if (data.success == true) {
                     setUsers(data.info.table);
                 }
@@ -35,66 +32,97 @@ function UserList() {
     }, []);
 
 
-
+    //show create row 
     return (
 
 
-
         <div className='adminpage'>
-            <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
-            <div id="header">
+        <button onClick={e=>{goToAudit(e)}}>go to audit page </button>
+            <div >
+                {!acivePage ?
+                   <button onClick={e=>{goToNotActiveUsers(e)}}>Show Not Active</button>
+                   :
+                   <button onClick={e=>{goToActiveUsers(e)}}>Show Active</button>
+                }
+               
             </div>
-            <div className='AdminTable'>
-                <button onClick={goToAudit}>Audit</button>
-                <div className="TableColHeeader">
-                    <h4>Username</h4>
-                    <h4>E-Mail</h4>
-                    <h4>Business Role</h4>
-                    <h4>Password</h4>
-                </div>
-                <form name='create' onSubmit={createUser} className='TableCreateRow' >
 
-                    <div className='AdminTable'>
-                        <div className="TableColHeeader">
-                            <div className="TableColHeeaderi">Email</div>
-                            <div className="TableColHeeaderi">Business Role</div>
-                            <div className="TableColHeeaderi">Password</div>
-                        </div>
-                        <div name='create' onSubmit={createUser} className='TableCreateRow' >
-                            <div>
-                                <input name="inputEmail" type="email" placeholder='Enter Email' required ></input>
-                            </div>
-                            <div>
-                                <select className="opt-wrapper" name="inputRole" required  >
-                                    <option className="opt" value="Admin">Admin</option>
-                                    <option className="opt" value="QA manager">QA Manager</option>
-                                    <option className="opt" value="TOP manager">TOP Manager</option>
-                                </select>
-                            </div>
-                            <div>
-                                <input name="inputPassword" type="password" placeholder='Enter password' required ></input>
-                            </div>
-                        </div>
-                        <div>
-                            <button id="createBtn" type='submit' > Create</button>
-                        </div>
-                    </div>
+            
+            <form id='Names'>
+                <h1>Name</h1>
+                <h2>Email</h2>
+                <h3>Role</h3>
+                <h4>password</h4>
+            </form>
+           
+            <form name='create' onSubmit={createUser} >
 
-                    {users.map(user => <UserRow setUsers={setUsers} key={user.id} user={user} />)}
+                <input name="inputName" type="text" placeholder='Enter Name' required ></input>
+                <input name="inputEmail" type="email" placeholder='Enter Email' required ></input>
+                <select name="inputRole" required  >
+                    <option value="Admin">Admin</option>
+                    <option value="QA manager">QA manager</option>
+                    <option value="TOP manager">TOP manager</option>
+                </select>
+                <input className="filter" name="inputPassword" type="password" placeholder='Enter password' required ></input>
+                <button type='submit'>CREATE</button>
+            </form>
+            :
 
-                </form>
+            {/* sho users list using component              */}
+            {users.map(user => <UserRow isActive={user.active} setUsers={setUsers} key={user.id} user={user} />)}
 
-            </div>
+           
         </div>
+        
     )
 
+    //button send you to active users (default)
+    function goToActiveUsers(e) {
+        e.preventDefault();
+        fetch('/api/users/getUsersList')
+        .then(res => res.json())
+        .then(data => {
+            if (data.success == true) {
+                console.log(data.success)
+                console.log(data.info.table)
+                setUsers(data.info.table);
+            }
+            else {
+                alert(data.error)
+            }
+        })
+            setAcivePage(false);
+    }
 
+
+    //button send you to- not active users 
+    function goToNotActiveUsers(e) {
+        console.log('ENTERED')
+        e.preventDefault();
+        fetch('/api/users/getDeactivatedList')   
+            .then(res => res.json())
+            .then(data => {
+                if (data.success == true) {
+                    console.log(data.success)
+                    console.log(data.info.table)
+                    setUsers(data.info.table);
+                    }
+                else {
+                    alert(data.error)
+                }
+            })
+            setAcivePage(true);
+
+    }
+    
+    //go to audit page 
     function goToAudit(e) {
         history.push("/Audit");
 
     }
 
-
+    //creating user function 
     function createUser(e) {
         e.preventDefault();
         let { inputName, inputEmail, inputRole, inputPassword } = e.target.elements;
@@ -116,12 +144,11 @@ function UserList() {
         })
             .then(response => response.json())
             .then(data => {
-
-                if (data.success = true) {
+                if (data.success == true) {
                     setUsers(data.info.table)
                     return (alert('created sucsses'))
                 }
-                else if (data = false) {
+                else if (data.success == false) {
                     return (alert(data.error))
                 }
 
