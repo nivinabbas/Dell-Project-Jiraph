@@ -3,6 +3,7 @@ import './UserList.css'
 
 
 export default props => {
+
     //--------------------------------
     const {isActive} = props ; 
 
@@ -12,7 +13,7 @@ export default props => {
    //-----------------------------------------
    
 
-  
+    //show users list 
     return (
 
 
@@ -54,7 +55,7 @@ export default props => {
 
     )
 
-
+    //activating user function 
     function activeUser(e, id) {
         e.preventDefault();
         if (!window.confirm('Are you sure you want to Active this User?')) {
@@ -82,7 +83,7 @@ export default props => {
 
     }
 
-
+    //save after updating user 
     function onSave(e, id) {
         e.preventDefault()
         setEdit(false)
@@ -117,14 +118,14 @@ export default props => {
 
     }
 
-
+    //give the option to edit 
     function onEdit(e) {
         e.preventDefault();
         setEdit(true)
 
     }
 
-
+    //deleting user function 
     function deleteUser(e, id) {
         e.preventDefault();
         if (!window.confirm('Are you sure you want to delete this User?')) {

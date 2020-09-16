@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './Audit.css'
+import {
+    Link
+} from "react-router-dom";
+
 
 import AuditRow from './AuditRow';
 
@@ -27,7 +31,14 @@ function UserAudit() {
    
     return (
 
+        
+
         <div className='adminpage'>
+             <div id="ButtonDiv">
+                
+                <Link to="/Admin"><button>Go to Users List </button> </Link>
+                
+            </div>
             <div id="header">
             </div>
             <div className='AdminTable'>
