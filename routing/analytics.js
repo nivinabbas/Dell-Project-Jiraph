@@ -4,7 +4,9 @@ const mongoose = require('mongoose');
 const UserSchema = require('../schemas/UserSchema');
 const UserModel = mongoose.model("UserModel", UserSchema);
 const TaskModel = require('../schemas/TaskSchema');
-
+const auth = require("../authentication/auth");
+const qaTopManagers = require("../authentication/qaTopManagers");
+const audit = require("../authentication/audit");
 
 //Weekly Label Function===> 
 function weeklyLabel(startDate, endDate, tasks) {
@@ -86,12 +88,12 @@ function formatDate(date) {
     if (day.length < 2)
         day = '0' + day;
 
-    return [day, month,year ].join('-');
+    return [day, month, year].join('-');
 }
 
 // --------------------------------------------------------------- modification By Field ---------------------------------------------------------------
 
-router.post('/modificationByField', async (req, res) => {
+router.post('/modificationByField', [auth, qaTopManagers, audit], async (req, res) => {
     let tasks = []
     const { serverFilters } = req.body
     let { fieldName, values, qaRepresentative, startDate, endDate, label } = serverFilters;
@@ -105,10 +107,10 @@ router.post('/modificationByField', async (req, res) => {
     else if (label[0] == 'monthly') {
         dateFormat = "%m-%Y"
     }
-    else if(label[0] == 'daily')  {
+    else if (label[0] == 'daily') {
         dateFormat = "%d-%m-%Y"
     }
-    else{
+    else {
         dateFormat = "%Y-%m-%d"
     }
 
@@ -151,13 +153,13 @@ router.post('/modificationByField', async (req, res) => {
                     _id: {
                         date: { $dateToString: { format: dateFormat, date: "$diffItem.updatedTime" } },
                         fieldName: {
-                                $cond: {
-                                    if: { $eq: ["$diffItem.updatedField.fieldName", "functionalTest"] },
+                            $cond: {
+                                if: { $eq: ["$diffItem.updatedField.fieldName", "functionalTest"] },
 
-                                    then: { $toString: "$diffItem.updatedField.newValue" },
+                                then: { $toString: "$diffItem.updatedField.newValue" },
 
-                                    else: "$diffItem.updatedField.newValue"
-                                }  
+                                else: "$diffItem.updatedField.newValue"
+                            }
                         }
                     },
                     tasks: { $push: "$$ROOT" },
@@ -187,19 +189,19 @@ router.post('/modificationByField', async (req, res) => {
     if (label[0] === "weekly") {
         tasks = weeklyLabel(startDate, endDate, tasks);
     }
-    else{
-        tasks.sort(function(a, b){
+    else {
+        tasks.sort(function (a, b) {
 
             let aa = a._id.split('-').reverse().join(),
                 bb = b._id.split('-').reverse().join();
             return aa < bb ? -1 : (aa > bb ? 1 : 0);
         });
     }
-    
-    
-    
 
-    
+
+
+
+
     let maxLength = 0;
     let sumLength = 0;
     if (tasks.length > 0) {
@@ -230,7 +232,7 @@ router.post('/modificationByField', async (req, res) => {
     res.send(tasks)
 })
 
-router.post('/modificationByFieldFilters', async (req, res) => {
+router.post('/modificationByFieldFilters', [auth, qaTopManagers, audit], async (req, res) => {
     let tasks = []
     let { fieldName, startDate, endDate } = req.body
     startDate = new Date(startDate)
@@ -289,7 +291,7 @@ router.post('/modificationByFieldFilters', async (req, res) => {
 
 // --------------------------------------------------------------- deleted JiraTickets ---------------------------------------------------------------
 
-router.post('/deletedJiraTickets', async (req, res) => {
+router.post('/deletedJiraTickets', [auth, qaTopManagers, audit], async (req, res) => {
     let tasks = []
     const { serverFilters } = req.body
     let { priority, qaRepresentative, functionalTest, startDate, endDate, label } = serverFilters;
@@ -302,10 +304,10 @@ router.post('/deletedJiraTickets', async (req, res) => {
     else if (label[0] == 'monthly') {
         dateFormat = "%m-%Y"
     }
-    else if(label[0] == 'daily')  {
+    else if (label[0] == 'daily') {
         dateFormat = "%d-%m-%Y"
     }
-    else{
+    else {
         dateFormat = "%Y-%m-%d"
     }
 
@@ -364,12 +366,12 @@ router.post('/deletedJiraTickets', async (req, res) => {
         },
         { $sort: { _id: 1 } }
     ])
-    
+
     if (label[0] === "weekly") {
         tasks = weeklyLabel(startDate, endDate, tasks);
     }
-    else{
-        tasks.sort(function(a, b){
+    else {
+        tasks.sort(function (a, b) {
 
             let aa = a._id.split('-').reverse().join(),
                 bb = b._id.split('-').reverse().join();
@@ -405,7 +407,7 @@ router.post('/deletedJiraTickets', async (req, res) => {
     res.send(tasks)
 })
 
-router.post('/deletedJiraTicketsFilters', async (req, res) => {
+router.post('/deletedJiraTicketsFilters', [auth, qaTopManagers, audit], async (req, res) => {
     let tasks = []
     let { startDate, endDate } = req.body
     startDate = new Date(startDate)
@@ -433,7 +435,7 @@ router.post('/deletedJiraTicketsFilters', async (req, res) => {
 
 // --------------------------------------------------------------- changes By ParentId ---------------------------------------------------------------
 
-router.post('/changesByParentIdFilters', async (req, res) => {
+router.post('/changesByParentIdFilters', [auth, qaTopManagers, audit], async (req, res) => {
     let tasks = []
     const { serverFilters } = req.body
     let { fixVersion, startDate, endDate } = serverFilters;
@@ -524,7 +526,7 @@ router.post('/changesByParentIdFilters', async (req, res) => {
 
 // --------------------------------------------------------------- changes in jira tickets ---------------------------------------------------------------
 
-router.post('/changeOfJIRATicketsStatus', async (req, res) => {
+router.post('/changeOfJIRATicketsStatus', [auth, qaTopManagers, audit], async (req, res) => {
     const filterValue = req.body.values
     const filterStatus = req.body.status
     const filterQaRep = req.body.qaRepresentative
@@ -542,10 +544,10 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
     else if (label[0] == 'monthly') {
         dateFormat = "%m-%Y"
     }
-    else if(label[0] == 'daily')  {
+    else if (label[0] == 'daily') {
         dateFormat = "%d-%m-%Y"
     }
-    else{
+    else {
         dateFormat = "%Y-%m-%d"
     }
 
@@ -638,8 +640,8 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
     if (label[0] == 'weekly') {
         tasks = weeklyLabel(startDate, endDate, tasks)
     }
-    else{
-        tasks.sort(function(a, b){
+    else {
+        tasks.sort(function (a, b) {
 
             let aa = a._id.split('-').reverse().join(),
                 bb = b._id.split('-').reverse().join();
@@ -674,7 +676,7 @@ router.post('/changeOfJIRATicketsStatus', async (req, res) => {
 
 })
 
-router.post('/changeOfJIRATicketsStatusFilters', async (req, res) => {
+router.post('/changeOfJIRATicketsStatusFilters', [auth, qaTopManagers, audit], async (req, res) => {
 
     let tasks = []
     let matchFilters = ''
@@ -723,7 +725,7 @@ router.post('/changeOfJIRATicketsStatusFilters', async (req, res) => {
 
 // --------------------------------------------------------------- delays in delivery ---------------------------------------------------------------------
 
-router.post('/delaysInDelivery', async (req, res) => {
+router.post('/delaysInDelivery', [auth, qaTopManagers, audit], async (req, res) => {
 
 
     const fixVersion = req.body.fixVersion[0]
@@ -745,10 +747,10 @@ router.post('/delaysInDelivery', async (req, res) => {
     else if (label[0] == 'monthly') {
         dateFormat = "%m-%Y"
     }
-    else if(label[0] == 'daily')  {
+    else if (label[0] == 'daily') {
         dateFormat = "%d-%m-%Y"
     }
-    else{
+    else {
         dateFormat = "%Y-%m-%d"
     }
 
@@ -869,8 +871,8 @@ router.post('/delaysInDelivery', async (req, res) => {
     if (label[0] == 'weekly') {
         tasks = weeklyLabel(startDate, endDate, tasks)
     }
-    else{
-        tasks.sort(function(a, b){
+    else {
+        tasks.sort(function (a, b) {
 
             let aa = a._id.split('-').reverse().join(),
                 bb = b._id.split('-').reverse().join();
@@ -907,7 +909,7 @@ router.post('/delaysInDelivery', async (req, res) => {
 
 })
 
-router.post('/delaysInDeliveryFilters', async (req, res) => {
+router.post('/delaysInDeliveryFilters', [auth, qaTopManagers, audit], async (req, res) => {
     let filters = await TaskModel.aggregate([
         {
             $match: {}
