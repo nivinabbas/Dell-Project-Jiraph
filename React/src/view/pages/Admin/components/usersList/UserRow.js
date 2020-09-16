@@ -1,57 +1,40 @@
 import React, { useState } from 'react';
 import './UserList.css'
-
-
 export default props => {
-
     //--------------------------------
     const {isActive} = props ; 
-
     const { user, setUsers } = props;
-
     const [edit, setEdit] = useState(false);
    //-----------------------------------------
-   
-
     //show users list 
     return (
-
-
         <form id={user.id} className="TableBody" onSubmit={(e => onSave(e, user.id))} >
-
-            <input id="item" name="name" disabled={!edit} type="text" defaultValue={user.name} ></input>
-            <input id="item" disabled={!edit} type="email" name='email' defaultValue={user.email}></input>
-            <select id="item__slt" disabled={!edit} type="text" name='role' defaultValue={user.role}>
+            <input name="name" disabled={!edit} type="text" defaultValue={user.name} ></input>
+            <input disabled={!edit} type="email" name='email' defaultValue={user.email}></input>
+            <select disabled={!edit} type="text" name='role' defaultValue={user.role}>
                 <option value="Admin">Admin</option>
                 <option value="QA manager">QA manager</option>
                 <option value="TOP manager">TOP manager</option>
             </select>
-                <input id="item" disabled={!edit} className={edit ? 'inset' : ''} name='password' type="password" placeholder='Password'></input>
-
+            <div className="item">
+                <input disabled={!edit} className={edit ? 'inset' : ''} name='password' type="password" placeholder='Password'></input>
+            </div>
+            <div className="item">
                 {!edit ?
-                    <button id="item__btn__edit" className="edit__Btn" onClick={e => { onEdit(e, user.id) }}>EDIT</button>
+                    <button className="edit__Btn" onClick={e => { onEdit(e, user.id) }}>Edit</button>
                     :
-                    <button id="item__btn__save" className="save__Btn" type='submit'>SAVE</button>
+                    <button className="save__Btn" type='submit'>Save</button>
                 }
                 </div>
-
                 <div className="item1" >
                     {isActive ?
                         <button onClick={e => { deleteUser(e, user.id) }}>Delete</button>
                         :
                         <button onClick={e => { activeUser(e, user.id) }}>Activate</button>
                     }
-
                 </div>
-
-            
-            
         </form>
-
-
-
     )
-
     //activating user function 
     function activeUser(e, id) {
         e.preventDefault();
@@ -75,26 +58,18 @@ export default props => {
                 else if (data.success == false) {
                     alert(data.error)
                 }
-
             })
-
     }
-
     //save after updating user 
     function onSave(e, id) {
         e.preventDefault()
         setEdit(false)
-
         let { name, email, password, role } = e.target.elements;
-
         name = name.value;
         email = email.value;
         role = role.value;
         password = password.value;
-
         e.target.elements.password.value = '';
-
-
         fetch('/api/users/editUser', {
             method: 'PUT',
             body: JSON.stringify({ id, name, email, role, password }),
@@ -111,17 +86,12 @@ export default props => {
                     alert(data.error)
                 }
             })
-
-
     }
-
     //give the option to edit 
     function onEdit(e) {
         e.preventDefault();
         setEdit(true)
-
     }
-
     //deleting user function 
     function deleteUser(e, id) {
         e.preventDefault();
@@ -145,8 +115,6 @@ export default props => {
                 else if (data.success == false) {
                     alert(data.error)
                 }
-
             })
-
     }
 }
