@@ -5,19 +5,18 @@ import AuditRow from './AuditRow';
 
 var d = new Date();
 
-//-----------------------------------------------------------change
+
 const serverFilters = { UserName: [], Email: [], Role: [], startDate: (new Date(d.setMonth(d.getMonth()-1))), endDate: new Date() };
-//-----------------------------------------------------------change
+
 
 function UserAudit() {
 
   
     const [users, setUsers] = useState([]);
-    
 
-//-----------------------------------------------------------change
 
     useEffect(() => {
+        // In this fetch We send to the server the Date Range to get the table filtered by date
         fetch('/api/users/getUsersAudit', {
             method: 'POST',
             body: JSON.stringify({ UserName: serverFilters.UserName, startDate:serverFilters.startDate, endDate:serverFilters.endDate  }),
@@ -39,11 +38,6 @@ function UserAudit() {
     }, []);
 
 
-
-
-
-
-//-----------------------------------------------------------change
 
 const render = (serverFilters) => {
     fetch('/api/users/getUsersAudit', {
@@ -67,58 +61,27 @@ const render = (serverFilters) => {
       })
   }
 
-
-
-
-
-
-
-
-    // useEffect(() => {
-    //     fetch('/api/users/getUsersAudit')
-    //         .then(res => res.json())
-    //         .then(data => {
-                
-    //             if (data.success == true) {
-                   
-    //                 setUsers(data.info.table);
-    //             }
-    //             else {
-    //                 alert(data.error)
-    //             }
-    //         })
-    // }, []);
-
-
-
-
-
-
-
-
-    //-----------------------------------------------------------change
+    // Function for handle the change of Start Date, to filter the Audit table by Date Range  
     const handleChangeStartDate = (change => {
         console.log(change.target.value)
         serverFilters.startDate = new Date(change.target.value);
         render(serverFilters);
       })
     
+
+      // Function for handle the change of End Date, to filter the Audit table by Date Range  
       const handleChangeEndDate = (change => {
         serverFilters.endDate = new Date(change.target.value);
         render(serverFilters);
       })
-    //-----------------------------------------------------------change
-
-
-
-
+    
 
 
     return (
 
         <div className='adminpage'>
             <div className="ModificationByField__Filters">
-            <label >From</label>
+            <label >From:</label>
             <input
           className="ModificationByField__Filter__date"
           type="date"
@@ -126,7 +89,7 @@ const render = (serverFilters) => {
            onChange={handleChangeStartDate}
         />
 
-        <label >To</label>
+        <label >To:</label>
         <input
           className="ModificationByField__Filter__date"
           type="date"
