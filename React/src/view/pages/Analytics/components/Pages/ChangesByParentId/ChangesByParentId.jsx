@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import "./ChangesByParentId.css";
 import Select from 'react-select'
 import { useEffect } from 'react';
-import PieChartAnalysis from "../charts/PicChartAnalysis"
+import PieChartAnalysis from "../../charts/PicChartAnalysis"
 
 //Server Filters to receive Data
 let serverFilters = { fixVersion: [], startDate: "", endDate: "" };
@@ -38,7 +38,6 @@ function ChangesByParentId() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
         if (data.length > 0) {
           setfixVersionOptions(data[0].fixVersions)
         }
@@ -66,7 +65,6 @@ function ChangesByParentId() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setUiObjs(data)
       })
   }

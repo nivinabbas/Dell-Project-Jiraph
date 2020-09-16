@@ -4,8 +4,7 @@ import "./DelaysInDelivery.css";
 
 //Components 
 import Select from 'react-select'
-import Chart from "../charts/Chart"
-
+import Chart from "../../charts/Chart"
 
 // Filters To Send To Server 
 let serverFilters = {
@@ -56,7 +55,6 @@ function DelaysInDelivery() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
         if (data.length > 0) {
           setfixVersionOptions(data[0].fixVersion)
         }
@@ -79,7 +77,6 @@ function DelaysInDelivery() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
         setUiObjs(data)
       })
 
@@ -118,19 +115,19 @@ function DelaysInDelivery() {
   const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([])
 
   //Jira Type Filter
-  const [jiraTypeOptions, setJiraTypeOptions] = useState([
+  const jiraTypeOptions = [
     { value: "Create", label: "Create" },
     { value: "Deleted", label: "Deleted" },
     { value: "Update", label: "Update" },
-  ])
+  ]
 
 // Label Filter 
-  const [labelOptions, setLabelOptions] = useState([
+  const labelOptions=[
     { value: "daily", label: "Daily" },
     { value: "weekly", label: "Weekly" },
     { value: "monthly", label: "Monthly" },
     { value: "yearly", label: "Yearly" }
-  ])
+  ]
 
 
 

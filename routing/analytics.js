@@ -1,12 +1,9 @@
 const express = require("express");
-
 const router = express.Router();
 const mongoose = require('mongoose');
 const UserSchema = require('../schemas/UserSchema');
 const UserModel = mongoose.model("UserModel", UserSchema);
 const TaskModel = require('../schemas/TaskSchema');
-
-//app.get/post/put/delete => router.get/post/put/delete
 
 
 //Weekly Label Function===> 
@@ -78,7 +75,6 @@ function weeklyLabel(startDate, endDate, tasks) {
     return result;
 }
 
-
 //Date format function
 function formatDate(date) {
     month = '' + (date.getMonth() + 1),
@@ -92,6 +88,8 @@ function formatDate(date) {
 
     return [day, month,year ].join('-');
 }
+
+// --------------------------------------------------------------- modification By Field ---------------------------------------------------------------
 
 router.post('/modificationByField', async (req, res) => {
     let tasks = []
@@ -167,7 +165,12 @@ router.post('/modificationByField', async (req, res) => {
             });
     }
     if (qaRepresentative.length != 0) {
-        filtersArray.push({ "jiraItem.qaRepresentative": qaRepresentative[0] })
+        let valuesArray = []
+        qaRepresentative.map((item, index) => {
+            valuesArray.push({ "jiraItem.qaRepresentative": item })
+        })
+        filtersArray.push({ "$or": valuesArray })
+       // filtersArray.push({ "jiraItem.qaRepresentative": qaRepresentative[0] })
     }
     if (values.length != 0) {
         let valuesArray = []
@@ -227,7 +230,6 @@ router.post('/modificationByField', async (req, res) => {
     res.send(tasks)
 })
 
-
 router.post('/modificationByFieldFilters', async (req, res) => {
     let tasks = []
     let { fieldName, startDate, endDate } = req.body
@@ -285,6 +287,7 @@ router.post('/modificationByFieldFilters', async (req, res) => {
     res.send(tasks)
 })
 
+// --------------------------------------------------------------- deleted JiraTickets ---------------------------------------------------------------
 
 router.post('/deletedJiraTickets', async (req, res) => {
     let tasks = []
@@ -402,7 +405,6 @@ router.post('/deletedJiraTickets', async (req, res) => {
     res.send(tasks)
 })
 
-
 router.post('/deletedJiraTicketsFilters', async (req, res) => {
     let tasks = []
     let { startDate, endDate } = req.body
@@ -428,6 +430,8 @@ router.post('/deletedJiraTicketsFilters', async (req, res) => {
     res.send(tasks)
 
 })
+
+// --------------------------------------------------------------- changes By ParentId ---------------------------------------------------------------
 
 router.post('/changesByParentIdFilters', async (req, res) => {
     let tasks = []
@@ -518,9 +522,7 @@ router.post('/changesByParentIdFilters', async (req, res) => {
     res.send(tasks)
 })
 
-// ---------------------------------------------------------- changes in jira tickets ----------------------------------------------------------
-
-
+// --------------------------------------------------------------- changes in jira tickets ---------------------------------------------------------------
 
 router.post('/changeOfJIRATicketsStatus', async (req, res) => {
     const filterValue = req.body.values
@@ -716,16 +718,8 @@ router.post('/changeOfJIRATicketsStatusFilters', async (req, res) => {
         item.status.sort((a, b) => (a.label > b.label) ? 1 : -1);
         item.qa.sort((a, b) => (a.label > b.label) ? 1 : -1);
     })
-
-
-    // console.log(tasks)
     res.send(tasks)
-
 })
-
-
-
-
 
 // --------------------------------------------------------------- delays in delivery ---------------------------------------------------------------------
 
