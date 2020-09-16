@@ -1419,23 +1419,24 @@ router.post("/filltersAllSubmit", async function (req, res) {
   } else if (status === "notDone") {
     status = false;
   }
- 
-  if(data[0].value===''&&data[1].value==''&&data[2].value==''){
-    if(status==="all"){
-    TaskModel.find({},
-      function (err, doc) {
-        res.send({
-          success: true,
-          error: null,
-          info: {
-            doc,
-          },
-        });
-      }
-    ).then((err) => console.log(err));}
+
+  if (data[0].value === '' && data[1].value == '' && data[2].value == '') {
+    if (status === "all") {
+      TaskModel.find({},
+        function (err, doc) {
+          res.send({
+            success: true,
+            error: null,
+            info: {
+              doc,
+            },
+          });
+        }
+      ).then((err) => console.log(err));
+    }
     else {
       TaskModel.find({
-        "taskItem.isDone":status
+        "taskItem.isDone": status
       },
         function (err, doc) {
           res.send({
@@ -1447,232 +1448,20 @@ router.post("/filltersAllSubmit", async function (req, res) {
           });
         }
       ).then((err) => console.log(err));
-    }
-   }else
-{
-  if (status === "all") {
-    if (
-      data[0].value === "Update" &&
-      data[1].value != null &&
-      data[2].value != null &&
-      data[2].value != "All" &&
-      data[1].value != "All" 
-    ) {
-      TaskModel.find({
-        "diffItem.type": data[0].value,
-        "diffItem.updatedField.fieldName": data[1].value,
-        "diffItem.updatedField.newValue": data[2].value,
-      },
-        function (err, doc) {
-          res.send({
-            success: true,
-            error: null,
-            info: {
-              doc,
-            },
-          });
-        }
-      ).then((err) => console.log(err));
-    } else if (
-      data[0].value === "Update" &&
-      data[1].value != null &&
-      data[2].value == null &&
-      data[1].value != "All" 
-    ) {
-      TaskModel.find({
-        "diffItem.type": data[0].value,
-        "diffItem.updatedField.fieldName": data[1].value,
-      },
-        function (err, doc) {
-          res.send({
-            success: true,
-            error: null,
-            info: {
-              doc,
-            },
-          });
-        }
-      ).then((err) => console.log(err));
-    } else if (
-      data[0].value === "Update" &&
-      data[1].value != null &&
-      data[2].value === "All" &&
-      data[1].value != "All" 
-    ) {
-      //************************ */
-      TaskModel.find({
-        "diffItem.type": data[0].value,
-        "diffItem.updatedField.fieldName": data[1].value,
-      },
-        function (err, doc) {
-          res.send({
-            success: true,
-            error: null,
-            info: {
-              doc,
-            },
-          });
-        }
-      ).then((err) => console.log(err));
-
-      //*&********
-    } else if (
-      (data[0].value === "Update" && data[1].value === "All") ||
-      (data[0].value === "Update" &&
-        data[1].value === "All" &&
-        data[2].value === "All") && data[3].value == "all"
-    ) {
-      //************************ */
-      TaskModel.find({
-        "diffItem.type": data[0].value,
-      },
-        function (err, doc) {
-          res.send({
-            success: true,
-            error: null,
-            info: {
-              doc,
-            },
-          });
-        }
-      ).then((err) => console.log(err));
-
-      //*&********
-    } else if (data[0].value === "All" || data[0].value === "all") {
-      TaskModel.find({}, function (err, doc) {
-        res.send({
-          success: true,
-          error: null,
-          info: {
-            doc,
-          },
-        });
-      }).then((err) => console.log(err));
-    } else {
-      {
-        TaskModel.find({
-          "diffItem.type": data[0].value,
-        },
-          function (err, doc) {
-            res.send({
-              success: true,
-              error: null,
-              info: {
-                doc,
-              },
-            });
-          }
-        ).then((err) => console.log(err));
-      }
     }
   } else {
-    //else start
-    if (
-      data[0].value === "Update" &&
-      data[1].value != null &&
-      data[2].value != null &&
-      data[2].value != "All" &&
-      data[1].value != "All" 
-    ) {
-      TaskModel.find({
-        "diffItem.type": data[0].value,
-        "diffItem.updatedField.fieldName": data[1].value,
-        "diffItem.updatedField.newValue": data[2].value,
-        "taskItem.isDone":status
-      },
-        function (err, doc) {
-          res.send({
-            success: true,
-            error: null,
-            info: {
-              doc,
-            },
-          });
-        }
-      ).then((err) => console.log(err));
-    } else if (
-      data[0].value === "Update" &&
-      data[1].value != null &&
-      data[2].value == null &&
-      data[1].value != "All" 
-    ) {
-      TaskModel.find({
-        "diffItem.type": data[0].value,
-        "diffItem.updatedField.fieldName": data[1].value,
-        "taskItem.isDone":status
-      },
-        function (err, doc) {
-          res.send({
-            success: true,
-            error: null,
-            info: {
-              doc,
-            },
-          });
-        }
-      ).then((err) => console.log(err));
-    } else if (
-      data[0].value === "Update" &&
-      data[1].value != null &&
-      data[2].value === "All" &&
-      data[1].value != "All" 
-    ) {
-      //************************ */
-      TaskModel.find({
-        "diffItem.type": data[0].value,
-        "diffItem.updatedField.fieldName": data[1].value,
-        "taskItem.isDone":status
-      },
-        function (err, doc) {
-          res.send({
-            success: true,
-            error: null,
-            info: {
-              doc,
-            },
-          });
-        }
-      ).then((err) => console.log(err));
-
-      //*&********
-    } else if (
-      (data[0].value === "Update" && data[1].value === "All") ||
-      (data[0].value === "Update" &&
-        data[1].value === "All" &&
-        data[2].value === "All") 
-    ) {
-      //************************ */
-      TaskModel.find({
-        "diffItem.type": data[0].value,
-        "taskItem.isDone":status
-      },
-        function (err, doc) {
-          res.send({
-            success: true,
-            error: null,
-            info: {
-              doc,
-            },
-          });
-        }
-      ).then((err) => console.log(err));
-
-      //*&********
-    } else if (data[0].value === "All" || data[0].value === "all") {
-      TaskModel.find({}, function (err, doc) {
-        res.send({
-          success: true,
-          error: null,
-          info: {
-            doc,
-          },
-        });
-      }).then((err) => console.log(err));
-    } else {
-      {
+    if (status === "all") {
+      if (
+        data[0].value === "Update" &&
+        data[1].value != null &&
+        data[2].value != null &&
+        data[2].value != "All" &&
+        data[1].value != "All"
+      ) {
         TaskModel.find({
           "diffItem.type": data[0].value,
-          "taskItem.isDone":status
+          "diffItem.updatedField.fieldName": data[1].value,
+          "diffItem.updatedField.newValue": data[2].value,
         },
           function (err, doc) {
             res.send({
@@ -1684,12 +1473,225 @@ router.post("/filltersAllSubmit", async function (req, res) {
             });
           }
         ).then((err) => console.log(err));
+      } else if (
+        data[0].value === "Update" &&
+        data[1].value != null &&
+        data[2].value == null &&
+        data[1].value != "All"
+      ) {
+        TaskModel.find({
+          "diffItem.type": data[0].value,
+          "diffItem.updatedField.fieldName": data[1].value,
+        },
+          function (err, doc) {
+            res.send({
+              success: true,
+              error: null,
+              info: {
+                doc,
+              },
+            });
+          }
+        ).then((err) => console.log(err));
+      } else if (
+        data[0].value === "Update" &&
+        data[1].value != null &&
+        data[2].value === "All" &&
+        data[1].value != "All"
+      ) {
+        //************************ */
+        TaskModel.find({
+          "diffItem.type": data[0].value,
+          "diffItem.updatedField.fieldName": data[1].value,
+        },
+          function (err, doc) {
+            res.send({
+              success: true,
+              error: null,
+              info: {
+                doc,
+              },
+            });
+          }
+        ).then((err) => console.log(err));
+
+        //*&********
+      } else if (
+        (data[0].value === "Update" && data[1].value === "All") ||
+        (data[0].value === "Update" &&
+          data[1].value === "All" &&
+          data[2].value === "All") && data[3].value == "all"
+      ) {
+        //************************ */
+        TaskModel.find({
+          "diffItem.type": data[0].value,
+        },
+          function (err, doc) {
+            res.send({
+              success: true,
+              error: null,
+              info: {
+                doc,
+              },
+            });
+          }
+        ).then((err) => console.log(err));
+
+        //*&********
+      } else if (data[0].value === "All" || data[0].value === "all") {
+        TaskModel.find({}, function (err, doc) {
+
+          res.send({
+            success: true,
+            error: null,
+            info: {
+              doc,
+            },
+          });
+        }).then((err) => console.log(err));
+      } else {
+        {
+          TaskModel.find({
+            "diffItem.type": data[0].value,
+          },
+            function (err, doc) {
+              res.send({
+                success: true,
+                error: null,
+                info: {
+                  doc,
+                },
+              });
+            }
+          ).then((err) => console.log(err));
+        }
       }
+    } else {
+      //else start
+      if (
+        data[0].value === "Update" &&
+        data[1].value != null &&
+        data[2].value != null &&
+        data[2].value != "All" &&
+        data[1].value != "All"
+      ) {
+        TaskModel.find({
+          "diffItem.type": data[0].value,
+          "diffItem.updatedField.fieldName": data[1].value,
+          "diffItem.updatedField.newValue": data[2].value,
+          "taskItem.isDone": status
+        },
+          function (err, doc) {
+            res.send({
+              success: true,
+              error: null,
+              info: {
+                doc,
+              },
+            });
+          }
+        ).then((err) => console.log(err));
+      } else if (
+        data[0].value === "Update" &&
+        data[1].value != null &&
+        data[2].value == null &&
+        data[1].value != "All"
+      ) {
+        TaskModel.find({
+          "diffItem.type": data[0].value,
+          "diffItem.updatedField.fieldName": data[1].value,
+          "taskItem.isDone": status
+        },
+          function (err, doc) {
+            res.send({
+              success: true,
+              error: null,
+              info: {
+                doc,
+              },
+            });
+          }
+        ).then((err) => console.log(err));
+      } else if (
+        data[0].value === "Update" &&
+        data[1].value != null &&
+        data[2].value === "All" &&
+        data[1].value != "All"
+      ) {
+        //************************ */
+        TaskModel.find({
+          "diffItem.type": data[0].value,
+          "diffItem.updatedField.fieldName": data[1].value,
+          "taskItem.isDone": status
+        },
+          function (err, doc) {
+            res.send({
+              success: true,
+              error: null,
+              info: {
+                doc,
+              },
+            });
+          }
+        ).then((err) => console.log(err));
+
+        //*&********
+      } else if (
+        (data[0].value === "Update" && data[1].value === "All") ||
+        (data[0].value === "Update" &&
+          data[1].value === "All" &&
+          data[2].value === "All")
+      ) {
+        //************************ */
+        TaskModel.find({
+          "diffItem.type": data[0].value,
+          "taskItem.isDone": status
+        },
+          function (err, doc) {
+            res.send({
+              success: true,
+              error: null,
+              info: {
+                doc,
+              },
+            });
+          }
+        ).then((err) => console.log(err));
+
+        //*&********
+      } else if (data[0].value === "All" || data[0].value === "all") {
+        TaskModel.find({ "taskItem.isDone": status }, function (err, doc) {
+          res.send({
+            success: true,
+            error: null,
+            info: {
+              doc,
+            },
+          });
+        }).then((err) => console.log(err));
+      } else {
+        {
+          TaskModel.find({
+            "diffItem.type": data[0].value,
+            "taskItem.isDone": status
+          },
+            function (err, doc) {
+              res.send({
+                success: true,
+                error: null,
+                info: {
+                  doc,
+                },
+              });
+            }
+          ).then((err) => console.log(err));
+        }
+      }
+
+
+      ////else end 
     }
-
-
-    ////else end 
-  }}
+  }
 });
 //  end
 
