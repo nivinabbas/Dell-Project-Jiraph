@@ -1,0 +1,20 @@
+.NewTaskContainer__labels {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  margin: auto;
+}
+.NewTaskContainer__labels input {
+  width: 40%;
+  margin: auto;
+}
+.NewTaskContainer__labels button {
+  width: 40%;
+  height: 20px;
+  margin: auto;
+  margin-top: 1%;
+}
+.NewTaskContainer__labels label {
+  width: 40%;
+  margin: auto;
+}

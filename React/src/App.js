@@ -1,25 +1,24 @@
 import React from "react";
 
-
-
 //components
-import Nav from './components/Nav/Nav';
+import Nav from "./components/Nav/Nav";
 
 //admin
-import Login from "./view/pages/Admin/components/Login/Login"
+import Login from "./view/pages/Admin/components/Login/Login";
 import ForgetPassword from "./view/pages/Admin/components/ForgetPassword/ForgetPassword";
 import StatusPage from "./view/pages/Status/components/StatusPage/StatusPage";
-import MainPage from "./view/pages/Analytics/components/MainPage/MainPage";
+
 import ChangePassword from "./view/pages/Admin/components/ChangePassword/ChangePassword";
 import KeyPassword from "./view/pages/Admin/components/KeyPassword/KeyPassword";
 import UserList from "./view/pages/Admin/components/usersList/UserList";
-import Audit from "./view/pages/Admin/components/Audit/Audit"
+import Audit from "./view/pages/Admin/components/Audit/Audit";
 
-import ModificationByField from "./view/pages/Analytics/components/ModificationByField/ModificationByField";
-import DeletedJiraTickets from "./view/pages/Analytics/components/DeletedJiraTickets/DeletedJiraTickets";
-import ChangesInJiraTickets from "./view/pages/Analytics/components/ChangesInJiraTickets/ChangesInJiraTickets";
-import ChangesByParentId from "./view/pages/Analytics/components/ChangesByParentId/ChangesByParentId";
-import DelaysInDelivery from "./view/pages/Analytics/components/DelaysInDelivery/DelaysInDelivery";
+import ModificationByField from "./view/pages/Analytics/components/Pages/ModificationByField/ModificationByField";
+import DeletedJiraTickets from "./view/pages/Analytics/components/Pages/DeletedJiraTickets/DeletedJiraTickets";
+import ChangesInJiraTickets from "./view/pages/Analytics/components/Pages/ChangesInJiraTickets/ChangesInJiraTickets";
+import ChangesByParentId from "./view/pages/Analytics/components/Pages/ChangesByParentId/ChangesByParentId";
+import DelaysInDelivery from "./view/pages/Analytics/components/Pages/DelaysInDelivery/DelaysInDelivery";
+
 
 import "./App.css";
 
@@ -30,9 +29,8 @@ import {
   Redirect,
   Link,
   useLocation,
+  useParams
 } from "react-router-dom";
-
-
 
 function App() {
   // let location = useLocation();
@@ -55,16 +53,18 @@ function App() {
             <Route exact={true} path="/">
               <Login />
             </Route>
-            <Route path="/changePassword">
-              <ChangePassword />
-            </Route>
+          
             <Route path="/register"></Route>
             <Route path="/forgotPassword">
               <ForgetPassword />
             </Route>
-            <Route path="/keyPassword">
-              <KeyPassword />
-            </Route>
+           
+
+            <Route path="/KeyPassword/:email" children={<KeyPassword  />} />
+
+              <Route path="/ChangePassword/:email" children={<ChangePassword  />} />
+
+
             <Route path="/Admin">
               <UserList />
             </Route>
@@ -75,9 +75,9 @@ function App() {
               <StatusPage />
             </Route>
             <Route path="/analysis">
-              <MainPage />
+            <ModificationByField />
             </Route>
-
+            
             <Route path="/ModificationByField">
               <ModificationByField />
             </Route>
@@ -99,6 +99,5 @@ function App() {
     </Router>
   );
 }
-
 
 export default App;

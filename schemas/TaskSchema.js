@@ -2,19 +2,16 @@ const mongoose = require('mongoose');
 const UserSchema = require('./UserSchema')
 
 const TaskModel = mongoose.model('TaskModel', {
-    jiraItem: { //some of the fields have jira prefix like jiraName and some don't like fixVersion,
-                // we recommend using without the prefix for all
-        jiraId: String,
-        jiraName: String,
-        jiraType: String,
+    jiraItem: { //some of the fields have jira prefix like jiraName and some don't like fixVersion, we recommend using without the prefix for all
+        id: String,
+        name: String,
+        type:  { type: String },
         priority: String,
         status: String,
-        //specialFields: {
-        jiraParentId: String,
+        parentId: String,
         functionalTest: Boolean, //change from String "Yes"/"No" to Booleam true/false
         qaRepresentative: String,
         fixVersion: String
-        //}
     },
     qcItem: {
         requirementId: String,
