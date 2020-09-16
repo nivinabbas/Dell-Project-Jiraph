@@ -9,9 +9,7 @@
 nav {
   font-family: "Roboto Slab", serif;
 }
-.sidebar__header-wrapper__login {
-  background-color: lawngreen;
-}
+
 .sidebar__header-wrapper {
   height: 7vh;
   grid-area: header;
