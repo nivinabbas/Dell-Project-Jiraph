@@ -4,11 +4,16 @@ import './UserList.css'
 
 export default props => {
 
+    //--------------------------------
+    const {isActive} = props ; 
+
     const { user, setUsers } = props;
 
-    const [edit, setEdit] = useState(false)
+    const [edit, setEdit] = useState(false);
+   //-----------------------------------------
+   
 
-
+    //show users list 
     return (
 
 
@@ -28,15 +33,54 @@ export default props => {
                     :
                     <button id="item__btn__save" className="save__Btn" type='submit'>SAVE</button>
                 }
-                <button id="item__btn__delete" onClick={e => { deleteUser(e, user.id) }}>DELETE</button>
+                </div>
 
+                <div className="item1" >
+                    {isActive ?
+                        <button onClick={e => { deleteUser(e, user.id) }}>Delete</button>
+                        :
+                        <button onClick={e => { activeUser(e, user.id) }}>Activate</button>
+                    }
+
+                </div>
+
+            
+            
         </form>
 
 
 
     )
 
+    //activating user function 
+    function activeUser(e, id) {
+        e.preventDefault();
+        if (!window.confirm('Are you sure you want to Active this User?')) {
+            alert("Not Activated")
+            return;
+        }
+        fetch('/api/users/activeUser', {
+            method: 'PUT',
+            body: JSON.stringify({ id }),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success == true) {
+                    setUsers(data.info.table);
+                    return alert('Activated sucsses')
+                }
+                else if (data.success == false) {
+                    alert(data.error)
+                }
 
+            })
+
+    }
+
+    //save after updating user 
     function onSave(e, id) {
         e.preventDefault()
         setEdit(false)
@@ -71,14 +115,14 @@ export default props => {
 
     }
 
-
+    //give the option to edit 
     function onEdit(e) {
         e.preventDefault();
         setEdit(true)
 
     }
 
-
+    //deleting user function 
     function deleteUser(e, id) {
         e.preventDefault();
         if (!window.confirm('Are you sure you want to delete this User?')) {
@@ -94,11 +138,11 @@ export default props => {
         })
             .then(response => response.json())
             .then(data => {
-                if (data.success = true) {
+                if (data.success == true) {
                     setUsers(data.info.table);
                     return alert('Deleted sucsses')
                 }
-                else if (data.success = false) {
+                else if (data.success == false) {
                     alert(data.error)
                 }
 
