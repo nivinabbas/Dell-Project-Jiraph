@@ -1,8 +1,12 @@
 const express = require("express");
+const app = express();
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
-
 const router = express.Router();
+const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken");
+const cookies = require("cookie-parser");
+
+
 const UserSchema = require('../schemas/UserSchema');
 const KeySchema = require('../schemas/KeySchema');
 const AuditSchema = require('../schemas/AuditSchema');
@@ -12,9 +16,13 @@ const AuditModel = mongoose.model("AuditModel", AuditSchema);
 
 var nodemailer = require('nodemailer')
 var validator = require("email-validator");
-const { find } = require("../schemas/TaskSchema");
+
+var secret = require("../index")
+const auth = require("../authentication/auth");
+const admin = require("../authentication/admin");
+
+
 const saltRounds = 10
- 
 
 var transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -24,27 +32,8 @@ var transporter = nodemailer.createTransport({
     }
 });
 
-AuditModel.insertMany(
-    {
-        employeeName: 'rami',
-        employeeEmail: 'rami@gmail.com',
-        employeeRole: 'Admin',
-        change: 'Login',
-        timeChange: '1'
-    }
-)
 
 
-const u = new UserModel({
-    userInfo: {
-        employeeName: "yousef",
-        employeeEmail: "yousef@gmail.com",
-        employeeRole: "admin",
-        password: "111"
-    }
-})
-
-//app.get/post/put/delete => router.get/post/put/delete
 router.post('/login', (req, res) => {
     const { email, password } = req.body;
     if (validator.validate(email)) {
@@ -52,8 +41,20 @@ router.post('/login', (req, res) => {
             if (checkEmail.length > 0) {
                 const isMatch = await bcrypt.compare(password,checkEmail[0].userInfo.password)
                 if(isMatch){
-                    if(checkEmail[0].active == 1){
-                        return (res.send({ success: true, error: null, info: { role: checkEmail[0].userInfo.employeeRole, id: checkEmail[0]._id } }))
+                    if(checkEmail[0].active == true){
+                        const token = await jwt.sign({
+                            name:checkEmail[0].userInfo.employeeName,
+                            username: checkEmail[0].userInfo.employeeEmail,
+                            role: checkEmail[0].userInfo.employeeRole,
+                          },
+                          secret
+                        );
+                        res.cookie("loginToken", token, {
+                            maxAge: 60000,
+                          });
+                                     res.send({ success: true, error: null, info: { role: checkEmail[0].userInfo.employeeRole, id: checkEmail[0]._id } })
+
+                          res.end();
                     }else{
                         return (res.send({ success: false, error: "User is deleted from the system", info: null }))
                     }
@@ -70,12 +71,28 @@ router.post('/login', (req, res) => {
     }
 })
 
-router.get('/getUsersList', (req, res) => {
-    UserModel.find({ active: 1 }).then(users => {
+router.get('/getUsersList',[auth,admin] , (req, res) => {
+    UserModel.find({active:true}).then(users => {
         if (users.length > 0) {
             let table = [];
             for (let index = 0; index < users.length; index++) {
-                table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id })
+                table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id , active:users[index].active })
+            }
+
+            res.send({ success: true, error: null, info: { table } })
+        }
+        else{
+            res.send({ success: false, error: "No Users found", info: null })
+        }
+    })
+})
+
+router.get('/getDeactivatedList',[auth,admin], (req, res) => {
+    UserModel.find({active:false}).then(users => {
+        if (users.length > 0) {
+            let table = [];
+            for (let index = 0; index < users.length; index++) {
+                table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id , active:users[index].active })
             }
 
             res.send({ success: true, error: null, info: { table } })
@@ -83,7 +100,7 @@ router.get('/getUsersList', (req, res) => {
     })
 })
 
-router.put('/deleteUser', (req, res) => {
+router.put('/deleteUser',[auth,admin], (req, res) => {
 
     const { id } = req.body;
     let table = [];
@@ -93,13 +110,13 @@ router.put('/deleteUser', (req, res) => {
         }
         else {
             if (docs) {
-                docs.active = 0;
+                docs.active = false;
                 await docs.save();
-                await UserModel.find({ active: 1 }).then(users => {
+                await UserModel.find({ active:true }).then(users => {
                     if (users.length > 0) {
 
                         for (let index = 0; index < users.length; index++) {
-                            table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id })
+                            table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id , active:users[index].active })
                         }
                         res.send({ success: true, error: null, info: { table } })
                     }
@@ -118,7 +135,7 @@ router.put('/deleteUser', (req, res) => {
 router.post('/forgotPassword', (req, res) => {
     const { email } = req.body;
     if (validator.validate(email)) {
-        UserModel.find({ "userInfo.employeeEmail": email, active: 1 }).then(checkEmail => {
+        UserModel.find({ "userInfo.employeeEmail": email, active: true }).then(checkEmail => {
             if (checkEmail.length > 0) {
                 const key = makeid(10)
 
@@ -158,7 +175,7 @@ ${key}`
 })
 
 
-router.post('/createUser', (req, res) => {
+router.post('/createUser',[auth,admin], (req, res) => {
 
     const { name, email, role, password } = req.body;
     let table = [];
@@ -172,13 +189,13 @@ router.post('/createUser', (req, res) => {
             else {
                 const salt = await bcrypt.genSalt(saltRounds)
                 const hashpassword = await bcrypt.hash(password,salt)
-                await UserModel.insertMany({ userInfo: { employeeName: name, employeeEmail: email, employeeRole: role, password: hashpassword }, active: 1 })
+                await UserModel.insertMany({ userInfo: { employeeName: name, employeeEmail: email, employeeRole: role, password: hashpassword }, active: true })
 
-                await UserModel.find({ active: 1 }).then(users => {
+                await UserModel.find({ active:true }).then(users => {
                     if (users.length > 0) {
 
                         for (let index = 0; index < users.length; index++) {
-                            table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id })
+                            table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id , active:users[index].active })
                         }
 
 
@@ -262,7 +279,7 @@ router.put('/updatePassword', (req, res) => {
 
 })
 
-router.put('/editUser', (req, res) => {
+router.put('/editUser',[auth,admin], (req, res) => {
     const { id, name, email, role, password } = req.body;
     if (validator.validate(email)) {
         UserModel.find({ _id: id }).then(async doc => {
@@ -320,6 +337,28 @@ function makeid(length) {
     return result;
 }
 
+router.put('/activeUser',[auth,admin], (req, res) => {
+    const {id} = req.body
+    let table =[]
+    UserModel.find({_id:id}).then(async doc=>{
+        if(doc.length>0){
+            doc[0].active = true
+            await doc[0].save();
+            await UserModel.find({ active:false }).then(users => { 
+                if (users.length > 0) {
+
+                    for (let index = 0; index < users.length; index++) {
+                        table.push({ email: users[index].userInfo.employeeEmail, name: users[index].userInfo.employeeName, role: users[index].userInfo.employeeRole, id: users[index]._id , active:users[index].active })
+                    }
+                }
+            })
+            return (res.send({ success: true, error: null, info: { table } }))
+        }
+        else{
+            return (res.send({success: false, error: 'User Not Found in DB', info: null}))
+        }
+    })
+})
 
 module.exports = router;
 
