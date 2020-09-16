@@ -34,10 +34,7 @@ function ModificationByField(props) {
       label: ["weekly"]
     };
 
-    //const savedFilters = { pageName: 'ModificationByField', filter1: { values: [] }, filter2: { values: [] }, filter3: { values: [] }, filter4: [] };
-
-
-
+    //fetch to receive Available Filters options from server by date
     fetch('/api/analytics/modificationByFieldFilters', {
       method: 'POST',
       body: JSON.stringify({
@@ -75,6 +72,27 @@ function ModificationByField(props) {
         }
         else { setUiObjs([]); }
       })
+
+    //fetch to receive saved filters 
+    fetch('/api/analytics/modificationByFieldSelectTwo', {
+      method: 'POST',
+      body: JSON.stringify({ savedFilters }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data.array[0].filters[1].values)
+        console.log(data.array[data.array.length - 1].filterNames);
+        console.log(data.array[data.array.length - 1].filterNames[0].value);
+        if (data.array != null) {
+          if (data.array.length > 0) {
+            setSelectFiltersOptions(data.array[data.array.length - 1].filterNames);
+          }
+        }
+      })
+
   }, [])
 
   //fetch to receive Data (UiObj) from server after every filter Change
@@ -122,54 +140,11 @@ function ModificationByField(props) {
       })
   }
 
-  const [selectFiltersOptions, setSelectFiltersOptions] = useState([]);
-
-  const renderSavedFilters = (savedFilters) => {
-    console.log(savedFilters.pageName);
-    fetch('/api/analytics/modificationByFieldSelectTwo', {
-      method: 'POST',
-      body: JSON.stringify({ savedFilters }),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data.array[0].filters[1].values)
-        console.log(data.array[data.array.length - 1].filterNames);
-        console.log(data.array[data.array.length - 1].filterNames[0].value);
-        //  console.log(data.array[0].filters[1].values[0])
-        const myArray = [];
-        // array=data;
-
-        if (data.array != null) {
-          if (data.array.length > 0) {
-
-            //  for(let i=0;i<data.array.length;i++){
-
-            setSelectFiltersOptions(data.array[data.array.length - 1].filterNames);
-            // } 
-
-
-
-          }
-
-          // setQaRepresentativeOptions(data[0].Values);
-
-        }
-
-      })
-  }
-
   //Modification By Field Variables
   const [UiObjs, setUiObjs] = useState([]); //UiObject from the server
   const [fieldNameOptions, setFieldNameOptions] = useState([]); //FieldName options for filtering
   const [valueOptions, setValueOptions] = useState([]);//Values of certain FieldName options for filtering
   const [startDate, setStartDate] = useState("");
-<<<<<<< HEAD:React/src/view/pages/Analytics/components/Pages/ModificationByField/ModificationByField.jsx
-=======
-  const [tasks, setTasks] = useState([])
->>>>>>> sally:React/src/view/pages/Analytics/components/ModificationByField/ModificationByField.jsx
   const [endDate, setEndDate] = useState("");
   const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([]);//Qa Representative options for filtering
   const labelOptions = [ //Labels for Displaying the Chart 
@@ -177,9 +152,12 @@ function ModificationByField(props) {
     { value: "weekly", label: "weekly" },
     { value: "monthly", label: "monthly" },
     { value: "yearly", label: "yearly" }];
-  const savedFilters = { pageName: 'ModificationByField', filters: [{ filter: 'fieldName', values: [] }, { filter: 'value', values: [] }, { filter: 'qaRepresentative', values: [] }, { filter: 'label', values: [] }], filterName: '' };
-  let filterName = '';
 
+
+  
+
+
+  // handleSaveFilter
 
   //Filters Changes Handlers
   // for each Filter we have a handler
@@ -227,8 +205,8 @@ function ModificationByField(props) {
     serverFilters.qaRepresentative = [];
     if (change != null) {
       change.map((item) => {
-        return (serverFilters.qaRepresentative.push(item.value))
-      }) 
+        return (serverFilters.values.push(item.value))
+      })
     }
     else { serverFilters.values = []; }
     console.log(serverFilters)
@@ -253,25 +231,17 @@ function ModificationByField(props) {
   const valueInput = useRef("")
   const qaInput = useRef("")
 
-  //handleFilterName
-  const handleFilterName = (e => {
-    filterName = e.target.value;
 
-  })
 
-  const handleSelectFilter = (change => {
-    renderSavedFilters(savedFilters);
-  })
 
-  // handleSaveFilter
+  //Filters Section
+
   const handleSaveFilter = (e => {
-
     savedFilters.filters[0].values.push(serverFilters.fieldName);
     savedFilters.filters[1].values.push(serverFilters.values);
     savedFilters.filters[2].values.push(serverFilters.qaRepresentative);
     savedFilters.filters[3].values.push(serverFilters.label[0]);
     savedFilters.filterName = filterName;
-
     fetch('/api/analytics/modificationByFieldSavedFilters', {
       method: 'POST',
       body: JSON.stringify({ savedFilters }),
@@ -281,19 +251,51 @@ function ModificationByField(props) {
     })
       .then(res => res.json())
       .then(data => {
-        if (data.success == true)
+        if (data.success == true) {
           renderSavedFilters(savedFilters);
+        }
 
-          else{
-            alert(data.error);
-          }
+        else {
+          alert(data.error);
+        }
       })
   })
+  const savedFilters = { pageName: 'ModificationByField', filters: [{ filter: 'fieldName', values: [] }, { filter: 'value', values: [] }, { filter: 'qaRepresentative', values: [] }, { filter: 'label', values: [] }], filterName: '' };
+  let filterName = '';
 
+  //handleFilterName
+  const handleFilterName = (e => {
+    filterName = e.target.value;
 
-  // const valueInput = useRef("")
-  // const qaInput = useRef("")
-  // const selectinput = useRef("")
+  })
+
+  const handleSelectFilter = (change => {
+    renderSavedFilters(savedFilters);
+  })
+  const [selectFiltersOptions, setSelectFiltersOptions] = useState([]);
+
+  const renderSavedFilters = (savedFilters) => {
+    console.log(savedFilters.pageName);
+    fetch('/api/analytics/modificationByFieldSelectTwo', {
+      method: 'POST',
+      body: JSON.stringify({ savedFilters }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data.array[0].filters[1].values)
+        console.log(data.array[data.array.length - 1].filterNames);
+        console.log(data.array[data.array.length - 1].filterNames[0].value);
+        if (data.array != null) {
+          if (data.array.length > 0) {
+            setSelectFiltersOptions(data.array[data.array.length - 1].filterNames);
+          }
+        }
+      })
+  }
+
 
 
   return (
@@ -324,7 +326,6 @@ function ModificationByField(props) {
             <p>Value</p>
             <Select
               name="value"
-              id="value"
               onChange={handleChangeValues}
               ref={valueInput}
               isMulti
@@ -334,35 +335,22 @@ function ModificationByField(props) {
           </div>
 
           <div className="ModificationByField__Filters__Header">
-<<<<<<< HEAD:React/src/view/pages/Analytics/components/Pages/ModificationByField/ModificationByField.jsx
-          <p>Qa Representative</p>
-          <Select
-          name="qaRepresentative"
-          ref={qaInput}
-          isMulti
-          onChange={handleChangeQaRepresentative}
-          placeholder="QA Representative"
-          className="ModificationByField__Filter"
-          options={qaRepresentativeOptions}
-          isClearable={true} />
-=======
             <p>Qa Representative</p>
             <Select
               name="qaRepresentative"
-              id="qaRepresentative"
               ref={qaInput}
+              isMulti
               onChange={handleChangeQaRepresentative}
               placeholder="QA Representative"
               className="ModificationByField__Filter"
               options={qaRepresentativeOptions}
               isClearable={true} />
->>>>>>> sally:React/src/view/pages/Analytics/components/ModificationByField/ModificationByField.jsx
           </div>
 
           <div className="ModificationByField__Filters__Header">
             <p>Start Date</p>
             <input
-              className="ModificationByField_Filter_date"
+              className="ModificationByField__Filter__date"
               type="date"
               value={startDate}
               onChange={handleChangeStartDate}
@@ -372,7 +360,7 @@ function ModificationByField(props) {
           <div className="ModificationByField__Filters__Header">
             <p>End Date</p>
             <input
-              className="ModificationByField_Filter_date"
+              className="ModificationByField__Filter__date"
               type="date"
               name="endDate"
               value={endDate}
@@ -384,17 +372,10 @@ function ModificationByField(props) {
             <p>Period</p>
             <Select
               name="label"
-              id="label"
               onChange={handleChangeLabel}
               placeholder="Weekly"
               className="ModificationByField__Filter"
               options={labelOptions} />
-
-            {/* <input className="ModificationByField__Filter"
-          type="text"
-          name="filterName"
-          id="filterName"
-          placeholder="filterName" onKeyUp={handleSaveFilter}></input> */}
             <form >
               <input className="ModificationByField__Filter"
                 type="text"
@@ -418,9 +399,6 @@ function ModificationByField(props) {
               // ref={selectinput}
               className="ModificationByField__Filter"
               options={selectFiltersOptions} />
-
-
-
           </div>
         </div>
       </div>
@@ -431,3 +409,6 @@ function ModificationByField(props) {
 
 
 export default ModificationByField;
+
+
+

@@ -993,7 +993,7 @@ router.post('/modificationByFieldSelectTwo', async (req, res) => {
             //console.log('here');
             for (let index = 0; index < filters.length; index++) {
                 array.push({ pageName: filters[index].Filter.pageName, filters: filters[index].Filter.filters, filterName: filters[index].Filter.filterName });
-                filterNames.push({ lable: filters[index].Filter.filterName, value: filters[index].Filter.filterName });
+                filterNames.push({ label: filters[index].Filter.filterName, value: filters[index].Filter.filterName });
             }
 
         }
