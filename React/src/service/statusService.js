@@ -1,28 +1,28 @@
 exports.initialTableFilters = [{
-        name: "modificationType",
-        value: ""
-    },
-    {
-        name: "modificationField",
-        value: ""
-    },
-    {
-        name: "modificationValue",
-        value: ""
-    },
-    {
-        name: "status",
-        value: "notDone"
-    }
+    name: "modificationType",
+    value: "All"
+},
+{
+    name: "modificationField",
+    value: ""
+},
+{
+    name: "modificationValue",
+    value: ""
+},
+{
+    name: "status",
+    value: "notDone"
+}
 ];
 exports.initialPieChartsFilters = [{
-        name: "pieChartModificationType",
-        value: "",
-    },
-    {
-        name: "pieChartModificationField",
-        value: "",
-    },
+    name: "pieChartModificationType",
+    value: "",
+},
+{
+    name: "pieChartModificationField",
+    value: "",
+},
 ];
 
 exports.tasksNames = (tasksId, openTasks) => {

@@ -25,7 +25,7 @@ const timeLabelOptions = [
 ];
 const statusOptions = [
   { value: "all", label: "All" },
-  { value: "done", label: "Done" },
+  { value: "Done", label: "Done" },
   { value: "notDone", label: "NotDone" },
 ];
 const StatusPage = () => {
@@ -379,14 +379,23 @@ const StatusPage = () => {
         }
       });
     const newFilters = [...tableFilters];
+    newFilters[0].value = "All";
+    newFilters[1].value = null;
+    newFilters[2].value = null;
     newFilters[3].value = status;
     setTableFilters(newFilters);
   };
 
   const handleStaticsClick = (date, tasks) => {
+    const newFilters = [...tableFilters];
+    newFilters[0].value = "All";
+    newFilters[1].value = null;
+    newFilters[2].value = null;
+    newFilters[3].value = "Done";
+    setTableFilters(newFilters);
     setOpenTasks(tasks);
   };
-
+  console.log("asdadasdasdasdasda", tableFilters);
   return (
     <div>
       <div className="status__header">Status</div>
