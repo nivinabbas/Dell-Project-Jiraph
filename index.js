@@ -37,6 +37,10 @@ app.use("/api/analytics", analyticsRouter);
 const bellaRouting = require("./routing/bellaRouting");
 app.use("/api/PostBellaData", bellaRouting);
 
+const statistics = require("./routing/statistics");
+app.use("/api/statistics", statistics);
+
+
 const port = process.env.PORT || 4000; 
 
 app.listen(port, () => {
