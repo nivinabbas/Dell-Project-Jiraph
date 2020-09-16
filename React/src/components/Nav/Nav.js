@@ -16,10 +16,15 @@ import adminIcon from "../../img/adminB2.png"
 import statusIcon from "../../img/statusB.png"
 import analysisIcon from "../../img/analyticsB.png"
 import trademarkIcon from "../../img/trademark.png"
+import { useState } from 'react';
 export default props => {
 
     let location = useLocation().pathname;
     let token = Cookies.get('loginToken');
+    // const [render,setRender]=useState(Math.random())
+
+
+    //if there is no cookies dont show nav bar
     if(!token){
         
     return (
@@ -42,6 +47,7 @@ export default props => {
 
     if (token != null) {
         const decoded = jwt.decode(token);
+        //show the respective bar by the role
         if (decoded.role === 'Admin') {
             return (
                 <nav className="sidebar">
@@ -52,7 +58,7 @@ export default props => {
                    JIRAPH
                   </div>
                     <div className="menu__wrapper">
-                        <div className='menu__item'>
+                        <div className='menu__item' >
                             <Link className={location === "/register" ? 'menu__link menu__link--selected' : "menu__link"} to="/" ><img className="register__logo" src={regIcon} alt="this is a logo" />Log Out</Link>
                         </div>
                     </div>

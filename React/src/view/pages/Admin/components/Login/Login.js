@@ -6,20 +6,23 @@ import './Login.css';
 import {
     Link
 } from "react-router-dom";
+import { useEffect } from "react";
 
 
 
 function Login(props) {
     const history = useHistory();
     let error='';
-    Cookies.remove('loginToken');   
+
      function handleLogin(e) {
         e.preventDefault();
+        Cookies.remove('loginToken');
 
         const { userEmailInp, userPswInp } = e.target.elements;
         const email = userEmailInp.value;
         const password = userPswInp.value;
 
+        //fetch to login user 
         fetch('/api/users/login', {
             method: "POST",
             body: JSON.stringify({ email, password }),

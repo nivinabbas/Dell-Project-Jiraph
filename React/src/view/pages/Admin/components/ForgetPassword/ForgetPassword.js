@@ -17,7 +17,7 @@ function Forgotpassword(props) {
         const email  = sendToMailInput.value;
         console.log(email)
         
-
+        //fetch to check if email in database
         fetch('/api/users/forgotPassword', {
             method: "POST",
             body: JSON.stringify({ email }),
