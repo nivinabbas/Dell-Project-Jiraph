@@ -81,17 +81,21 @@ function ChangesByParentId() {
   
   //Start Date
   const HandleStartDateChange = (change => {
+    setStartDate(change.target.value)
     serverFilters.startDate = change.target.value;
-    render(serverFilters);
+    if (serverFilters.fixVersion.length>0) {
+    render(serverFilters);}
   })
 
   //End Date
   const HandleEndDateChange = (change => {
+    setEndDate(change.target.value)
     let endDate =new Date(change.target.value)
     const timeZone = (endDate.getTimezoneOffset() / 60);
     endDate.setHours((0 - timeZone)+(23), 59, 59, 59);
     serverFilters.endDate = endDate;
-    render(serverFilters);
+    if (serverFilters.fixVersion.length>0){
+    render(serverFilters);}
   })
 
   return (

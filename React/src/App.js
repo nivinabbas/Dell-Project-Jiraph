@@ -31,11 +31,13 @@ import {
   useLocation,
   useParams
 } from "react-router-dom";
+import { createBrowserHistory } from "history";
+
 
 function App() {
   // let location = useLocation();
   // console.log(location);
-
+const history = createBrowserHistory();
   return (
     <Router>
       <div className="app">
@@ -53,6 +55,7 @@ function App() {
             <Route exact={true} path="/">
               <Login />
             </Route>
+            
           
             <Route path="/register"></Route>
             <Route path="/forgotPassword">
@@ -65,7 +68,7 @@ function App() {
               <Route path="/ChangePassword/:email" children={<ChangePassword  />} />
 
 
-            <Route path="/Admin">
+            <Route path="/Admin" history={history}>
               <UserList />
             </Route>
             <Route path="/Audit">
@@ -78,7 +81,7 @@ function App() {
             <ModificationByField />
             </Route>
             
-            <Route path="/ModificationByField">
+            <Route path="/ModificationByField" >
               <ModificationByField />
             </Route>
             <Route path="/DeletedJiraTickets">
