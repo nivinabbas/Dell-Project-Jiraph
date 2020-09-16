@@ -16,7 +16,7 @@ import {
   tasksNames,
 } from "../../../../../service/statusService";
 import "./StatusPage.css";
-import { dateFormat, lastMonth } from "../../../../../service/utils";
+import { datesFormat } from "../../../../../service/utils";
 
 const timeLabelOptions = [
   { value: "daily", label: "Daily" },
@@ -44,14 +44,15 @@ const StatusPage = () => {
     modificationFieldValueOptions,
     setModificationFieldValueOptions,
   ] = useState({});
-  const [startDate, setStartDate] = useState(dateFormat(lastMonth()));
-  const [endDate, setEndDate] = useState(dateFormat(new Date()));
+  const [startDate, setStartDate] = useState(datesFormat()[0]);
+  const [endDate, setEndDate] = useState(datesFormat()[1]);
   const [timeLabel, setTimeLabel] = useState("");
   const [pieChartsFilters, setPieChartsFilters] = useState(
     initialPieChartsFilters
   );
   const [tableFilters, setTableFilters] = useState(initialTableFilters);
   const [tasksId, setTasksId] = useState([]);
+
   //statistics
   useEffect(() => {
     const filters = {
