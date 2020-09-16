@@ -13,10 +13,10 @@ import { useEffect } from "react";
 function Login(props) {
     const history = useHistory();
     let error='';
+    Cookies.remove('loginToken');
 
      function handleLogin(e) {
         e.preventDefault();
-        Cookies.remove('loginToken');
 
         const { userEmailInp, userPswInp } = e.target.elements;
         const email = userEmailInp.value;
