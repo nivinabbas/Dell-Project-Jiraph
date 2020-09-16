@@ -386,6 +386,12 @@ const StatusPage = () => {
   };
 
   const handleStaticsClick = (date, tasks) => {
+    const newFilters = [...tableFilters];
+    newFilters[0].value = "All";
+    newFilters[1].value = null;
+    newFilters[2].value = null;
+    newFilters[3].value = "Done";
+    setTableFilters(newFilters);
     setOpenTasks(tasks);
   };
   console.log("asdadasdasdasdasda", tableFilters);
