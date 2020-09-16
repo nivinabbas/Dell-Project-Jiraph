@@ -377,6 +377,9 @@ const StatusPage = () => {
         }
       });
     const newFilters = [...tableFilters];
+    newFilters[0].value = "All";
+    newFilters[1].value = null;
+    newFilters[2].value = null;
     newFilters[3].value = status;
     setTableFilters(newFilters);
   };
