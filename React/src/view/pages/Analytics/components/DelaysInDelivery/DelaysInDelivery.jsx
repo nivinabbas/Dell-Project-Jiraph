@@ -118,7 +118,7 @@ function DelaysInDelivery() {
   //Jira Type Filter
   const jiraTypeOptions = [
     { value: "Create", label: "Create" },
-    { value: "Deleted", label: "Deleted" },
+    { value: "Delete", label: "Delete" },
     { value: "Update", label: "Update" },
   ]
 

@@ -732,7 +732,7 @@ router.post('/delaysInDelivery', [auth, qaTopManagers, audit], async (req, res) 
     startDate = new Date(startDate)
     endDate = new Date(endDate)
 
-
+    console.log(fixVersion, jiraTypeFilter, label, qaRepresentativeFilter)
 
     let dateFormat = '';
 
