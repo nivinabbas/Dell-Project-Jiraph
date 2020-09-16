@@ -29,7 +29,8 @@ function dateFormat() {
   return `${ye}-${mo}-${da}`;
 }
 
-//////////////////////////////////////
+
+module.exports = router;
 
 // Start daily status alert !
 router.get("/dailyalerts", [auth, qaManager], async function (req, res) {

@@ -2,6 +2,8 @@ import React from 'react';
 import "./MainTable.css";
 import { forwardRef } from 'react';
 
+
+// import  Material Ui Icons for Table 
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import ChevronLeft from '@material-ui/icons/ChevronLeft';
 import ChevronRight from '@material-ui/icons/ChevronRight';
@@ -16,8 +18,11 @@ import ViewColumn from '@material-ui/icons/ViewColumn';
 
 
 function MainTable(props) {
+
   const { tasks } = props
   const {title}=props;
+
+  // Intiliaze Icons 
   const tableIcons = {
     Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
     FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
@@ -30,10 +35,12 @@ function MainTable(props) {
     ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
     SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
   };
+
+  // Table Titles 
   const columns = [
     {
       title: 'jiraId', field: 'jiraId',
-      cellStyle: {
+      cellStyle: {  
         minWidth: 150,
         border: '1px solid steelBlue',
         backgroundColor: 'whiteSmoke',
@@ -192,6 +199,7 @@ function MainTable(props) {
     },
   ]
 
+  // 
   let data = []
   tasks.map((task) => {
     return data = [...data,
