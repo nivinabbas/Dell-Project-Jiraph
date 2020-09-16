@@ -13,7 +13,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import {
   initialTableFilters,
   initialPieChartsFilters,
-  tasksNames,
+  tasksToBeUpdated,
 } from "../../../../../service/statusService";
 import "./StatusPage.css";
 import { datesFormat } from "../../../../../service/utils";
@@ -234,15 +234,19 @@ const StatusPage = () => {
   };
 
   const handleUpdateClick = () => {
-    const names = tasksNames(tasksId, openTasks);
+    const tasks = tasksToBeUpdated(tasksId, openTasks);
     confirmAlert({
       childrenElement: () => (
         <ol>
           <h2>Are You Sure?</h2>
-          {names.map((name, index) => (
+          {tasks.map((task, index) => (
             <li key={index}>
-              <span>{++index}.</span>
-              {name}
+              <p>
+                {++index}.{task.name}
+                <span
+                  style={{ fontWeight: "bold" }}
+                >{`(to ${task.status})`}</span>
+              </p>
             </li>
           ))}
         </ol>
@@ -355,6 +359,7 @@ const StatusPage = () => {
           alert(error);
         }
       });
+    setTasksId([]);
   };
 
   const handleSegmentClick = (date, status) => {
@@ -370,6 +375,7 @@ const StatusPage = () => {
         let { success, error, info } = data;
         if (success) {
           setOpenTasks(info);
+          setTasksId([]);
         } else {
           alert(error);
         }
@@ -391,6 +397,7 @@ const StatusPage = () => {
     newFilters[3].value = "Done";
     setTableFilters(newFilters);
     setOpenTasks(tasks);
+    setTasksId([]);
   };
 
   return (

@@ -25,13 +25,16 @@ exports.initialPieChartsFilters = [{
     },
 ];
 
-exports.tasksNames = (tasksId, openTasks) => {
-    const names = [];
+exports.tasksToBeUpdated = (tasksId, openTasks) => {
+    const tasks = [];
     for (let id of tasksId) {
         let found = openTasks.find(task => id === task._id);
         if (found) {
-            names.push(found.jiraItem.name);
+            tasks.push({
+                name: found.jiraItem.name,
+                status: found.taskItem.isDone ? "Not Done" : "Done"
+            });
         }
     }
-    return names;
+    return tasks;
 }
