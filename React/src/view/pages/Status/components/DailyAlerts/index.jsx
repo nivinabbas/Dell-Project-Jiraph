@@ -13,31 +13,31 @@ const DailyAlerts = ({ cardsContent }) => {
         <div className="daily-alerts-items">
           <div
             className="daily-alerts-item"
-            style={{ backgroundColor: "#ff5722" }}
+            style={{ backgroundColor: "#EE6411" }}
           >
-            <h3>Functional Tests</h3>
+            <h3 className="daily-alerts-item__name">Functional Tests</h3>
             <span>{cardsContent[0].number}</span>
           </div>
 
           <div
             className="daily-alerts-item"
-            style={{ backgroundColor: "#2196f3" }}
+            style={{ backgroundColor: "#6EA204" }}
           >
-            <h3>Fix Version</h3>
+            <h3 className="daily-alerts-item__name">Fix Version</h3>
             <span>{cardsContent[2].number}</span>
           </div>
           <div
             className="daily-alerts-item"
-            style={{ backgroundColor: "#009688" }}
+            style={{ backgroundColor: "#0076CE " }}
           >
-            <h3>Deleted Tasks</h3>
+            <h3 className="daily-alerts-item__name">Deleted Tasks</h3>
             <span>{cardsContent[1].number}</span>
           </div>
           <div
             className="daily-alerts-item"
-            style={{ backgroundColor: "#3f51b5" }}
+            style={{ backgroundColor: "#00447C" }}
           >
-            <h3>Total Changes/Not Done</h3>
+            <h3 className="daily-alerts-item__name">Total Changes/Not Done</h3>
             <span>{cardsContent[3].number}</span>
           </div>
         </div>

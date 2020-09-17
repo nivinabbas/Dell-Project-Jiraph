@@ -51,7 +51,7 @@ export default props => {
                 <nav className="sidebar">
                     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
                     <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet"></link>
-                    <div className="sidebar__header-wrapper">
+                    <div className="sidebar__header-wrapper1">
                         <img className="jiraph__logo" src={logo} alt="this is a logo" />
                    JIRAPH
                   </div>
@@ -72,7 +72,7 @@ export default props => {
                 <nav className="sidebar">
                     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
                     <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet"></link>
-                    <div className="sidebar__header-wrapper">
+                    <div className="sidebar__header-wrapper2">
                         <img className="jiraph__logo" src={logo} alt="this is a logo" />
                    JIRAPH
                   </div>

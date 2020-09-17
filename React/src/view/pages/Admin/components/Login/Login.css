@@ -16,10 +16,13 @@
     ". . .";
 }
 
-.sidebar__header-wrapper{
+.sidebar__header-wrapper3{
     background-color: white;
     padding: 2rem;
     height: 5.5rem;
+    color: #00447c;
+    font-weight: 500;
+    font-size: 24px;
 }
 .header__login{
     font-weight: 400;
