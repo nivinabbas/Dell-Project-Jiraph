@@ -13,10 +13,11 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import {
   initialTableFilters,
   initialPieChartsFilters,
-  tasksNames,
+  tasksToBeUpdated,
 } from "../../../../../service/statusService";
 import "./StatusPage.css";
-import { dateFormat, lastMonth } from "../../../../../service/utils";
+import { datesFormat } from "../../../../../service/utils";
+import Tooltips from "../helpers/Tooltips.jsx";
 
 const timeLabelOptions = [
   { value: "daily", label: "Daily" },
@@ -25,7 +26,7 @@ const timeLabelOptions = [
 ];
 const statusOptions = [
   { value: "all", label: "All" },
-  { value: "done", label: "Done" },
+  { value: "Done", label: "Done" },
   { value: "notDone", label: "NotDone" },
 ];
 const StatusPage = () => {
@@ -44,14 +45,15 @@ const StatusPage = () => {
     modificationFieldValueOptions,
     setModificationFieldValueOptions,
   ] = useState({});
-  const [startDate, setStartDate] = useState(dateFormat(lastMonth()));
-  const [endDate, setEndDate] = useState(dateFormat(new Date()));
+  const [startDate, setStartDate] = useState(datesFormat()[0]);
+  const [endDate, setEndDate] = useState(datesFormat()[1]);
   const [timeLabel, setTimeLabel] = useState("");
   const [pieChartsFilters, setPieChartsFilters] = useState(
     initialPieChartsFilters
   );
   const [tableFilters, setTableFilters] = useState(initialTableFilters);
   const [tasksId, setTasksId] = useState([]);
+
   //statistics
   useEffect(() => {
     const filters = {
@@ -148,7 +150,7 @@ const StatusPage = () => {
       .then((res) => res.json())
       .then((data) => {
         let { success, error, info } = data;
-        console.log("type Pie info: ", info);
+
         if (success) {
           setTypePieChart(info);
         } else {
@@ -225,25 +227,27 @@ const StatusPage = () => {
   }, []);
 
   const handleDoneClick = (jiraId) => {
-    console.log(jiraId);
     const cloned = [...tasksId];
     const index = tasksId.indexOf(jiraId);
-    index != -1 ? cloned.splice(index, 1) : cloned.push(jiraId);
+    index !== -1 ? cloned.splice(index, 1) : cloned.push(jiraId);
 
     setTasksId(cloned);
   };
-  console.log("tttt", tableFilters[3]);
-  const handleUpdateClick = () => {
-    const names = tasksNames(tasksId, openTasks);
 
+  const handleUpdateClick = () => {
+    const tasks = tasksToBeUpdated(tasksId, openTasks);
     confirmAlert({
-      title: `Confirm`,
-      message: (
+      childrenElement: () => (
         <ol>
-          {names.map((name, index) => (
+          <h2>Are You Sure?</h2>
+          {tasks.map((task, index) => (
             <li key={index}>
-              <span>{++index}.</span>
-              {name}
+              <p>
+                {++index}.{task.name}
+                <span
+                  style={{ fontWeight: "bold" }}
+                >{`(to ${task.status})`}</span>
+              </p>
             </li>
           ))}
         </ol>
@@ -260,6 +264,7 @@ const StatusPage = () => {
                   (task) => tasksId.indexOf(task._id) === -1
                 );
                 setOpenTasks(tasks);
+                setTasksId([]);
               }
 
               fetch("/api/status/updateTasks", {
@@ -290,7 +295,6 @@ const StatusPage = () => {
     });
   };
 
-  ////////////////////////////
   const handlePieChartsFilters = (filter, name) => {
     const newPieFilters = [...pieChartsFilters].map((f) => {
       if (f.name === name) {
@@ -300,7 +304,7 @@ const StatusPage = () => {
     });
     setPieChartsFilters(newPieFilters);
   };
-  //date
+
   const handleDateClick = (date) => {
     const { name, value } = date;
     name === "startDate"
@@ -351,16 +355,15 @@ const StatusPage = () => {
       .then((res) => {
         let { success, error, info } = res;
         if (success) {
-          console.log(info.doc);
           setOpenTasks(info.doc);
         } else {
           alert(error);
         }
       });
+    setTasksId([]);
   };
 
   const handleSegmentClick = (date, status) => {
-    console.log("s:", status);
     fetch("/api/status/segmentData", {
       method: "POST",
       headers: {
@@ -373,17 +376,29 @@ const StatusPage = () => {
         let { success, error, info } = data;
         if (success) {
           setOpenTasks(info);
+          setTasksId([]);
         } else {
           alert(error);
         }
       });
+
     const newFilters = [...tableFilters];
+    newFilters[0].value = "All";
+    newFilters[1].value = null;
+    newFilters[2].value = null;
     newFilters[3].value = status;
     setTableFilters(newFilters);
   };
 
   const handleStaticsClick = (date, tasks) => {
+    const newFilters = [...tableFilters];
+    newFilters[0].value = "All";
+    newFilters[1].value = null;
+    newFilters[2].value = null;
+    newFilters[3].value = "Done";
+    setTableFilters(newFilters);
     setOpenTasks(tasks);
+    setTasksId([]);
   };
 
   return (
@@ -411,8 +426,15 @@ const StatusPage = () => {
         </div>
 
         <div className="statusPage__barChart">
-          <h2 className="statusPage__headerTitles">Tasks Statistics</h2>
-          {StatisticsChart.length != 0 && (
+          <div>
+            <h2 className="statusPage__headerTitles">
+              Tasks Statistics
+              <h2 style={{ display: "inline" }}>
+                <Tooltips />
+              </h2>
+            </h2>
+          </div>
+          {StatisticsChart.length !== 0 && (
             <StatisticsChart
               data={statisticsChart}
               onDataSelected={handleStaticsClick}
@@ -436,7 +458,7 @@ const StatusPage = () => {
                   <CircularProgress disableShrink />
                 </div>
               )}
-              {stackedChart.length != 0 && (
+              {stackedChart.length !== 0 && (
                 <StackedChart
                   data={stackedChart}
                   onDataSelected={handleSegmentClick}
@@ -486,6 +508,7 @@ const StatusPage = () => {
             onSelect={handleSelect}
             tableFilters={tableFilters}
             onUpdateClick={handleUpdateClick}
+            numOfTasksToBeUpdeated={tasksId.length}
           />
         </div>
       </div>

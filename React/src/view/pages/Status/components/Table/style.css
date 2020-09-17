@@ -69,6 +69,7 @@
   width: 22em;
   /* position: relative; */
   padding-right: 2;
+  height: max-content;
 }
 
 .container__filterSelect {
