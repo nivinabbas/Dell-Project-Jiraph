@@ -428,12 +428,9 @@ const StatusPage = () => {
 
         <div className="statusPage__barChart">
           <div>
-            <h2 className="statusPage__headerTitles">
-              Tasks Statistics
               <h2 style={{ display: "inline" }}>
                 <Tooltips />
               </h2>
-            </h2>
           </div>
           {StatisticsChart.length !== 0 && (
             <StatisticsChart

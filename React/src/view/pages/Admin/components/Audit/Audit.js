@@ -120,10 +120,9 @@ const render = (serverFilters) => {
 
     return (
 
-        
-
         <div className='adminpage'>
             <div className="ModificationByField__Filters">
+            Start date :
             <input
           className="ModificationByField__Filter__date"
           type="date"
@@ -131,7 +130,7 @@ const render = (serverFilters) => {
            onChange={handleChangeStartDate}
         />
 
-
+        End date :
         <input
           className="ModificationByField__Filter__date"
           type="date"
@@ -142,12 +141,12 @@ const render = (serverFilters) => {
             <div id="header">
             </div>
             <div className='AdminTable'>
-                <div className="TableColHeeader">
-                    <h4>Username</h4>
-                    <h4>E-Mail</h4>
-                    <h4> Role</h4>
-                    <h4>Action</h4>
-                    <h4>Date & Time</h4>
+                <div className="TableColHeeader2">
+                    <h4 className="table-haader-item">Username</h4>
+                    <h4 className="table-haader-item">E-Mail</h4>
+                    <h4 className="table-haader-item"> Role</h4>
+                    <h4 className="table-haader-item">Action</h4>
+                    <h4 className="table-haader-item">Date & Time</h4>
                 </div>
               
                 
