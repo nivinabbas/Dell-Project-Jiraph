@@ -92,7 +92,7 @@ export default function TasksTable({
           />
         </div>
         <button
-          className="filterSelectB"
+          className="update__Btn"
           onClick={() => onUpdateClick()}
           disabled={numOfTasksToBeUpdeated === 0}
         >
