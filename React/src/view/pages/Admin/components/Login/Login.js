@@ -43,7 +43,7 @@ function Login(props) {
                     history.replace("/analysis")
                 }
                 else 
-                alert("User Not Found")
+                alert("Username or password is incorrect")
 
             });
     }
