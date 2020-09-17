@@ -17,6 +17,7 @@ import {
 } from "../../../../../service/statusService";
 import "./StatusPage.css";
 import { datesFormat } from "../../../../../service/utils";
+import Tooltips from "../helpers/Tooltips.jsx";
 
 const timeLabelOptions = [
   { value: "daily", label: "Daily" },
@@ -425,7 +426,14 @@ const StatusPage = () => {
         </div>
 
         <div className="statusPage__barChart">
-          <h2 className="statusPage__headerTitles">Tasks Statistics</h2>
+          <div>
+            <h2 className="statusPage__headerTitles">
+              Tasks Statistics
+              <h2 style={{ display: "inline" }}>
+                <Tooltips />
+              </h2>
+            </h2>
+          </div>
           {StatisticsChart.length !== 0 && (
             <StatisticsChart
               data={statisticsChart}
