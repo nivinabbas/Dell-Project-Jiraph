@@ -1,8 +1,9 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import Select from "react-select";
 import "./style.css";
 import TablePagination from "@material-ui/core/TablePagination";
 import { useEffect } from "react";
+import { Button } from "@material-ui/core";
 const getPaginatedTasks = (tasks = [], pageNumber = 0, rowsCount = 25) => {
   const start = (pageNumber + 1) * rowsCount - rowsCount;
   return tasks.slice(start, start + rowsCount);
@@ -18,15 +19,11 @@ export default function TasksTable({
   onSelect,
   tableFilters,
   onUpdateClick,
+  numOfTasksToBeUpdeated,
 }) {
   const disableSelect = () => {
     return tableFilters[0].value !== "Update" ? true : false;
   };
-
-  /* Select inputs refs */
-  const modField = useRef("");
-  const modValue = useRef("");
-  const statusSelect = useRef("");
 
   const [pageNumber, setPageNumber] = useState(0);
   const [rowsCount, setRowsCount] = useState(25);
@@ -46,10 +43,6 @@ export default function TasksTable({
     setPaginatedTasks(getPaginatedTasks(openTasks));
   }, [openTasks]);
 
-  // /* Select inputs refs */
-  // const modField = useRef("");
-  // const modValue = useRef("");
-
   return (
     <div className="open-tasks">
       <div className="open-tasks-title">OPEN TASKS :</div>
@@ -60,12 +53,8 @@ export default function TasksTable({
             options={modificationTypeOptions}
             className="filterSelectB__3"
             onChange={(filter, name) => onSelect(filter, "modificationType")}
-            placeholder="All"
-            onInputChange={() => {
-              modField.current.state.value = "";
-              modValue.current.state.value = "";
-              statusSelect.current.state.value = "";
-            }}
+            placeholder={tableFilters[0].value}
+            value={tableFilters[0].value}
           />
         </div>
         <div>
@@ -77,12 +66,8 @@ export default function TasksTable({
               onSelect(filterObj, "modificationField")
             }
             isDisabled={disableSelect()}
-            placeholder="Field"
-            ref={modField}
-            onInputChange={() => {
-              modValue.current.state.value = "";
-              statusSelect.current.state.value = "";
-            }}
+            placeholder={tableFilters[1].value}
+            value={tableFilters[1].value}
           />
         </div>
         <div>
@@ -92,8 +77,8 @@ export default function TasksTable({
             className="filterSelectB__3"
             onChange={(filter, name) => onSelect(filter, "modificationValue")}
             isDisabled={disableSelect()}
-            placeholder="Value"
-            ref={modValue}
+            placeholder={tableFilters[2].value}
+            value={tableFilters[2].value}
           />
         </div>
         <div>
@@ -102,13 +87,16 @@ export default function TasksTable({
             options={statusOptions}
             className="filterSelectB__3"
             onChange={(filter, name) => onSelect(filter, "status")}
-            ref={statusSelect}
             placeholder={tableFilters[3].value}
-            // value={}
+            value={tableFilters[3].value}
           />
         </div>
-        <button className="update__Btn" onClick={() => onUpdateClick()}>
-          Update
+        <button
+          className="update__Btn"
+          onClick={() => onUpdateClick()}
+          disabled={numOfTasksToBeUpdeated === 0}
+        >
+          Update Task/s <span>{numOfTasksToBeUpdeated}</span>
         </button>
       </div>
       <div className="open-tasks-table">
@@ -146,7 +134,6 @@ export default function TasksTable({
                     onClick={() => onDoneClick(task._id, task.taskItem.isDone)}
                     key={task._id}
                     defaultChecked={task.taskItem.isDone}
-                    // checked={task.taskItem.isDone}
                     onChange={() => {}}
                   />
                 </td>

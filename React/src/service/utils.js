@@ -5,24 +5,19 @@ exports.isEmpty = (obj) => {
   return true;
 };
 
-exports.dateFormat = (date) => {
-  const ye = new Intl.DateTimeFormat("en", {
-    year: "numeric",
-  }).format(date);
-  const mo = new Intl.DateTimeFormat("en", {
-    month: "2-digit",
-  }).format(date);
-  const da = new Intl.DateTimeFormat("en", {
-    day: "2-digit",
-  }).format(date);
+/**
+ * returns two dates with difference of month  
+ * startDate
+ * endDate
+ * format MM-DD-YYYY
+ *  */
+exports.datesFormat = () => {
+  let startDate = new Date();
+  let endDate = new Date();
+  startDate.setMonth(endDate.getMonth() - 1);
+  let endMonth = endDate.getMonth() + 1 < 10 ? `0${endDate.getMonth() + 1}` : endDate.getMonth() + 1;
+  let startMonth = startDate.getMonth() + 1 < 10 ? `0${startDate.getMonth() + 1}` : startDate.getMonth() + 1;
 
-  return `${ye}-${mo}-${da}`;
-}
-
-exports.lastMonth = () => {
-  const date = new Date();
-  date.setDate(1);
-  date.setMonth(date.getMonth() - 1);
-
-  return date;
+  const dates = [`${startDate.getFullYear()}-${startMonth}-${startDate.getDate()}`, `${endDate.getFullYear()}-${endMonth}-${endDate.getDate()}`]
+  return dates;
 }
