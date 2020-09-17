@@ -31,8 +31,9 @@ function dateFormat() {
 
 function lastMonth(date) {
   let d = new Date(date);
-  d.setDate(1);
+  d.setDate(d.getDate());
   d.setMonth(d.getMonth() - 1);
+ 
   return d;
 }
 
