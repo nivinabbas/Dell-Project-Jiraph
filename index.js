@@ -3,6 +3,9 @@ const app = express();
 var bodyParser = require('body-parser')
 const jwt = require("jsonwebtoken");
 const cookies = require("cookie-parser");
+const cors = require('cors');
+
+app.use(cors()); //BE aware! this options should be only use to server Bella.js server. please correct it to the url of bella server, after moving to DELL premise
 app.use(bodyParser.json()); // to support JSON-encoded bodies
 app.use(
   bodyParser.urlencoded({
