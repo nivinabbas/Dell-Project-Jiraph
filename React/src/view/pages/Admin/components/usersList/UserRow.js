@@ -8,7 +8,7 @@ export default props => {
    //-----------------------------------------
     //show users list 
     return (
-        <form id={user.id} className="TableBody" onSubmit={(e => onSave(e, user.id))} >
+        <form id={user.id} className="TableBody_UserList" onSubmit={(e => onSave(e, user.id))} >
             <input id="item" name="name" disabled={!edit} type="text" defaultValue={user.name} ></input>
             <input id="item" disabled={!edit} type="email" name='email' defaultValue={user.email}></input>
             <select  id="item__slt"  disabled={!edit} type="text" name='role' defaultValue={user.role}>

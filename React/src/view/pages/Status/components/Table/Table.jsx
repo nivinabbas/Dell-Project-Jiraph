@@ -96,7 +96,7 @@ export default function TasksTable({
           onClick={() => onUpdateClick()}
           disabled={numOfTasksToBeUpdeated === 0}
         >
-          Update Task/s <span>{numOfTasksToBeUpdeated}</span>
+          Update Task/s  <span>{numOfTasksToBeUpdeated}</span>
         </button>
       </div>
       <div className="open-tasks-table">
