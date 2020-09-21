@@ -2,33 +2,50 @@
     padding: 0;
     margin: 0;
 }
+.login {
+    border-radius: 3px;
+}
 .login-wrapper {
     /* background-color: #C8C9C7; */
     display: grid;
-    grid-template-columns: 23vw 41vw auto;
+    grid-template-columns: 10vw 55vw auto;
     grid-template-rows: 7vh 70vh auto;
     grid-template-areas: 
-    "header1 header1 header1"
+    ". . . "
     ". box ."
     ". . .";
 }
-.header__login{
+
+.sidebar__header-wrapper3{
+    background-color: white;
+    padding: 2rem;
+    height: 5.5rem;
+    color: #00447c;
     font-weight: 500;
+    font-size: 24px;
+}
+.header__login{
+    font-weight: 400;
     grid-area: header1;
     text-align: center;
     color: #00447c;
     background-color: white;
     font-family: "Roboto Slab", serif;
-    font-size: 26px;
+    font-size: 24px;
     padding-top: 2vh;
 }
 
 
+.jiraph__logo__login {
+height: 28px;
+width: 28px;
+margin-right: .3rem;
+}
 
 .login {
     grid-area: box;
     font-family: 'Roboto Slab', serif;
-    margin-top: 17vh;
+    margin-top: 10vh;
     background-color: #EEEEEE;
     align-items: center;
     text-align: center;
@@ -42,46 +59,70 @@
     align-items: center;
     text-align: center;
     margin: auto;
-    width: 550px;
+    width: 60%;
     padding-top: 6rem;
 
 }
 
-#loginForm input {
+.loginForm__input{
     align-items: center;
     text-align: center;
     position: inherit;
-    width: 98%;
-    height:3rem;
+    width: 100%;
+    height: 3rem;
     font-size: 18px;
-    font-family: 'Roboto Slab', serif;
+    /* font-family: 'Dosis', sans-serif; */
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
     margin-bottom: 1.5rem;
     box-shadow:inset 0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
     border:none;
 }
 
+.loginForm__input:hover{
+    font-size: 18.2px;
+    text-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.13);
+}
+
 
 .forgetPassword{
+    /* font-family: 'Dosis', sans-serif; */
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    font-style: italic;
     padding: 5px;
-    font-size: 16px;
+    font-size: 14px;
     color: black;
+}
+
+.forgetPassword:hover{
+    color:  #0076CE;
+    font-size: 14.5px;
 }
 
 
 .loginForm__btn {
-    width:98%;
+    width:95%;
     height:2.5rem;
     font-size: 24px;
-    font-family: 'Roboto Slab', serif;
+    font-family: 'Dosis', sans-serif;
     letter-spacing: 3px;
-    margin-bottom: 1.5rem;
+    margin-bottom: .8rem;
     background-color: #808080;
     border: none;
     color:#FFFFFF;
     box-shadow:0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
 }
 
-@media(max-width: 1400px){
+.loginForm__btn:hover{
+    background-color: #444444;
+    font-size: 24.3px;
+    height: 2.53rem;
+    margin-bottom: .77rem;
+    width: 96%;
+    border-radius: 2px;
+}
+/* @media(max-width: 1400px){
 
     #loginForm input {
         align-items: center;
@@ -1037,4 +1078,4 @@
 
 
 
-
+ */

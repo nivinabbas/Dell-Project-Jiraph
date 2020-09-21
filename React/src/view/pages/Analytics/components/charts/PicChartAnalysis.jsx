@@ -1,6 +1,6 @@
 import React from "react";
 import Chart from "react-apexcharts";
-import { useState } from "react";
+import { useState , useEffect} from "react";
 import "./PieChartAnalysis.css";
 import MainTable from "../MainTable/MainTable"
 const PieChartAnalysis = (props) => {
@@ -29,6 +29,12 @@ const PieChartAnalysis = (props) => {
     setTasks(tasks)
     setTitle(title)
   }
+
+  useEffect(() => {
+
+    setTasks([])
+    setFeaturesToDisplay([])
+  } ,[UiObjs])
 
   return (
     <div className="PieChartAnalysis__Wrapper">

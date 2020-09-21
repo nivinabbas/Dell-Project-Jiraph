@@ -69,6 +69,7 @@ function DeletedJiraTickets() {
 
   //fetch to receive Data (UiObj) from server after every filter Change
   const render = (serverFilters) => {
+    console.log(serverFilters)
     fetch('/api/analytics/deletedJiraTickets', {
       method: 'POST',
       body: JSON.stringify({ serverFilters }),
@@ -90,8 +91,8 @@ function DeletedJiraTickets() {
   const [priorityOptions, setPriorityOptions] = useState([]);//proiority options for filters
   const [qaRepresentativeOptions, setQaRepresentativeOptions] = useState([]);//Qa Representative options for filters
   const functionalTestOptions = [//functionalTest options for filters
-    { name: "functionalTest", value: "true", label: "True" },
-    { name: "functionalTest", value: "false", label: "False" },
+    { name: "functionalTest", value: true, label: "True" },
+    { name: "functionalTest", value: false, label: "False" },
   ]
 
   const labelOptions = [//Label options for filters
@@ -110,6 +111,7 @@ function DeletedJiraTickets() {
   const HandlePriorityChange = (change => {
     serverFilters.functionalTest = [];
     serverFilters.qaRepresentative = [];
+    serverFilters.priority=[]
     if (change != null) {
       change.map((item) => {
         return (
@@ -147,11 +149,13 @@ function DeletedJiraTickets() {
   })
   ///Start Date:
   const HandleStartDateChange = (change => {
+    setStartDate(change.target.value)
     serverFilters.startDate = new Date(change.target.value);
     render(serverFilters);
   })
   //End Date:
   const HandleEndDateChange = (change => {
+    setEndDate(change.target.value)
     let endDate =new Date(change.target.value)
     const timeZone = (endDate.getTimezoneOffset() / 60);
     endDate.setHours((0 - timeZone)+(23), 59, 59, 59);

@@ -3,6 +3,9 @@ const app = express();
 var bodyParser = require('body-parser')
 const jwt = require("jsonwebtoken");
 const cookies = require("cookie-parser");
+const cors = require('cors');
+
+app.use(cors()); //BE aware! this options should be only use to server Bella.js server. please correct it to the url of bella server, after moving to DELL premise
 app.use(bodyParser.json()); // to support JSON-encoded bodies
 app.use(
   bodyParser.urlencoded({
@@ -36,6 +39,10 @@ app.use("/api/analytics", analyticsRouter);
 
 const bellaRouting = require("./routing/bellaRouting");
 app.use("/api/PostBellaData", bellaRouting);
+
+const statistics = require("./routing/statistics");
+app.use("/api/statistics", statistics);
+
 
 const port = process.env.PORT || 4000; 
 

@@ -4,20 +4,20 @@ import { useHistory,Link } from "react-router-dom";
 
 
 
-//components
+//import component
 import UserRow from './UserRow';
 
 
 function UserList() {
+
+
     const [users, setUsers] = useState([]);
     const [acivePage, setAcivePage] = useState(false)
-
     const history = useHistory();
 
 
-    //-------------------------------------
 
-    
+    //show active users list
     useEffect(() => {
         fetch('/api/users/getUsersList')
             .then(res => res.json())
@@ -32,34 +32,28 @@ function UserList() {
     }, []);
 
 
-
+    //show create row 
     return (
 
 
         <div className='adminpage'>
-        <button onClick={e=>{goToAudit(e)}}>go to audit page </button>
+            <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
+            <div className='header__Admin'>Admin</div>
+        <button className="audit__btn" onClick={e=>{goToAudit(e)}}>Go to audit page </button>
             <div >
                 {!acivePage ?
-                   <button onClick={e=>{goToNotActiveUsers(e)}}>Show Not Active</button>
+                   < button className="showNotActive__btn" onClick={e=>{goToNotActiveUsers(e)}}>Show Not Active</button>
                    :
-                   <button onClick={e=>{goToActiveUsers(e)}}>Show Active</button>
+                   <button className="showActive__btn" onClick={e=>{goToActiveUsers(e)}}>Show Active</button>
                 }
                
             </div>
-
-            
-            <form id='Names'>
-                <h1>Name</h1>
-                <h2>Email</h2>
-                <h3>Role</h3>
-                <h4>password</h4>
-            </form>
            
-            <form name='create' onSubmit={createUser} >
+            <form className="filters" name='create' onSubmit={createUser} >
 
-                <input name="inputName" type="text" placeholder='Enter Name' required ></input>
-                <input name="inputEmail" type="email" placeholder='Enter Email' required ></input>
-                <select name="inputRole" required  >
+                <input className="filter"  name="inputName" type="text" placeholder='Enter Name' required ></input>
+                <input className="filter"  name="inputEmail" type="email" placeholder='Enter Email' required ></input>
+                <select className="filter"  name="inputRole" required  >
                     <option value="Admin">Admin</option>
                     <option value="QA manager">QA manager</option>
                     <option value="TOP manager">TOP manager</option>
@@ -69,19 +63,15 @@ function UserList() {
             </form>
             :
 
-                         
+            {/* sho users list using component              */}
             {users.map(user => <UserRow isActive={user.active} setUsers={setUsers} key={user.id} user={user} />)}
 
-            <div id="ButtonDiv">
-                
-                <Link to="/Audit"><button>Audit</button> </Link>
-                
-            </div>
+           
         </div>
         
     )
 
-
+    //button send you to active users (default)
     function goToActiveUsers(e) {
         e.preventDefault();
         fetch('/api/users/getUsersList')
@@ -100,7 +90,7 @@ function UserList() {
     }
 
 
-
+    //button send you to- not active users 
     function goToNotActiveUsers(e) {
         console.log('ENTERED')
         e.preventDefault();
@@ -119,13 +109,14 @@ function UserList() {
             setAcivePage(true);
 
     }
-
+    
+    //go to audit page 
     function goToAudit(e) {
         history.push("/Audit");
 
     }
 
-
+    //creating user function 
     function createUser(e) {
         e.preventDefault();
         let { inputName, inputEmail, inputRole, inputPassword } = e.target.elements;
