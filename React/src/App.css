@@ -9,7 +9,7 @@
 .app {
   background-color: #c8c9c7; 
   display: grid;
-  grid-template-columns: 13vw auto;
+  grid-template-columns: 11vw auto;
 }
 
 

@@ -429,6 +429,24 @@ function ModificationByField(props) {
 
         <div className="ModificationByField__Filters__fields">
 
+        <div className="ModificationByField__Filters__Header">
+            <Select 
+              name="selectFilter"
+              id="selectFilter"
+              onChange={handleSelectFilter}
+              placeholder="selectFilter"
+              className="filter1-item__ModificationByField"
+              ref={selectFilterInput}
+              options={selectFiltersOptions} />
+
+            <button
+              id="deleteFilterBTN"
+              type="button"
+              onClick={handleDeleteFilter}
+              className="filter1-item__ModificationByField"
+              name="deleteFilterBTN">Delete filter
+                </button>
+          </div>
           <div className="ModificationByField__Filters__Header">
             <p  className='uni'>Field Name</p>
             <Select
@@ -500,44 +518,23 @@ function ModificationByField(props) {
           </div>
 
           <div className="ModificationByField__Filters__Header">
-          <p className='uni2'>Insert Filter</p>
             <form >
               <input
+                className="filter2-item__ModificationByField"
                 type="text"
                 name="filterName"
                 id="filterName"
-                className="ModificationByField__Filter_Insert-filter"
                 placeholder="filterName" onKeyUp={handleFilterName}>
               </input>
             
               <button 
+                className="filter2-item__ModificationByField"
                 id="saveFilterBTN"
                 type="button"
                 onClick={handleSaveFilter}
-                // className="ModificationByField__Filter_Insert-filter"
                 name="saveFilterBTN">Save Filter
               </button>
             </form>
-          </div>
-
-          <div className="ModificationByField__Filters__Header">
-          <p  className='uni'>Period</p>
-            <Select
-              name="selectFilter"
-              id="selectFilter"
-              onChange={handleSelectFilter}
-              placeholder="selectFilter"
-              className="ModificationByField__Filter"
-              ref={selectFilterInput}
-              options={selectFiltersOptions} />
-
-            <button
-              id="deleteFilterBTN"
-              type="button"
-              onClick={handleDeleteFilter}
-              className="ModificationByField__Filter"
-              name="deleteFilterBTN">Delete filter
-                </button>
           </div>
         </div>
       </div>

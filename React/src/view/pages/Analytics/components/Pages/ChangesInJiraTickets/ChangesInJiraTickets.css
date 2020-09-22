@@ -1,7 +1,7 @@
 .ChangeOfJiraTicketWrapper{
   display: grid;
-  grid-template-columns: 1vw 84vw auto;
-  grid-template-rows: 7vh 12vh 5vh auto;
+  grid-template-columns: 1vw 86vw auto;
+  grid-template-rows: 7vh 14vh 5vh auto;
   grid-template-areas: 
   "header header header "
   ". filterButtons ."
@@ -64,26 +64,30 @@
   .ChangeOfJiraTicket__Filters__wrapper {
     grid-area: filterButtons;
     display: grid;
-    height: 13vh;
+    height: 15vh;
     background-color: #eeeeee;
     align-items: center;
     text-align: center;
-    padding: 1%;
+    padding-left: 1.5%;
+    padding-right: 1.5%;
+    padding-top: .5%;
     border-radius: 3px;
     margin-top: 1%;
+      
   }
   
   .ChangeOfJiraTicket__Filters__headers{
     display: flex;
     justify-content: space-between;
     font-size: 18px;
+    padding-bottom: 1%;
     color: #0076ce;
     text-shadow: 0 .1rem .3rem#00447c28;
   }
   
   .filter__header__item{
     justify-content: space-between;
-    width: 12vw;
+    width: 9.5vw;
     /* background-color: red; */
   }
   
@@ -94,11 +98,12 @@
   
   
   .ChangeOfJiraTicket__Filter{
-   width: 12vw;
+   width: 9.5vw;
    /* border: 0.1px solid black; */
    box-sizing: border-box;
    background-color:   #EEEEEE;
    color: black;
+   border-radius: 5px;
    box-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.2);
   }
   .ChangeOfJiraTicket__Filter__date{
@@ -106,11 +111,24 @@
     /* border: .1px solid rgba(0, 0, 0, 0.2); */
     border:none;
     height: 4.5vh;
-    width: 12vw;
+    width: 9.5vw;
     border-radius: 3px;
     color: rgba(0, 0, 0, 0.7);
     text-align: center;
     font-size: 15px;
+  }
+
+  .ChangeOfJiraTicket__Filters__Header button{
+    box-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.2);
+    height: 3.9vh;
+    background-color: white;
+    width: 8vw;
+    border: none;
+    border-radius: 3px;
+    color: rgba(0, 0, 0, 0.7);
+    text-align: center;
+    padding: 4%;
+    font-size: 16px;
   }
 
   .ChangeOfJiraTicket__Submit{
@@ -127,3 +145,38 @@
   font-weight: bold;
   padding-bottom: 1%;
   }
+
+  
+#saveFilterBTN, #deleteFilterBTN {
+  background : #41B6E6;
+  color: white;
+  margin-top: 5%;
+}
+
+#saveFilterBTN:hover, #deleteFilterBTN:hover {
+  background-color: #56a9ca;
+}
+
+.filter2-item__ChangeOfJiraTicket {
+  display: grid;
+  grid-template-columns: auto;
+  width: 8vw;
+  height: 4.25vh;
+  margin-top: 16%;
+  text-align: center;
+  align-items: center;
+  box-shadow: inset 0 .1rem .3rem rgba(0, 0, 0, 0.2);
+  border: none;
+  font-size: 15px;
+}
+
+.filter1-item__ChangeOfJiraTicket {
+  display: grid;
+  grid-template-columns: auto;
+  margin-top: 15.5%;
+  border: none;
+  width: 8vw;
+  height: 4.25vh;
+  font-size: 15px;
+  padding: 1%;
+} 

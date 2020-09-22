@@ -293,6 +293,26 @@ function ChangesByParentId() {
 
       <div className="ChangesByParentId__Filters__wrapper">
         <form className="ChangesByParentId__Filters__fields">
+        <div className="ChangesByParentId___Filters__Header"> 
+          <Select
+              name="selectFilter"
+              id="selectFilter"
+              onChange={handleSelectFilter}
+              placeholder="selectFilter"
+              className="filter1-item"
+              ref={selectFilterInput}
+              options={selectFiltersOptions} />
+
+            <button
+              id="deleteFilterBTN"
+              type="button"
+              onClick={handleDeleteFilter}
+              className="filter1-item"
+              name="deleteFilterBTN">Delete filter
+            </button>
+        </div> 
+
+        <div className="ChangesByParentId___Filters__Header">
           <div className="Date_header">
             <p>Fix Version</p>
             <Select
@@ -304,6 +324,9 @@ function ChangesByParentId() {
               onChange={HandlefixVersionChange}
             />
           </div>
+        </div>
+
+        <div className="ChangesByParentId___Filters__Header">
           <div className="Date_header">
             <p>Start Date</p>
             <input
@@ -314,7 +337,9 @@ function ChangesByParentId() {
               onChange={HandleStartDateChange}
             />
           </div>
+        </div>
 
+        <div className="ChangesByParentId___Filters__Header">
           <div className="Date_header">
             <p>End Date</p>
             <input
@@ -324,9 +349,13 @@ function ChangesByParentId() {
               value={endDate}
               onChange={HandleEndDateChange}
             />
+          </div>
+        </div>
 
-            <form >
-              <input className="ModificationByField__Filter"
+        <div className="ChangesByParentId___Filters__Header">
+          <form >
+              <input
+              className="filter2-item"
                 type="text"
                 name="filterName"
                 id="filterName"
@@ -335,31 +364,14 @@ function ChangesByParentId() {
                 id="saveFilterBTN"
                 type="button"
                 onClick={handleSaveFilter}
-                className="ModificationByField__Filter"
+                className="filter2-item"
                 name="saveFilterBTN">Save Filter
-          </button>
-            </form>
-
-            <Select
-              name="selectFilter"
-              id="selectFilter"
-              onChange={handleSelectFilter}
-              placeholder="selectFilter"
-              className="ModificationByField__Filter"
-              ref={selectFilterInput}
-              options={selectFiltersOptions} />
-
-            <button
-              id="deleteFilterBTN"
-              type="button"
-              onClick={handleDeleteFilter}
-              className="ModificationByField__Filter"
-              name="deleteFilterBTN">Delete filter
-                </button>
-          </div>
-        </form>
-      </div>
+              </button>
+          </form>
+        </div>
+      </form>
     </div>
+  </div>
   )
 
 }

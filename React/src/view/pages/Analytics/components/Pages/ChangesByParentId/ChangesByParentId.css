@@ -1,8 +1,8 @@
 
 .ChangesByParentIdWrapper{
   display: grid;
-  grid-template-columns: 1vw 84vw auto;
-  grid-template-rows: 7vh 12vh 5vh auto;
+  grid-template-columns: 1vw 86vw auto;
+  grid-template-rows: 7vh 14vh 5vh auto;
   grid-template-areas: 
   "header header header "
   ". filterButtonsID ."
@@ -12,14 +12,14 @@
   background-color: #C8C9C7;
   }
 .ChangesByParentId__DateFilter{
-  box-shadow: 0px 0.1px 0.3px rgba(0, 0, 0, 0.8);
-    border: .1px solid rgba(0, 0, 0, 0.2);
+    box-shadow:inset 0 0.1rem 0.3rem rgba(0, 0, 0, 0.3);
     height:2.25rem;
     width: 13rem;
     border-radius: 3px;
     color: rgba(0, 0, 0, 0.7);
     text-align: center;
     font-size: 15px;
+    border: none;
 }
   .ChangesByParentId__Chart{
     grid-area: chart;
@@ -40,35 +40,32 @@
   }
 
   .ChangesByParentId__Filters__wrapper {
-    
+  
     grid-area: filterButtonsID;
     display: grid;
-    height: 7rem;
+    height: 15vh;
     background-color: #eeeeee;
     align-items: center;
     text-align: center;
-    padding-left: 7rem;
-    padding-right: 7rem;
+    padding-left: 15%;
+    padding-right: 15%;
+    padding-top: .5%;
+    padding-bottom: .1%;
     border-radius: 3px;
-    margin-top: 1rem;
-    padding-bottom: 1rem;
-    padding-top: 1rem;
+    margin-top: 1%;
   }
   
   .ChangesByParentId__Filters__headers{
     display: flex;
     justify-content: space-between;
-    padding-left: 3rem;
-    padding-right: 4rem;
     font-size: 18px;
-    color: #0076ce;
+    color: #444444;
     text-shadow: 0 .1rem .3rem#00447c28;
   }
   
   .filter__header__item{
     justify-content: space-between;
-    width: 12rem;
-    /* background-color: red; */
+    width: 9.5vw;
   }
   
   .ChangesByParentId__Filters__fields {
@@ -78,19 +75,20 @@
   
   
   .ChangesByParentId__Filter{
-   width: 13rem;
+   width: 9.5vw;
    /* border: 0.1px solid black; */
    box-sizing: border-box;
    background-color:   #EEEEEE;
    color: black;
+   border-radius: 3px;
    box-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.2);
   }
 
   .ChangesByParentId__Filter__date{
     box-shadow: inset 0 .1rem 0.3rem rgba(0, 0, 0, 0.2);
     /* border: .1px solid rgba(0, 0, 0, 0.2); */
-    height:2.3rem;
-    width: 18rem;
+    height: 2.4rem;
+    width: 9.5vw;
     border-radius: 3px;
     color: rgba(0, 0, 0, 0.7);
     text-align: center;
@@ -98,7 +96,7 @@
   }
   .ChangesByParentId__Filter__i{
     padding-right: .7rem;
-    width: 20rem;
+    width: 9.5vw;
     box-sizing: border-box;
     background-color:   white;
     border: none;
@@ -112,7 +110,7 @@
   }
 
   .ChangesByParentId__Filter{
-    width: 20rem;
+    width: 11vw;
     font-size: 16px;
     box-sizing: border-box;
     background-color:   white;
@@ -125,9 +123,57 @@
   
 .Date_header > p {
   text-align: center;
-  color: #00447C;
+  color: #444444;
   font-weight: bold;
+  padding-bottom: 1%;
 }
   
+#saveFilterBTN, #deleteFilterBTN {
+  background : #41B6E6;
+  color: white;
+  margin-top: 5%;
+}
+
+#saveFilterBTN:hover, #deleteFilterBTN:hover {
+  background-color: #56a9ca;
+}
+
+.filter2-item {
+  display: grid;
+  grid-template-columns: auto;
+  width: 10vw;
+  height: 4.25vh;
+  margin-top: 13%;
+  text-align: center;
+  align-items: center;
+  box-shadow: inset 0 .1rem .3rem rgba(0, 0, 0, 0.2);
+  border: none;
+  font-size: 15px;
+}
+
+.filter1-item {
+  display: grid;
+  grid-template-columns: auto;
+  margin-top: 13%;
+  width: 10vw;
+  height: 4.2vh;
+  text-align: center;
+  align-items: center;
+  border: none;
+  font-size: 15px;
+}
+
 
   
+.ChangesByParentId___Filters__Header button{
+  box-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.2);
+  height: 3.9vh;
+  background-color: white;
+  width: 10vw;
+  border: none;
+  border-radius: 3px;
+  color: rgba(0, 0, 0, 0.7);
+  text-align: center;
+  padding: 4%;
+  font-size: 16px;
+}
