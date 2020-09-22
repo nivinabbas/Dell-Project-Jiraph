@@ -12,11 +12,8 @@
   grid-template-columns: 13vw auto;
 }
 
-/* .mainPage{
-  height: 100vh;
-} */
 
-@media screen and (max-width: 1190px) {
+@media screen and (max-width: 900px) {
   .app {
   grid-template-columns: 5.5vw auto;
   }

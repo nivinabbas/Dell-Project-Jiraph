@@ -311,7 +311,7 @@ function ModificationByField(props) {
         <div className="ModificationByField__Filters__fields">
 
           <div className="ModificationByField__Filters__Header">
-            <p>Field Name</p>
+            <p  className='uni'>Field Name</p>
             <Select
               name="fieldName"
               onInputChange={() => { valueInput.current.state.value = ""; qaInput.current.state.value = "" }}
@@ -323,7 +323,7 @@ function ModificationByField(props) {
           </div>
 
           <div className="ModificationByField__Filters__Header">
-            <p>Value</p>
+            <p  className='uni'>Value</p>
             <Select
               name="value"
               onChange={handleChangeValues}
@@ -335,20 +335,20 @@ function ModificationByField(props) {
           </div>
 
           <div className="ModificationByField__Filters__Header">
-            <p>Qa Representative</p>
+            <p  className='uni'>Qa Representative</p>
             <Select
               name="qaRepresentative"
               ref={qaInput}
               isMulti
               onChange={handleChangeQaRepresentative}
-              placeholder="QA Representative"
+              placeholder="All"
               className="ModificationByField__Filter"
               options={qaRepresentativeOptions}
               isClearable={true} />
           </div>
 
           <div className="ModificationByField__Filters__Header">
-            <p>Start Date</p>
+            <p  className='uni'>Start Date</p>
             <input
               className="ModificationByField__Filter__date"
               type="date"
@@ -358,7 +358,7 @@ function ModificationByField(props) {
           </div>
 
           <div className="ModificationByField__Filters__Header">
-            <p>End Date</p>
+            <p  className='uni'>End Date</p>
             <input
               className="ModificationByField__Filter__date"
               type="date"
@@ -369,28 +369,38 @@ function ModificationByField(props) {
           </div>
 
           <div className="ModificationByField__Filters__Header">
-            <p>Period</p>
+            <p  className='uni'>Period</p>
             <Select
               name="label"
               onChange={handleChangeLabel}
               placeholder="Weekly"
               className="ModificationByField__Filter"
               options={labelOptions} />
+          </div>
+
+          <div className="ModificationByField__Filters__Header">
+          <p className='uni2'>Insert Filter</p>
             <form >
-              <input className="ModificationByField__Filter"
+              <input
                 type="text"
                 name="filterName"
                 id="filterName"
-                placeholder="filterName" onKeyUp={handleFilterName}></input>
-              <button
+                className="ModificationByField__Filter_Insert-filter"
+                placeholder="filterName" onKeyUp={handleFilterName}>
+              </input>
+            
+              <button 
                 id="saveFilterBTN"
                 type="button"
                 onClick={handleSaveFilter}
-                className="ModificationByField__Filter"
+                // className="ModificationByField__Filter_Insert-filter"
                 name="saveFilterBTN">Save Filter
-          </button>
+              </button>
             </form>
+          </div>
 
+          <div className="ModificationByField__Filters__Header">
+          <p  className='uni'>Period</p>
             <Select
               name="selectFilter"
               id="selectFilter"
