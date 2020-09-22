@@ -271,7 +271,7 @@ function DeletedJiraTickets() {
       startDate: startDate,
       endDate: endDate
     };
-
+    if(change!=null){
     setSelectFilterCurrentOption(change.value);
     for (let i = 0; i < savedFiltersArray.length - 1; i++) {
       if (savedFiltersArray[savedFiltersArray.length - 1].filterNames[i].label == change.value) {
@@ -313,6 +313,23 @@ function DeletedJiraTickets() {
       )
 
     }
+  }  else{
+
+    
+  
+
+    serverFilters.priority=[]
+    serverFilters.functionalTest=[]
+    serverFilters.label=["weekly"]
+    serverFilters.startDate =startDate
+    serverFilters.endDate=endDate
+    serverFilters.qaRepresentative=[]
+    priorityInput.current.state.value = ""
+    functionalTestInput.current.state.value = ""
+    qaInput.current.state.value = ""
+    periodInput.current.state.value = ""
+    selectFilterInput.current.state.value = ""
+  }
 
     render(serverFilters);
   })
@@ -321,7 +338,10 @@ function DeletedJiraTickets() {
   //a function for handling the delete filter button
   const handleDeleteFilter = (e => {
     const pageName = 'DeletedJiraTickets';
-
+    if (!window.confirm('Are you sure you want to delete this Filter?')) {
+      alert("Not Deleted")
+      return;
+  }
     fetch('/api/analytics/analyticsDeleteFilters', {
       method: 'POST',
       body: JSON.stringify({ selectFilterCurrentOption, pageName }),
@@ -379,16 +399,6 @@ function DeletedJiraTickets() {
         }
       })
   }
-
-
-  /*
-  
-  const priorityInput = useRef("")
-    const functionalTestInput = useRef("")
-    const qaInput = useRef("")
-    const periodInput = useRef("")
-    const selectFilterInput = useRef("")
-  */
 
   return (
     <div className='DeletedJiraTicketsWrapper'>
@@ -492,6 +502,7 @@ function DeletedJiraTickets() {
               placeholder="selectFilter"
               className="ModificationByField__Filter"
               ref={selectFilterInput}
+              isClearable={true}
               options={selectFiltersOptions} />
 
             <button

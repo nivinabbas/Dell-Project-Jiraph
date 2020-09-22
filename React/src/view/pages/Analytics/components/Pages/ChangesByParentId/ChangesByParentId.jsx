@@ -86,7 +86,13 @@ function ChangesByParentId() {
     })
       .then((res) => res.json())
       .then((data) => {
+        console.log(data)
+        if(data.length===3){
         setUiObjs(data)
+        }
+        else{
+          setUiObjs([])
+        }
       })
   }
 
@@ -130,8 +136,8 @@ function ChangesByParentId() {
 
 
   //We Use UseRef to clear other filters when we pick Main Filter
-  const fixVersionInput = useRef("")
-  const selectFilterInput = useRef("")
+  let fixVersionInput = useRef("")
+  let selectFilterInput = useRef("")
 
   //Filters Section
 
@@ -201,6 +207,7 @@ function ChangesByParentId() {
       endDate: endDate
     };
 
+    if(change!=null){
     setSelectFilterCurrentOption(change.value);
     for (let i = 0; i < savedFiltersArray.length - 1; i++) {
       if (savedFiltersArray[savedFiltersArray.length - 1].filterNames[i].label == change.value) {
@@ -219,6 +226,14 @@ function ChangesByParentId() {
 
     }
 
+  }  else{
+    serverFilters.fixVersion=[]
+
+  fixVersionInput.current.state.value = ""
+  selectFilterInput.current.state.value = ""
+  
+  }
+
     render(serverFilters);
   })
 
@@ -226,7 +241,10 @@ function ChangesByParentId() {
   //a function for handling the delete filter button
   const handleDeleteFilter = (e => {
     const pageName = 'ChangesByParentID';
-
+    if (!window.confirm('Are you sure you want to delete this Filter?')) {
+      alert("Not Deleted")
+      return;
+  }
     fetch('/api/analytics/analyticsDeleteFilters', {
       method: 'POST',
       body: JSON.stringify({ selectFilterCurrentOption, pageName }),
@@ -347,6 +365,7 @@ function ChangesByParentId() {
               placeholder="selectFilter"
               className="ModificationByField__Filter"
               ref={selectFilterInput}
+              isClearable={true}
               options={selectFiltersOptions} />
 
             <button

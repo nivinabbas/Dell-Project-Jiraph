@@ -305,7 +305,7 @@ function DelaysInDelivery() {
       endDate: endDate,
       label: ["weekly"]
     };
-
+    if(change!=null){
     setSelectFilterCurrentOption(change.value);
     for (let i = 0; i < savedFiltersArray.length - 1; i++) {
       if (savedFiltersArray[savedFiltersArray.length - 1].filterNames[i].label == change.value) {
@@ -347,7 +347,19 @@ function DelaysInDelivery() {
       )
 
     }
-
+  } else{
+    serverFilters.fixVersion=[]
+    serverFilters.jiraType=[]
+    serverFilters.qaRepresentative=[]
+    serverFilters.startDate =startDate
+    serverFilters.endDate=endDate
+    serverFilters.label=["weekly"]
+    fixVersionInput.current.state.value = ""
+    jiraTypeInput.current.state.value = ""
+    qaInput.current.state.value = ""
+   periodInput.current.state.value = ""
+   selectFilterInput.current.state.value= ""
+  }
     render(serverFilters);
   })
 
@@ -355,7 +367,10 @@ function DelaysInDelivery() {
   //a function for handling the delete filter button
   const handleDeleteFilter = (e => {
     const pageName = 'DelaysInDelivery';
-
+    if (!window.confirm('Are you sure you want to delete this Filter?')) {
+      alert("Not Deleted")
+      return;
+  }
     fetch('/api/analytics/analyticsDeleteFilters', {
       method: 'POST',
       body: JSON.stringify({ selectFilterCurrentOption, pageName }),
@@ -526,6 +541,7 @@ function DelaysInDelivery() {
               placeholder="selectFilter"
               className="ModificationByField__Filter"
               ref={selectFilterInput}
+              isClearable={true}
               options={selectFiltersOptions} />
 
             <button

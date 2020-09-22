@@ -228,11 +228,11 @@ function ModificationByField(props) {
   })
 
   //We Use UseRef to clear other filters when we pick Main Filter
-  const valueInput = useRef("")
-  const qaInput = useRef("")
-  const FieldNameInput = useRef("")
-  const periodInput = useRef("")
-  const selectFilterInput= useRef("")
+  let valueInput = useRef("")
+  let qaInput = useRef("")
+  let FieldNameInput = useRef("")
+  let periodInput = useRef("")
+  let selectFilterInput= useRef("")
 
 
 
@@ -307,7 +307,7 @@ function ModificationByField(props) {
       endDate: (endDate),
       label: []
     };
-
+    if(change!=null){
     setSelectFilterCurrentOption(change.value);
     for (let i = 0; i < savedFiltersArray.length - 1; i++) {
       if (savedFiltersArray[savedFiltersArray.length - 1].filterNames[i].label == change.value) {
@@ -350,6 +350,20 @@ function ModificationByField(props) {
       )
 
     }
+  }
+  else{
+    serverFilters.fieldName=[]
+    serverFilters.values=[]
+    serverFilters.qaRepresentative=[]
+    serverFilters.startDate =startDate
+    serverFilters.endDate=endDate
+    serverFilters.label=["weekly"]
+     valueInput.current.state.value = ""
+   qaInput.current.state.value = ""
+   FieldNameInput.current.state.value = ""
+   periodInput.current.state.value = ""
+   selectFilterInput.current.state.value= ""
+  }
 
     render(serverFilters);
   })
@@ -358,6 +372,10 @@ function ModificationByField(props) {
   //a function for handling the delete filter button
   const handleDeleteFilter = (e => {
     const pageName = 'ModificationByField';
+    if (!window.confirm('Are you sure you want to delete this Filter?')) {
+            alert("Not Deleted")
+            return;
+        }
 
     fetch('/api/analytics/analyticsDeleteFilters', {
       method: 'POST',
@@ -520,6 +538,7 @@ function ModificationByField(props) {
               placeholder="selectFilter"
               className="ModificationByField__Filter"
               ref={selectFilterInput}
+              isClearable={true}
               options={selectFiltersOptions} />
 
             <button
