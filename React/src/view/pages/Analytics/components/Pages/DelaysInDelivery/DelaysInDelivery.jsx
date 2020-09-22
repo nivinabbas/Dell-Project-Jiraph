@@ -450,6 +450,25 @@ function DelaysInDelivery() {
 
         <form className="DelaysInDelivery__Filters__fields">
 
+        <div className="DelaysInDelivery__Filters__Header">
+            <Select
+              name="selectFilter"
+              id="selectFilter"
+              onChange={handleSelectFilter}
+              placeholder="selectFilter"
+              className="filter1-item__DelaysInDelivery"
+              ref={selectFilterInput}
+              options={selectFiltersOptions} />
+
+            <button
+              id="deleteFilterBTN"
+              type="button"
+              onClick={handleDeleteFilter}
+              className="filter1-item__DelaysInDelivery"
+              name="deleteFilterBTN">Delete filter
+            </button>
+          </div>
+
           <div className="DelaysInDelivery__Filters__Header">
             <p> Fix Version </p>
             <Select
@@ -482,7 +501,7 @@ function DelaysInDelivery() {
               isMulti
               ref={qaInput}
               options={qaRepresentativeOptions}
-              placeholder="Qa Representative "
+              placeholder="All"
               className="DelaysInDelivery__Filter"
               onChange={HandleqaRepresentativeChange}
             /></div>
@@ -517,10 +536,11 @@ function DelaysInDelivery() {
               placeholder="Weekly"
               className="DelaysInDelivery__Filter"
               onChange={HandleLabelChange}
-            /></div>
-
-<form >
-              <input className="ModificationByField__Filter"
+            />
+          </div>
+          <div className="DelaysInDelivery__Filters__Header">
+            <form >
+              <input className="filter2-item__DelaysInDelivery"
                 type="text"
                 name="filterName"
                 id="filterName"
@@ -529,10 +549,11 @@ function DelaysInDelivery() {
                 id="saveFilterBTN"
                 type="button"
                 onClick={handleSaveFilter}
-                className="ModificationByField__Filter"
+                className="filter2-item__DelaysInDelivery"
                 name="saveFilterBTN">Save Filter
-          </button>
+              </button>
             </form>
+          </div>
 
             <Select
               name="selectFilter"

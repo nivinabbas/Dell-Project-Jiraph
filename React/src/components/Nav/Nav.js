@@ -55,7 +55,7 @@ export default props => {
                         <img className="jiraph__logo" src={logo} alt="this is a logo" />
                    JIRAPH
                   </div>
-                    <div className="menu__wrapper">
+                    <div className="menu__wrapper-1">
                         <div className='menu__item' >
                             <Link className={location === "/register" ? 'menu__link menu__link--selected' : "menu__link"} to="/" ><img className="register__logo" src={regIcon} alt="this is a logo" />Log Out</Link>
                         </div>
@@ -77,7 +77,7 @@ export default props => {
                    JIRAPH
                   </div>
         
-                    <div className="menu__wrapper">
+                    <div className="menu__wrapper-2">
         
                         <div className='menu__item'>
         

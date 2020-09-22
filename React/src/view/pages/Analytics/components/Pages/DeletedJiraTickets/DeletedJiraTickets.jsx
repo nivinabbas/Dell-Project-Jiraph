@@ -410,6 +410,25 @@ function DeletedJiraTickets() {
 
         <form className="DeletedJiraTickets__Filters__fields">
 
+        <div className="DeletedJiraTickets__Filters__Header"> 
+        <Select
+              name="selectFilter"
+              id="selectFilter"
+              onChange={handleSelectFilter}
+              placeholder="selectFilter"
+              className="filter1-item__DeletedJiraTickets"
+              ref={selectFilterInput}
+              options={selectFiltersOptions} />
+
+            <button
+              id="deleteFilterBTN"
+              type="button"
+              onClick={handleDeleteFilter}
+              className="filter1-item__DeletedJiraTickets"
+              name="deleteFilterBTN">Delete filter
+            </button>
+          </div>
+
           <div className="DeletedJiraTickets__Filters__Header">
             <p>Priority</p>
             <Select
@@ -433,7 +452,8 @@ function DeletedJiraTickets() {
               placeholder="functional-Test "
               className="DeletedJiraTickets__Filter"
               onChange={HandlefunctionalTestChange}
-            /></div>
+            />
+          </div>
 
           <div className="DeletedJiraTickets__Filters__Header">
             <p>Qa Representative</p>
@@ -442,7 +462,7 @@ function DeletedJiraTickets() {
               isMulti
               ref={qaInput}
               options={qaRepresentativeOptions}
-              placeholder="Qa Representative"
+              placeholder="All"
               className="DeletedJiraTickets__Filter"
               onChange={HandleqaRepresentativeChange}
             /></div>
@@ -479,20 +499,24 @@ function DeletedJiraTickets() {
               ref={periodInput}
               onChange={HandleLabelChange}
             />
-
+            </div>
+          <div className="DeletedJiraTickets__Filters__Header">
             <form >
-              <input className="ModificationByField__Filter"
+              <input 
+              className="filter2-item__DeletedJiraTickets"
                 type="text"
                 name="filterName"
                 id="filterName"
-                placeholder="filterName" onKeyUp={handleFilterName}></input>
+                placeholder="filterName" onKeyUp={handleFilterName}>
+
+                </input>
               <button
                 id="saveFilterBTN"
                 type="button"
                 onClick={handleSaveFilter}
-                className="ModificationByField__Filter"
+                className="filter2-item__DeletedJiraTickets"
                 name="saveFilterBTN">Save Filter
-          </button>
+              </button>
             </form>
 
             <Select
@@ -513,8 +537,8 @@ function DeletedJiraTickets() {
               name="deleteFilterBTN">Delete filter
                 </button>
           </div>
-        </form>
-      </div>
+      </form>
+    </div>
     </div>
   )
 }

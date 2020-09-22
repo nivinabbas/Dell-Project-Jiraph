@@ -434,10 +434,27 @@ function ChangesInJiraTickets() {
 
       <div className="ChangeOfJiraTicket__Title">Changes Of Jira Tickets</div>
 
-      <div className="ModificationByField__Filters__wrapper">
-
+      <div className="ChangeOfJiraTicket__Filters__wrapper">
 
         <form className="ChangeOfJiraTicket__Filters__fields">
+        <div className="ChangeOfJiraTicket__Filters__Header">
+            <Select
+              name="selectFilter"
+              id="selectFilter"
+              onChange={handleSelectFilter}
+              placeholder="selectFilter"
+              className="filter1-item__ChangeOfJiraTicket"
+              ref={selectFilterInput}
+              options={selectFiltersOptions} />
+
+            <button
+              id="deleteFilterBTN"
+              type="button"
+              onClick={handleDeleteFilter}
+              className="filter1-item__ChangeOfJiraTicket"
+              name="deleteFilterBTN">Delete filter
+            </button>
+          </div>
           <div className="ChangeOfJiraTicket__Filters__Header">
             <p> Old/New  </p>
             <Select
@@ -470,7 +487,7 @@ function ChangesInJiraTickets() {
               isMulti
               ref={qaInput}
               options={qaRepresentativeOptions}
-              placeholder="Qa Representative "
+              placeholder="All"
               className="DelaysInDelivery__Filter"
               onChange={HandleqaRepresentativeChange} />
           </div>
@@ -507,8 +524,10 @@ function ChangesInJiraTickets() {
             />
           </div>
 
-          <form >
-              <input className="ModificationByField__Filter"
+          <div className="ChangeOfJiraTicket__Filters__Header">
+            <form>
+              <input
+                className="filter2-item__ChangeOfJiraTicket"
                 type="text"
                 name="filterName"
                 id="filterName"
@@ -517,10 +536,11 @@ function ChangesInJiraTickets() {
                 id="saveFilterBTN"
                 type="button"
                 onClick={handleSaveFilter}
-                className="ModificationByField__Filter"
+                className="filter2-item__ChangeOfJiraTicket"
                 name="saveFilterBTN">Save Filter
-          </button>
+              </button>
             </form>
+          </div>
 
             <Select
               name="selectFilter"
