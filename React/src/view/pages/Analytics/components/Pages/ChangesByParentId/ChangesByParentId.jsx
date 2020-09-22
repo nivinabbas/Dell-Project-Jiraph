@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useRef } from 'react';
 import "./ChangesByParentId.css";
 import Select from 'react-select'
 import { useEffect } from 'react';
@@ -20,7 +20,7 @@ function ChangesByParentId() {
     setEndDate(`${endDate.getFullYear()}-${endMonth}-${endDate.getDate()}`)
     const timeZone = startDate.getTimezoneOffset() / 60
     startDate.setHours(0 - timeZone, 0, 0, 0)
-    endDate.setHours(0 - timeZone+23, 59, 59, 59);
+    endDate.setHours(0 - timeZone + 23, 59, 59, 59);
 
     //Default Server Filters to receive Data
     serverFilters = {
@@ -46,10 +46,31 @@ function ChangesByParentId() {
         }
 
       })
+
+    //fetch to receive saved filters 
+    fetch('/api/analytics/analyticsSelectFields', {
+      method: 'POST',
+      body: JSON.stringify({ savedFilters }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then((res) => res.json())
+      .then((data) => {
+
+        if (data.array != null) {
+          if (data.array.length > 0) {
+            setSavedFiltersArray(data.array);
+            setSelectFiltersOptions(data.array[data.array.length - 1].filterNames);
+          }
+
+        }
+      })
+
   }, [])
 
-  const [UiObjs,setUiObjs]=useState([]);
-  const [fixVersionOptions,setfixVersionOptions] = useState([]);
+  const [UiObjs, setUiObjs] = useState([]);
+  const [fixVersionOptions, setfixVersionOptions] = useState([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
@@ -78,25 +99,187 @@ function ChangesByParentId() {
     serverFilters.fixVersion = [change.label];
     render(serverFilters);
   })
-  
+
   //Start Date
   const HandleStartDateChange = (change => {
     setStartDate(change.target.value)
     serverFilters.startDate = change.target.value;
-    if (serverFilters.fixVersion.length>0) {
-    render(serverFilters);}
+    if (serverFilters.fixVersion.length > 0) {
+      render(serverFilters);
+    }
   })
 
   //End Date
   const HandleEndDateChange = (change => {
     setEndDate(change.target.value)
-    let endDate =new Date(change.target.value)
+    let endDate = new Date(change.target.value)
     const timeZone = (endDate.getTimezoneOffset() / 60);
-    endDate.setHours((0 - timeZone)+(23), 59, 59, 59);
+    endDate.setHours((0 - timeZone) + (23), 59, 59, 59);
     serverFilters.endDate = endDate;
-    if (serverFilters.fixVersion.length>0){
-    render(serverFilters);}
+    if (serverFilters.fixVersion.length > 0) {
+      render(serverFilters);
+    }
   })
+
+
+  //Filters Section
+
+  //changes By ParentID save filters Variables
+
+
+
+
+  //We Use UseRef to clear other filters when we pick Main Filter
+  const fixVersionInput = useRef("")
+  const selectFilterInput = useRef("")
+
+  //Filters Section
+
+  //save filters Variables
+
+  //Filters Variable to save the filters data
+  let savedFilters = { pageName: 'ChangesByParentID', filters: [{ filter: 'fixVersion', values: [] }], filterName: '' };
+
+
+
+  //select filter option for the filter
+  let [selectFiltersOptions, setSelectFiltersOptions] = useState([]);
+
+  //select filter option for the filter
+  let [savedFiltersArray, setSavedFiltersArray] = useState([]);
+
+  //a Variable for the filter name
+  let filterName = '';
+
+  //a Variable for the selected filter option
+  // let selectFilterCurrentOption = '';
+  let [selectFilterCurrentOption, setSelectFilterCurrentOption] = useState("");
+
+  //a var for saving the selected filter current option 
+  let index = 0;
+
+  //a function for handling the save filter button
+  const handleSaveFilter = (e => {
+    savedFilters.filters[0].values.push(serverFilters.fixVersion);
+    savedFilters.filterName = filterName;
+    fetch('/api/analytics/analyticsSavedFilters', {
+      method: 'POST',
+      body: JSON.stringify({ savedFilters }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success === true) {
+          renderSavedFilters(savedFilters);
+          alert('Filter saved successfully')
+
+        }
+
+        else {
+          alert(data.error);
+        }
+      })
+  })
+
+
+
+  //handleFilterName
+  const handleFilterName = (e => {
+    filterName = e.target.value;
+
+  })
+
+  //a function for handling the select filter button
+  const handleSelectFilter = (change => {
+
+
+    serverFilters = {
+      fixVersion: [],
+      startDate: startDate,
+      endDate: endDate
+    };
+
+    setSelectFilterCurrentOption(change.value);
+    for (let i = 0; i < savedFiltersArray.length - 1; i++) {
+      if (savedFiltersArray[savedFiltersArray.length - 1].filterNames[i].label == change.value) {
+        index = i;
+      }
+    }
+
+    fixVersionInput.current.state.value = { label: savedFiltersArray[index].filters[0].values }
+   
+
+    if (savedFiltersArray[index].filters[0].values != null) {
+      savedFiltersArray[index].filters[0].values.map((item) => {
+        serverFilters.fixVersion.push(item);
+      }
+      )
+
+    }
+
+    render(serverFilters);
+  })
+
+
+  //a function for handling the delete filter button
+  const handleDeleteFilter = (e => {
+    const pageName = 'ChangesByParentID';
+
+    fetch('/api/analytics/analyticsDeleteFilters', {
+      method: 'POST',
+      body: JSON.stringify({ selectFilterCurrentOption, pageName }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success === true) {
+          fixVersionInput.current.state.value = ""
+          selectFilterInput.current.state.value = ""
+
+          serverFilters = {
+            fixVersion: [],
+      startDate: startDate,
+      endDate: endDate
+          };
+          renderSavedFilters(savedFilters);
+          render(serverFilters);
+          alert('Filter deleted successfully')
+        }
+
+        else {
+          alert(data.error);
+        }
+      })
+  })
+
+  //a funtion to receive Data from server after every save filter Change
+  const renderSavedFilters = (savedFilters) => {
+
+    fetch('/api/analytics/analyticsSelectFields', {
+      method: 'POST',
+      body: JSON.stringify({ savedFilters }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then((res) => res.json())
+      .then((data) => {
+
+        if (data.array != null) {
+          if (data.array.length > 0) {
+            setSavedFiltersArray(data.array);
+            setSelectFiltersOptions(data.array[data.array.length - 1].filterNames);
+          }
+        }
+      })
+  }
+
+
+
 
   return (
 
@@ -107,43 +290,76 @@ function ChangesByParentId() {
         {UiObjs.length > 0 && <PieChartAnalysis UiObjs={UiObjs} title="Changes By Parent ID (All)" />}
       </div>
       {/* Select Filters */}
-      
-      <div className="ChangesByParentId__Filters__wrapper"> 
-      <form className="ChangesByParentId__Filters__fields">
-      <div className="Date_header">
-         <p>Fix Version</p> 
-        <Select
-          name="fixVersion"
-          options={fixVersionOptions}
-          placeholder="fix Version "
-          className="ChangesByParentId__Filter"
-          onChange={HandlefixVersionChange}
-        />
+
+      <div className="ChangesByParentId__Filters__wrapper">
+        <form className="ChangesByParentId__Filters__fields">
+          <div className="Date_header">
+            <p>Fix Version</p>
+            <Select
+              name="fixVersion"
+              ref={fixVersionInput}
+              options={fixVersionOptions}
+              placeholder="fix Version "
+              className="ChangesByParentId__Filter"
+              onChange={HandlefixVersionChange}
+            />
+          </div>
+          <div className="Date_header">
+            <p>Start Date</p>
+            <input
+              className="ChangesByParentId__DateFilter"
+              type="date"
+              name="startDate"
+              value={startDate}
+              onChange={HandleStartDateChange}
+            />
+          </div>
+
+          <div className="Date_header">
+            <p>End Date</p>
+            <input
+              className="ChangesByParentId__DateFilter"
+              type="date"
+              name="endDate"
+              value={endDate}
+              onChange={HandleEndDateChange}
+            />
+
+            <form >
+              <input className="ModificationByField__Filter"
+                type="text"
+                name="filterName"
+                id="filterName"
+                placeholder="filterName" onKeyUp={handleFilterName}></input>
+              <button
+                id="saveFilterBTN"
+                type="button"
+                onClick={handleSaveFilter}
+                className="ModificationByField__Filter"
+                name="saveFilterBTN">Save Filter
+          </button>
+            </form>
+
+            <Select
+              name="selectFilter"
+              id="selectFilter"
+              onChange={handleSelectFilter}
+              placeholder="selectFilter"
+              className="ModificationByField__Filter"
+              ref={selectFilterInput}
+              options={selectFiltersOptions} />
+
+            <button
+              id="deleteFilterBTN"
+              type="button"
+              onClick={handleDeleteFilter}
+              className="ModificationByField__Filter"
+              name="deleteFilterBTN">Delete filter
+                </button>
+          </div>
+        </form>
       </div>
-        <div className="Date_header">
-         <p>Start Date</p> 
-        <input
-          className="ChangesByParentId__DateFilter"
-          type="date"
-          name="startDate"
-          value={startDate}
-          onChange={HandleStartDateChange}
-        />
-        </div>
-        
-        <div className="Date_header">
-         <p>End Date</p> 
-        <input
-          className="ChangesByParentId__DateFilter"
-          type="date"
-          name="endDate"
-          value={endDate}
-          onChange={HandleEndDateChange}
-        />
-        </div>
-      </form>
-      </div>
-      </div>
+    </div>
   )
 
 }
