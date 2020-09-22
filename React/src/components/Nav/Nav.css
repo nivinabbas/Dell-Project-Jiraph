@@ -1,9 +1,8 @@
 @media screen and (max-width: 20000px) {
 
-  
 .sidebar {
-  margin: 0;
-  padding: 0;
+   margin: 0;
+  padding: 0; 
 
 }
 
@@ -16,7 +15,7 @@ nav {
   grid-area: header;
   background-color:white;
   text-align: center;
-  padding-top: .6vh;
+  padding-top: 1vh;
   color: #00447C;
   font-weight: 800;
   font-size: 29px;
@@ -28,7 +27,7 @@ nav {
   grid-area: header;
   background-color:white;
   text-align: center;
-  padding-top: .6vh;
+  padding-top: 1vh;
   color: #00447C;
   font-weight: 800;
   font-size: 29px;
@@ -36,25 +35,23 @@ nav {
 }
 
 .jiraph__logo {
-  height: 34px;
+  height: 30px;
 }
 
 .menu__wrapper-1 {
   padding-top: 1rem;
   height: 88vh;
-  /* grid-area: menu; */
   background-color: #EEEEEE;
 }
   
 .menu__wrapper-2 {
   padding-top: 1rem;
   height: 88vh;
-  /* grid-area: menu; */
   background-color: #EEEEEE;
 }
    
 .menu__link {
-  font-size: 25px;
+  font-size: 22px;
   color: #808080;
   position: relative;
   line-height: 3rem;
@@ -62,18 +59,18 @@ nav {
 }
 
 .menu__link:hover {
-  font-size: 26px;
+  font-size: 23px;
   color: #444444;
 }
 
 .menu__link--selected {
-  font-size: 26px !important;
+  font-size: 23px !important;
   color: #444444;
 }
 
 
 .menu__subLink {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   font-family: "Roboto Slab", serif;
   color: #444444;
@@ -82,26 +79,26 @@ nav {
 }
 
 .menu__subLink:hover {
-  font-size: 14px;
+  font-size: 13px;
   color: #0076ce;
 }
 
 .menu-subLink--selected {
-  font-size: 14px;
+  font-size: 13px;
   color: #0076ce;
 }
 
  .analysis__logo, .status__logo, .admin__logo, .register__logo {
   margin-left: 15px;
   margin-right: 11px;
-  width: 19px;
-  height: 19px;
+  width: 16px;
+  height: 16px;
   opacity: 0.6;
 }
 
 .analysis-options {
   transform: scaleY(0.5) translateY(-50%);
-  margin-left: 35px;
+  margin-left: 10%;
   opacity: 0;
   position: relative;
   top:-20px;
@@ -110,14 +107,14 @@ nav {
 
 .analysis-options:hover, .analysis-options:active, .analysis-options--show {
   transform: scaleY(1) translateY(0%);
-  margin-left: 35px;
+  margin-left: 10%;
   top:0px;
   opacity: 1;
 }
 
 .analysis-options--select {
   transform: scaleY(1) translateY(0%);
-  margin-left: 15px;
+  margin-left: 5%;
   top:0px;
   opacity: 1;
 }
@@ -129,7 +126,7 @@ nav {
   grid-area: footer;
   color:black;
   text-align: center;
-  padding-top: .7rem;
+  padding-top: .3rem;
   font-family: 'Anton', sans-serif;
   letter-spacing: 2.5px;
   font-size: 16px;
@@ -156,7 +153,7 @@ nav {
             }
             
             .jiraph__logo {
-              height: 33px;
+              height: 30px;
             }
             
             .menu__wrapper-1 {

@@ -9,7 +9,7 @@
   text-align: center;
   margin-bottom: 5vh;
   padding-top: .5%;
-  padding: 2%;
+  padding: 1%;
   box-shadow: 0 0.1rem 0.3rem rgba(0, 0, 0, 0.4);
   border-radius: 3px;
   background-color: #EEEEEE;
@@ -63,33 +63,30 @@
   width: 4vw;
   min-height: 9%;
   margin-right: .5%;
-  /* padding-top: 3%; */
   border-radius: 5px 5px 0px 0px;
   box-shadow:0 .1rem .3rem rgba(0, 0, 0, 0.3);
   text-shadow:0 .1rem .3rem rgba(0, 0, 0, 0.1);
-  background-color: #B7295A;  
+  background-color: #0076CE;
   font-family: 'Roboto Slab', serif;
   color: white;
 }
-.chart__innerColumn:hover {
-  background: #c46083; 
-}
-.chart__label{
 
-  color:#C8C9C7; 
-  background-color: #444444;
+.chart__innerColumn:hover {
+  background-color: #2888d1ab;
+}
+
+.chart__label{
+  background-color:#C8C9C7; 
+  color: #444444;
   font-size: 100%;
   font-weight: 500;
-  box-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.2);
-  text-shadow: 0 .1rem .3rem rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
-  /* border:1px solid #C8C9C7; */
-  /* color: white; */
+  box-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.1);
+  text-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
   height: 4vh;
   margin-top: 2%;
   width: 100%;
   padding: 1%;
-  /* margin: auto; */
 }
 .Chart__Table{
   grid-area: table;
