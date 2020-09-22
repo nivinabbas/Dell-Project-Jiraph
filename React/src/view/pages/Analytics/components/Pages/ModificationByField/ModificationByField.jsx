@@ -74,7 +74,7 @@ function ModificationByField(props) {
       })
 
     //fetch to receive saved filters 
-    fetch('/api/analytics/modificationByFieldSelectTwo', {
+    fetch('/api/analytics/analyticsSelectFields', {
       method: 'POST',
       body: JSON.stringify({ savedFilters }),
       headers: {
@@ -83,13 +83,13 @@ function ModificationByField(props) {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data.array[0].filters[1].values)
-        console.log(data.array[data.array.length - 1].filterNames);
-        console.log(data.array[data.array.length - 1].filterNames[0].value);
+
         if (data.array != null) {
           if (data.array.length > 0) {
+            setSavedFiltersArray(data.array);
             setSelectFiltersOptions(data.array[data.array.length - 1].filterNames);
           }
+
         }
       })
 
@@ -131,7 +131,7 @@ function ModificationByField(props) {
           if (data.length > 0)
             setValueOptions(data[0].Values);
           else {
-        
+
             setValueOptions([]);
           }
         }
@@ -152,7 +152,7 @@ function ModificationByField(props) {
     { value: "yearly", label: "yearly" }];
 
 
-  
+
 
 
   // handleSaveFilter
@@ -207,7 +207,7 @@ function ModificationByField(props) {
       })
     }
     else { serverFilters.qaRepresentative = []; }
-    
+
     render(serverFilters);
   })
 
@@ -230,19 +230,43 @@ function ModificationByField(props) {
   //We Use UseRef to clear other filters when we pick Main Filter
   const valueInput = useRef("")
   const qaInput = useRef("")
-
+  const FieldNameInput = useRef("")
+  const periodInput = useRef("")
+  const selectFilterInput= useRef("")
 
 
 
   //Filters Section
 
+  //Modification By Field save filters Variables
+
+  //Filters Variable to save the filters data
+  let savedFilters = { pageName: 'ModificationByField', filters: [{ filter: 'fieldName', values: [] }, { filter: 'value', values: [] }, { filter: 'qaRepresentative', values: [] }, { filter: 'label', values: [] }], filterName: '' };
+
+  //select filter option for the filter
+  let [selectFiltersOptions, setSelectFiltersOptions] = useState([]);
+
+  //select filter option for the filter
+  let [savedFiltersArray, setSavedFiltersArray] = useState([]);
+
+  //a Variable for the filter name
+  let filterName = '';
+
+  //a Variable for the selected filter option
+  // let selectFilterCurrentOption = '';
+  let [selectFilterCurrentOption, setSelectFilterCurrentOption] = useState("");
+
+  //a var for saving the selected filter current option 
+  let index = 0;
+
+  //a function for handling the save filter button
   const handleSaveFilter = (e => {
     savedFilters.filters[0].values.push(serverFilters.fieldName);
     savedFilters.filters[1].values.push(serverFilters.values);
     savedFilters.filters[2].values.push(serverFilters.qaRepresentative);
     savedFilters.filters[3].values.push(serverFilters.label[0]);
     savedFilters.filterName = filterName;
-    fetch('/api/analytics/modificationByFieldSavedFilters', {
+    fetch('/api/analytics/analyticsSavedFilters', {
       method: 'POST',
       body: JSON.stringify({ savedFilters }),
       headers: {
@@ -253,6 +277,8 @@ function ModificationByField(props) {
       .then(data => {
         if (data.success === true) {
           renderSavedFilters(savedFilters);
+          alert('Filter saved successfully')
+
         }
 
         else {
@@ -260,8 +286,8 @@ function ModificationByField(props) {
         }
       })
   })
-  const savedFilters = { pageName: 'ModificationByField', filters: [{ filter: 'fieldName', values: [] }, { filter: 'value', values: [] }, { filter: 'qaRepresentative', values: [] }, { filter: 'label', values: [] }], filterName: '' };
-  let filterName = '';
+
+
 
   //handleFilterName
   const handleFilterName = (e => {
@@ -269,14 +295,109 @@ function ModificationByField(props) {
 
   })
 
+  //a function for handling the select filter button
   const handleSelectFilter = (change => {
-    renderSavedFilters(savedFilters);
-  })
-  const [selectFiltersOptions, setSelectFiltersOptions] = useState([]);
 
+    
+    serverFilters = {
+      fieldName: [],
+      values: [],
+      qaRepresentative: [],
+      startDate: (startDate),
+      endDate: (endDate),
+      label: []
+    };
+
+    setSelectFilterCurrentOption(change.value);
+    for (let i = 0; i < savedFiltersArray.length - 1; i++) {
+      if (savedFiltersArray[savedFiltersArray.length - 1].filterNames[i].label == change.value) {
+        index = i;
+      }
+    }
+
+    FieldNameInput.current.state.value = { label: savedFiltersArray[index].filters[0].values }
+     valueInput.current.state.value = { label: savedFiltersArray[index].filters[1].values}
+    qaInput.current.state.value = { label: savedFiltersArray[index].filters[2].values }
+    periodInput.current.state.value = { label: savedFiltersArray[index].filters[3].values }
+
+   
+    if(savedFiltersArray[index].filters[0].values!=null){
+      savedFiltersArray[index].filters[0].values.map((item)=>{
+        serverFilters.fieldName.push(item);
+      }
+      )
+
+    }
+
+    if(savedFiltersArray[index].filters[1].values!=null){
+      savedFiltersArray[index].filters[1].values.map((item)=>{
+        serverFilters.values.push(item);
+      }
+      )
+
+    }
+    if(savedFiltersArray[index].filters[2].values!=null){
+      savedFiltersArray[index].filters[2].values.map((item)=>{
+        serverFilters.qaRepresentative.push(item);
+      }
+      )
+
+    }
+    if(savedFiltersArray[index].filters[3].values!=null){
+      savedFiltersArray[index].filters[3].values.map((item)=>{
+        serverFilters.label.push(item);
+      }
+      )
+
+    }
+
+    render(serverFilters);
+  })
+
+
+  //a function for handling the delete filter button
+  const handleDeleteFilter = (e => {
+    const pageName = 'ModificationByField';
+
+    fetch('/api/analytics/analyticsDeleteFilters', {
+      method: 'POST',
+      body: JSON.stringify({ selectFilterCurrentOption, pageName }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success === true) {         
+    FieldNameInput.current.state.value = ""
+    valueInput.current.state.value = ""
+    qaInput.current.state.value = ""
+    periodInput.current.state.value =""
+    selectFilterInput.current.state.value =""
+
+    serverFilters = {
+      fieldName: [],
+      values: [],
+      qaRepresentative: [],
+      startDate: (startDate),
+      endDate: (endDate),
+      label: []
+    };
+    renderSavedFilters(savedFilters);
+    render(serverFilters);
+    alert('Filter deleted successfully')
+        }
+
+        else {
+          alert(data.error);
+        }
+      })
+  })
+
+  //a funtion to receive Data from server after every save filter Change
   const renderSavedFilters = (savedFilters) => {
-    console.log(savedFilters.pageName);
-    fetch('/api/analytics/modificationByFieldSelectTwo', {
+   
+    fetch('/api/analytics/analyticsSelectFields', {
       method: 'POST',
       body: JSON.stringify({ savedFilters }),
       headers: {
@@ -285,17 +406,15 @@ function ModificationByField(props) {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data.array[0].filters[1].values)
-        console.log(data.array[data.array.length - 1].filterNames);
-        console.log(data.array[data.array.length - 1].filterNames[0].value);
+
         if (data.array != null) {
           if (data.array.length > 0) {
+            setSavedFiltersArray(data.array);
             setSelectFiltersOptions(data.array[data.array.length - 1].filterNames);
           }
         }
       })
   }
-
 
 
   return (
@@ -319,6 +438,7 @@ function ModificationByField(props) {
               placeholder="All"
               className="ModificationByField__Filter"
               options={fieldNameOptions}
+              ref={FieldNameInput}
               isClearable={true} />
           </div>
 
@@ -375,6 +495,7 @@ function ModificationByField(props) {
               onChange={handleChangeLabel}
               placeholder="Weekly"
               className="ModificationByField__Filter"
+              ref={periodInput}
               options={labelOptions} />
           </div>
 
@@ -404,11 +525,19 @@ function ModificationByField(props) {
             <Select
               name="selectFilter"
               id="selectFilter"
-              onClick={handleSelectFilter}
+              onChange={handleSelectFilter}
               placeholder="selectFilter"
-              // ref={selectinput}
               className="ModificationByField__Filter"
+              ref={selectFilterInput}
               options={selectFiltersOptions} />
+
+            <button
+              id="deleteFilterBTN"
+              type="button"
+              onClick={handleDeleteFilter}
+              className="ModificationByField__Filter"
+              name="deleteFilterBTN">Delete filter
+                </button>
           </div>
         </div>
       </div>
