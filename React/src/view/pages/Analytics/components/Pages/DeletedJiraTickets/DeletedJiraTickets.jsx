@@ -223,6 +223,9 @@ function DeletedJiraTickets() {
   //a var for saving the selected filter current option 
   let index = 0;
 
+  
+  const [showFilters, setShowFilters] = useState(false)
+
   //a function for handling the save filter button
   const handleSaveFilter = (e => {
     savedFilters.filters[0].values.push(serverFilters.priority);
@@ -271,65 +274,65 @@ function DeletedJiraTickets() {
       startDate: startDate,
       endDate: endDate
     };
-    if(change!=null){
-    setSelectFilterCurrentOption(change.value);
-    for (let i = 0; i < savedFiltersArray.length - 1; i++) {
-      if (savedFiltersArray[savedFiltersArray.length - 1].filterNames[i].label == change.value) {
-        index = i;
+    if (change != null) {
+      setSelectFilterCurrentOption(change.value);
+      for (let i = 0; i < savedFiltersArray.length - 1; i++) {
+        if (savedFiltersArray[savedFiltersArray.length - 1].filterNames[i].label == change.value) {
+          index = i;
+        }
       }
-    }
 
-    priorityInput.current.state.value = { label: savedFiltersArray[index].filters[0].values }
-    functionalTestInput.current.state.value = { label: savedFiltersArray[index].filters[1].values }
-    periodInput.current.state.value = { label: savedFiltersArray[index].filters[2].values }
-    qaInput.current.state.value = { label: savedFiltersArray[index].filters[3].values }
+      priorityInput.current.state.value = { label: savedFiltersArray[index].filters[0].values }
+      functionalTestInput.current.state.value = { label: savedFiltersArray[index].filters[1].values }
+      periodInput.current.state.value = { label: savedFiltersArray[index].filters[2].values }
+      qaInput.current.state.value = { label: savedFiltersArray[index].filters[3].values }
 
-    if (savedFiltersArray[index].filters[0].values != null) {
-      savedFiltersArray[index].filters[0].values.map((item) => {
-        serverFilters.priority.push(item);
+      if (savedFiltersArray[index].filters[0].values != null) {
+        savedFiltersArray[index].filters[0].values.map((item) => {
+          serverFilters.priority.push(item);
+        }
+        )
+
       }
-      )
 
-    }
+      if (savedFiltersArray[index].filters[1].values != null) {
+        savedFiltersArray[index].filters[1].values.map((item) => {
+          serverFilters.functionalTest.push(item);
+        }
+        )
 
-    if (savedFiltersArray[index].filters[1].values != null) {
-      savedFiltersArray[index].filters[1].values.map((item) => {
-        serverFilters.functionalTest.push(item);
       }
-      )
+      if (savedFiltersArray[index].filters[2].values != null) {
+        savedFiltersArray[index].filters[2].values.map((item) => {
+          serverFilters.label.push(item);
+        }
+        )
 
-    }
-    if (savedFiltersArray[index].filters[2].values != null) {
-      savedFiltersArray[index].filters[2].values.map((item) => {
-        serverFilters.label.push(item);
       }
-      )
+      if (savedFiltersArray[index].filters[3].values != null) {
+        savedFiltersArray[index].filters[3].values.map((item) => {
+          serverFilters.qaRepresentative.push(item);
+        }
+        )
 
-    }
-    if (savedFiltersArray[index].filters[3].values != null) {
-      savedFiltersArray[index].filters[3].values.map((item) => {
-        serverFilters.qaRepresentative.push(item);
       }
-      )
+    } else {
 
+
+
+
+      serverFilters.priority = []
+      serverFilters.functionalTest = []
+      serverFilters.label = ["weekly"]
+      serverFilters.startDate = startDate
+      serverFilters.endDate = endDate
+      serverFilters.qaRepresentative = []
+      priorityInput.current.state.value = ""
+      functionalTestInput.current.state.value = ""
+      qaInput.current.state.value = ""
+      periodInput.current.state.value = ""
+      selectFilterInput.current.state.value = ""
     }
-  }  else{
-
-    
-  
-
-    serverFilters.priority=[]
-    serverFilters.functionalTest=[]
-    serverFilters.label=["weekly"]
-    serverFilters.startDate =startDate
-    serverFilters.endDate=endDate
-    serverFilters.qaRepresentative=[]
-    priorityInput.current.state.value = ""
-    functionalTestInput.current.state.value = ""
-    qaInput.current.state.value = ""
-    periodInput.current.state.value = ""
-    selectFilterInput.current.state.value = ""
-  }
 
     render(serverFilters);
   })
@@ -341,7 +344,7 @@ function DeletedJiraTickets() {
     if (!window.confirm('Are you sure you want to delete this Filter?')) {
       alert("Not Deleted")
       return;
-  }
+    }
     fetch('/api/analytics/analyticsDeleteFilters', {
       method: 'POST',
       body: JSON.stringify({ selectFilterCurrentOption, pageName }),
@@ -408,27 +411,7 @@ function DeletedJiraTickets() {
       <div className="DeletedJiraTickets__Filters__wrapper">
 
 
-        <form className="DeletedJiraTickets__Filters__fields">
-
-        <div className="DeletedJiraTickets__Filters__Header"> 
-        <Select
-              name="selectFilter"
-              id="selectFilter"
-              onChange={handleSelectFilter}
-              placeholder="selectFilter"
-              className="filter1-item__DeletedJiraTickets"
-              ref={selectFilterInput}
-              options={selectFiltersOptions} />
-
-            <button
-              id="deleteFilterBTN"
-              type="button"
-              onClick={handleDeleteFilter}
-              className="filter1-item__DeletedJiraTickets"
-              name="deleteFilterBTN">Delete filter
-            </button>
-          </div>
-
+        <div className="DeletedJiraTickets__Filters__fields">
           <div className="DeletedJiraTickets__Filters__Header">
             <p>Priority</p>
             <Select
@@ -499,47 +482,62 @@ function DeletedJiraTickets() {
               ref={periodInput}
               onChange={HandleLabelChange}
             />
-            </div>
-          <div className="DeletedJiraTickets__Filters__Header">
-            <form >
-              <input 
-              className="filter2-item__DeletedJiraTickets"
-                type="text"
-                name="filterName"
-                id="filterName"
-                placeholder="filterName" onKeyUp={handleFilterName}>
-
-                </input>
-              <button
-                id="saveFilterBTN"
-                type="button"
-                onClick={handleSaveFilter}
-                className="filter2-item__DeletedJiraTickets"
-                name="saveFilterBTN">Save Filter
-              </button>
-            </form>
-
-            <Select
-              name="selectFilter"
-              id="selectFilter"
-              onChange={handleSelectFilter}
-              placeholder="selectFilter"
-              className="ModificationByField__Filter"
-              ref={selectFilterInput}
-              isClearable={true}
-              options={selectFiltersOptions} />
-
-            <button
-              id="deleteFilterBTN"
-              type="button"
-              onClick={handleDeleteFilter}
-              className="ModificationByField__Filter"
-              name="deleteFilterBTN">Delete filter
-                </button>
           </div>
-      </form>
+
+          <button className='button' onClick={() => { setShowFilters(true) }}>Filters</button>
+
+          <div className="ModificationByField__Filters__Header">
+            <div className={showFilters ? 'filtersPop' : 'none'}>
+              <Select
+                name="selectFilter"
+                id="selectFilter"
+                onChange={handleSelectFilter}
+                placeholder="selectFilter"
+                className="filter1-item__ModificationByField"
+                ref={selectFilterInput}
+                isClearable={true}
+                options={selectFiltersOptions} />
+
+              <button
+                id="deleteFilterBTN"
+                type="button"
+                onClick={handleDeleteFilter}
+                className="filter1-item__ModificationByField"
+                name="deleteFilterBTN">Delete filter
+                                 </button>
+
+              <form >
+                <input className="filter2-item__ModificationByField"
+                  type="text"
+                  name="filterName"
+                  id="filterName"
+                  placeholder="filterName"
+                  onKeyUp={handleFilterName}></input>
+                <button
+                  id="saveFilterBTN"
+                  type="button"
+                  onClick={handleSaveFilter}
+                  className="filter2-item__ModificationByField"
+                  name="saveFilterBTN">Save Filter
+                             </button>
+
+                <button
+                  className="filter2-item__ModificationByField"
+                  id="closeFilterBTN"
+                  type="button"
+                  onClick={() => { setShowFilters(false) }}
+                  name="closeFilterBTN">Close
+                                </button>
+              </form>
+
+
+            </div>
+          </div>
+          </div>
+          </div>
     </div>
-    </div>
+    
+   
   )
 }
 

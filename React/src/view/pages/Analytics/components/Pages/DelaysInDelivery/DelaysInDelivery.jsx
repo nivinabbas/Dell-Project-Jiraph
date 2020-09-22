@@ -255,6 +255,8 @@ function DelaysInDelivery() {
   //a var for saving the selected filter current option 
   let index = 0;
 
+  const [showFilters, setShowFilters] = useState(false)
+
   //a function for handling the save filter button
   const handleSaveFilter = (e => {
 
@@ -301,65 +303,65 @@ function DelaysInDelivery() {
       fixVersion: [],
       jiraType: [],
       qaRepresentative: [],
-      startDate: startDate,
-      endDate: endDate,
+      startDate: (startDate),
+      endDate: (endDate),
       label: ["weekly"]
     };
-    if(change!=null){
-    setSelectFilterCurrentOption(change.value);
-    for (let i = 0; i < savedFiltersArray.length - 1; i++) {
-      if (savedFiltersArray[savedFiltersArray.length - 1].filterNames[i].label == change.value) {
-        index = i;
+    if (change != null) {
+      setSelectFilterCurrentOption(change.value);
+      for (let i = 0; i < savedFiltersArray.length - 1; i++) {
+        if (savedFiltersArray[savedFiltersArray.length - 1].filterNames[i].label == change.value) {
+          index = i;
+        }
       }
-    }
 
-    fixVersionInput.current.state.value = { label: savedFiltersArray[index].filters[0].values }
-    jiraTypeInput.current.state.value = { label: savedFiltersArray[index].filters[1].values }
-    qaInput.current.state.value = { label: savedFiltersArray[index].filters[2].values }
-    periodInput.current.state.value = { label: savedFiltersArray[index].filters[3].values }
+      fixVersionInput.current.state.value = { label: savedFiltersArray[index].filters[0].values }
+      jiraTypeInput.current.state.value = { label: savedFiltersArray[index].filters[1].values }
+      qaInput.current.state.value = { label: savedFiltersArray[index].filters[2].values }
+      periodInput.current.state.value = { label: savedFiltersArray[index].filters[3].values }
 
-    if (savedFiltersArray[index].filters[0].values != null) {
-      savedFiltersArray[index].filters[0].values.map((item) => {
-        serverFilters.fixVersion.push(item);
+      if (savedFiltersArray[index].filters[0].values != null) {
+        savedFiltersArray[index].filters[0].values.map((item) => {
+          serverFilters.fixVersion.push(item);
+        }
+        )
+
       }
-      )
 
-    }
+      if (savedFiltersArray[index].filters[1].values != null) {
+        savedFiltersArray[index].filters[1].values.map((item) => {
+          serverFilters.jiraType.push(item);
+        }
+        )
 
-    if (savedFiltersArray[index].filters[1].values != null) {
-      savedFiltersArray[index].filters[1].values.map((item) => {
-        serverFilters.jiraType.push(item);
       }
-      )
+      if (savedFiltersArray[index].filters[2].values != null) {
+        savedFiltersArray[index].filters[2].values.map((item) => {
+          serverFilters.qaRepresentative.push(item);
+        }
+        )
 
-    }
-    if (savedFiltersArray[index].filters[2].values != null) {
-      savedFiltersArray[index].filters[2].values.map((item) => {
-        serverFilters.qaRepresentative.push(item);
       }
-      )
+      if (savedFiltersArray[index].filters[3].values != null) {
+        savedFiltersArray[index].filters[3].values.map((item) => {
+          serverFilters.label.push(item);
+        }
+        )
 
-    }
-    if (savedFiltersArray[index].filters[3].values != null) {
-      savedFiltersArray[index].filters[3].values.map((item) => {
-        serverFilters.label.push(item);
       }
-      )
-
+    } else {
+      serverFilters.fixVersion = []
+      serverFilters.jiraType = []
+      serverFilters.qaRepresentative = []
+      serverFilters.setEndDate = ""
+      serverFilters.endDate = ""
+      serverFilters.label = ["weekly"]
+      fixVersionInput.current.state.value = ""
+      jiraTypeInput.current.state.value = ""
+      qaInput.current.state.value = ""
+      periodInput.current.state.value = ""
+      selectFilterInput.current.state.value = ""
     }
-  } else{
-    serverFilters.fixVersion=[]
-    serverFilters.jiraType=[]
-    serverFilters.qaRepresentative=[]
-    serverFilters.startDate =startDate
-    serverFilters.endDate=endDate
-    serverFilters.label=["weekly"]
-    fixVersionInput.current.state.value = ""
-    jiraTypeInput.current.state.value = ""
-    qaInput.current.state.value = ""
-   periodInput.current.state.value = ""
-   selectFilterInput.current.state.value= ""
-  }
     render(serverFilters);
   })
 
@@ -370,7 +372,7 @@ function DelaysInDelivery() {
     if (!window.confirm('Are you sure you want to delete this Filter?')) {
       alert("Not Deleted")
       return;
-  }
+    }
     fetch('/api/analytics/analyticsDeleteFilters', {
       method: 'POST',
       body: JSON.stringify({ selectFilterCurrentOption, pageName }),
@@ -392,8 +394,8 @@ function DelaysInDelivery() {
             fixVersion: [],
             jiraType: [],
             qaRepresentative: [],
-            startDate: startDate,
-            endDate: endDate,
+            startDate: (startDate),
+            endDate: (endDate),
             label: ["weekly"]
           };
           renderSavedFilters(savedFilters);
@@ -448,27 +450,7 @@ function DelaysInDelivery() {
       <div className="DelaysInDelivery__Filters__wrapper">
 
 
-        <form className="DelaysInDelivery__Filters__fields">
-
-        <div className="DelaysInDelivery__Filters__Header">
-            <Select
-              name="selectFilter"
-              id="selectFilter"
-              onChange={handleSelectFilter}
-              placeholder="selectFilter"
-              className="filter1-item__DelaysInDelivery"
-              ref={selectFilterInput}
-              options={selectFiltersOptions} />
-
-            <button
-              id="deleteFilterBTN"
-              type="button"
-              onClick={handleDeleteFilter}
-              className="filter1-item__DelaysInDelivery"
-              name="deleteFilterBTN">Delete filter
-            </button>
-          </div>
-
+        <div className="DelaysInDelivery__Filters__fields">
           <div className="DelaysInDelivery__Filters__Header">
             <p> Fix Version </p>
             <Select
@@ -538,41 +520,58 @@ function DelaysInDelivery() {
               onChange={HandleLabelChange}
             />
           </div>
-          <div className="DelaysInDelivery__Filters__Header">
-            <form >
-              <input className="filter2-item__DelaysInDelivery"
-                type="text"
-                name="filterName"
-                id="filterName"
-                placeholder="filterName" onKeyUp={handleFilterName}></input>
+
+
+          <button className='button' onClick={() => { setShowFilters(true) }}>Filters</button>
+
+          <div className="ModificationByField__Filters__Header">
+            <div className={showFilters ? 'filtersPop' : 'none'}>
+              <Select
+                name="selectFilter"
+                id="selectFilter"
+                onChange={handleSelectFilter}
+                placeholder="selectFilter"
+                className="filter1-item__ModificationByField"
+                ref={selectFilterInput}
+                isClearable={true}
+                options={selectFiltersOptions} />
+
               <button
-                id="saveFilterBTN"
+                id="deleteFilterBTN"
                 type="button"
-                onClick={handleSaveFilter}
-                className="filter2-item__DelaysInDelivery"
-                name="saveFilterBTN">Save Filter
-              </button>
-            </form>
+                onClick={handleDeleteFilter}
+                className="filter1-item__ModificationByField"
+                name="deleteFilterBTN">Delete filter
+                                 </button>
+
+              <form >
+                <input className="filter2-item__ModificationByField"
+                  type="text"
+                  name="filterName"
+                  id="filterName"
+                  placeholder="filterName"
+                  onKeyUp={handleFilterName}></input>
+                <button
+                  id="saveFilterBTN"
+                  type="button"
+                  onClick={handleSaveFilter}
+                  className="filter2-item__ModificationByField"
+                  name="saveFilterBTN">Save Filter
+                             </button>
+
+                <button
+                  className="filter2-item__ModificationByField"
+                  id="closeFilterBTN"
+                  type="button"
+                  onClick={() => { setShowFilters(false) }}
+                  name="closeFilterBTN">Close
+                                </button>
+              </form>
+
+
+            </div>
           </div>
-
-            <Select
-              name="selectFilter"
-              id="selectFilter"
-              onChange={handleSelectFilter}
-              placeholder="selectFilter"
-              className="ModificationByField__Filter"
-              ref={selectFilterInput}
-              isClearable={true}
-              options={selectFiltersOptions} />
-
-            <button
-              id="deleteFilterBTN"
-              type="button"
-              onClick={handleDeleteFilter}
-              className="ModificationByField__Filter"
-              name="deleteFilterBTN">Delete filter
-                </button>
-        </form>
+        </div>
       </div>
     </div>
   )

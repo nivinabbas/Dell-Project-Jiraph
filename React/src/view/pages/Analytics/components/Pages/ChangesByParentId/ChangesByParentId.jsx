@@ -1,7 +1,7 @@
-import React, {useState, useRef} from 'react';
+import React, { useState, useRef } from 'react';
 import "./ChangesByParentId.css";
 import Select from 'react-select'
-import {useEffect} from 'react';
+import { useEffect } from 'react';
 import PieChartAnalysis from "../../charts/PicChartAnalysis"
 
 //Server Filters to receive Data
@@ -39,7 +39,7 @@ function ChangesByParentId() {
         //fetch to receive Available Filters options from server
         fetch('/api/analytics/changesByParentIdFilters', {
             method: 'POST',
-            body: JSON.stringify({serverFilters}),
+            body: JSON.stringify({ serverFilters }),
             headers: {
                 "Content-Type": "application/json"
             }
@@ -55,7 +55,7 @@ function ChangesByParentId() {
         //fetch to receive saved filters
         fetch('/api/analytics/analyticsSelectFields', {
             method: 'POST',
-            body: JSON.stringify({savedFilters}),
+            body: JSON.stringify({ savedFilters }),
             headers: {
                 "Content-Type": "application/json"
             }
@@ -85,7 +85,7 @@ function ChangesByParentId() {
     const render = (serverFilters) => {
         fetch('/api/analytics/ChangesByParentIdFilters', {
             method: 'POST',
-            body: JSON.stringify({serverFilters}),
+            body: JSON.stringify({ serverFilters }),
             headers: {
                 "Content-Type": "application/json"
             }
@@ -164,6 +164,8 @@ function ChangesByParentId() {
     //a var for saving the selected filter current option
     let index = 0;
 
+    const [showFilters, setShowFilters] = useState(false)
+
     //a function for handling the save filter button
     const handleSaveFilter = (e => {
         savedFilters
@@ -173,11 +175,11 @@ function ChangesByParentId() {
         savedFilters.filterName = filterName;
         fetch('/api/analytics/analyticsSavedFilters', {
             method: 'POST',
-            body: JSON.stringify({savedFilters}),
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            })
+            body: JSON.stringify({ savedFilters }),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
             .then(res => res.json())
             .then(data => {
                 if (data.success === true) {
@@ -249,11 +251,11 @@ function ChangesByParentId() {
         }
         fetch('/api/analytics/analyticsDeleteFilters', {
             method: 'POST',
-            body: JSON.stringify({selectFilterCurrentOption, pageName}),
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            })
+            body: JSON.stringify({ selectFilterCurrentOption, pageName }),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
             .then(res => res.json())
             .then(data => {
                 if (data.success === true) {
@@ -279,7 +281,7 @@ function ChangesByParentId() {
 
         fetch('/api/analytics/analyticsSelectFields', {
             method: 'POST',
-            body: JSON.stringify({savedFilters}),
+            body: JSON.stringify({ savedFilters }),
             headers: {
                 "Content-Type": "application/json"
             }
@@ -302,31 +304,12 @@ function ChangesByParentId() {
                 rel="stylesheet"></link>
             <div className="ChangesByParentId__Title">Changes By Parent Id</div>
             <div className="ChangesByParentId__Chart">
-                {UiObjs.length > 0 && <PieChartAnalysis UiObjs={UiObjs} title="Changes By Parent ID (All)"/>}
+                {UiObjs.length > 0 && <PieChartAnalysis UiObjs={UiObjs} title="Changes By Parent ID (All)" />}
             </div>
             {/* Select Filters */}
 
             <div className="ChangesByParentId__Filters__wrapper">
-                <form className="ChangesByParentId__Filters__fields">
-                    <div className="ChangesByParentId___Filters__Header">
-                        <Select
-                            name="selectFilter"
-                            id="selectFilter"
-                            onChange={handleSelectFilter}
-                            placeholder="selectFilter"
-                            className="filter1-item"
-                            ref={selectFilterInput}
-                            options={selectFiltersOptions}/>
-
-                        <button
-                            id="deleteFilterBTN"
-                            type="button"
-                            onClick={handleDeleteFilter}
-                            className="filter1-item"
-                            name="deleteFilterBTN">Delete filter
-                        </button>
-                    </div>
-
+                <div className="ChangesByParentId__Filters__fields">
                     <div className="ChangesByParentId___Filters__Header">
                         <div className="Date_header">
                             <p>Fix Version</p>
@@ -336,7 +319,7 @@ function ChangesByParentId() {
                                 options={fixVersionOptions}
                                 placeholder="fix Version "
                                 className="ChangesByParentId__Filter"
-                                onChange={HandlefixVersionChange}/>
+                                onChange={HandlefixVersionChange} />
                         </div>
                     </div>
 
@@ -348,7 +331,7 @@ function ChangesByParentId() {
                                 type="date"
                                 name="startDate"
                                 value={startDate}
-                                onChange={HandleStartDateChange}/>
+                                onChange={HandleStartDateChange} />
                         </div>
                     </div>
 
@@ -360,47 +343,61 @@ function ChangesByParentId() {
                                 type="date"
                                 name="endDate"
                                 value={endDate}
-                                onChange={HandleEndDateChange}/>
+                                onChange={HandleEndDateChange} />
                         </div>
                     </div>
 
-                    <div className="ChangesByParentId___Filters__Header">
-                        <form >
-                            <input
-                                className="filter2-item"
-                                type="text"
-                                name="filterName"
-                                id="filterName"
-                                placeholder="filterName"
-                                onKeyUp={handleFilterName}></input>
+
+                    <button className='button' onClick={() => { setShowFilters(true) }}>Filters</button>
+
+                    <div className="ModificationByField__Filters__Header">
+                        <div className={showFilters ? 'filtersPop' : 'none'}>
+                            <Select
+                                name="selectFilter"
+                                id="selectFilter"
+                                onChange={handleSelectFilter}
+                                placeholder="selectFilter"
+                                className="filter1-item__ModificationByField"
+                                ref={selectFilterInput}
+                                isClearable={true}
+                                options={selectFiltersOptions} />
+
                             <button
-                                id="saveFilterBTN"
+                                id="deleteFilterBTN"
                                 type="button"
-                                onClick={handleSaveFilter}
-                                className="filter2-item"
-                                name="saveFilterBTN">Save Filter
-                            </button>
-                        </form>
+                                onClick={handleDeleteFilter}
+                                className="filter1-item__ModificationByField"
+                                name="deleteFilterBTN">Delete filter
+                       </button>
 
-                        <Select
-                            name="selectFilter"
-                            id="selectFilter"
-                            onChange={handleSelectFilter}
-                            placeholder="selectFilter"
-                            className="ModificationByField__Filter"
-                            ref={selectFilterInput}
-                            isClearable={true}
-                            options={selectFiltersOptions}/>
+                            <form >
+                                <input className="filter2-item__ModificationByField"
+                                    type="text"
+                                    name="filterName"
+                                    id="filterName"
+                                    placeholder="filterName"
+                                    onKeyUp={handleFilterName}></input>
+                                <button
+                                    id="saveFilterBTN"
+                                    type="button"
+                                    onClick={handleSaveFilter}
+                                    className="filter2-item__ModificationByField"
+                                    name="saveFilterBTN">Save Filter
+                   </button>
 
-                        <button
-                            id="deleteFilterBTN"
-                            type="button"
-                            onClick={handleDeleteFilter}
-                            className="ModificationByField__Filter"
-                            name="deleteFilterBTN">Delete filter
-                        </button>
+                                <button
+                                    className="filter2-item__ModificationByField"
+                                    id="closeFilterBTN"
+                                    type="button"
+                                    onClick={() => { setShowFilters(false) }}
+                                    name="closeFilterBTN">Close
+                      </button>
+                            </form>
+
+
+                        </div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
 

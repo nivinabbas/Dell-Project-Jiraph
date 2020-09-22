@@ -248,6 +248,8 @@ function ChangesInJiraTickets() {
   //a var for saving the selected filter current option 
   let index = 0;
 
+  const [showFilters, setShowFilters] = useState(false)
+
   //a function for handling the save filter button
   const handleSaveFilter = (e => {
     savedFilters.filters[0].values.push(serverFilters.values);
@@ -436,25 +438,8 @@ function ChangesInJiraTickets() {
 
       <div className="ChangeOfJiraTicket__Filters__wrapper">
 
-        <form className="ChangeOfJiraTicket__Filters__fields">
-        <div className="ChangeOfJiraTicket__Filters__Header">
-            <Select
-              name="selectFilter"
-              id="selectFilter"
-              onChange={handleSelectFilter}
-              placeholder="selectFilter"
-              className="filter1-item__ChangeOfJiraTicket"
-              ref={selectFilterInput}
-              options={selectFiltersOptions} />
-
-            <button
-              id="deleteFilterBTN"
-              type="button"
-              onClick={handleDeleteFilter}
-              className="filter1-item__ChangeOfJiraTicket"
-              name="deleteFilterBTN">Delete filter
-            </button>
-          </div>
+        <div className="ChangeOfJiraTicket__Filters__fields">
+        
           <div className="ChangeOfJiraTicket__Filters__Header">
             <p> Old/New  </p>
             <Select
@@ -524,44 +509,58 @@ function ChangesInJiraTickets() {
             />
           </div>
 
-          <div className="ChangeOfJiraTicket__Filters__Header">
-            <form>
-              <input
-                className="filter2-item__ChangeOfJiraTicket"
-                type="text"
-                name="filterName"
-                id="filterName"
-                placeholder="filterName" onKeyUp={handleFilterName}></input>
+   
+          <button className='button' onClick={() => { setShowFilters(true) }}>Filters</button>
+
+          <div className="ModificationByField__Filters__Header">
+            <div className={showFilters ? 'filtersPop' : 'none'}>
+              <Select
+                name="selectFilter"
+                id="selectFilter"
+                onChange={handleSelectFilter}
+                placeholder="selectFilter"
+                className="filter1-item__ModificationByField"
+                ref={selectFilterInput}
+                isClearable={true}
+                options={selectFiltersOptions} />
+
               <button
-                id="saveFilterBTN"
+                id="deleteFilterBTN"
                 type="button"
-                onClick={handleSaveFilter}
-                className="filter2-item__ChangeOfJiraTicket"
-                name="saveFilterBTN">Save Filter
-              </button>
-            </form>
+                onClick={handleDeleteFilter}
+                className="filter1-item__ModificationByField"
+                name="deleteFilterBTN">Delete filter
+                                 </button>
+
+              <form >
+                <input className="filter2-item__ModificationByField"
+                  type="text"
+                  name="filterName"
+                  id="filterName"
+                  placeholder="filterName"
+                  onKeyUp={handleFilterName}></input>
+                <button
+                  id="saveFilterBTN"
+                  type="button"
+                  onClick={handleSaveFilter}
+                  className="filter2-item__ModificationByField"
+                  name="saveFilterBTN">Save Filter
+                             </button>
+
+                <button
+                  className="filter2-item__ModificationByField"
+                  id="closeFilterBTN"
+                  type="button"
+                  onClick={() => { setShowFilters(false) }}
+                  name="closeFilterBTN">Close
+                                </button>
+              </form>
+
+
+            </div>
           </div>
-
-            <Select
-              name="selectFilter"
-              id="selectFilter"
-              onChange={handleSelectFilter}
-              placeholder="selectFilter"
-              className="ModificationByField__Filter"
-              ref={selectFilterInput}
-              isClearable={true}
-              options={selectFiltersOptions} />
-
-            <button
-              id="deleteFilterBTN"
-              type="button"
-              onClick={handleDeleteFilter}
-              className="ModificationByField__Filter"
-              name="deleteFilterBTN">Delete filter
-                </button>
-
-        </form>
-      </div>
+          </div>
+          </div>
     </div>
   )
 
