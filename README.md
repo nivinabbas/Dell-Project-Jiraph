@@ -27,5 +27,7 @@ In /Dell-Project-Jiraph/React, merge to `master` and change to `master` branch a
 
 `npm run build`
 
+Copy thr files and folders in /Dell-Project-Jiraph/React/build to /Dell-Project-Jiraph/public
+
 Then, upload master to host.
 
