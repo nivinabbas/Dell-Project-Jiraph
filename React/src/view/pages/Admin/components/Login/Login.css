@@ -1,23 +1,125 @@
+*{
+    padding: 0;
+    margin: 0;
+}
 .login {
-    display: flex;
-    flex-direction: column;
+    border-radius: 3px;
+
+}
+.login-wrapper {
+    background-color: #C8C9C7;  
+    display: grid;
+    grid-template-columns: 10vw 55vw auto;
+    grid-template-rows: 7vh 70vh auto;
+    grid-template-areas: 
+    ". . . "
+    ". box ."
+    ". . .";
+}
+
+.sidebar__header-wrapper3{
+    background-color: white;
+    padding: 2rem;
+    height: 5.5rem;
+    color: #00447c;
+    font-weight: 500;
+    font-size: 24px;
+}
+.header__login{
+    font-weight: 400;
+    grid-area: header1;
+    text-align: center;
+    color: #00447c;
+    background-color: white;
+    font-family: "Roboto Slab", serif;
+    font-size: 24px;
+    padding-top: 2vh;
+}
+
+
+.jiraph__logo__login {
+height: 28px;
+width: 28px;
+margin-right: .3rem;
+}
+
+.login {
+    grid-area: box;
+    font-family: 'Roboto Slab', serif;
+    margin-top: 10vh;
+    background-color: #EEEEEE;
     align-items: center;
-
-
-
-}
-.login input {
-    width: 20%;
-    height: 2rem;
-    margin-bottom: 0.5rem;  
+    text-align: center;
+    justify-content: space-around;
+    box-shadow:0 0.1rem 0.3rem rgba(0, 0, 0, 0.3);
 }
 
-.login button {
-    width: 20%;
-    height: 2rem;   
-    margin-top:0.5rem;
+
+ #loginForm {
+
+    align-items: center;
+    text-align: center;
+    margin: auto;
+    width: 60%;
+    padding-top: 6rem;
+
 }
-    
+
+.loginForm__input{
+    align-items: center;
+    text-align: center;
+    position: inherit;
+    width: 100%;
+    height: 3rem;
+    font-size: 18px;
+    /* font-family: 'Dosis', sans-serif; */
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+    box-shadow:inset 0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+    border:none;
+}
+
+.loginForm__input:hover{
+    font-size: 18.2px;
+    text-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.13);
+}
 
 
+.forgetPassword{
+    /* font-family: 'Dosis', sans-serif; */
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    font-style: italic;
+    padding: 5px;
+    font-size: 14px;
+    color: black;
+}
 
+.forgetPassword:hover{
+    color:  #0076CE;
+    font-size: 14.5px;
+}
+
+
+.loginForm__btn {
+    width:95%;
+    height:2.5rem;
+    font-size: 24px;
+    font-family: 'Dosis', sans-serif;
+    letter-spacing: 3px;
+    margin-bottom: .8rem;
+    background-color: #808080;
+    border: none;
+    color:#FFFFFF;
+    box-shadow:0 0.1rem 0.3rem rgba(0, 0, 0, 0.5);
+}
+
+.loginForm__btn:hover{
+    background-color: #444444;
+    font-size: 24.3px;
+    height: 2.53rem;
+    margin-bottom: .77rem;
+    width: 96%;
+    border-radius: 2px;
+}

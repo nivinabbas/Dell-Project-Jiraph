@@ -1,29 +1,192 @@
-.statuspage {
+.status__header {
+  font-weight: 500;
+  text-align: center;
+  color: #00447c;
+  background-color: white;
+  font-family: "Roboto Slab", serif;
+  font-size: 26px;
+  padding-top: 2vh;
+  height: 7vh;
+}
+
+.statusPage__dashboard {
+  background-color: #EEEEEE;
+  box-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  padding-left: .7%;
+  padding-right: .7%;
+  margin-bottom: .7%;
+  
+}
+.daily-alerts__header{
+  color: #444444;
+  text-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.03);
+  font-size: 24px;
+  font-weight: 400;
+  padding-top: 1%;
+  padding-left: 1%;
+  padding-bottom: 1%;
+}
+
+.statusPage__headerTitles__taskHistory {
+  color: #444444;
+  text-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.03);
+  font-size: 24px;
+  font-weight: 400;
+  padding-top: 1%;
+  padding-left: 1%;
+  /* padding-bottom: .7rem; */
+}
+
+.statusPage__headerTitles__taskStatics{
+  color: #444444;
+  text-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.03);
+  font-size: 24px;
+  font-weight: 400;
+  padding-top: 1%;
+  padding-left: 1%;
+  padding-bottom: .7%;
+
+}
+
+.statics-wrpper{
+  background-color: #EEEEEE;
+  border-radius: 3px;
+  box-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.3);
+  padding: .7%;
+}
+.statusPageContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 1.3%;
+  min-height: 100vh;
+  /* background-color: chartreuse; */
+}
+
+.statusPage__charts {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2%;
+}
+
+.statusPage__barChart {
+  /* flex: 1; */
+  background-color: white;
+  padding-left: 1%;
+  padding-right: 1%;
+  padding-bottom: 1%;
+  /* margin-right: 1rem; */
+  border-radius: 5px;
+}
+
+.statusPage__barChart2 {
+  flex: 1;
+  background-color:white; 
+  padding: 1%;
+  width: 27vw;
+  height: 64vh;
+  margin-top: 1%;
+  /* margin-right: 1rem; */
+  border-radius: 3px;
+  /* margin-bottom: .1rem; */
+  margin-left: .7%;
+  box-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.1);
+  padding-top: .2%;
+}
+
+.statusPage__pieCharts {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background-color: white;
+  padding-left: 1%;
+  width: 20vw;
+  height: 64vh;
+  margin-right: .3%;
+  margin-top: 1%;
+  margin-left: .3%;
+  border-radius: 3px;
+  box-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.1);
+}
+
+
+.statusPage__barChart__filters {
+  display: flex;
+  background-color: white;
+  border-radius: 3px;
+  padding-bottom: 1%;
+  margin-bottom: 1%;
+  color: #444444;
+  box-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.1);
+}
+.statusPage__barChart__filters  label{
+  padding-left: 2vw;
+  padding-bottom: .4vw;
+  font-size: 19px;
+  font-weight: 400;
+  padding-right: 1vw;
+}
+
+
+.datePicker__input {
+  border: none;
+  box-shadow: inset 0 .1rem .3rem rgba(0, 0, 0, 0.3);
   width: 100%;
-  background-color: #f9f9f9;
-  display: grid;
-  grid-template-columns: 5vw 46vw 22vw 22vw 5vw;
-  grid-template-rows: auto auto auto auto auto;
-  grid-template-areas:
-    ". dashboard dashboard dashboard ."
-    ". tabl chart chart ."
-    ". tabl pie pie .";
+  padding-right: 1%;
+  padding-left: 1%;
+  background-color: #EEEEEE;
 }
-.statuspage__dashboard {
-  grid-area: dashboard;
-  margin: auto;
+
+.statusPage__divAllcharts {
+  background-color: #EEEEEE;
+  margin-top: 1%;
+  box-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+  padding: .3%;
+}
+
+.statusPage__pieChart {
+  display: flex;
+  flex-direction: column;
+}
+
+.statusPage__pieChart:first-child {
+  margin-right: 4%;
+}
+
+.filterSelect-pie {
+  margin-bottom: 3%;
+}
+
+.statusPage__table {
   width: 100%;
-  border: 1px solid red;
-}
-.statuspage__table {
-  grid-area: tabl;
+  height: 25vh;
   margin: auto;
 }
-.statuspage__chart {
-  grid-area: chart;
-  background-color: brown;
+
+.statupPage__circularProgress {
+  height: 50%;
+  text-align: center;
+  margin-top: 2%;
 }
-.statuspage__pie {
-  grid-area: pie;
-  background-color: cadetblue;
+#NewTaskLogo {
+  cursor: pointer;
+  margin: 1%;
 }
+ .h3_headers_wapper2 {
+   color: #444444;
+   font-size: 18px;
+   font-weight: 400;
+   padding-top: 2%;
+   padding-bottom: 2%;
+ }
+
+ .h3_headers_wapper2__1 {
+  color: #444444;
+  font-size: 18px;
+  font-weight: 400;
+  padding-top: .5%;
+  padding-bottom: .5%;
+ }
+

@@ -1,0 +1,137 @@
+.DeletedJiraTicketsWrapper {
+  display: grid;
+  grid-template-columns: 1vw 86vw auto;
+  grid-template-rows: 7vh 14vh 5vh auto;
+  grid-template-areas: "header header header " ". filterButtons ." ". . ." "chartColors chart .";
+  background-color: #C8C9C7;
+}
+
+.DeletedJiraTickets__Table {
+  grid-area: table;
+}
+
+.DeletedJiraTickets__Title {
+  font-weight: 500;
+  grid-area: header;
+  text-align: center;
+  color: #00447C;
+  background-color: white;
+  height: 100%;
+  font-family: 'Roboto Slab', serif;
+  font-size: 26px;
+  padding-top: 2vh;
+}
+.filter__header__item{
+  justify-content: space-between;
+  width: 9.5vw;
+  /* background-color: red; */
+}
+.DeletedJiraTickets__Filter__date{
+  box-shadow: inset 0 .1rem .3rem rgba(0, 0, 0, 0.2);
+  height: 4.5vh;
+  width: 9.5vw;
+  padding: 4%;
+  border-radius: 3px;
+  color: rgba(0, 0, 0, 0.7);
+  text-align: center;
+  font-size: 15px;
+  border: none;
+}
+.DeletedJiraTickets__Filters__wrapper {
+  grid-area: filterButtons;
+  display: grid;
+  height: 15vh;
+  background-color: #eeeeee;
+  align-items: center;
+  text-align: center;
+  padding-top: .5%;
+  padding-right: 1.5%;
+  padding-left: 1.5%;
+  padding-bottom: .1%;
+  border-radius: 3px;
+  margin-top: 1%;
+}
+
+
+.DeletedJiraTickets__Filters__headers{
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+  color: #444444;
+  text-shadow: 0 .1rem .3rem#00447c28;
+}
+
+
+.DeletedJiraTickets__Filters__fields {
+  display: flex;
+  justify-content: space-between;
+  border-radius: 3px;
+}
+
+.DeletedJiraTickets__Chart {
+  grid-area: chart;
+}
+
+.DeletedJiraTickets__Filter {
+  width: 9.5vw;
+  box-sizing: border-box;
+  background-color: #EEEEEE;
+  color: black;
+  font-size: 16px;
+  box-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+
+.DeletedJiraTickets__Filters__Header > p {
+  text-align: center;
+  color: #444444;
+  padding-bottom: 2%;
+  font-weight: bold;
+}
+
+.filter2-item__DeletedJiraTickets {
+  display: grid;
+  grid-template-columns: auto;
+  width: 9vw;
+  height: 4.25vh;
+  margin-top: 16%;
+  text-align: center;
+  align-items: center;
+  box-shadow: inset 0 .1rem .3rem rgba(0, 0, 0, 0.2);
+  border: none;
+  font-size: 15px;
+}
+
+.filter1-item__DeletedJiraTickets {
+  display: grid;
+  grid-template-columns: auto;
+  width: 9vw;
+  height: 4.25vh;
+  margin-top: 16%;
+  text-align: center;
+  align-items: center;
+  box-shadow: inset 0 .1rem .3rem rgba(0, 0, 0, 0.2);
+  border: none;
+  font-size: 15px;
+}
+#saveFilterBTN, #deleteFilterBTN {
+  background : #41B6E6;
+  color: white;
+  margin-top: 5%;
+  font-size: 16px;
+  box-shadow:0 .1rem .3rem rgba(0, 0, 0, 0.2);
+}
+
+#saveFilterBTN:hover, #deleteFilterBTN:hover {
+  background-color: #56a9ca;
+}
+
+#closeFilterBTN{
+  background :rgb(236, 29, 29);
+  color: white;
+  margin-top: 5%;
+}
+
+#closeFilterBTN:hover {
+  background-color: rgb(224, 14, 14);
+}

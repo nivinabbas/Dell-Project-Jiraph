@@ -1,0 +1,274 @@
+@media screen and (max-width: 20000px) {
+
+.sidebar {
+   margin: 0;
+  padding: 0; 
+
+}
+
+nav {
+  font-family: "Roboto Slab", serif;
+}
+
+.sidebar__header-wrapper1 {
+  height: 7vh;
+  grid-area: header;
+  background-color:white;
+  text-align: center;
+  padding-top: 1vh;
+  color: #00447C;
+  font-weight: 800;
+  font-size: 29px;
+  font-family: 'Roboto Slab', serif;
+}
+
+.sidebar__header-wrapper2 {
+  height: 7vh;
+  grid-area: header;
+  background-color:white;
+  text-align: center;
+  padding-top: 1vh;
+  color: #00447C;
+  font-weight: 800;
+  font-size: 29px;
+  font-family: 'Roboto Slab', serif;
+}
+
+.jiraph__logo {
+  height: 30px;
+}
+
+.menu__wrapper-1 {
+  padding-top: 1rem;
+  height: 88vh;
+  background-color: #EEEEEE;
+}
+  
+.menu__wrapper-2 {
+  padding-top: 1rem;
+  height: 88vh;
+  background-color: #EEEEEE;
+}
+   
+.menu__link {
+  font-size: 22px;
+  color: #808080;
+  position: relative;
+  line-height: 3rem;
+  transition: all 0.4s;
+}
+
+.menu__link:hover {
+  font-size: 23px;
+  color: #444444;
+}
+
+.menu__link--selected {
+  font-size: 23px !important;
+  color: #444444;
+}
+
+
+.menu__subLink {
+  font-size: 12px;
+  font-weight: 500;
+  font-family: "Roboto Slab", serif;
+  color: #444444;
+  line-height: 2rem;
+  transition: all 0.4s;
+}
+
+.menu__subLink:hover {
+  font-size: 13px;
+  color: #0076ce;
+}
+
+.menu-subLink--selected {
+  font-size: 13px;
+  color: #0076ce;
+}
+
+ .analysis__logo, .status__logo, .admin__logo, .register__logo {
+  margin-left: 15px;
+  margin-right: 11px;
+  width: 16px;
+  height: 16px;
+  opacity: 0.6;
+}
+
+.analysis-options {
+  transform: scaleY(0.5) translateY(-50%);
+  margin-left: 10%;
+  opacity: 0;
+  position: relative;
+  top:-20px;
+  transition: 0.6s all;
+}
+
+.analysis-options:hover, .analysis-options:active, .analysis-options--show {
+  transform: scaleY(1) translateY(0%);
+  margin-left: 10%;
+  top:0px;
+  opacity: 1;
+}
+
+.analysis-options--select {
+  transform: scaleY(1) translateY(0%);
+  margin-left: 5%;
+  top:0px;
+  opacity: 1;
+}
+
+
+.sidebar__footer {
+  height: 5vh;
+  background-color: #00447C;
+  grid-area: footer;
+  color:black;
+  text-align: center;
+  padding-top: .3rem;
+  font-family: 'Anton', sans-serif;
+  letter-spacing: 2.5px;
+  font-size: 16px;
+  text-shadow:0 0.7px 0.7px rgba(255, 255, 255, 0.219);
+}
+
+}
+
+
+@media screen and (max-width: 900px) {
+
+            nav {
+              font-family: "Roboto Slab", serif;
+            }
+            .sidebar__header-wrapper {
+              height: 7vh;
+              grid-area: header;
+              background-color:white;
+              text-align: center;
+              padding-top: 1.8vh;
+              font-size: 1px;
+              color: transparent;
+              font-family: 'Roboto Slab', serif;
+            }
+            
+            .jiraph__logo {
+              height: 30px;
+            }
+            
+            .menu__wrapper-1 {
+              padding-top: 1rem;
+              height: 88vh;
+              grid-area: menu;
+              background-color: #0076CE;
+              
+            }
+
+            .menu__wrapper-2 {
+              padding-top: 1rem;
+              height: 88vh;
+              grid-area: menu;
+              background-color: #0076CE;
+            }
+              
+            
+            .menu__link {
+              font-size: 0px;
+              color: #808080;
+              position: relative;
+              line-height: 3rem;
+              transition: all 0.4s;
+            }
+            
+            .menu__link:hover {
+              font-size: 0px;
+              color: #444444;
+            }
+            
+            .menu__link--selected {
+              font-size: 0px !important;
+              color: #444444;
+            }
+            
+            
+            .menu__subLink {
+              font-size: 14px;
+              font-weight: 500;
+              font-family: "Roboto Slab", serif;
+              color: #444444;
+              line-height: 2rem;
+              transition: all 0.4s;
+              
+            }
+            
+            .menu__subLink:hover {
+              font-size: 15px;
+              color: #0076ce;
+              width: 20rem;
+            }
+            
+            .menu-subLink--selected {
+              font-size: 15px;
+              color: #0076ce;
+              width: 20rem;
+            }
+            
+             .analysis__logo, .status__logo, .admin__logo, .register__logo {
+             
+              padding: 5px;
+              width: 29px;
+              height: 29px;
+              opacity: .8;
+            }
+            
+            .analysis-options {
+              transform: scaleY(0.5) translateY(-50%);
+              margin-left: 17px;
+              opacity: 0;
+              position: relative;
+              top:-20px;
+              transition: 0.6s all;
+              width: 20rem;
+            }
+            
+            .analysis-options:hover, .analysis-options:active, .analysis-options--show {
+              transform: scaleY(1) translateY(0%);
+              top:0px;
+              opacity: 1;
+              width: 20rem;
+              margin-left: 5.8vw;
+            }
+            
+            .analysis-options--select {
+              transform: scaleY(1) translateY(0%);
+              top:0px;
+              opacity: 1;
+              margin-left: 5.8vw;
+              animation-duration: 1s;
+            }
+            
+            
+            .sidebar__footer {
+              height: 5vh;
+              background-color: #0076CE;
+              grid-area: footer;
+              color:transparent;
+              text-align: center;
+              padding-top: .7rem;
+              font-family: 'Anton', sans-serif;
+              letter-spacing: 2.5px;
+              font-size: 16px;
+              text-shadow:none;
+            }
+            
+}
+
+
+      
+
+  
+    
+  
+  
+
+ 

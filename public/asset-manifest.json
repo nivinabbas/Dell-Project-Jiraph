@@ -1,0 +1,28 @@
+{
+  "files": {
+    "main.css": "/static/css/main.382ac8ab.chunk.css",
+    "main.js": "/static/js/main.f2602464.chunk.js",
+    "main.js.map": "/static/js/main.f2602464.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.c9c43c88.js",
+    "runtime-main.js.map": "/static/js/runtime-main.c9c43c88.js.map",
+    "static/css/2.627926fe.chunk.css": "/static/css/2.627926fe.chunk.css",
+    "static/js/2.4323507e.chunk.js": "/static/js/2.4323507e.chunk.js",
+    "static/js/2.4323507e.chunk.js.map": "/static/js/2.4323507e.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.fd85b4a6a0295272459ae8cc0e52a25e.js": "/precache-manifest.fd85b4a6a0295272459ae8cc0e52a25e.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/2.627926fe.chunk.css.map": "/static/css/2.627926fe.chunk.css.map",
+    "static/css/main.382ac8ab.chunk.css.map": "/static/css/main.382ac8ab.chunk.css.map",
+    "static/js/2.4323507e.chunk.js.LICENSE.txt": "/static/js/2.4323507e.chunk.js.LICENSE.txt",
+    "static/media/JiraphLogo.jpg": "/static/media/JiraphLogo.4ddabadb.jpg",
+    "static/media/adminB2.png": "/static/media/adminB2.0e4aee1f.png",
+    "static/media/analyticsB.png": "/static/media/analyticsB.25fd7ee8.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.c9c43c88.js",
+    "static/css/2.627926fe.chunk.css",
+    "static/js/2.4323507e.chunk.js",
+    "static/css/main.382ac8ab.chunk.css",
+    "static/js/main.f2602464.chunk.js"
+  ]
+}
