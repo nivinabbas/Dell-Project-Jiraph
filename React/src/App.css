@@ -19,6 +19,11 @@
   }
 }
 
+.mainPage{
+  margin-left:11vw;
+  width: 89VW;
+}
+
 
 
 @media screen and (max-width: 800px) {

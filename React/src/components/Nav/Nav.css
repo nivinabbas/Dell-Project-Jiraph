@@ -1,8 +1,10 @@
 @media screen and (max-width: 20000px) {
 
 .sidebar {
+  position: fixed;
    margin: 0;
-  padding: 0; 
+  padding: 0;
+  width: 11vw; 
 
 }
 

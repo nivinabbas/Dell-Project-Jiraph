@@ -1,5 +1,6 @@
 
 .ChangesByParentIdWrapper{
+  min-height: 100vh;
   display: grid;
   grid-template-columns: 1vw 86vw auto;
   grid-template-rows: 7vh 14vh 5vh auto;
