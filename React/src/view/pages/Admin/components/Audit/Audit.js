@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './Audit.css'
 import {
-    Link
+    Link,
+    useHistory
 } from "react-router-dom";
 
 
@@ -17,6 +18,8 @@ function UserAudit() {
 
   
     const [users, setUsers] = useState([]);
+
+    const history = useHistory();
     
 
 //-----------------------------------------------------------change
@@ -121,6 +124,7 @@ const render = (serverFilters) => {
     return (
 
         <div className='adminpage'>
+          <button onClick={backTouserList}>back to userList</button>
             <div className="ModificationByField__Filters">
             Start date :
             <input
@@ -155,6 +159,13 @@ const render = (serverFilters) => {
 
         </div>
     );
+
+
+    //back to userlist
+    function backTouserList(){
+      history.push("/Admin");
+
+    }
 
     
 }
