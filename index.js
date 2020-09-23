@@ -14,7 +14,7 @@ app.use(
   })
 );
 
-app.use(express.static("React/build"));
+app.use(express.static("./React/build"));
 
 var secret = 'abcdefghujklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789!@#$%^&*()_+';
 module.exports = secret;
