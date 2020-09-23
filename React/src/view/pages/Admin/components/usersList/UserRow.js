@@ -30,7 +30,7 @@ export default props => {
                     {isActive ?
                         <button  className="item1" id="item__btn__delete" onClick={e => { deleteUser(e, user.id) }}>Delete</button>
                         :
-                        <button className="item1" onClick={e => { activeUser(e, user.id) }}>Activate</button>
+                        <button className="item1" id="item__btn__active" onClick={e => { activeUser(e, user.id) }}>Activate</button>
                     }
                 
         </form>

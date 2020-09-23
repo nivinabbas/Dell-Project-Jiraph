@@ -24,7 +24,7 @@ const Tooltips = () => {
         disableFocusListener
         disableHoverListener
         disableTouchListener
-        title="how long does it take to complete a task in the selected period 0=same day,1=one day,2=two daysclick on the segment to see the task in the tableclick on the segment to see the task/s in the table"
+        title="How long does it take to complete a task in the selected period as an example: 0=same day, 1=one day,2=two days. Click on the segment to see the tasks in the table."
       >
         <Button>
           <HelpOutlineIcon onClick={handleTooltipOpen} />

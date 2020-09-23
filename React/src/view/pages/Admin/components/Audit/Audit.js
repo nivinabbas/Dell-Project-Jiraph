@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './Audit.css'
 import {
-    Link
+    Link,
+    useHistory
 } from "react-router-dom";
 
 
@@ -17,6 +18,8 @@ function UserAudit() {
 
   
     const [users, setUsers] = useState([]);
+
+    const history = useHistory();
     
 
 //-----------------------------------------------------------change
@@ -121,10 +124,11 @@ const render = (serverFilters) => {
     return (
 
         <div className='adminpage'>
-            <div className="ModificationByField__Filters">
+          <button className="backToUserList__btn" onClick={backTouserList}>Back to user list</button>
+            <div className="audit__Filters">
             Start date :
             <input
-          className="ModificationByField__Filter__date"
+          className="audit__Filter__date"
           type="date"
           name="startDate"
            onChange={handleChangeStartDate}
@@ -132,21 +136,21 @@ const render = (serverFilters) => {
 
         End date :
         <input
-          className="ModificationByField__Filter__date"
+          className="audit__Filter__date"
           type="date"
           name="endDate"
            onChange={handleChangeEndDate}
         />
         </div>
-            <div id="header">
-            </div>
+            {/* <div id="header">
+            </div> */}
             <div className='AdminTable'>
                 <div className="TableColHeeader2">
-                    <h4 className="table-haader-item">Username</h4>
-                    <h4 className="table-haader-item">E-Mail</h4>
-                    <h4 className="table-haader-item"> Role</h4>
-                    <h4 className="table-haader-item">Action</h4>
-                    <h4 className="table-haader-item">Date & Time</h4>
+                    <div className="audit__item">Username</div>
+                    <div className="audit__item">E-Mail</div>
+                    <div className="audit__item"> Role</div>
+                    <div className="audit__item">Action</div>
+                    <div className="audit__item">Date Time</div>
                 </div>
               
                 
@@ -155,6 +159,13 @@ const render = (serverFilters) => {
 
         </div>
     );
+
+
+    //back to userlist
+    function backTouserList(){
+      history.push("/Admin");
+
+    }
 
     
 }
