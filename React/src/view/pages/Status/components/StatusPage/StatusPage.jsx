@@ -409,43 +409,48 @@ const StatusPage = () => {
           <h3 className="daily-alerts__header">Daily Alerts :</h3>
           <DailyAlerts cardsContent={cardsContent} />
         </div>
-      <div className="statics-wrpper">
-      <h3 className="statusPage__headerTitles__taskStatics">Tasks Statistics :</h3>
-        <div className="statusPage__barChart__filters">
-          <DatePicker className="date"
-            onDateClick={handleDateClick}
-            name="startDate"
-            label="From:"
-            value={startDate}
-          />
-          <DatePicker
-            onDateClick={handleDateClick}
-            name="endDate"
-            label="To:"
-            value={endDate}
-          />
-        </div>
-
-        <div className="statusPage__barChart">
-          <div>
-              <h2 style={{ display: "inline" }}>
-                <Tooltips />
-              </h2>
-          </div>
-          {StatisticsChart.length !== 0 && (
-            <StatisticsChart
-              data={statisticsChart}
-              onDataSelected={handleStaticsClick}
+        <div className="statics-wrpper">
+          <div className="statusPage__barChart__filters">
+            <DatePicker
+              className="date"
+              onDateClick={handleDateClick}
+              name="startDate"
+              label="From:"
+              value={startDate}
             />
-          )}
-        </div>
+            <DatePicker
+              onDateClick={handleDateClick}
+              name="endDate"
+              label="To:"
+              value={endDate}
+            />
+          </div>
+
+          <div className="statusPage__barChart">
+            <div style={{ display: "inline" }}>
+              <h3 className="statusPage__headerTitles__taskStatics">
+                Tasks Statistics :
+                <Tooltips />
+              </h3>
+            </div>
+            {StatisticsChart.length !== 0 && (
+              <StatisticsChart
+                data={statisticsChart}
+                onDataSelected={handleStaticsClick}
+              />
+            )}
+          </div>
         </div>
 
         <div className="statusPage__divAllcharts">
-          <h2 className="statusPage__headerTitles__taskHistory">Task History :</h2>
+          <h2 className="statusPage__headerTitles__taskHistory">
+            Task History :
+          </h2>
           <div className="statusPage__charts">
             <div className="statusPage__barChart2">
-              <h3 className="h3_headers_wapper2__1" style={{ margin: "4px" }}>Period: </h3>
+              <h3 className="h3_headers_wapper2__1" style={{ margin: "4px" }}>
+                Period:{" "}
+              </h3>
               <Select
                 options={timeLabelOptions}
                 onChange={(filter) => setTimeLabel(filter)}

@@ -480,7 +480,7 @@ function ChangesInJiraTickets() {
           <div className="ChangeOfJiraTicket__Filters__Header">
             <p> Start Date </p>
             <input
-              className="ChangeOfJiraTicket__Filter__date"
+              className="Filter__date"
               type="date"
               name="startDate"
               value={startDate}
@@ -490,7 +490,7 @@ function ChangesInJiraTickets() {
           <div className="ChangeOfJiraTicket__Filters__Header">
             <p> End Date </p>
             <input
-              className="ChangeOfJiraTicket__Filter__date"
+              className="Filter__date"
               type="date"
               name="endDate"
               value={endDate}

@@ -8,7 +8,7 @@ export default props => {
  
     return (
         <div className="auditRow-wrapper">
-        <form id={user.id} className="TableBody2" >
+        <form id={user.id} className="TableBody2__audit" >
 
             <input className="input__TableBody__item" name="name" type="text" defaultValue={user.name} ></input>
             <input className="input__TableBody__item"   type="email" name='email' defaultValue={user.email}></input>
