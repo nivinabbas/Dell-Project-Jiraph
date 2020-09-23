@@ -124,7 +124,7 @@ const render = (serverFilters) => {
     return (
 
         <div className='adminpage'>
-          <button onClick={backTouserList}>back to useList</button>
+          <button onClick={backTouserList}>back to userList</button>
             <div className="ModificationByField__Filters">
             Start date :
             <input
