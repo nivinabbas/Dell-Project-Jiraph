@@ -1,4 +1,4 @@
-exports.initialTableFilters = [{
+export const initialTableFilters = [{
         name: "modificationType",
         value: "All"
     },
@@ -15,7 +15,7 @@ exports.initialTableFilters = [{
         value: "notDone"
     }
 ];
-exports.initialPieChartsFilters = [{
+export const initialPieChartsFilters = [{
         name: "pieChartModificationType",
         value: "",
     },
@@ -25,7 +25,7 @@ exports.initialPieChartsFilters = [{
     },
 ];
 
-exports.tasksToBeUpdated = (tasksId, openTasks) => {
+export const tasksToBeUpdated = (tasksId, openTasks) => {
     const tasks = [];
     for (let id of tasksId) {
         let found = openTasks.find(task => id === task._id);

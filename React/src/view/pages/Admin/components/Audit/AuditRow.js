@@ -7,16 +7,18 @@ export default props => {
     const { user, setUsers } = props;
  
     return (
-        <form id={user.id} className="TableBody" >
+        <div className="auditRow-wrapper">
+        <form id={user.id} className="TableBody2" >
 
-            <input name="name" type="text" defaultValue={user.name} ></input>
-            <input  type="email" name='email' defaultValue={user.email}></input>
-            <input  type="text" name='role' defaultValue={user.role}></input>
-            <input name="inputAction" type="text" defaultValue={user.action} ></input>
-            <input name="inputDate" type="text" defaultValue={user.date} ></input>
+            <input className="input__TableBody__item" name="name" type="text" defaultValue={user.name} ></input>
+            <input className="input__TableBody__item"   type="email" name='email' defaultValue={user.email}></input>
+            <input className="input__TableBody__item"   type="text" name='role' defaultValue={user.role}></input>
+            <input className="input__TableBody__item"  name="inputAction" type="text" defaultValue={user.action} ></input>
+            <input className="input__TableBody__item"  name="inputDate" type="text" defaultValue={user.date} ></input>
                
             
         </form>
+        </div>
     )
 
 }

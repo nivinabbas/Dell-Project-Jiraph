@@ -15,6 +15,7 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import MaterialTable from 'material-table';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+import shadows from '@material-ui/core/styles/shadows';
 
 
 function MainTable(props) {
@@ -39,40 +40,39 @@ function MainTable(props) {
   // Table Titles 
   const columns = [
     {
-      title: 'jiraId', field: 'jiraId',
+      title: 'jiraID', field: 'jiraId',
       cellStyle: {  
         minWidth: 150,
-        border: '1px solid steelBlue',
-        backgroundColor: 'whiteSmoke',
-        color: 'black',
-       
-      },
+        border: '1px solid #C8C9C7',
+        backgroundColor: 'white',
+        color: '#444444',
     },
+  },
     {
       title: 'jira Name', field: 'jiraName',
       cellStyle: {
         minWidth: 300,
-        border: '1px solid steelBlue',
-        backgroundColor: 'whiteSmoke',
-        color: 'black',
+        border: '1px solid #C8C9C7',
+        backgroundColor: 'white',
+        color: '#444444',
       },
     },
     {
       title: 'jira Type', field: 'jiraType',
       cellStyle: {
         minWidth: 100,
-        border: '1px solid steelBlue',
-        backgroundColor: 'whiteSmoke',
-        color: 'black',
+        border: '1px solid #C8C9C7',
+        backgroundColor: 'white',
+        color: '#444444',
       },
     },
     {
       title: 'Jira Priority', field: 'jiraPriority',
       cellStyle: {
         minWidth: 150,
-        border: '1px solid steelBlue',
-        backgroundColor: 'whiteSmoke',
-        color: 'black',
+        border: '1px solid #C8C9C7',
+        backgroundColor: 'white',
+        color: '#444444',
 
       },
     },
@@ -80,9 +80,9 @@ function MainTable(props) {
       title: 'Jira Item Status', field: 'JiraItemStatus',
       cellStyle: {
         minWidth: 150,
-        border: '1px solid steelBlue',
-        backgroundColor: 'whiteSmoke',
-        color: 'black',
+        border: '1px solid #C8C9C7',
+        backgroundColor: 'white',
+        color: '#444444',
 
       },
     },
@@ -90,9 +90,9 @@ function MainTable(props) {
       title: 'jira Parent Id', field: 'jiraParentId',
       cellStyle: {
         minWidth: 200,
-        border: '1px solid steelBlue',
-        backgroundColor: 'whiteSmoke',
-        color: 'black',
+        border: '1px solid #C8C9C7',
+        backgroundColor: 'white',
+        color: '#444444',
 
       },
     },
@@ -100,63 +100,63 @@ function MainTable(props) {
       title: 'Functional Test', field: 'functionalTest',
       cellStyle: {
         minWidth: 150,
-        border: '1px solid steelBlue',
-        backgroundColor: 'whiteSmoke',
-        color: 'black',
+        border: '1px solid #C8C9C7',
+        backgroundColor: 'white',
+        color: '#444444',
       },
     },
     {
       title: 'Qa Representative', field: 'qaRepresentative',
       cellStyle: {
         minWidth: 200,
-        border: '1px solid steelBlue',
-        backgroundColor: 'whiteSmoke',
-        color: 'black',
+        border: '1px solid #C8C9C7',
+        backgroundColor: 'white',
+        color: '#444444',
       },
     },
     {
       title: 'Fix Version', field: 'fixVersion',
       cellStyle: {
         minWidth: 150,
-        border: '1px solid steelBlue',
-        backgroundColor: 'whiteSmoke',
-        color: 'black',
+        border: '2px solid #C8C9C7',
+        backgroundColor: 'white',
+        color: '#444444',
       },
     },
     {
       title: 'Qc Requirement Id', field: 'qcRequirementId',
       cellStyle: {
         minWidth: 150,
-        border: '1px solid steelBlue',
-        backgroundColor: 'whiteSmoke',
-        color: 'black',
+        border: '1px solid #C8C9C7',
+        backgroundColor: 'white',
+        color: '#444444',
       },
     },
     {
       title: 'Qc Requirement Type', field: 'qcRequirementType',
       cellStyle: {
         minWidth: 200,
-        border: '1px solid steelBlue',
-        backgroundColor: 'whiteSmoke',
-        color: 'black',
+        border: '1px solid #C8C9C7',
+        backgroundColor: 'white',
+        color: '#444444',
       },
     },
     {
       title: 'QC Status', field: 'qcStatus',
       cellStyle: {
         minWidth: 150,
-        border: '1px solid steelBlue',
-        backgroundColor: 'whiteSmoke',
-        color: 'black',
+        border: '1px solid #C8C9C7',
+        backgroundColor: 'white',
+        color: '#444444',
       },
     },
     {
       title: 'Updated Time', field: 'updatedTime',
       cellStyle: {
         minWidth: 200,
-        border: '1px solid steelBlue',
-        backgroundColor: 'whiteSmoke',
-        color: 'black',
+        border: '1px solid #C8C9C7',
+        backgroundColor: 'white',
+        color: '#444444',
       },
     },
     {
@@ -164,9 +164,9 @@ function MainTable(props) {
       cellStyle: {
         height: 'fit-content',
         minWidth: 200,
-        border: '1px solid steelBlue',
-        backgroundColor: 'whiteSmoke',
-        color: 'black',
+        border: '1px solid #C8C9C7',
+        backgroundColor: 'white',
+        color: '#444444',
       },
     },
     {
@@ -174,27 +174,27 @@ function MainTable(props) {
       cellStyle: {
         height: 'fit-content',
         minWidth: 200,
-        border: '1px solid steelBlue',
-        backgroundColor: 'whiteSmoke',
-        color: 'black',
+        border: '1px solid #C8C9C7',
+        backgroundColor: 'white',
+        color: '#444444',
       },
     },
     {
       title: 'Old Value', field: 'oldValue',
       cellStyle: {
         minWidth: 100,
-        border: '1px solid steelBlue',
-        backgroundColor: 'whiteSmoke',
-        color: 'black',
+        border: '1px solid #C8C9C7',
+        backgroundColor: 'white',
+        color: '#444444',
       },
     },
     {
       title: 'New Value', field: 'newValue',
       cellStyle: {
         minWidth: 100,
-        border: '1px solid steelBlue',
-        backgroundColor: 'whiteSmoke',
-        color: 'black',
+        border: '1px solid #C8C9C7',
+        backgroundColor: 'white',
+        color: '#444444',
       },
     },
   ]
@@ -238,11 +238,12 @@ function MainTable(props) {
             doubleHorizontalScroll:true,
             columnsButton:true,
             headerStyle: {
-              backgroundColor: '#00447C',
-              color: '#FFF',
-              border: '1px solid black',
+              backgroundColor: '#808080',
+              color: '#EEEEEE',
+              fontSize: '16px',
+              border: '1px solid #C8C9C7',
               borderBottom:'none',
-              padding: 3,
+              padding: 2.5,
               textAlign: 'center',
             },
           }}
