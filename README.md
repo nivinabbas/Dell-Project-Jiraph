@@ -21,3 +21,11 @@ open new terminal
 in /Dell-Project-Jiraph/React
 `npm start`
 
+## Production
+
+In /Dell-Project-Jiraph/React, merge to `master` and change to `master` branch and run:
+
+`npm run build`
+
+Then, upload master to host.
+
