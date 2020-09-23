@@ -180,3 +180,13 @@
   font-size: 15px;
   padding: 1%;
 } 
+
+#closeFilterBTN{
+  background :rgb(236, 29, 29);
+  color: white;
+  margin-top: 5%;
+}
+
+#closeFilterBTN:hover {
+  background-color: rgb(224, 14, 14);
+}

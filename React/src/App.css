@@ -27,5 +27,29 @@
   }
 }
 
+.filtersPop{
+  position: absolute;
+    right: 2vw;
+    background: white;
+    padding: 20px;
+    box-shadow: 2px 2px 6px #00000094;
+    border-radius: 10px;
+}
+
+.none{
+  display: none;
+}
+
+.button{
+  background: #40b6e6;
+  padding:0x 20px;
+  height: 3vh;
+  min-width: 3vw;
+  color:white;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.461);
+}
+
 
 
