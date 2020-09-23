@@ -1,4 +1,3 @@
-import { Button, ClickAwayListener, Tooltip } from "@material-ui/core";
 import React, { useState } from "react";
 import Chart from "react-apexcharts";
 import "./StackedChart.css";
@@ -95,35 +94,8 @@ export default function StatisticsChart({ data = [], onDataSelected }) {
     },
   };
 
-  const [open, setOpen] = useState(false);
-
-  const handleTooltipClose = () => {
-    setOpen(false);
-  };
-
-  const handleTooltipOpen = () => {
-    setOpen(true);
-  };
   return (
     <div id="daily_chart" style={{ width: "100%" }}>
-      <ClickAwayListener onClickAway={handleTooltipClose}>
-        <div>
-          <Tooltip
-            style={{ fontSize: 8 }}
-            PopperProps={{
-              disablePortal: true,
-            }}
-            onClose={handleTooltipClose}
-            open={open}
-            disableFocusListener
-            disableHoverListener
-            disableTouchListener
-            title="how long does it take to complete a task in the selected period 0=same day,1=one day,2=two daysclick on the segment to see the task in the tableclick on the segment to see the task/s in the table"
-          >
-            <Button onClick={handleTooltipOpen}>Details</Button>
-          </Tooltip>
-        </div>
-      </ClickAwayListener>
       <Chart
         options={{ ...options, xaxis }}
         height="450"

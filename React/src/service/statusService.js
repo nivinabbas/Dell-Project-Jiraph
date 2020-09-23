@@ -1,6 +1,6 @@
-exports.initialTableFilters = [{
+export const initialTableFilters = [{
         name: "modificationType",
-        value: ""
+        value: "All"
     },
     {
         name: "modificationField",
@@ -15,7 +15,7 @@ exports.initialTableFilters = [{
         value: "notDone"
     }
 ];
-exports.initialPieChartsFilters = [{
+export const initialPieChartsFilters = [{
         name: "pieChartModificationType",
         value: "",
     },
@@ -25,12 +25,16 @@ exports.initialPieChartsFilters = [{
     },
 ];
 
-exports.tasksNames = (tasksId, openTasks) => {
-    const names = [];
+export const tasksToBeUpdated = (tasksId, openTasks) => {
+    const tasks = [];
     for (let id of tasksId) {
         let found = openTasks.find(task => id === task._id);
-        if (found)
-            names.push(found.jiraItem.name);
+        if (found) {
+            tasks.push({
+                name: found.jiraItem.name,
+                status: found.taskItem.isDone ? "Not Done" : "Done"
+            });
+        }
     }
-    return names;
+    return tasks;
 }

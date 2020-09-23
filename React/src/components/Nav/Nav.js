@@ -28,17 +28,16 @@ export default props => {
     if(!token){
         
     return (
-        <nav className="sidebar">
+        <nav className="sidebar__login">
             <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
             <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet"></link>
-            <div className="sidebar__header-wrapper">
+            {/* <div className="sidebar__header-wrapper">
                 <img className="jiraph__logo" src={logo} alt="this is a logo" />JIRAPH
             </div>
-
-
+            <div className="menu__wrapper"></div>
             <div className="sidebar__footer">
-                DELL-Jiraph <img className="trademark__logo" src={trademarkIcon} alt="this is a logo" />
-            </div>
+                DELL-Jiraph 
+            </div> */}
         </nav>
     )
 
@@ -52,18 +51,18 @@ export default props => {
                 <nav className="sidebar">
                     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
                     <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet"></link>
-                    <div className="sidebar__header-wrapper">
+                    <div className="sidebar__header-wrapper1">
                         <img className="jiraph__logo" src={logo} alt="this is a logo" />
                    JIRAPH
                   </div>
-                    <div className="menu__wrapper">
+                    <div className="menu__wrapper-1">
                         <div className='menu__item' >
                             <Link className={location === "/register" ? 'menu__link menu__link--selected' : "menu__link"} to="/" ><img className="register__logo" src={regIcon} alt="this is a logo" />Log Out</Link>
                         </div>
                     </div>
 
                     <div className="sidebar__footer">
-                        DELL-Jiraph <img className="trademark__logo" src={trademarkIcon} alt="this is a logo" />
+                        DELL-Jiraph 
                     </div>
                 </nav>
             )
@@ -73,12 +72,12 @@ export default props => {
                 <nav className="sidebar">
                     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
                     <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet"></link>
-                    <div className="sidebar__header-wrapper">
+                    <div className="sidebar__header-wrapper2">
                         <img className="jiraph__logo" src={logo} alt="this is a logo" />
                    JIRAPH
                   </div>
         
-                    <div className="menu__wrapper">
+                    <div className="menu__wrapper-2">
         
                         <div className='menu__item'>
         
@@ -121,7 +120,7 @@ export default props => {
                     </div>
         
                     <div className="sidebar__footer">
-                        DELL-Jiraph <img className="trademark__logo" src={trademarkIcon} alt="this is a logo" />
+                        DELL-Jiraph 
                     </div>
                 </nav>
             )

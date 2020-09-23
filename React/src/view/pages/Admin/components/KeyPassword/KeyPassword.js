@@ -46,10 +46,11 @@ function KeyPassword(props) {
     return (
         <div className="commitPassword-wrapper">
              <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"></link>
-             <div className="block"></div>
-             <h3 className="header">Enter the Code</h3>
+
+             {/* <h3 className="header">Enter your verification code</h3> */}
             <form className="confirmCodeForm" onSubmit={onConfirmCode} >
-                <input id="confCodeInp" name="confCodeInp" placeholder="Enter your confirmation code"></input>
+                <p className="ver-text">Once you recieve the verification code, enter it here to confirm your identity.</p>
+                <input id="confCodeInp" name="confCodeInp" placeholder="Verification code"></input>
                 <button type="submit">CONFIRM</button> 
             </form>
         </div>
