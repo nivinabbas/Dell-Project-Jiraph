@@ -6,35 +6,20 @@
   list-style: none;
   text-decoration: none;
 }
-
 .app {
-  background-color: #c8c9c7;
+  background-color: #c8c9c7; 
   display: grid;
-  grid-template-columns: 13vw auto;
+  grid-template-columns: 11vw auto;
 }
 
-.mainPage{
-  overflow-y: scroll;
-  height: 100vh;
-}
 
-@media screen and (max-width: 1190px) {
-  .app {
-  grid-template-columns: 5vw auto;
-  }
-}
-
-@media screen and (max-width: 950px) {
+@media screen and (max-width: 900px) {
   .app {
   grid-template-columns: 5.5vw auto;
   }
 }
 
-@media screen and (max-width: 850px) {
-  .app {
-  grid-template-columns: 6vw auto;
-  }
-}
+
 
 @media screen and (max-width: 800px) {
   .app {
@@ -42,33 +27,29 @@
   }
 }
 
-@media screen and (max-width: 750px) {
-  .app {
-  grid-template-columns: 5vw auto;
-  }
-}
-@media screen and (max-width: 700px) {
-  .app {
-  grid-template-columns: 5vw auto;
-  }
-}
-@media screen and (max-width: 650px) {
-  .app {
-  grid-template-columns: 5vw auto;
-  }
-}
-@media screen and (max-width: 600px) {
-  .app {
-  grid-template-columns: 5vw auto;
-  }
-}
-@media screen and (max-width: 550px) {
-  .app {
-  grid-template-columns: 5vw auto;
-  }
+.filtersPop{
+  position: absolute;
+    right: 2vw;
+    background: white;
+    padding: 20px;
+    box-shadow: 2px 2px 6px #00000094;
+    border-radius: 10px;
 }
 
+.none{
+  display: none;
+}
 
+.button{
+  background: #40b6e6;
+  padding:0x 20px;
+  height: 3vh;
+  min-width: 3vw;
+  color:white;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.461);
+}
 
 
 

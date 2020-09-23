@@ -1,29 +1,39 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import DashBoard from "../DashBoard/DashBoard";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 import Table from "../Table/Table.jsx";
 import StackedChart from "../Chart/StackedChart";
+import StatisticsChart from "../Chart/StatisticsChart";
 import PieChart from "../Chart/PieChart.js";
 import DatePicker from "../DatePicker/DatePicker";
+import DailyAlerts from "../DailyAlerts/index";
 import Select from "react-select";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {
   initialTableFilters,
   initialPieChartsFilters,
+  tasksToBeUpdated,
 } from "../../../../../service/statusService";
-import { isEmpty } from "../../../../../service/utils";
 import "./StatusPage.css";
+import { datesFormat } from "../../../../../service/utils";
+import Tooltips from "../helpers/Tooltips.jsx";
 
 const timeLabelOptions = [
   { value: "daily", label: "Daily" },
   { value: "weekly", label: "Weekly" },
   { value: "monthly", label: "Monthly" },
 ];
-const StatusPage = (props) => {
+const statusOptions = [
+  { value: "all", label: "All" },
+  { value: "Done", label: "Done" },
+  { value: "notDone", label: "NotDone" },
+];
+const StatusPage = () => {
   const [cardsContent, setCardsContent] = useState([]);
   const [openTasks, setOpenTasks] = useState([]);
-  const [barChart, setBarChart] = useState({});
   const [stackedChart, setStackedChart] = useState([]);
+  const [statisticsChart, setStatisticsChart] = useState([]);
   const [typePieChart, setTypePieChart] = useState({});
   const [fieldPieChart, setFieldPieChart] = useState({});
   const [modificationTypeOptions, setModificationTypeOptions] = useState({});
@@ -35,14 +45,40 @@ const StatusPage = (props) => {
     modificationFieldValueOptions,
     setModificationFieldValueOptions,
   ] = useState({});
-  const [startDate, setStartDate] = useState(""); // choose the default value, with marshood
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(datesFormat()[0]);
+  const [endDate, setEndDate] = useState(datesFormat()[1]);
   const [timeLabel, setTimeLabel] = useState("");
   const [pieChartsFilters, setPieChartsFilters] = useState(
     initialPieChartsFilters
   );
   const [tableFilters, setTableFilters] = useState(initialTableFilters);
+  const [tasksId, setTasksId] = useState([]);
 
+  //statistics
+  useEffect(() => {
+    const filters = {
+      startDate,
+      endDate,
+    };
+    fetch("/api/statistics/getStatistics", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(filters),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        let { success, error, info } = data;
+        if (success) {
+          setStatisticsChart(info);
+        } else {
+          alert(error);
+        }
+      });
+  }, [startDate, endDate, openTasks]);
+
+  //statistics
   useEffect(() => {
     fetch("/api/status/dailyalerts")
       .then((res) => res.json())
@@ -54,8 +90,9 @@ const StatusPage = (props) => {
           alert(error);
         }
       });
-  }, []);
+  }, [openTasks]);
 
+  /** Load open tasks */
   useEffect(() => {
     fetch("/api/status/openTasks")
       .then((res) => res.json())
@@ -69,13 +106,14 @@ const StatusPage = (props) => {
       });
   }, []);
 
-  //main bar chart convert to post method and pass in the body startDate, timeLabel
+  /** Main bar chart */
   useEffect(() => {
     const filters = {
       startDate,
       endDate,
       label: timeLabel.value,
     };
+
     fetch("/api/status/stackedChart", {
       method: "POST",
       headers: {
@@ -86,44 +124,16 @@ const StatusPage = (props) => {
       .then((res) => res.json())
       .then((data) => {
         let { success, error, info } = data;
+
         if (success) {
-          console.log("bar chart", info);
-          const dataFromServer = [
-            {
-              done: 5,
-              notDone: 9,
-              date: "01/09/2020",
-            },
-            {
-              done: 5,
-              notDone: 9,
-              date: "02/09/2020",
-            },
-            {
-              done: 7,
-              notDone: 0,
-              date: "03/09/2020",
-            },
-            {
-              done: 7,
-              notDone: 89,
-              date: "04/09/2020",
-            },
-          ];
-          setStackedChart(dataFromServer);
+          setStackedChart(info);
         } else {
           alert(error);
         }
       });
-  }, [startDate, endDate, timeLabel]);
-  //left pie ==> convert to post method and pass in the body startDate, endDate,pieChartsFilters[0]
-  // add conditions to the array startDate, endDate, pieChartsFilters[0]
-  const onStachChartDataSelect = (date, status) => {
-    console.log(date, status);
-    // send date and status to server
-    // get the tickets
-    // set the table data with the received tickets.
-  };
+  }, [startDate, endDate, timeLabel, openTasks]);
+
+  /** type pie  */
   useEffect(() => {
     const filters = {
       startDate,
@@ -140,17 +150,16 @@ const StatusPage = (props) => {
       .then((res) => res.json())
       .then((data) => {
         let { success, error, info } = data;
+
         if (success) {
-          console.log("ss", info);
           setTypePieChart(info);
         } else {
           alert(error);
         }
       });
-  }, [startDate, endDate, pieChartsFilters]);
+  }, [startDate, endDate, pieChartsFilters, openTasks]);
 
-  //right pie ==> convert to post method and pass in the body startDate, endDate,pieChartsFilters[1]
-  // add conditions to the array startDate, endDate, pieChartsFilters[1]
+  /** Right Pie */
   useEffect(() => {
     const filters = {
       startDate,
@@ -173,12 +182,10 @@ const StatusPage = (props) => {
           alert(error);
         }
       });
-  }, [startDate, endDate, pieChartsFilters]);
+  }, [startDate, endDate, pieChartsFilters, openTasks]);
 
-  // table select option ==> based on "update" select
+  /** table select option ==> based on "update" select */
   useEffect(() => {
-    // const newFilters =
-    //   filters[0].value === "Update" ? [...filters] : [{ ...filters[0] }];
     fetch("/api/status/modificationTypeOptions")
       .then((res) => res.json())
       .then((data) => {
@@ -219,23 +226,75 @@ const StatusPage = (props) => {
       });
   }, []);
 
-  // setFieldPieChart(pieTypeDummyData);
-  const handleDoneClick = async (jiraId) => {
-    // try {
-    //   const userId = null;
-    //   const result = openTasks.filter(
-    //     (openTask) => openTask.jiraItem.jiraId !== jiraId
-    //   );
-    //   setOpenTasks(result);
-    //   await fetch("/api/status/updateTasks", {
-    //     method: "POST",
-    //     body: JSON.stringify({ jiraId, userId }),
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //   });
-    // } catch (error) {}
+  const handleDoneClick = (jiraId) => {
+    const cloned = [...tasksId];
+    const index = tasksId.indexOf(jiraId);
+    index !== -1 ? cloned.splice(index, 1) : cloned.push(jiraId);
+
+    setTasksId(cloned);
   };
+
+  const handleUpdateClick = () => {
+    const tasks = tasksToBeUpdated(tasksId, openTasks);
+    confirmAlert({
+      childrenElement: () => (
+        <ol>
+          <h2>Are You Sure?</h2>
+          {tasks.map((task, index) => (
+            <li key={index}>
+              <p>
+                {++index}.{task.name}
+                <span
+                  style={{ fontWeight: "bold" }}
+                >{`(to ${task.status})`}</span>
+              </p>
+            </li>
+          ))}
+        </ol>
+      ),
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => {
+            const originalTasksID = [...openTasks];
+            try {
+              const userId = null;
+              if (tableFilters[3].value !== "all") {
+                const tasks = openTasks.filter(
+                  (task) => tasksId.indexOf(task._id) === -1
+                );
+                setOpenTasks(tasks);
+                setTasksId([]);
+              }
+
+              fetch("/api/status/updateTasks", {
+                method: "POST",
+                body: JSON.stringify({ tasksId, userId }),
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              })
+                .then((res) => res.json())
+                .then((res) => {
+                  let { success, error, info } = res;
+                  if (success) {
+                  } else {
+                    alert(error);
+                  }
+                });
+            } catch (error) {
+              setOpenTasks(originalTasksID);
+            }
+          },
+        },
+        {
+          label: "No",
+          onClick: () => {},
+        },
+      ],
+    });
+  };
+
   const handlePieChartsFilters = (filter, name) => {
     const newPieFilters = [...pieChartsFilters].map((f) => {
       if (f.name === name) {
@@ -245,74 +304,12 @@ const StatusPage = (props) => {
     });
     setPieChartsFilters(newPieFilters);
   };
-  //date
+
   const handleDateClick = (date) => {
     const { name, value } = date;
-    name === "startDate" ? setStartDate(value) : setEndDate(value);
-    // console.log("label",tableFilters);
-    //typechart ---> RAWAD
-    // await fetch("/api/status/typePieChartFilter", {
-    //   method: "POST",
-    //   body: JSON.stringify({
-    //     filterTypePie,
-    //     CurrentstartDate,
-    //     CurrentEndtDate,
-    //   }),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     let { success, error, info } = data;
-    //     if (success) {
-    //       setBarChart(info);
-    //     } else {
-    //       alert(error);
-    //     }
-    //   });
-    // // fieldpiechart
-    // await fetch("/api/status/fieldPieChart", {
-    //   method: "POST",
-    //   body: JSON.stringify({
-    //     filterFieldPie,
-    //     CurrentstartDate,
-    //     CurrentEndtDate,
-    //   }),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     let { success, error, info } = data;
-    //     if (success) {
-    //       setBarChart(info);
-    //     } else {
-    //       alert(error);
-    //     }
-    //   });
-    // //first barchart
-    // await fetch("/api/status/filterStackedChart", {
-    //   method: "POST",
-    //   body: JSON.stringify({
-    //     label: "daily",
-    //     datefrom: CurrentstartDate,
-    //     dateTo: CurrentEndtDate,
-    //   }),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     let { success, error, info } = data;
-    //     if (success) {
-    //       // setStackedChart(info);
-    //     } else {
-    //       alert(error);
-    //     }
-    //   });
+    name === "startDate"
+      ? setStartDate(value.trim())
+      : setEndDate(value.trim());
   };
 
   const handleSelect = (filter, name) => {
@@ -363,92 +360,157 @@ const StatusPage = (props) => {
           alert(error);
         }
       });
+    setTasksId([]);
   };
 
-  // const handelTableFilterClick = () => {
-  //   const newFilters =
-  //     filters[0].value === "Update" ? [...filters] : [{ ...filters[0] }];
+  const handleSegmentClick = (date, status) => {
+    fetch("/api/status/segmentData", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ date, status }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        let { success, error, info } = data;
+        if (success) {
+          setOpenTasks(info);
+          setTasksId([]);
+        } else {
+          alert(error);
+        }
+      });
 
-  //   //fetch
-  // };
+    const newFilters = [...tableFilters];
+    newFilters[0].value = "All";
+    newFilters[1].value = null;
+    newFilters[2].value = null;
+    newFilters[3].value = status;
+    setTableFilters(newFilters);
+  };
+
+  const handleStaticsClick = (date, tasks) => {
+    const newFilters = [...tableFilters];
+    newFilters[0].value = "All";
+    newFilters[1].value = null;
+    newFilters[2].value = null;
+    newFilters[3].value = "Done";
+    setTableFilters(newFilters);
+    setOpenTasks(tasks);
+    setTasksId([]);
+  };
 
   return (
     <div>
-    <div className="status__header">Status</div>
-    <div className="statusPageContainer">
-     
-      <div className="statusPage__dashboard">
-        <DashBoard cardsContent={cardsContent} />
-      </div>
-      <div className="statusPage__charts">
-        <div className="statusPage__barChart">
-          <div className="statusPage__barChart__filters">
-            <DatePicker
-              onDateClick={handleDateClick}
-              name="startDate"
-              label="From:"
-            />
-            <DatePicker
-              onDateClick={handleDateClick}
-              name="endDate"
-              label="To:"
-            />
-            <Select
-              options={timeLabelOptions}
-              onChange={(filter) => setTimeLabel(filter)}
-              className="filterSelect"
-              placeholder="Time Label"
-              isDisabled={!startDate || !endDate}
-            />
-          </div>
-          {isEmpty(stackedChart) && (
-            <div className="statupPage__circularProgress">
-              <CircularProgress disableShrink color="primary" />
-            </div>
-          )}
-          <StackedChart
-            data={stackedChart}
-            onDataSelected={onStachChartDataSelect}
+      <div className="status__header">Status</div>
+      <div className="statusPageContainer">
+        <div className="statusPage__dashboard">
+          <h3 className="daily-alerts__header">Daily Alerts :</h3>
+          <DailyAlerts cardsContent={cardsContent} />
+        </div>
+      <div className="statics-wrpper">
+      <h3 className="statusPage__headerTitles__taskStatics">Tasks Statistics :</h3>
+        <div className="statusPage__barChart__filters">
+          <DatePicker className="date"
+            onDateClick={handleDateClick}
+            name="startDate"
+            label="From:"
+            value={startDate}
+          />
+          <DatePicker
+            onDateClick={handleDateClick}
+            name="endDate"
+            label="To:"
+            value={endDate}
           />
         </div>
 
-        <div className="statusPage__pieCharts">
-          <div className="statusPage__pieChart">
-            <Select
-              options={modificationTypeOptions}
-              onChange={(filter, name) =>
-                handlePieChartsFilters(filter, "pieChartModificationType")
-              }
-              className="filterSelect filterSelect-pie"
-              placeholder="Type"
-            />
-            <PieChart dataPieChart={typePieChart} name="pie1" />
+        <div className="statusPage__barChart">
+          <div>
+              <h2 style={{ display: "inline" }}>
+                <Tooltips />
+              </h2>
           </div>
-          <div className="statusPage__pieChart">
-            <Select
-              options={modificationNamePieOptions}
-              onChange={(filter, name) =>
-                handlePieChartsFilters(filter, "pieChartModificationField")
-              }
-              className="filterSelect filterSelect-pie"
-              placeholder="Field"
+          {StatisticsChart.length !== 0 && (
+            <StatisticsChart
+              data={statisticsChart}
+              onDataSelected={handleStaticsClick}
             />
-            <PieChart dataPieChart={fieldPieChart} name="pie2" />
+          )}
+        </div>
+        </div>
+
+        <div className="statusPage__divAllcharts">
+          <h2 className="statusPage__headerTitles__taskHistory">Task History :</h2>
+          <div className="statusPage__charts">
+            <div className="statusPage__barChart2">
+              <h3 className="h3_headers_wapper2__1" style={{ margin: "4px" }}>Period: </h3>
+              <Select
+                options={timeLabelOptions}
+                onChange={(filter) => setTimeLabel(filter)}
+                className="filterSelect"
+                placeholder="Daily"
+              />
+              {stackedChart.length === 0 && (
+                <div className="statupPage__circularProgress">
+                  <CircularProgress disableShrink />
+                </div>
+              )}
+              {stackedChart.length !== 0 && (
+                <StackedChart
+                  data={stackedChart}
+                  onDataSelected={handleSegmentClick}
+                />
+              )}
+            </div>
+
+            <div className="statusPage__pieCharts">
+              <div className="statusPage__pieChart">
+                <h3 className="h3_headers_wapper2">Type:</h3>
+                <Select
+                  options={modificationTypeOptions}
+                  onChange={(filter, name) =>
+                    handlePieChartsFilters(filter, "pieChartModificationType")
+                  }
+                  className="filterSelect filterSelect-pie"
+                  placeholder="All"
+                />
+                <PieChart dataPieChart={typePieChart} name="pie1" />
+              </div>
+            </div>
+            <div className="statusPage__pieCharts">
+              <div className="statusPage__pieChart">
+                <h3 className="h3_headers_wapper2">Field:</h3>
+                <Select
+                  options={modificationNamePieOptions}
+                  onChange={(filter, name) =>
+                    handlePieChartsFilters(filter, "pieChartModificationField")
+                  }
+                  className="filterSelect filterSelect-pie"
+                  placeholder="All"
+                />
+                <PieChart dataPieChart={fieldPieChart} name="pie2" />
+              </div>
+            </div>
           </div>
         </div>
+
+        <div className="statusPage__table">
+          <Table
+            modificationFieldValueOptions={modificationFieldValueOptions}
+            modificationFieldOptions={modificationFieldOptions}
+            modificationTypeOptions={modificationTypeOptions}
+            statusOptions={statusOptions}
+            openTasks={openTasks}
+            onDoneClick={handleDoneClick}
+            onSelect={handleSelect}
+            tableFilters={tableFilters}
+            onUpdateClick={handleUpdateClick}
+            numOfTasksToBeUpdeated={tasksId.length}
+          />
+        </div>
       </div>
-      <div className="statusPage__table">
-        <Table
-          modificationFieldValueOptions={modificationFieldValueOptions}
-          modificationFieldOptions={modificationFieldOptions}
-          modificationTypeOptions={modificationTypeOptions}
-          openTasks={openTasks}
-          onDoneClick={handleDoneClick}
-          onSelect={handleSelect}
-          tableFilters={tableFilters}
-        />
-      </div>
-    </div>
     </div>
   );
 };
