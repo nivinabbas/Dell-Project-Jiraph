@@ -1,27 +1,40 @@
 .PieChartAnalysis__Wrapper{
 display: grid;
-grid-template-columns:40vw 40vw;
-grid-template-rows: 40vh 5vh auto;
+grid-template-columns:38vw 1vw 47vw;
+grid-template-rows: 40vh 2vh auto;
 grid-template-areas: 
-"pieChart featureTable"
-". ."
-"mainTable mainTable";
+"pieChart . featureTable"
+". . ."
+"mainTable mainTable mainTable";
 
 
 }
 .PieChartAnalysis__Chart{
   grid-area:pieChart;
   margin: auto;
-  /* width: 100%; */
+  background-color: #eeeeee;
+  width: 100%;
+  padding-top: 2.3vh;
+  border-radius: 3px;
+  box-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.2);
 }
 
 .PieChartAnalysis__MainTable{
-grid-area: mainTable;
+  grid-area: mainTable;
+  margin-bottom: 3vh;
+  background-color: #EEEEEE;
+  padding: .5vw;
+  border-radius: 3px;
+  box-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.2);
 }
+
 .PieChartAnalysis__FeaturesTable{
   grid-area: featureTable;
   max-height: 100%;
   overflow: auto;
+  border-radius: 2px;
+  background-color: #EEEEEE;
+  box-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.2);
 }
 
 
@@ -34,36 +47,39 @@ grid-area: mainTable;
   text-align: center;
   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
   border-collapse: collapse;
-  border: 3px solid #ddd;
+  box-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.2);
   width: 100%;
+  border-radius: 3px;
 }
-
-
-
-
 
 
 
 .PieChartAnalysis__FeaturesTableContainer td,
 .PieChartAnalysis__FeaturesTableContainer th {
-  border: 1px solid #ddd;
+  /* border: 1px solid #ddd; */
   padding: 8px;
+  box-shadow: 0 .05rem .2rem rgba(0, 0, 0, 0.2);
 }
 
 .PieChartAnalysis__FeaturesTableContainer tr:nth-child(even) {
-  background-color: #f2f2f2;
+  background-color: white;
+  box-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.1);
+  
 }
 
 .PieChartAnalysis__FeaturesTableContainer tr:hover {
-  background-color: #ddd;
+  background-color: #808080;
   cursor: pointer;
 }
 
 .PieChartAnalysis__FeaturesTableContainer th {
-  padding-top: 12px;
-  padding-bottom: 12px;
+  padding-top: 1.5%;
+  padding-bottom: 1.5%;
   text-align: center;
-  width: 200px;
-  background-color: #00447C;
+  width: 40vw;
+  background-color: #444444;
   color: white;
+  font-weight: 400;
+  font-size: 16px;
+   box-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.7);
 }

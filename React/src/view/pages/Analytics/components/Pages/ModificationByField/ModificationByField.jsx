@@ -482,7 +482,7 @@ function ModificationByField(props) {
                             ref={qaInput}
                             isMulti
                             onChange={handleChangeQaRepresentative}
-                            placeholder="QA Representative"
+                            placeholder="All"
                             className="ModificationByField__Filter"
                             options={qaRepresentativeOptions}
                             isClearable={true} />
@@ -519,7 +519,7 @@ function ModificationByField(props) {
                             options={labelOptions} />
                              </div>
 
-                        <button className='button' onClick={() => { setShowFilters(true) }}>Filters</button>
+                        <button className='analysis_filter_btn' onClick={() => { setShowFilters(true) }}>Filters</button>
 
                         <div className="ModificationByField__Filters__Header">
                             <div className={showFilters ? 'filtersPop' : 'none'}>

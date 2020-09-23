@@ -9,7 +9,7 @@
     ". . ."
 
     "chartColors chart .";
-    
+    min-height: 100vh;
     background-color: #C8C9C7;
   }
 .DelaysInDelivery__Table{
@@ -130,7 +130,7 @@
     border-radius: 3px;
     color: rgba(0, 0, 0, 0.7);
     text-align: center;
-    font-size: 15px;
+    font-size: 14px;
   }
   
   .DelaysInDelivery__Chart{
@@ -140,7 +140,7 @@
   .DelaysInDelivery__Filters__Header > p {
     text-align: center;
     color: #444444;
-    padding-bottom: 1%;
+    padding-bottom: 4%;
     font-weight: bold;
   }
   
@@ -164,7 +164,7 @@
   align-items: center;
   box-shadow: inset 0 .1rem .3rem rgba(0, 0, 0, 0.2);
   border: none;
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .filter1-item__DelaysInDelivery {

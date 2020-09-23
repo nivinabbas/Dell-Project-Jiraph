@@ -3,6 +3,7 @@
   flex-direction: column;
   width: 60%;
   margin: auto;
+  
 }
 .NewTaskContainer__labels input {
   width: 40%;

@@ -126,7 +126,7 @@
   text-align: center;
   color: #444444;
   font-weight: bold;
-  padding-bottom: 1%;
+  padding-bottom: 4%;
 }
   
 #saveFilterBTN, #deleteFilterBTN {
@@ -187,4 +187,19 @@
 
 #closeFilterBTN:hover {
   background-color: rgb(224, 14, 14);
+}
+
+.analysis_filter_btn {
+ width: 6rem;
+ height: 2rem;
+ text-align: center;
+ align-items: center;
+ margin-top: 4vh;
+ box-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.2);
+ border: none;
+ background-color: #41B6E6;
+ color: white;
+ font-weight: 400;
+ font-size: 17px;
+
 }

@@ -510,7 +510,7 @@ function ChangesInJiraTickets() {
           </div>
 
    
-          <button className='button' onClick={() => { setShowFilters(true) }}>Filters</button>
+          <button className='analysis_filter_btn' onClick={() => { setShowFilters(true) }}>Filters</button>
 
           <div className="ModificationByField__Filters__Header">
             <div className={showFilters ? 'filtersPop' : 'none'}>
