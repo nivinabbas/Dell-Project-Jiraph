@@ -491,7 +491,7 @@ function ModificationByField(props) {
                     <div className="ModificationByField__Filters__Header">
                         <p>Start Date</p>
                         <input
-                            className="ModificationByField__Filter__date"
+                            className="Filter__date"
                             type="date"
                             value={startDate}
                             onChange={handleChangeStartDate}
@@ -501,7 +501,7 @@ function ModificationByField(props) {
                     <div className="ModificationByField__Filters__Header">
                         <p>End Date</p>
                         <input
-                            className="ModificationByField__Filter__date"
+                            className="Filter__date"
                             type="date"
                             name="endDate"
                             value={endDate}
