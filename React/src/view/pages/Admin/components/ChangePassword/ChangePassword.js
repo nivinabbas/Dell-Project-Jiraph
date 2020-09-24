@@ -1,6 +1,7 @@
 import React from 'react';
 import { useHistory } from "react-router-dom";
 import Login from "../Login/Login"
+import './ChangePassword.css'
 import {
     useParams
 } from "react-router-dom";
@@ -49,13 +50,18 @@ function ChangePassword(props) {
         }
     }
     return (
-        <div className='forgotpassword'>
-            <h3 className="header">Enter the new password</h3>
+        <div className='changePassword_wrapper'>
+            <div className="changePassword2">
+            <div className="header__changePass">
+            <div className="header">Enter the new password</div>
+
             <form id="resetPasswordForm" onSubmit={onResetPassword} >
-                <input id="resetNPswInp" type="password" name="resetNPswInp" placeholder="Choose a new Password"></input>
-                <input id="confirmNPswInp" type="password" name="confirmNPswInp" placeholder="confirm the new Password"></input>
+                <input id="resetNPswInp" type="password" name="resetNPswInp" placeholder="choose a new password"></input>
+                <input id="confirmNPswInp" type="password" name="confirmNPswInp" placeholder="confirm the new password"></input>
                 <button type="submit">Save</button>
             </form>
+            </div>
+            </div>
         </div>
     )
 }

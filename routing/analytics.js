@@ -938,7 +938,7 @@ router.post('/delaysInDeliveryFilters', [auth, qaTopManagers, audit], async (req
 })
 
 
-router.post('/modificationByFieldSavedFilters', async (req, res) => {
+router.post('/analyticsSavedFilters', async (req, res) => {
     const { savedFilters } = req.body;
 
     let { pageName, filterName, filters } = savedFilters;
@@ -954,7 +954,7 @@ router.post('/modificationByFieldSavedFilters', async (req, res) => {
 
     })
 
-    FilterModel.find({ "Filter.filterName": filterName }).then(filters => {
+    FilterModel.find({ "Filter.filterName": filterName , "Filter.pageName": pageName }).then(filters => {
         // console.log('here');
         //console.log(filters.length);
         if (filters.length > 0) {
@@ -978,7 +978,7 @@ router.post('/modificationByFieldSavedFilters', async (req, res) => {
 })
 
 
-router.post('/modificationByFieldSelectTwo', async (req, res) => {
+router.post('/analyticsSelectFields', async (req, res) => {
     let array = [];
     let filterNames = [];
     console.log(req.body);
@@ -1009,14 +1009,14 @@ router.post('/modificationByFieldSelectTwo', async (req, res) => {
 })
 
 
-router.post('/modificationByFieldDelete', async (req, res) => {
-    // const {filterName , pageName } = body.req;
-    let filterName = "hbl";
-    let pageName = "ModificationByField"
-
-    FilterModel.find({ "Filter.filterName": filterName, "Filter.pageName": pageName }).then(filters => {
+router.post('/analyticsDeleteFilters', async (req, res) => {
+    const {selectFilterCurrentOption , pageName } = req.body;
+    console.log('hereeeeeeeeeeeeee')
+console.log(selectFilterCurrentOption);
+console.log(pageName);
+    FilterModel.find({ "Filter.filterName": selectFilterCurrentOption, "Filter.pageName": pageName }).then(filters => {
         if (filters.length > 0) {
-            FilterModel.findOneAndDelete({ "Filter.filterName": filterName, "Filter.pageName": pageName }, function (err, docs) {
+            FilterModel.findOneAndDelete({ "Filter.filterName": selectFilterCurrentOption, "Filter.pageName": pageName }, function (err, docs) {
                 if (err) {
                     console.log(err)
                 }

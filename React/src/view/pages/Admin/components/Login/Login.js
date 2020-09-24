@@ -44,7 +44,7 @@ function Login(props) {
                     history.replace("/analysis")
                 }
                 else 
-                alert("User Not Found")
+                alert("Username or password is incorrect")
 
             });
     }
@@ -59,7 +59,7 @@ function Login(props) {
             </div> */}
             
             <div className="login">
-            <div className="sidebar__header-wrapper">
+            <div className="sidebar__header-wrapper3">
                     <img className="jiraph__logo__login" src={logo} alt="this is a logo" />           
                 Welcome to Jiraph System 
             </div>

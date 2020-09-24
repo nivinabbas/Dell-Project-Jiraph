@@ -8,31 +8,31 @@ export default props => {
    //-----------------------------------------
     //show users list 
     return (
-        <form id={user.id} className="TableBody" onSubmit={(e => onSave(e, user.id))} >
-            <input name="name" disabled={!edit} type="text" defaultValue={user.name} ></input>
-            <input disabled={!edit} type="email" name='email' defaultValue={user.email}></input>
-            <select disabled={!edit} type="text" name='role' defaultValue={user.role}>
+        <form id={user.id} className="TableBody_UserList" onSubmit={(e => onSave(e, user.id))} >
+            <input id="item" name="name" disabled={!edit} type="text" defaultValue={user.name} ></input>
+            <input id="item" disabled={!edit} type="email" name='email' defaultValue={user.email}></input>
+            <select  id="item__slt"  disabled={!edit} type="text" name='role' defaultValue={user.role}>
                 <option value="Admin">Admin</option>
                 <option value="QA manager">QA manager</option>
                 <option value="TOP manager">TOP manager</option>
             </select>
-            <div className="item">
-                <input disabled={!edit} className={edit ? 'inset' : ''} name='password' type="password" placeholder='Password'></input>
-            </div>
-            <div className="item">
+            
+                <input id="item" disabled={!edit} className={edit ? 'inset' : ''} name='password' type="password" placeholder='Password'></input>
+            
+            
                 {!edit ?
-                    <button className="edit__Btn" onClick={e => { onEdit(e, user.id) }}>Edit</button>
+                    <button id="item__btn__edit" className="edit__Btn" onClick={e => { onEdit(e, user.id) }}>Edit</button>
                     :
-                    <button className="save__Btn" type='submit'>Save</button>
+                    <button id="item__btn__save" className="save__Btn" type='submit'>Save</button>
                 }
-                </div>
-                <div className="item1" >
+                
+                
                     {isActive ?
-                        <button onClick={e => { deleteUser(e, user.id) }}>Delete</button>
+                        <button  className="item1" id="item__btn__delete" onClick={e => { deleteUser(e, user.id) }}>Delete</button>
                         :
-                        <button onClick={e => { activeUser(e, user.id) }}>Activate</button>
+                        <button className="item1" id="item__btn__active" onClick={e => { activeUser(e, user.id) }}>Activate</button>
                     }
-                </div>
+                
         </form>
     )
     //activating user function 
