@@ -49,10 +49,10 @@
 
 
     .filters{
-        margin-top:1rem;
+        margin-top:1%;
         display: flex;
         flex-direction: row;
-        width: 85%;
+        width: 84%;
         margin-left: 7.9%;
         justify-content: space-between;
     }
@@ -179,9 +179,33 @@
         color:white;
         font-weight: 500;
         font-size: 16px;
-        background-color:  #6EA204;
+        background-color:  #0076CE;
     }
     #item__btn__save:hover{
+        background-color:  #0075cea2;
+        font-size: 16.3px;
+        color: #EEEEEE;
+        text-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.4);
+        box-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.4);
+
+    }
+
+    #item__btn__active {
+        width: 6%;
+        height: 4.5vh;
+        margin-bottom: .3%;
+        margin-top: .3%;
+        margin-right: .5%;
+        box-shadow: 0 .1rem .3rem rgba(0, 0, 0, 0.2);
+        border:none;
+        /* letter-spacing: .5px; */
+        color:white;
+        font-weight: 500;
+        font-size: 16px;
+        background-color:  #6EA204; 
+    }
+
+    #item__btn__active:hover{
         background-color:  #6da2048e;
         font-size: 16.3px;
         color: #EEEEEE;
